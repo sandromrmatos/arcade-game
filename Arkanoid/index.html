@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Arkanoid Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="arkanoid-wrapper">
+    <header class="arkanoid-header">
+      <h1>Arkanoid</h1>
+
+      <div class="controls">
+        <label for="difficulty">Difficulty:</label>
+        <select id="difficulty">
+          <option value="easy">Easy</option>
+          <option value="hard">Hard</option>
+        </select>
+        <button id="startButton">Start</button>
+        <button id="resetButton">Reset</button>
+      </div>
+
+      <div class="hud">
+        <div class="hud-left">
+          Score: <span id="score">0</span>
+          Lives: <span id="lives">3</span>
+        </div>
+        <div id="statusMessage"></div>
+      </div>
+    </header>
+
+    <div class="game-area-wrapper">
+      <div id="gameArea">
+        <div id="bricksContainer"></div>
+        <div id="paddle"></div>
+      </div>
+
+      <!-- Mobile tap zones (only over game area) -->
+      <div id="leftZone" class="tap-zone tap-left"></div>
+      <div id="rightZone" class="tap-zone tap-right"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
