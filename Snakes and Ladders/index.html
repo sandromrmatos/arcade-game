@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Snakes & Ladders</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #222;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #board {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(10, 45px);
+    grid-template-rows: repeat(5, 45px);
+    gap: 2px;
+    margin-top: 20px;
+    background: #333;
+    padding: 5px;
+  }
+  .cell {
+    width: 45px;
+    height: 45px;
+    background: #555;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .cell:nth-child(odd) { background: #666; }
+
+  /* Player tokens */
+  .player, .pc {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+  }
+  .player { background: #ffcc00; }
+  .pc { background: #00aaff; }
+
+  /* Ladder frames (4 shades) */
+  .ladder0 { border: 3px solid #b6ff00; }
+  .ladder1 { border: 3px solid #d4ff4f; }
+  .ladder2 { border: 3px solid #eaff8f; }
+  .ladder3 { border: 3px solid #ffffc2; }
+
+  /* Snake frames (4 shades) */
+  .snake0 { border: 3px solid #ff003c; }
+  .snake1 { border: 3px solid #ff4f6b; }
+  .snake2 { border: 3px solid #ff8fa2; }
+  .snake3 { border: 3px solid #ffc2d1; }
+
+  /* Bold + larger number for ladder FROM tiles */
+  .ladder-from {
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  /* Bold + larger number for snake FROM tiles */
+  .snake-from {
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  #controls {
+    margin-top: 20px;
+  }
+  button {
+    padding: 8px 16px;
+    margin: 0 5px;
+    cursor: pointer;
+  }
+  #log {
+    margin-top: 10px;
+    max-width: 420px;
+    text-align: center;
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+
+<h1>Snakes & Ladders</h1>
+
+<div id="board"></div>
+
+<div id="controls">
+  <button id="rollBtn">Roll Dice</button>
+  <span id="diceResult">Dice: -</span>
+</div>
+
+<div id="log">Game starting… deciding who goes first…</div>
+
+<script>
+const boardEl = document.getElementById('board');
+const rollBtn = document.getElementById('rollBtn');
+const diceResultEl = document.getElementById('diceResult');
+const logEl = document.getElementById('log');
+
+/* 4 ladders, 4 snakes */
+const ladders = {
+  2: 14,
+  7: 19,
+  16: 30,
+  22: 41
+};
+
+const snakes = {
+  12: 3,
+  25: 8,
+  37: 20,
+  48: 29
+};
+
+let cells = [];
+let playerPos = 0;
+let pcPos = 0;
+
+let playerEl, pcEl;
+
+let turn = null;
+let gameOver = false;
+
+function createBoard() {
+  boardEl.innerHTML = "";
+  cells = [];
+
+  /* Build serpentine rows */
+  let rows = [];
+  for (let r = 0; r < 5; r++) {
+    let row = [];
+    for (let c = 0; c < 10; c++) {
+      row.push(r * 10 + c);
+    }
+    if (r % 2 === 1) row.reverse();
+    rows.push(row);
+  }
+
+  let visualOrder = rows.flat();
+
+  for (let idx of visualOrder) {
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    cell.dataset.index = idx;
+    cell.textContent = (idx === 0 ? "start" : idx);
+    boardEl.appendChild(cell);
+    cells[idx] = cell;
+  }
+
+  /* Apply ladder frames + bold FROM tile */
+  Object.entries(ladders).forEach(([start, end], i) => {
+    cells[start].classList.add(`ladder${i}`);
+    cells[end].classList.add(`ladder${i}`);
+    cells[start].classList.add("ladder-from");
+  });
+
+  /* Apply snake frames + bold FROM tile */
+  Object.entries(snakes).forEach(([start, end], i) => {
+    cells[start].classList.add(`snake${i}`);
+    cells[end].classList.add(`snake${i}`);
+    cells[start].classList.add("snake-from");
+  });
+
+  playerEl = document.createElement('div');
+  playerEl.className = 'player';
+
+  pcEl = document.createElement('div');
+  pcEl.className = 'pc';
+
+  updatePositions();
+}
+
+function updatePositions() {
+  cells.forEach(c => {
+    const p = c.querySelector('.player');
+    const pc = c.querySelector('.pc');
+    if (p) p.remove();
+    if (pc) pc.remove();
+  });
+
+  cells[playerPos].appendChild(playerEl);
+  cells[pcPos].appendChild(pcEl);
+}
+
+function animateMove(isPlayer, targetPos, callback) {
+  let pos = isPlayer ? playerPos : pcPos;
+
+  function step() {
+    if (pos === targetPos) {
+      if (isPlayer) playerPos = pos;
+      else pcPos = pos;
+      updatePositions();
+      callback();
+      return;
+    }
+    pos += (targetPos > pos ? 1 : -1);
+    if (isPlayer) playerPos = pos;
+    else pcPos = pos;
+    updatePositions();
+    setTimeout(step, 150);
+  }
+  step();
+}
+
+function rollDice() {
+  if (gameOver) return;
+
+  if (turn !== "player") {
+    logEl.textContent = "Not your turn.";
+    return;
+  }
+
+  playTurn("player");
+}
+
+function playTurn(who) {
+  if (gameOver) return;
+
+  const roll = Math.floor(Math.random() * 6) + 1;
+  diceResultEl.textContent = "Dice: " + roll;
+
+  let pos = who === "player" ? playerPos : pcPos;
+  let newPos = pos + roll;
+
+  if (newPos > 49) {
+    logEl.textContent = `${who} rolled ${roll} but needs exact number.`;
+    switchTurn();
+    return;
+  }
+
+  logEl.textContent = `${who} rolled ${roll}. Moving…`;
+
+  animateMove(who === "player", newPos, () => {
+    let finalPos = newPos;
+
+    let jumpPos = null;
+    if (ladders[finalPos]) {
+      jumpPos = ladders[finalPos];
+      logEl.textContent += ` Ladder to ${jumpPos}!`;
+    }
+    if (snakes[finalPos]) {
+      jumpPos = snakes[finalPos];
+      logEl.textContent += ` Snake to ${jumpPos}!`;
+    }
+
+    if (jumpPos) {
+      setTimeout(() => {
+        animateMove(who === "player", jumpPos, () => {
+          if (jumpPos === 49) {
+            logEl.textContent = `${who.toUpperCase()} wins!`;
+            gameOver = true;
+            return;
+          }
+          switchTurn();
+        });
+      }, 700);
+    } else {
+      if (finalPos === 49) {
+        logEl.textContent = `${who.toUpperCase()} wins!`;
+        gameOver = true;
+        return;
+      }
+      switchTurn();
+    }
+  });
+}
+
+function switchTurn() {
+  turn = (turn === "player") ? "pc" : "player";
+  logEl.textContent += ` Now it's ${turn}'s turn.`;
+
+  if (turn === "pc" && !gameOver) {
+    setTimeout(() => playTurn("pc"), 1200);
+  }
+}
+
+createBoard();
+
+turn = Math.random() < 0.5 ? "player" : "pc";
+logEl.textContent = `${turn.toUpperCase()} starts!`;
+
+if (turn === "pc") {
+  setTimeout(() => playTurn("pc"), 1200);
+}
+
+rollBtn.addEventListener('click', rollDice);
+</script>
+
+</body>
+</html>

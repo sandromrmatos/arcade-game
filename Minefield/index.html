@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Minefield Modes</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background: #f0f0f0;
+    }
+    #grid {
+        display: grid;
+        grid-gap: 5px;
+        justify-content: center;
+        margin-top: 20px;
+    }
+    .cell {
+        width: 50px;
+        height: 50px;
+        background: #ccc;
+        border: 1px solid #999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+        cursor: pointer;
+        user-select: none;
+    }
+    .revealed {
+        background: #eee;
+        cursor: default;
+    }
+    .bomb {
+        background: red;
+        color: white;
+    }
+    button {
+        margin: 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+    }
+</style>
+</head>
+<body>
+
+<h2>Minefield</h2>
+
+<button onclick="startGame('easy')">Easy</button>
+<button onclick="startGame('medium')">Medium</button>
+<button onclick="startGame('hard')">Hard</button>
+
+<p>Safe cells clicked: <span id="counter">0</span></p>
+<p id="message"></p>
+<p id="reward"></p>
+
+<div id="grid"></div>
+
+<script>
+let SIZE = 5;
+let BOMBS = 5;
+
+let grid = [];
+let bombPositions = new Set();
+let revealedCount = 0;
+let gameOver = false;
+
+let currentMode = null;
+
+let finalGridState = {
+    easy: null,
+    medium: null,
+    hard: null
+};
+
+let playedModes = {
+    easy: false,
+    medium: false,
+    hard: false
+};
+
+function startGame(mode) {
+    const msg = document.getElementById("message");
+    const gridDiv = document.getElementById("grid");
+
+    if (playedModes[mode]) {
+        msg.textContent = "You have already played this mode.";
+
+        if (finalGridState[mode]) {
+            gridDiv.innerHTML = finalGridState[mode].html;
+            gridDiv.style.gridTemplateColumns =
+                `repeat(${finalGridState[mode].size}, 50px)`;
+
+            document.getElementById("counter").textContent = finalGridState[mode].counter;
+            document.getElementById("reward").textContent = finalGridState[mode].reward;
+            document.getElementById("message").textContent = finalGridState[mode].message;
+        }
+
+        disableGridInteraction();
+        return;
+    }
+
+    currentMode = mode;
+
+    if (mode === "easy") {
+        SIZE = 5;
+        BOMBS = 5;
+    } else if (mode === "medium") {
+        SIZE = 6;
+        BOMBS = 8;
+    } else if (mode === "hard") {
+        SIZE = 8;
+        BOMBS = 12;
+    }
+
+    setupGame();
+}
+
+function setupGame() {
+    gameOver = false;
+    revealedCount = 0;
+    bombPositions.clear();
+    grid = [];
+
+    document.getElementById("counter").textContent = 0;
+    document.getElementById("message").textContent = "";
+    document.getElementById("reward").textContent = "";
+
+    const gridDiv = document.getElementById("grid");
+    gridDiv.innerHTML = "";
+    gridDiv.style.gridTemplateColumns = `repeat(${SIZE}, 50px)`;
+
+    while (bombPositions.size < BOMBS) {
+        bombPositions.add(Math.floor(Math.random() * SIZE * SIZE));
+    }
+
+    for (let i = 0; i < SIZE * SIZE; i++) {
+        const cell = document.createElement("div");
+        cell.classList.add("cell");
+        cell.dataset.index = i;
+
+        cell.addEventListener("click", (e) => {
+            e.preventDefault();
+            handleReveal(i, cell);
+        });
+
+        cell.addEventListener("contextmenu", (e) => {
+            e.preventDefault();
+            handleFlag(cell);
+        });
+
+        gridDiv.appendChild(cell);
+        grid.push(cell);
+    }
+}
+
+function handleFlag(cell) {
+    if (gameOver || cell.classList.contains("revealed")) return;
+    cell.textContent = cell.textContent === "🚩" ? "" : "🚩";
+}
+
+function getAdjacentBombs(index) {
+    const x = index % SIZE;
+    const y = Math.floor(index / SIZE);
+    let count = 0;
+
+    for (let dy = -1; dy <= 1; dy++) {
+        for (let dx = -1; dx <= 1; dx++) {
+            if (dx === 0 && dy === 0) continue;
+            const nx = x + dx;
+            const ny = y + dy;
+            if (nx >= 0 && nx < SIZE && ny >= 0 && ny < SIZE) {
+                const nIndex = ny * SIZE + nx;
+                if (bombPositions.has(nIndex)) count++;
+            }
+        }
+    }
+    return count;
+}
+
+function handleReveal(index, cell) {
+    if (gameOver || cell.classList.contains("revealed")) return;
+    if (cell.textContent === "🚩") return;
+
+    if (bombPositions.has(index)) {
+        cell.classList.add("bomb");
+        cell.textContent = "💣";
+        endGame(false);
+        return;
+    }
+
+    floodReveal(index);
+
+    document.getElementById("counter").textContent = revealedCount;
+    checkWin();
+}
+
+function floodReveal(index) {
+    const cell = grid[index];
+
+    if (cell.classList.contains("revealed")) return;
+    if (cell.textContent === "🚩") return;
+
+    const adjacent = getAdjacentBombs(index);
+
+    cell.classList.add("revealed");
+    cell.textContent = adjacent > 0 ? adjacent : "";
+
+    revealedCount++;
+
+    if (adjacent > 0) return;
+
+    const x = index % SIZE;
+    const y = Math.floor(index / SIZE);
+
+    for (let dy = -1; dy <= 1; dy++) {
+        for (let dx = -1; dx <= 1; dx++) {
+            if (dx === 0 && dy === 0) continue;
+
+            const nx = x + dx;
+            const ny = y + dy;
+
+            if (nx >= 0 && nx < SIZE && ny >= 0 && ny < SIZE) {
+                const nIndex = ny * SIZE + nx;
+                if (!bombPositions.has(nIndex)) {
+                    floodReveal(nIndex);
+                }
+            }
+        }
+    }
+}
+
+function checkWin() {
+    const totalCells = SIZE * SIZE;
+    if (revealedCount === totalCells - BOMBS) {
+        endGame(true);
+    }
+}
+
+function computeRewards(win) {
+    const reward = document.getElementById("reward");
+    reward.textContent = "";
+
+    const clickable = (SIZE * SIZE) - BOMBS;
+    const percent = (revealedCount / clickable) * 100;
+
+    const today = new Date();
+    const isSunday = today.getDay() === 0;
+
+    if (!win) {
+        if (percent < 30) reward.textContent = "no credits";
+        else if (percent < 60) reward.textContent = "+1 credit";
+        else reward.textContent = "+2 credits";
+        return;
+    }
+
+    if (currentMode === "easy") {
+        reward.textContent = isSunday
+            ? "+3 credits, if Sunday +1 gem"
+            : "+3 credits";
+    }
+
+    if (currentMode === "medium") {
+        reward.textContent = isSunday
+            ? "+4 credits +2 gems"
+            : "+4 credits +1 gem";
+    }
+
+    if (currentMode === "hard") {
+        reward.textContent = isSunday
+            ? "+5 credits +4 gems"
+            : "+5 credits +2 gems";
+    }
+}
+
+function endGame(win) {
+    gameOver = true;
+    const msg = document.getElementById("message");
+
+    if (win) {
+        msg.textContent = "🎉 You win! All bombs avoided.";
+    } else {
+        msg.textContent = "💥 You clicked a bomb! Game over.";
+        revealAllBombs();
+    }
+
+    computeRewards(win);
+
+    const gridDiv = document.getElementById("grid");
+    finalGridState[currentMode] = {
+        html: gridDiv.innerHTML,
+        size: SIZE,
+        counter: revealedCount,
+        reward: document.getElementById("reward").textContent,
+        message: document.getElementById("message").textContent
+    };
+
+    playedModes[currentMode] = true;
+    disableGridInteraction();
+}
+
+function disableGridInteraction() {
+    grid.forEach(cell => {
+        cell.style.pointerEvents = "none";
+    });
+}
+
+function revealAllBombs() {
+    bombPositions.forEach(i => {
+        const cell = grid[i];
+        cell.classList.add("bomb");
+        cell.textContent = "💣";
+    });
+}
+</script>
+
+</body>
+</html>

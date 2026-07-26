@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Puzzle Bobble</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background: #0033aa;
+        color: #fff;
+    }
+
+    #topBar {
+        margin-top: 10px;
+    }
+
+    #gameContainer {
+        margin: 20px auto;
+        display: inline-flex;
+        gap: 20px;
+        align-items: flex-start;
+    }
+
+    #leftPanel {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #score {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    #message {
+        font-size: 18px;
+        margin-top: 8px;
+        height: 24px;
+    }
+
+    canvas {
+        background: #001a55;
+        border: 4px solid #fff;
+        display: block;
+    }
+
+    #rightPanel {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    #nextLabel {
+        font-size: 16px;
+    }
+
+    button {
+        padding: 6px 12px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    button:disabled {
+        opacity: 0.4;
+        cursor: default;
+    }
+</style>
+</head>
+<body>
+
+<h2>Puzzle Bobble</h2>
+
+<div id="topBar">
+    <button id="easyBtn">Easy</button>
+    <button id="hardBtn" disabled>Hard</button>
+</div>
+
+<div id="gameContainer">
+    <div id="leftPanel">
+        <div id="score">Score: 0</div>
+        <!-- canvas width reduced so right border matches bubbles -->
+        <canvas id="gameCanvas" width="272" height="500"></canvas>
+        <div id="message"></div>
+    </div>
+
+    <div id="rightPanel">
+        <div id="nextLabel">Next bubble:</div>
+        <canvas id="nextCanvas" width="80" height="80"></canvas>
+    </div>
+</div>
+
+<script>
+const gameCanvas = document.getElementById("gameCanvas");
+const ctx = gameCanvas.getContext("2d");
+
+const nextCanvas = document.getElementById("nextCanvas");
+const nextCtx = nextCanvas.getContext("2d");
+
+// width matches classic 8-column staggered grid
+const WIDTH = 272;
+const HEIGHT = gameCanvas.height;
+
+const BUBBLE_RADIUS = 16;
+const ROW_HEIGHT = BUBBLE_RADIUS * 1.8;
+
+const COLS = 8;
+const ROWS = 12;
+
+const LOSS_LINE_Y = HEIGHT - 100;
+
+const COLORS = ["#ff4444", "#44ff44", "#4444ff", "#ffff44", "#ff44ff", "#44ffff"];
+
+let grid = [];
+let score = 0;
+let gameOver = false;
+let easyFinished = false;
+
+let mode = "easy";
+
+let ceilingOffset = 0;
+let ceilingDropTimer = 0;
+let ceilingDropIntervalBase = 5000;
+let ceilingDropInterval = ceilingDropIntervalBase;
+
+let shooter = {
+    x: WIDTH / 2,
+    y: HEIGHT - 40,
+    angle: -Math.PI / 2,
+    bubble: null,
+    nextBubbleColor: randomColor()
+};
+
+let mouseX = WIDTH / 2;
+let mouseY = HEIGHT - 100;
+
+function randomColor() {
+    return COLORS[Math.floor(Math.random() * COLORS.length)];
+}
+
+function initGrid() {
+    grid = [];
+    for (let row = 0; row < ROWS; row++) {
+        const rowArray = [];
+        for (let col = 0; col < COLS; col++) {
+            rowArray.push({
+                color: row < 5 ? randomColor() : null,
+                exists: row < 5
+            });
+        }
+        grid.push(rowArray);
+    }
+}
+
+function resetGame(selectedMode) {
+    mode = selectedMode;
+    score = 0;
+    document.getElementById("score").textContent = "Score: " + score;
+    document.getElementById("message").textContent = "";
+    gameOver = false;
+
+    ceilingOffset = 0;
+    ceilingDropTimer = 0;
+    ceilingDropInterval = ceilingDropIntervalBase;
+
+    shooter.nextBubbleColor = randomColor();
+    shooter.bubble = null;
+
+    initGrid();
+    spawnShooterBubble();
+    updateShooterAngle();
+}
+
+function getRemainingColors() {
+    const set = new Set();
+    for (let row = 0; row < ROWS; row++) {
+        for (let col = 0; col < COLS; col++) {
+            if (grid[row][col].exists) {
+                set.add(grid[row][col].color);
+            }
+        }
+    }
+    return Array.from(set);
+}
+
+function spawnShooterBubble() {
+    shooter.bubble = {
+        x: shooter.x,
+        y: shooter.y,
+        vx: 0,
+        vy: 0,
+        color: shooter.nextBubbleColor,
+        moving: false
+    };
+
+    const remaining = getRemainingColors();
+    shooter.nextBubbleColor = remaining.length > 0
+        ? remaining[Math.floor(Math.random() * remaining.length)]
+        : null;
+
+    drawNextBubble();
+}
+
+function drawNextBubble() {
+    nextCtx.fillStyle = "#001a55";
+    nextCtx.fillRect(0, 0, nextCanvas.width, nextCanvas.height);
+
+    if (!shooter.nextBubbleColor) return;
+
+    nextCtx.fillStyle = shooter.nextBubbleColor;
+    nextCtx.beginPath();
+    nextCtx.arc(nextCanvas.width / 2, nextCanvas.height / 2, BUBBLE_RADIUS, 0, Math.PI * 2);
+    nextCtx.fill();
+    nextCtx.strokeStyle = "#ffffff";
+    nextCtx.lineWidth = 2;
+    nextCtx.stroke();
+}
+
+function updateShooterAngle() {
+    const dx = mouseX - shooter.x;
+    const dy = mouseY - shooter.y;
+    shooter.angle = Math.atan2(dy, dx);
+    if (shooter.angle > -0.1) shooter.angle = -0.1;
+    if (shooter.angle < -Math.PI + 0.1) shooter.angle = -Math.PI + 0.1;
+}
+
+gameCanvas.addEventListener("mousemove", e => {
+    const rect = gameCanvas.getBoundingClientRect();
+    mouseX = e.clientX - rect.left;
+    mouseY = e.clientY - rect.top;
+    updateShooterAngle();
+});
+
+gameCanvas.addEventListener("click", () => {
+    if (gameOver) return;
+    if (!shooter.bubble.moving && shooter.nextBubbleColor) {
+        const speed = 6;
+        shooter.bubble.vx = Math.cos(shooter.angle) * speed;
+        shooter.bubble.vy = Math.sin(shooter.angle) * speed;
+        shooter.bubble.moving = true;
+    }
+});
+
+document.getElementById("easyBtn").addEventListener("click", () => {
+    resetGame("easy");
+});
+
+document.getElementById("hardBtn").addEventListener("click", () => {
+    if (!easyFinished) return;
+    resetGame("hard");
+});
+
+// classic staggered hex grid, left-aligned
+function colToX(col, isOffset) {
+    const step = BUBBLE_RADIUS * 2; // 32px
+    let x = BUBBLE_RADIUS + col * step; // starts at x = 16
+    if (isOffset) x += BUBBLE_RADIUS;   // odd rows offset by 16px
+    return x;
+}
+
+function rowToY(row) {
+    return BUBBLE_RADIUS + row * ROW_HEIGHT + ceilingOffset;
+}
+
+function update(delta) {
+    if (gameOver) return;
+
+    ceilingDropTimer += delta;
+    if (ceilingDropTimer > ceilingDropInterval) {
+        ceilingOffset += 4;
+        ceilingDropTimer = 0;
+
+        if (mode === "hard") {
+            const steps = Math.floor(score / 3);
+            ceilingDropInterval = Math.max(2000, ceilingDropIntervalBase - steps * 300);
+        }
+    }
+
+    for (let row = 0; row < ROWS; row++) {
+        for (let col = 0; col < COLS; col++) {
+            if (!grid[row][col].exists) continue;
+            const y = rowToY(row);
+            if (y + BUBBLE_RADIUS >= LOSS_LINE_Y) {
+                endGame("Game Over! Bubbles reached the danger line.");
+                return;
+            }
+        }
+    }
+
+    if (shooter.bubble && shooter.bubble.moving) {
+        shooter.bubble.x += shooter.bubble.vx;
+        shooter.bubble.y += shooter.bubble.vy;
+
+        if (shooter.bubble.x < BUBBLE_RADIUS) {
+            shooter.bubble.x = BUBBLE_RADIUS;
+            shooter.bubble.vx *= -1;
+        }
+        if (shooter.bubble.x > WIDTH - BUBBLE_RADIUS) {
+            shooter.bubble.x = WIDTH - BUBBLE_RADIUS;
+            shooter.bubble.vx *= -1;
+        }
+
+        if (shooter.bubble.y < BUBBLE_RADIUS + ceilingOffset) {
+            snapBubbleToGrid(shooter.bubble);
+            return;
+        }
+
+        for (let row = 0; row < ROWS; row++) {
+            const isOffset = row % 2 === 1;
+            for (let col = 0; col < COLS; col++) {
+                if (!grid[row][col].exists) continue;
+                const cx = colToX(col, isOffset);
+                const cy = rowToY(row);
+                const dx = shooter.bubble.x - cx;
+                const dy = shooter.bubble.y - cy;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < BUBBLE_RADIUS * 2 - 2) {
+                    snapBubbleToGrid(shooter.bubble);
+                    return;
+                }
+            }
+        }
+    }
+}
+
+// teleport fix + classic stagger
+function snapBubbleToGrid(bubble) {
+    let bestRow = null;
+    let bestCol = null;
+    let bestDist = Infinity;
+
+    for (let row = 0; row < ROWS; row++) {
+        const isOffset = row % 2 === 1;
+        for (let col = 0; col < COLS; col++) {
+            if (grid[row][col].exists) continue;
+
+            const cx = colToX(col, isOffset);
+            const cy = rowToY(row);
+
+            // only consider cells at or below bubble.y
+            if (cy < bubble.y - BUBBLE_RADIUS) continue;
+
+            const dx = bubble.x - cx;
+            const dy = bubble.y - cy;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < bestDist) {
+                bestDist = dist;
+                bestRow = row;
+                bestCol = col;
+            }
+        }
+    }
+
+    if (bestRow === null) {
+        endGame("Game Over! No space to place bubble.");
+        return;
+    }
+
+    const touchingCeiling = bestRow === 0;
+    const neighbors = getNeighbors(bestRow, bestCol);
+    const touchingNeighbor = neighbors.some(n => grid[n.row][n.col].exists);
+
+    if (!touchingCeiling && !touchingNeighbor) {
+        endGame("Game Over! Invalid bubble placement.");
+        return;
+    }
+
+    grid[bestRow][bestCol].exists = true;
+    grid[bestRow][bestCol].color = bubble.color;
+
+    shooter.bubble.moving = false;
+    shooter.bubble.x = shooter.x;
+    shooter.bubble.y = shooter.y;
+
+    handleMatches(bestRow, bestCol);
+    handleFloating();
+    if (checkWin()) return;
+    spawnShooterBubble();
+}
+
+function getNeighbors(row, col) {
+    const neighbors = [];
+    const isOffset = row % 2 === 1;
+
+    const deltas = isOffset
+        ? [[-1, 0], [-1, 1], [0, -1], [0, 1], [1, 0], [1, 1]]
+        : [[-1, -1], [-1, 0], [0, -1], [0, 1], [1, -1], [1, 0]];
+
+    for (const [dr, dc] of deltas) {
+        const nr = row + dr;
+        const nc = col + dc;
+        if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS) {
+            neighbors.push({ row: nr, col: nc });
+        }
+    }
+    return neighbors;
+}
+
+function handleMatches(row, col) {
+    const color = grid[row][col].color;
+    const visited = {};
+    const stack = [{ row, col }];
+    const cluster = [];
+
+    while (stack.length > 0) {
+        const { row: r, col: c } = stack.pop();
+        const key = r + "," + c;
+        if (visited[key]) continue;
+        visited[key] = true;
+        if (!grid[r][c].exists || grid[r][c].color !== color) continue;
+        cluster.push({ row: r, col: c });
+        const neighbors = getNeighbors(r, c);
+        neighbors.forEach(n => stack.push(n));
+    }
+
+    if (cluster.length >= 3) {
+        cluster.forEach(cell => {
+            grid[cell.row][cell.col].exists = false;
+            grid[cell.row][cell.col].color = null;
+        });
+        score += cluster.length;
+        document.getElementById("score").textContent = "Score: " + score;
+    }
+}
+
+function handleFloating() {
+    const visited = {};
+    const stack = [];
+
+    for (let col = 0; col < COLS; col++) {
+        if (grid[0][col].exists) {
+            stack.push({ row: 0, col });
+        }
+    }
+
+    while (stack.length > 0) {
+        const { row, col } = stack.pop();
+        const key = row + "," + col;
+        if (visited[key]) continue;
+        visited[key] = true;
+        const neighbors = getNeighbors(row, col);
+        neighbors.forEach(n => {
+            if (grid[n.row][n.col].exists) stack.push(n);
+        });
+    }
+
+    for (let row = 0; row < ROWS; row++) {
+        for (let col = 0; col < COLS; col++) {
+            const key = row + "," + col;
+            if (grid[row][col].exists && !visited[key]) {
+                grid[row][col].exists = false;
+                grid[row][col].color = null;
+                score += 1;
+            }
+        }
+    }
+    document.getElementById("score").textContent = "Score: " + score;
+}
+
+function checkWin() {
+    for (let row = 0; row < ROWS; row++) {
+        for (let col = 0; col < COLS; col++) {
+            if (grid[row][col].exists) return false;
+        }
+    }
+    endGame("You win!");
+    return true;
+}
+
+function draw() {
+    ctx.fillStyle = "#001a55";
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+    const topRowY = rowToY(0);
+    const bandHeight = Math.max(0, topRowY - BUBBLE_RADIUS);
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, WIDTH, bandHeight);
+
+    for (let row = 0; row < ROWS; row++) {
+        const isOffset = row % 2 === 1;
+        for (let col = 0; col < COLS; col++) {
+            if (!grid[row][col].exists) continue;
+            const x = colToX(col, isOffset);
+            const y = rowToY(row);
+            drawBubble(x, y, grid[row][col].color);
+        }
+    }
+
+    if (shooter.bubble) {
+        drawBubble(shooter.bubble.x, shooter.bubble.y, shooter.bubble.color);
+    }
+
+    ctx.strokeStyle = "#ff0000";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(0, LOSS_LINE_Y);
+    ctx.lineTo(WIDTH, LOSS_LINE_Y);
+    ctx.stroke();
+
+    const nx = shooter.x + Math.cos(shooter.angle) * 30;
+    const ny = shooter.y + Math.sin(shooter.angle) * 30;
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(shooter.x, shooter.y);
+    ctx.lineTo(nx, ny);
+    ctx.stroke();
+}
+
+function drawBubble(x, y, color) {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(x, y, BUBBLE_RADIUS, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+}
+
+function endGame(msg) {
+    if (gameOver) return;
+    gameOver = true;
+    document.getElementById("message").textContent = msg;
+    if (mode === "easy") {
+        easyFinished = true;
+        document.getElementById("hardBtn").disabled = false;
+    }
+}
+
+let lastTime = 0;
+function loop(time) {
+    const delta = time - lastTime;
+    lastTime = time;
+    update(delta);
+    draw();
+    requestAnimationFrame(loop);
+}
+
+resetGame("easy");
+requestAnimationFrame(loop);
+</script>
+
+</body>
+</html>

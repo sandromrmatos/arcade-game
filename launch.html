@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Start Game</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      text-align: center;
+      padding-top: 60px;
+    }
+    button {
+      padding: 14px 24px;
+      font-size: 18px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #9effb0 0%, #c7ffd9 100%);
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2 id="game-title">Game</h2>
+  <button id="start-btn">Start Playing</button>
+
+  <script>
+    // Read game name from URL
+    const params = new URLSearchParams(window.location.search);
+    const game = params.get("game");
+
+    document.getElementById("game-title").textContent = game;
+
+    document.getElementById("start-btn").onclick = () => {
+      window.location.href = `${game}/index.html`;
+    };
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Tic Tac Toe</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background: #f0f0f0;
+    }
+    #board {
+        display: grid;
+        grid-template-columns: repeat(3, 100px);
+        grid-gap: 5px;
+        justify-content: center;
+        margin-top: 20px;
+    }
+    .cell {
+        width: 100px;
+        height: 100px;
+        background: #ddd;
+        border: 2px solid #999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 50px;
+        cursor: pointer;
+        user-select: none;
+    }
+    .cell.disabled {
+        pointer-events: none;
+        background: #eee;
+    }
+    #message {
+        margin-top: 20px;
+        font-size: 22px;
+    }
+    button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 18px;
+    }
+</style>
+</head>
+<body>
+
+<h2>Tic Tac Toe</h2>
+
+<div id="board"></div>
+
+<p id="message"></p>
+
+<button onclick="resetGame()">Reset</button>
+
+<script>
+let board = [];
+let human = "X";
+let pc = "O";
+let gameOver = false;
+
+// Winning combinations
+const wins = [
+    [0,1,2], [3,4,5], [6,7,8], // rows
+    [0,3,6], [1,4,7], [2,5,8], // columns
+    [0,4,8], [2,4,6]           // diagonals
+];
+
+function startGame() {
+    const boardDiv = document.getElementById("board");
+    boardDiv.innerHTML = "";
+    board = Array(9).fill("");
+
+    gameOver = false;
+    document.getElementById("message").textContent = "";
+
+    for (let i = 0; i < 9; i++) {
+        const cell = document.createElement("div");
+        cell.classList.add("cell");
+        cell.dataset.index = i;
+
+        cell.addEventListener("click", () => humanMove(i));
+
+        boardDiv.appendChild(cell);
+    }
+
+    // Randomly choose who starts
+    if (Math.random() < 0.5) {
+        document.getElementById("message").textContent = "PC starts!";
+        pcMove();
+    } else {
+        document.getElementById("message").textContent = "You start!";
+    }
+}
+
+function humanMove(index) {
+    if (gameOver || board[index] !== "") return;
+
+    board[index] = human;
+    updateBoard();
+
+    if (checkWin(human)) {
+        endGame("You win!");
+        return;
+    }
+
+    if (board.every(c => c !== "")) {
+        endGame("Draw!");
+        return;
+    }
+
+    pcMove();
+}
+
+function pcMove() {
+    if (gameOver) return;
+
+    // 1. Try to win
+    let move = findBestMove(pc);
+    if (move !== null) {
+        board[move] = pc;
+        updateBoard();
+        if (checkWin(pc)) {
+            endGame("PC wins!");
+            return;
+        }
+        return;
+    }
+
+    // 2. Try to block human
+    move = findBestMove(human);
+    if (move !== null) {
+        board[move] = pc;
+        updateBoard();
+        return;
+    }
+
+    // 3. Otherwise random move
+    let empty = board.map((v, i) => v === "" ? i : null).filter(v => v !== null);
+    let random = empty[Math.floor(Math.random() * empty.length)];
+    board[random] = pc;
+    updateBoard();
+
+    if (checkWin(pc)) {
+        endGame("PC wins!");
+        return;
+    }
+
+    if (board.every(c => c !== "")) {
+        endGame("Draw!");
+        return;
+    }
+}
+
+function findBestMove(player) {
+    for (let combo of wins) {
+        const [a, b, c] = combo;
+        const line = [board[a], board[b], board[c]];
+
+        // If two are player and one is empty → winning/blocking move
+        if (line.filter(v => v === player).length === 2 &&
+            line.filter(v => v === "").length === 1) {
+            return combo[line.indexOf("")];
+        }
+    }
+    return null;
+}
+
+function updateBoard() {
+    const cells = document.querySelectorAll(".cell");
+    cells.forEach((cell, i) => {
+        cell.textContent = board[i];
+    });
+}
+
+function checkWin(player) {
+    return wins.some(combo => combo.every(i => board[i] === player));
+}
+
+function endGame(msg) {
+    gameOver = true;
+    document.getElementById("message").textContent = msg;
+
+    // Disable board
+    const cells = document.querySelectorAll(".cell");
+    cells.forEach(cell => cell.classList.add("disabled"));
+}
+
+function resetGame() {
+    const cells = document.querySelectorAll(".cell");
+    cells.forEach(cell => cell.classList.remove("disabled"));
+    startGame();
+}
+
+startGame();
+</script>
+
+</body>
+</html>

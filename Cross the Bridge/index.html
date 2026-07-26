@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cross the Bridge</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="game-container">
+    <h1>Cross the Bridge</h1>
+
+    <div class="hud">
+      <div class="hud-item">
+        <span class="label">Time:</span>
+        <span id="timer">01:00</span>
+      </div>
+      <div class="hud-item">
+        <span class="label">Attempts:</span>
+        <span id="attempts">0</span>
+      </div>
+      <button id="restart-btn">Restart</button>
+    </div>
+
+    <div class="bridge-wrapper">
+      <div class="start-pad">
+        <div id="paw" class="paw"></div>
+        <span class="start-label">START</span>
+      </div>
+
+      <div id="bridge" class="bridge"></div>
+
+      <div class="finish-pad">
+        <div class="finish-line"></div>
+        <span class="finish-label">FINISH</span>
+      </div>
+    </div>
+
+    <div id="message" class="message"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

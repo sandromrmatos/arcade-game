@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Mini Wordle</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background: #f0f0f0;
+    }
+    #board {
+        display: grid;
+        grid-template-columns: repeat(5, 50px);
+        grid-gap: 5px;
+        justify-content: center;
+        margin-top: 20px;
+    }
+    .tile {
+        width: 50px;
+        height: 50px;
+        border: 2px solid #999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        font-weight: bold;
+        text-transform: uppercase;
+        background: #fff;
+    }
+    .correct {
+        background: #6aaa64;
+        color: #fff;
+        border-color: #6aaa64;
+    }
+    .present {
+        background: #c9b458;
+        color: #fff;
+        border-color: #c9b458;
+    }
+    .absent {
+        background: #787c7e;
+        color: #fff;
+        border-color: #787c7e;
+    }
+    #message {
+        margin-top: 20px;
+        font-size: 18px;
+    }
+    #inputRow {
+        margin-top: 20px;
+    }
+    #guessInput {
+        padding: 8px;
+        font-size: 18px;
+        text-transform: uppercase;
+        width: 120px;
+        text-align: center;
+    }
+    button {
+        padding: 8px 16px;
+        font-size: 16px;
+        margin-left: 10px;
+    }
+
+    /* Keyboard */
+    #keyboard {
+        margin-top: 25px;
+        display: grid;
+        grid-template-columns: repeat(13, 35px);
+        grid-gap: 5px;
+        justify-content: center;
+    }
+    .key {
+        width: 35px;
+        height: 45px;
+        background: #ddd;
+        border: 1px solid #999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 18px;
+        font-weight: bold;
+        text-transform: uppercase;
+        user-select: none;
+    }
+    .key.used {
+        background: #bbb;
+        color: #666;
+    }
+</style>
+</head>
+<body>
+
+<h2>Mini Wordle (5 letters)</h2>
+
+<div id="board"></div>
+
+<div id="inputRow">
+    <input id="guessInput" maxlength="5" />
+    <button onclick="submitGuess()">Guess</button>
+</div>
+
+<p id="message"></p>
+
+<div id="keyboard"></div>
+
+<script>
+let WORDS = []; // Loaded from words.txt
+let target = "";
+let currentRow = 0;
+const maxRows = 6;
+let gameOver = false;
+
+async function loadWords() {
+    const response = await fetch("words.txt");
+    const text = await response.text();
+
+    WORDS = text
+        .split(/\r?\n/)
+        .map(w => w.trim().toUpperCase())
+        .filter(w => w.length === 5);
+
+    console.log("Loaded words:", WORDS.length);
+}
+
+function initBoard() {
+    const board = document.getElementById("board");
+    board.innerHTML = "";
+    for (let r = 0; r < maxRows; r++) {
+        for (let c = 0; c < 5; c++) {
+            const tile = document.createElement("div");
+            tile.classList.add("tile");
+            tile.dataset.row = r;
+            tile.dataset.col = c;
+            board.appendChild(tile);
+        }
+    }
+}
+
+function initKeyboard() {
+    const kb = document.getElementById("keyboard");
+    kb.innerHTML = "";
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+    letters.forEach(letter => {
+        const key = document.createElement("div");
+        key.classList.add("key");
+        key.textContent = letter;
+        key.id = "key_" + letter;
+        kb.appendChild(key);
+    });
+}
+
+function startGame() {
+    target = WORDS[Math.floor(Math.random() * WORDS.length)];
+    currentRow = 0;
+    gameOver = false;
+
+    document.getElementById("message").textContent = "";
+    document.getElementById("guessInput").value = "";
+
+    initBoard();
+    initKeyboard();
+}
+
+function submitGuess() {
+    if (gameOver) return;
+
+    const input = document.getElementById("guessInput");
+    let guess = input.value.toUpperCase().trim();
+
+    if (guess.length !== 5) {
+        document.getElementById("message").textContent = "Enter a 5-letter word.";
+        return;
+    }
+
+    fillRow(guess);
+    updateKeyboard(guess);
+    checkGuess(guess);
+
+    input.value = "";
+}
+
+function fillRow(guess) {
+    for (let c = 0; c < 5; c++) {
+        const tile = document.querySelector(
+            `.tile[data-row="${currentRow}"][data-col="${c}"]`
+        );
+        tile.textContent = guess[c];
+    }
+}
+
+function updateKeyboard(guess) {
+    guess.split("").forEach(letter => {
+        const key = document.getElementById("key_" + letter);
+        if (key) key.classList.add("used");
+    });
+}
+
+function checkGuess(guess) {
+    const targetArr = target.split("");
+    const guessArr = guess.split("");
+    const result = Array(5).fill("absent");
+    const usedTarget = Array(5).fill(false);
+
+    // First pass: correct positions
+    for (let i = 0; i < 5; i++) {
+        if (guessArr[i] === targetArr[i]) {
+            result[i] = "correct";
+            usedTarget[i] = true;
+        }
+    }
+
+    // Second pass: present but wrong position
+    for (let i = 0; i < 5; i++) {
+        if (result[i] === "correct") continue;
+        for (let j = 0; j < 5; j++) {
+            if (!usedTarget[j] && guessArr[i] === targetArr[j]) {
+                result[i] = "present";
+                usedTarget[j] = true;
+                break;
+            }
+        }
+    }
+
+    // Apply classes
+    for (let c = 0; c < 5; c++) {
+        const tile = document.querySelector(
+            `.tile[data-row="${currentRow}"][data-col="${c}"]`
+        );
+        tile.classList.add(result[c]);
+    }
+
+    if (guess === target) {
+        document.getElementById("message").textContent =
+            `You guessed it! The word was ${target}.`;
+        gameOver = true;
+        return;
+    }
+
+    currentRow++;
+
+    if (currentRow >= maxRows) {
+        document.getElementById("message").textContent =
+            `Out of guesses! The word was ${target}.`;
+        gameOver = true;
+    }
+}
+
+(async () => {
+    await loadWords();
+    startGame();
+})();
+</script>
+
+</body>
+</html>

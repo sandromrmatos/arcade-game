@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simon Says</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="game-container">
+    <h1>Simon Says</h1>
+
+    <div class="hud">
+      <div class="hud-item">
+        <span class="label">Round:</span>
+        <span id="round">0</span>
+      </div>
+      <div class="hud-item">
+        <span class="label">Max Length:</span>
+        <span id="max-length">20</span>
+      </div>
+      <button id="restart-btn">Restart</button>
+    </div>
+
+    <div id="grid" class="grid"></div>
+
+    <div id="message" class="message"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

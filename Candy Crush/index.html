@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Candy Crush</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="game-container">
+    <h1>Candy Crush</h1>
+
+    <div class="hud">
+      <div class="hud-item">
+        <span class="label">Score:</span>
+        <span id="score">0</span>
+      </div>
+      <div class="hud-item">
+        <span class="label">Time:</span>
+        <span id="timer">03:00</span>
+      </div>
+      <button id="restart-btn">Restart</button>
+    </div>
+
+    <div id="board" class="board"></div>
+
+    <div id="message" class="message"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

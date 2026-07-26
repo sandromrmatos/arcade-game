@@ -1,0 +1,72 @@
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: #f0f4ff;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Banner stays forever */
+.banner {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.banner h1 {
+  margin: 0 0 10px;
+  color: #4a1f3d;
+}
+
+.menu {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.menu button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.menu button:hover {
+  transform: translateY(-2px);
+}
+
+/* Music Button */
+.music-btn {
+  margin-left: 20px;
+  padding: 8px 14px;
+  font-size: 20px;
+  border: none;
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.music-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* Game iframe */
+.game-area {
+  flex: 1;
+  display: flex;
+}
+
+#game-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: white;
+}
