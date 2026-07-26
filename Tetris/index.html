@@ -36,17 +36,66 @@
         font-size: 18px;
         margin-bottom: 5px;
     }
+    #menuOverlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.85);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 100;
+        color: white;
+    }
+    .menu-content {
+        background: #333;
+        padding: 30px;
+        border-radius: 10px;
+        text-align: center;
+    }
+    .menu-content h2 {
+        margin-top: 0;
+    }
+    .menu-content button {
+        padding: 10px 20px;
+        font-size: 16px;
+        margin: 10px;
+        cursor: pointer;
+        background: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+    }
+    .menu-content button:hover {
+        background: #45a049;
+    }
+    .hidden {
+        display: none !important;
+    }
 </style>
 </head>
 <body>
 
 <h2>Tetris</h2>
 
+<div id="menuOverlay">
+    <div class="menu-content">
+        <h2>Tetris</h2>
+        <p>Select Difficulty:</p>
+        <button id="btnHard">Hard Mode</button>
+        <button id="btnEasy">Easy Mode</button>
+    </div>
+</div>
+
 <div id="container">
     <div id="leftPanel">
         <div id="score">Score: 0</div>
         <canvas id="tetris" width="200" height="400"></canvas>
         <div id="message"></div>
+
     </div>
 
     <div id="rightPanel">
@@ -70,9 +119,16 @@ let board = createMatrix(COLS, ROWS);
 let score = 0;
 let gameOver = false;
 
+let difficulty = localStorage.getItem("tetrisDifficulty") || "hard";
 let dropInterval = 500; // starting speed (ms)
 let dropCounter = 0;
 let lastTime = 0;
+
+// Speed reduction amounts (ms per cleared row)
+const SPEED_REDUCES = {
+    hard: 20,
+    easy: 10
+};
 
 const colors = [
     null,
@@ -237,7 +293,10 @@ function sweep() {
             board.unshift(new Array(COLS).fill(0));
 
             score += 1; // 1 point per row
-            dropInterval = Math.max(100, dropInterval - 20); // speed up
+            
+            // Speed up based on difficulty
+            const reduction = SPEED_REDUCES[difficulty];
+            dropInterval = Math.max(100, dropInterval - reduction);
 
             document.getElementById("score").textContent = "Score: " + score;
             y++;
@@ -324,9 +383,45 @@ document.addEventListener("keydown", e => {
     }
 });
 
-drawNextPiece();
-playerReset();
-update();
+// Difficulty menu logic
+function showMenu() {
+    document.getElementById("menuOverlay").classList.remove("hidden");
+}
+
+function hideMenu() {
+    document.getElementById("menuOverlay").classList.add("hidden");
+}
+
+function startGame(selectedDifficulty) {
+    difficulty = selectedDifficulty;
+    localStorage.setItem("tetrisDifficulty", difficulty);
+    
+    // Set dropInterval based on difficulty
+    dropInterval = difficulty === "easy" ? 700 : 500;
+    
+    hideMenu();
+    gameOver = false;
+    score = 0;
+    board = createMatrix(COLS, ROWS);
+    
+    document.getElementById("score").textContent = "Score: 0";
+    document.getElementById("message").textContent = "";
+    
+    playerReset();
+    update();
+}
+
+// Event listeners for menu buttons
+document.getElementById("btnHard").addEventListener("click", () => {
+    startGame("hard");
+});
+
+document.getElementById("btnEasy").addEventListener("click", () => {
+    startGame("easy");
+});
+
+// Show menu on startup
+showMenu();
 </script>
 
 </body>

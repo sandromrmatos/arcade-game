@@ -25,7 +25,19 @@ async function buildMenu() {
 
   data.games.forEach(folder => {
     const btn = document.createElement("button");
-    btn.textContent = folder;
+
+    // Icon
+    const img = document.createElement("img");
+    img.src = `icons/${folder}.png`;
+    img.className = "menu-icon";
+
+    // Text
+    const span = document.createElement("span");
+    span.textContent = folder;
+
+    btn.appendChild(img);
+    btn.appendChild(span);
+
     btn.onclick = () => loadGame(folder);
     menu.appendChild(btn);
   });
@@ -71,3 +83,34 @@ function toggleMusic() {
 }
 
 document.getElementById("music-btn").onclick = toggleMusic;
+
+// --- MOBILE KEYBOARD TOGGLE ---
+const keyboardBtn = document.getElementById("keyboard-toggle");
+const mobileControls = document.getElementById("mobile-controls");
+
+keyboardBtn.addEventListener("click", () => {
+  mobileControls.style.display =
+    mobileControls.style.display === "flex" ? "none" : "flex";
+});
+
+// --- MOBILE CONTROL BUTTONS ---
+document.querySelectorAll("#mobile-controls button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const dir = btn.dataset.dir;
+
+    const keyMap = {
+      up: "ArrowUp",
+      down: "ArrowDown",
+      left: "ArrowLeft",
+      right: "ArrowRight",
+      rotate: " " // SPACE BAR for Tetris rotation
+    };
+
+    const key = keyMap[dir];
+    const frame = document.getElementById("game-frame");
+
+    frame.contentWindow.dispatchEvent(
+      new KeyboardEvent("keydown", { key })
+    );
+  });
+});

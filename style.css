@@ -35,10 +35,20 @@ body {
   cursor: pointer;
   font-weight: 600;
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .menu button:hover {
   transform: translateY(-2px);
+}
+
+/* Game icons */
+.menu-icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
 }
 
 /* Music Button */
@@ -58,6 +68,23 @@ body {
   transform: translateY(-2px);
 }
 
+/* Keyboard Toggle Button */
+.keyboard-btn {
+  margin-left: 10px;
+  padding: 8px 14px;
+  font-size: 20px;
+  border: none;
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.keyboard-btn:hover {
+  transform: translateY(-2px);
+}
+
 /* Game iframe */
 .game-area {
   flex: 1;
@@ -69,4 +96,33 @@ body {
   height: 100%;
   border: none;
   background: white;
+}
+
+/* Mobile Controls */
+#mobile-controls {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: none; /* shown only when keyboard icon clicked */
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  z-index: 9999;
+}
+
+#mobile-controls button {
+  width: 70px;
+  height: 70px;
+  font-size: 32px;
+  border-radius: 14px;
+  border: none;
+  background: #ffffffdd;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  cursor: pointer;
+}
+
+#mobile-controls .row {
+  display: flex;
+  gap: 10px;
 }

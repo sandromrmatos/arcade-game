@@ -15,11 +15,25 @@
 
     <!-- Music Button -->
     <button id="music-btn" class="music-btn">▶️</button>
+
+    <!-- Keyboard Toggle Button -->
+    <button id="keyboard-toggle" class="keyboard-btn">⌨️</button>
   </div>
 
   <!-- Game Area -->
   <div class="game-area">
     <iframe id="game-frame" src="home.html"></iframe>
+  </div>
+
+  <!-- Mobile Controls Overlay -->
+  <div id="mobile-controls">
+    <button data-dir="up">▲</button>
+    <div class="row">
+      <button data-dir="left">◀</button>
+      <button data-dir="rotate">⟳</button>
+      <button data-dir="right">▶</button>
+    </div>
+    <button data-dir="down">▼</button>
   </div>
 
   <script src="script.js"></script>
