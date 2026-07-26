@@ -98,31 +98,11 @@ body {
   background: white;
 }
 
-/* Mobile Controls */
-#mobile-controls {
+/* Hidden input for mobile keyboard */
+#mobile-keyboard-input {
   position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: none; /* shown only when keyboard icon clicked */
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  z-index: 9999;
-}
-
-#mobile-controls button {
-  width: 70px;
-  height: 70px;
-  font-size: 32px;
-  border-radius: 14px;
-  border: none;
-  background: #ffffffdd;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-  cursor: pointer;
-}
-
-#mobile-controls .row {
-  display: flex;
-  gap: 10px;
+  bottom: -200px; /* fully hidden */
+  opacity: 0;
+  height: 1px;
+  width: 1px;
 }

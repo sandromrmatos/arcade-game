@@ -84,37 +84,33 @@ function toggleMusic() {
 
 document.getElementById("music-btn").onclick = toggleMusic;
 
-// --- MOBILE KEYBOARD TOGGLE ---
+// --- MOBILE KEYBOARD INPUT SYSTEM ---
 const keyboardBtn = document.getElementById("keyboard-toggle");
-const mobileControls = document.getElementById("mobile-controls");
+const mobileInput = document.getElementById("mobile-keyboard-input");
 
 keyboardBtn.addEventListener("click", () => {
-  mobileControls.style.display =
-    mobileControls.style.display === "flex" ? "none" : "flex";
+  mobileInput.focus(); // opens mobile keyboard
 });
 
-// --- MOBILE CONTROL BUTTONS ---
-document.querySelectorAll("#mobile-controls button").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const dir = btn.dataset.dir;
+// Map mobile keys → Arrow keys
+mobileInput.addEventListener("keydown", e => {
+  const frame = document.getElementById("game-frame");
 
-    const keyMap = {
-      up: "ArrowUp",
-      down: "ArrowDown",
-      left: "ArrowLeft",
-      right: "ArrowRight",
-      rotate: " " // SPACE BAR for Tetris rotation
-    };
+  const map = {
+    "a": "ArrowLeft",
+    "s": "ArrowRight",
+    "w": "ArrowUp",
+    "z": "ArrowDown",
+    " ": " " // Space
+  };
 
-    const key = keyMap[dir];
-    const frame = document.getElementById("game-frame");
+  const key = map[e.key.toLowerCase()];
+  if (!key) return;
 
-    const event = new KeyboardEvent("keydown", {
-      key,
-      bubbles: true
-    });
-
-    // SEND TO THE IFRAME DOCUMENT (this is the fix)
-    frame.contentWindow.document.dispatchEvent(event);
+  const event = new KeyboardEvent("keydown", {
+    key,
+    bubbles: true
   });
+
+  frame.contentWindow.document.dispatchEvent(event);
 });
