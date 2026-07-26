@@ -101,8 +101,16 @@ body {
 /* Hidden input for mobile keyboard */
 #mobile-keyboard-input {
   position: fixed;
-  bottom: -200px; /* fully hidden */
-  opacity: 0;
-  height: 1px;
-  width: 1px;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  padding: 6px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 2px solid #888;
+  background: #fff;
+  text-align: center;
+  z-index: 9999;
+  display: none; /* hidden until user taps ⌨️ */
 }

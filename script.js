@@ -1,37 +1,28 @@
-// Load game into iframe (launch screen first)
+// Load game into iframe
 function loadGame(name) {
   const frame = document.getElementById("game-frame");
-
-  if (name === "home") {
-    frame.src = "home.html";
-  } else {
-    frame.src = `launch.html?game=${name}`;
-  }
+  frame.src = name === "home" ? "home.html" : `launch.html?game=${name}`;
 }
 
-// Build menu from games.json
+// Build menu
 async function buildMenu() {
   const menu = document.getElementById("menu");
 
-  // Home button
   const homeBtn = document.createElement("button");
   homeBtn.textContent = "Home";
   homeBtn.onclick = () => loadGame("home");
   menu.appendChild(homeBtn);
 
-  // Load game list
   const response = await fetch("games.json");
   const data = await response.json();
 
   data.games.forEach(folder => {
     const btn = document.createElement("button");
 
-    // Icon
     const img = document.createElement("img");
     img.src = `icons/${folder}.png`;
     img.className = "menu-icon";
 
-    // Text
     const span = document.createElement("span");
     span.textContent = folder;
 
@@ -45,7 +36,7 @@ async function buildMenu() {
 
 buildMenu();
 
-// --- MUSIC PLAYER ---
+// MUSIC PLAYER
 const audioFiles = [
   "audio/Moss_Path.mp3",
   "audio/Poisonous_Lavender.mp3",
@@ -66,11 +57,10 @@ audioPlayer.addEventListener("ended", () => {
   audioPlayer.play();
 });
 
-function toggleMusic() {
+document.getElementById("music-btn").onclick = () => {
   const btn = document.getElementById("music-btn");
 
   if (!isPlaying) {
-    currentTrack = 0;
     audioPlayer.src = audioFiles[currentTrack];
     audioPlayer.play();
     isPlaying = true;
@@ -80,16 +70,19 @@ function toggleMusic() {
     isPlaying = false;
     btn.textContent = "▶️";
   }
-}
+};
 
-document.getElementById("music-btn").onclick = toggleMusic;
-
-// --- MOBILE KEYBOARD INPUT SYSTEM ---
+// MOBILE KEYBOARD INPUT
 const keyboardBtn = document.getElementById("keyboard-toggle");
 const mobileInput = document.getElementById("mobile-keyboard-input");
 
 keyboardBtn.addEventListener("click", () => {
-  mobileInput.focus(); // opens mobile keyboard
+  if (mobileInput.style.display === "none") {
+    mobileInput.style.display = "block";
+    mobileInput.focus();
+  } else {
+    mobileInput.style.display = "none";
+  }
 });
 
 // Map mobile keys → Arrow keys
@@ -101,7 +94,7 @@ mobileInput.addEventListener("keydown", e => {
     "s": "ArrowRight",
     "w": "ArrowUp",
     "z": "ArrowDown",
-    " ": " " // Space
+    " ": " "
   };
 
   const key = map[e.key.toLowerCase()];

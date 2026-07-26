@@ -7,26 +7,26 @@
 </head>
 <body>
 
-  <!-- Persistent Banner -->
   <div class="banner">
     <h1>Arcade Games by Sandro</h1>
 
     <div id="menu" class="menu"></div>
 
-    <!-- Music Button -->
     <button id="music-btn" class="music-btn">▶️</button>
-
-    <!-- Keyboard Toggle Button -->
     <button id="keyboard-toggle" class="keyboard-btn">⌨️</button>
   </div>
 
-  <!-- Game Area -->
   <div class="game-area">
     <iframe id="game-frame" src="home.html"></iframe>
   </div>
 
-  <!-- Hidden input to trigger mobile keyboard -->
-  <input id="mobile-keyboard-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <!-- Tiny visible input to trigger mobile keyboard -->
+  <input id="mobile-keyboard-input"
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"
+         placeholder="Mobile controls active">
 
   <script src="script.js"></script>
 </body>
