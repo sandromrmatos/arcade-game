@@ -109,8 +109,12 @@ document.querySelectorAll("#mobile-controls button").forEach(btn => {
     const key = keyMap[dir];
     const frame = document.getElementById("game-frame");
 
-    frame.contentWindow.dispatchEvent(
-      new KeyboardEvent("keydown", { key })
-    );
+    const event = new KeyboardEvent("keydown", {
+      key,
+      bubbles: true
+    });
+
+    // SEND TO THE IFRAME DOCUMENT (this is the fix)
+    frame.contentWindow.document.dispatchEvent(event);
   });
 });
