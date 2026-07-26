@@ -1,0 +1,160 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  background: #050608;
+  color: #f5f5f5;
+}
+
+.ws-wrapper {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 12px;
+}
+
+.ws-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.ws-header h1 {
+  text-align: center;
+  font-size: 1.6rem;
+}
+
+.ws-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#resetSelectionButton {
+  padding: 4px 10px;
+  font-size: 0.9rem;
+  border-radius: 999px;
+  border: none;
+  background: #ffc107;
+  color: #000;
+  cursor: pointer;
+}
+
+#resetSelectionButton:hover {
+  background: #ffca2c;
+}
+
+.finish-message {
+  text-align: center;
+  min-height: 20px;
+  font-size: 0.95rem;
+}
+
+/* Layout */
+
+.ws-main {
+  display: flex;
+  gap: 16px;
+}
+
+.ws-board {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  gap: 4px;
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 1 / 1;
+  background: #111;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+/* Cells */
+
+.ws-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #222;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.ws-cell:hover {
+  outline: 1px solid #555;
+}
+
+/* Selection highlight */
+
+.ws-cell.selected {
+  background: #ffeb3b; /* yellow */
+  color: #000;
+}
+
+/* Found word highlight */
+
+.ws-cell.found {
+  background: #4caf50;
+  color: #000;
+  font-weight: 700;
+}
+
+/* Word list */
+
+.ws-words {
+  min-width: 160px;
+}
+
+.ws-words h2 {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+#wordList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.95rem;
+}
+
+#wordList li {
+  padding: 2px 4px;
+  border-radius: 4px;
+  background: #222;
+}
+
+/* Crossed / found word */
+
+#wordList li.found {
+  text-decoration: line-through;
+  background: #4caf50;
+  color: #000;
+}
+
+/* Responsive */
+
+@media (max-width: 640px) {
+  .ws-main {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ws-board {
+    max-width: 320px;
+  }
+
+  .ws-words {
+    width: 100%;
+    max-width: 320px;
+  }
+}

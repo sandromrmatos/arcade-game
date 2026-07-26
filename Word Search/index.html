@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Word Search</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="ws-wrapper">
+    <header class="ws-header">
+      <h1>Word Search</h1>
+      <div class="ws-info">
+        <div>Timer: <span id="timer">00:00</span></div>
+        <button id="resetSelectionButton">Reset selection</button>
+      </div>
+      <div id="finishMessage" class="finish-message"></div>
+    </header>
+
+    <main class="ws-main">
+      <div id="board" class="ws-board">
+        <!-- 10x10 cells injected by script.js -->
+      </div>
+
+      <aside class="ws-words">
+        <h2>Words</h2>
+        <ul id="wordList"></ul>
+      </aside>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
