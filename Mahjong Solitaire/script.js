@@ -110,7 +110,7 @@ function generatePositions(layers) {
 function generateRandomImages(count) {
   const all = Array.from({ length: 42 }, (_, i) => i + 1);
   shuffle(all);
-  return all.slice(0, count).map(n => `.limages/${String(n).padStart(2, '0')}.png`);
+  return all.slice(0, count).map(n => `./images/${String(n).padStart(2, '0')}.png`);
 }
 
 function expandImages(images) {
