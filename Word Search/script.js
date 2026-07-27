@@ -170,9 +170,6 @@ function stopTimer() {
 }
 
 function handleCellClick(r, c, el) {
-  // If already part of a found word, ignore
-  if (el.classList.contains("found")) return;
-
   // If already selected in current sequence, ignore
   if (selectedCells.some(sc => sc.r === r && sc.c === c)) return;
 
@@ -262,7 +259,7 @@ function markWordFound(word) {
 
 function clearSelection(clearFound = false) {
   selectedCells.forEach(sc => {
-    if (!clearFound && sc.el.classList.contains("found")) return;
+    // Always remove selected class, but keep found class
     sc.el.classList.remove("selected");
   });
   selectedCells = [];
