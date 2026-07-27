@@ -273,6 +273,11 @@ function finishGame() {
   const seconds = totalSeconds % 60;
 
   finishMessageEl.textContent = `You finished in ${minutes} minutes and ${seconds} seconds`;
+  
+  // Save score to leaderboard
+  saveGameScore("Word Search", {
+    bestTime: totalSeconds
+  });
 }
 
 resetSelectionButton.addEventListener("click", () => {

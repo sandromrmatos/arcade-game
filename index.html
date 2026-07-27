@@ -16,6 +16,14 @@
     <button id="keyboard-toggle" class="keyboard-btn">⌨️</button>
   </div>
 
+  <div id="leaderboard-section" class="leaderboard-section hidden">
+    <div class="leaderboard-content">
+      <h2>Game Leaderboards</h2>
+      <p>Select a game to view its high scores:</p>
+      <div id="leaderboard-game-list" class="leaderboard-game-list"></div>
+    </div>
+  </div>
+
   <div class="game-area">
     <iframe id="game-frame" src="home.html"></iframe>
   </div>
@@ -27,6 +35,16 @@
          autocapitalize="off"
          spellcheck="false"
          placeholder="Mobile controls active">
+
+  <!-- Name Input Modal -->
+  <div id="name-modal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Welcome!</h2>
+      <p>Please enter your name:</p>
+      <input type="text" id="player-name-input" placeholder="Your name" maxlength="20">
+      <button id="save-name-btn">Start Playing</button>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
