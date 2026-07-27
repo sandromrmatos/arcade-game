@@ -1,0 +1,122 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #0b1724;
+  color: #f5f5f5;
+  text-align: center;
+}
+
+h1 {
+  margin-top: 20px;
+}
+
+#mode-select {
+  margin-top: 20px;
+}
+
+#mode-select button {
+  padding: 10px 20px;
+  margin: 0 10px;
+  font-size: 18px;
+  border: none;
+  border-radius: 6px;
+  background: #4fc3f7;
+  color: #021019;
+  cursor: pointer;
+}
+
+#mode-select button:hover {
+  background: #29b6f6;
+}
+
+#game-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+#board {
+  position: relative;
+  background: #102030;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.6);
+}
+
+/* Base tile style */
+.tile {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
+  overflow: hidden;
+}
+
+/* Stronger shadows per layer */
+.tile.layer1 {
+  background-color: #fdfdfd;
+  box-shadow: 0 10px 14px rgba(0,0,0,0.55);
+}
+
+.tile.layer2 {
+  background-color: #f7f7ff;
+  box-shadow: 0 18px 26px rgba(0,0,0,0.65);
+}
+
+.tile.layer3 {
+  background-color: #f2f6ff;
+  box-shadow: 0 26px 38px rgba(0,0,0,0.75);
+}
+
+.tile.layer4 {
+  background-color: #eaf1ff;
+  box-shadow: 0 34px 50px rgba(0,0,0,0.85);
+}
+
+.tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Free tile highlight */
+.tile.free {
+  outline: 3px solid #ffd54f;
+}
+
+/* Selected tile */
+.tile.selected {
+  transform: translateY(-10px) scale(1.08);
+  outline: 3px solid #4fc3f7;
+}
+
+/* Matched tile */
+.tile.matched {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#status {
+  margin-top: 20px;
+}
+
+#restart {
+  margin-left: 20px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  background: #4fc3f7;
+  color: #021019;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#restart:hover {
+  background: #29b6f6;
+}
+
+#message {
+  margin-top: 20px;
+  font-size: 22px;
+  font-weight: bold;
+}
