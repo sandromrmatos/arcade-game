@@ -2,25 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Mahjong Solitaire</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mahjong Pyramid</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="mahjong-wrapper">
-    <header class="mahjong-header">
-      <h1>Mahjong Solitaire</h1>
-      <div class="mahjong-info">
-        <div>Timer: <span id="timer">00:00</span></div>
-        <button id="restartButton">Restart</button>
-      </div>
-      <div id="finishMessage" class="finish-message"></div>
-    </header>
+  <h1>Mahjong Pyramid</h1>
 
-    <main class="mahjong-main">
-      <div id="board" class="mahjong-board"></div>
-    </main>
+  <div id="mode-select">
+    <button id="easy-btn">Easy</button>
+    <button id="hard-btn">Hard</button>
   </div>
+
+  <div id="game-container" style="display:none;">
+    <div id="board"></div>
+  </div>
+
+  <div id="status" style="display:none;">
+    <span id="timer">00:00</span>
+    <span id="matches">Matches: 0</span>
+    <button id="restart">Restart</button>
+  </div>
+
+  <div id="message"></div>
 
   <script src="script.js"></script>
 </body>
