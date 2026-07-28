@@ -1797,3 +1797,22 @@ window.showNewBestScore = function(gameName, scoreData) {
     setTimeout(() => message.remove(), 300);
   }, 3000);
 };
+
+// COLLAPSE/EXPAND BANNER
+const collapseBtn = document.getElementById("collapse-btn");
+const banner = document.querySelector(".banner");
+let isCollapsed = false;
+
+collapseBtn.addEventListener("click", () => {
+  isCollapsed = !isCollapsed;
+  
+  if (isCollapsed) {
+    banner.classList.add("collapsed");
+    collapseBtn.textContent = "▼";
+    collapseBtn.title = "Expand menu";
+  } else {
+    banner.classList.remove("collapsed");
+    collapseBtn.textContent = "▲";
+    collapseBtn.title = "Collapse menu";
+  }
+});

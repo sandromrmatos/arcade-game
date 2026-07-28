@@ -109,6 +109,12 @@ body {
   text-overflow: ellipsis;
 }
 
+.right-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .language-select {
   padding: 8px 15px;
   font-size: 14px;
@@ -125,6 +131,43 @@ body {
 .language-select:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+}
+
+.collapse-btn {
+  padding: 8px 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border: 2px solid #fff;
+  border-radius: 20px;
+  background: white;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  outline: none;
+  transition: all 0.2s;
+  line-height: 1;
+}
+
+.collapse-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+}
+
+/* Collapsed state */
+.banner.collapsed {
+  padding: 10px 20px;
+  transition: padding 0.3s ease;
+}
+
+.banner.collapsed h1,
+.banner.collapsed .menu,
+.banner.collapsed .music-controls,
+.banner.collapsed .language-select {
+  display: none;
+}
+
+.banner.collapsed .controls-row {
+  margin-top: 0;
+  justify-content: flex-end;
 }
 
 /* Game iframe */
