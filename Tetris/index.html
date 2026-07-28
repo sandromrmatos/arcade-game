@@ -75,6 +75,63 @@
     .hidden {
         display: none !important;
     }
+    
+    /* Mobile Controls */
+    #mobileControls {
+        display: none;
+        margin-top: 20px;
+        gap: 10px;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .control-row {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+    }
+    
+    .control-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+        border: 2px solid #555;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        cursor: pointer;
+        user-select: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        touch-action: manipulation;
+        font-weight: bold;
+    }
+    
+    .control-btn:active {
+        transform: scale(0.95);
+        background: linear-gradient(135deg, #5568d3 0%, #63408a 100%);
+    }
+    
+    .control-btn.wide {
+        width: 130px;
+    }
+    
+    @media (max-width: 768px) {
+        #mobileControls {
+            display: flex;
+        }
+        
+        #container {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        #leftPanel {
+            margin-right: 0;
+            margin-bottom: 15px;
+        }
+    }
 </style>
 </head>
 <body>
@@ -95,12 +152,26 @@
         <div id="score">Score: 0</div>
         <canvas id="tetris" width="200" height="400"></canvas>
         <div id="message"></div>
-
     </div>
 
     <div id="rightPanel">
         <div id="nextLabel">Next:</div>
         <canvas id="nextPiece" width="80" height="80"></canvas>
+    </div>
+</div>
+
+<!-- Mobile Touch Controls -->
+<div id="mobileControls">
+    <div class="control-row">
+        <button class="control-btn" id="btnRotate">↻</button>
+    </div>
+    <div class="control-row">
+        <button class="control-btn" id="btnLeft">←</button>
+        <button class="control-btn" id="btnDown">↓</button>
+        <button class="control-btn" id="btnRight">→</button>
+    </div>
+    <div class="control-row">
+        <button class="control-btn wide" id="btnDrop">DROP</button>
     </div>
 </div>
 
@@ -398,6 +469,42 @@ document.addEventListener("keydown", e => {
         playerReset();
         dropCounter = 0;
     }
+});
+
+// Mobile touch controls
+document.getElementById("btnLeft").addEventListener("click", () => {
+    if (!gameOver) playerMove(-1);
+});
+
+document.getElementById("btnRight").addEventListener("click", () => {
+    if (!gameOver) playerMove(1);
+});
+
+document.getElementById("btnDown").addEventListener("click", () => {
+    if (!gameOver) playerDrop();
+});
+
+document.getElementById("btnRotate").addEventListener("click", () => {
+    if (!gameOver) playerRotate(1);
+});
+
+document.getElementById("btnDrop").addEventListener("click", () => {
+    if (gameOver) return;
+    while (!collide(board, player)) {
+        player.pos.y++;
+    }
+    player.pos.y--;
+    merge(board, player);
+    sweep();
+    playerReset();
+    dropCounter = 0;
+});
+
+// Touch event optimization - prevent double-tap zoom
+document.querySelectorAll('.control-btn').forEach(btn => {
+    btn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+    }, { passive: false });
 });
 
 // Difficulty menu logic
