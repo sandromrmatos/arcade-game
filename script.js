@@ -239,13 +239,19 @@ function showGameLeaderboard(gameName) {
   
   // Special handling for Snake (length - higher is better)
   if (gameName === "Snake") {
-    showSnakeLeaderboard(db, content, gameName);
+    showLengthBasedDifficultyLeaderboard(db, content, gameName);
+    return;
+  }
+  
+  // Special handling for Cross the Bridge (timeLeft - higher is better)
+  if (gameName === "Cross the Bridge") {
+    showTimeLeftDifficultyLeaderboard(db, content, gameName);
     return;
   }
   
   // Special handling for Memory (turns - lower is better)
   if (gameName === "Memory") {
-    showMemoryLeaderboard(db, content, gameName);
+    showTurnsBasedDifficultyLeaderboard(db, content, gameName);
     return;
   }
   
@@ -478,38 +484,64 @@ function showTimeLeftLeaderboard(db, content, gameName) {
     });
 }
 
-function showSnakeLeaderboard(db, content, gameName) {
+function showLengthBasedDifficultyLeaderboard(db, content, gameName) {
   db.collection("games")
-    .limit(100)
+    .limit(200)
     .get()
     .then(snapshot => {
-      // Filter for Snake and sort by length (higher is better)
-      const docs = snapshot.docs
-        .map(doc => ({ id: doc.id, ...doc.data() }))
-        .filter(doc => doc.gameName === gameName)
+      const allDocs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+      // Filter for game and separate by difficulty
+      const smallDocs = allDocs
+        .filter(doc => doc.gameName === gameName && doc.difficulty === "small")
         .sort((a, b) => b.length - a.length)
         .slice(0, 10);
       
-      if (docs.length === 0) {
-        content.innerHTML = '<p style="color: #666;">No scores yet. Be the first!</p>';
-        return;
+      const bigDocs = allDocs
+        .filter(doc => doc.gameName === gameName && doc.difficulty === "big")
+        .sort((a, b) => b.length - a.length)
+        .slice(0, 10);
+      
+      let html = '<div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">';
+      
+      // Small mode table
+      html += '<div style="flex: 1; min-width: 300px;"><h3>Small (15x15)</h3>';
+      if (smallDocs.length === 0) {
+        html += '<p style="color: #666;">No scores yet.</p>';
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Length</th><th>Date</th></tr></thead><tbody>';
+        smallDocs.forEach((doc, i) => {
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${doc.length}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
       }
+      html += '</div>';
       
-      let html = '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Length</th><th>Date</th></tr></thead><tbody>';
+      // Big mode table
+      html += '<div style="flex: 1; min-width: 300px;"><h3>Big (18x18)</h3>';
+      if (bigDocs.length === 0) {
+        html += '<p style="color: #666;">No scores yet.</p>';
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Length</th><th>Date</th></tr></thead><tbody>';
+        bigDocs.forEach((doc, i) => {
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${doc.length}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div></div>';
       
-      let rank = 1;
-      docs.forEach(doc => {
-        const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
-        
-        html += `<tr>
-          <td>${rank++}</td>
-          <td>${doc.playerName}</td>
-          <td>${doc.length}</td>
-          <td>${date}</td>
-        </tr>`;
-      });
-      
-      html += "</tbody></table>";
       content.innerHTML = html;
     })
     .catch(err => {
@@ -518,38 +550,132 @@ function showSnakeLeaderboard(db, content, gameName) {
     });
 }
 
-function showMemoryLeaderboard(db, content, gameName) {
+function showTimeLeftDifficultyLeaderboard(db, content, gameName) {
   db.collection("games")
-    .limit(100)
+    .limit(200)
     .get()
     .then(snapshot => {
-      // Filter for Memory and sort by turns (lower is better)
-      const docs = snapshot.docs
-        .map(doc => ({ id: doc.id, ...doc.data() }))
-        .filter(doc => doc.gameName === gameName)
+      const allDocs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+      // Filter for game and separate by difficulty
+      const shortDocs = allDocs
+        .filter(doc => doc.gameName === gameName && doc.difficulty === "short")
+        .sort((a, b) => b.timeLeft - a.timeLeft)
+        .slice(0, 10);
+      
+      const longDocs = allDocs
+        .filter(doc => doc.gameName === gameName && doc.difficulty === "long")
+        .sort((a, b) => b.timeLeft - a.timeLeft)
+        .slice(0, 10);
+      
+      let html = '<div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">';
+      
+      // Short mode table
+      html += '<div style="flex: 1; min-width: 300px;"><h3>Short (3x6)</h3>';
+      if (shortDocs.length === 0) {
+        html += '<p style="color: #666;">No scores yet.</p>';
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Time Left</th><th>Date</th></tr></thead><tbody>';
+        shortDocs.forEach((doc, i) => {
+          const timeFormatted = formatTime(doc.timeLeft);
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${timeFormatted}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div>';
+      
+      // Long mode table
+      html += '<div style="flex: 1; min-width: 300px;"><h3>Long (3x12)</h3>';
+      if (longDocs.length === 0) {
+        html += '<p style="color: #666;">No scores yet.</p>';
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Time Left</th><th>Date</th></tr></thead><tbody>';
+        longDocs.forEach((doc, i) => {
+          const timeFormatted = formatTime(doc.timeLeft);
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${timeFormatted}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div></div>';
+      
+      content.innerHTML = html;
+    })
+    .catch(err => {
+      content.textContent = "Error loading scores: " + err.message;
+      console.error("Leaderboard error:", err);
+    });
+}
+
+function showTurnsBasedDifficultyLeaderboard(db, content, gameName) {
+  db.collection("games")
+    .limit(200)
+    .get()
+    .then(snapshot => {
+      const allDocs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+      // Filter for game and separate by difficulty
+      const smallDocs = allDocs
+        .filter(doc => doc.gameName === gameName && doc.difficulty === "small")
         .sort((a, b) => a.turns - b.turns)
         .slice(0, 10);
       
-      if (docs.length === 0) {
-        content.innerHTML = '<p style="color: #666;">No scores yet. Be the first!</p>';
-        return;
+      const largeDocs = allDocs
+        .filter(doc => doc.gameName === gameName && doc.difficulty === "large")
+        .sort((a, b) => a.turns - b.turns)
+        .slice(0, 10);
+      
+      let html = '<div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">';
+      
+      // Small mode table
+      html += '<div style="flex: 1; min-width: 300px;"><h3>Small (4x4)</h3>';
+      if (smallDocs.length === 0) {
+        html += '<p style="color: #666;">No scores yet.</p>';
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Turns</th><th>Date</th></tr></thead><tbody>';
+        smallDocs.forEach((doc, i) => {
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${doc.turns}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
       }
+      html += '</div>';
       
-      let html = '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Turns</th><th>Date</th></tr></thead><tbody>';
+      // Large mode table
+      html += '<div style="flex: 1; min-width: 300px;"><h3>Large (6x6)</h3>';
+      if (largeDocs.length === 0) {
+        html += '<p style="color: #666;">No scores yet.</p>';
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Turns</th><th>Date</th></tr></thead><tbody>';
+        largeDocs.forEach((doc, i) => {
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${doc.turns}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div></div>';
       
-      let rank = 1;
-      docs.forEach(doc => {
-        const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
-        
-        html += `<tr>
-          <td>${rank++}</td>
-          <td>${doc.playerName}</td>
-          <td>${doc.turns}</td>
-          <td>${date}</td>
-        </tr>`;
-      });
-      
-      html += "</tbody></table>";
       content.innerHTML = html;
     })
     .catch(err => {

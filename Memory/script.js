@@ -1,14 +1,6 @@
-// Paths for the 8 pair images (duplicated to make 16 cards)
-const pairImagePaths = [
-  "Pairs/01.png",
-  "Pairs/02.png",
-  "Pairs/03.png",
-  "Pairs/04.png",
-  "Pairs/05.png",
-  "Pairs/06.png",
-  "Pairs/07.png",
-  "Pairs/08.png"
-];
+// Paths for the pair images
+let pairImagePaths = [];
+const allPairImages = Array.from({ length: 18 }, (_, i) => `Pairs/${String(i + 1).padStart(2, '0')}.png`);
 
 const backImagePath = "memory card facing down.png";
 
@@ -23,10 +15,46 @@ let secondCard = null;
 let lockBoard = false;
 let turns = 0;
 let matchedPairs = 0;
+let difficulty = "small";
+let gameStarted = false;
+
+// Menu buttons
+document.getElementById("btnSmall").addEventListener("click", () => {
+  startGame("small");
+});
+
+document.getElementById("btnLarge").addEventListener("click", () => {
+  startGame("large");
+});
+
+function startGame(mode) {
+  difficulty = mode;
+  
+  if (mode === "small") {
+    pairImagePaths = allPairImages.slice(0, 8); // 8 pairs = 16 cards
+  } else {
+    pairImagePaths = allPairImages; // 18 pairs = 36 cards
+  }
+  
+  // Hide menu
+  document.getElementById("menuOverlay").style.display = "none";
+  gameStarted = true;
+  
+  initGame();
+}
 
 function initGame() {
   // Reset state
   gameBoard.innerHTML = "";
+  gameBoard.className = "game-board";
+  
+  // Set grid size based on difficulty
+  if (difficulty === "small") {
+    gameBoard.classList.add("grid-small"); // 4x4
+  } else {
+    gameBoard.classList.add("grid-large"); // 6x6
+  }
+  
   cards = [];
   firstCard = null;
   secondCard = null;
@@ -117,11 +145,12 @@ function checkForMatch() {
       // Save score to leaderboard
       if (window.parent && window.parent.saveGameScore) {
         window.parent.saveGameScore("Memory", {
-          turns: turns
+          turns: turns,
+          difficulty: difficulty
         }).then((result) => {
           console.log("Memory score saved successfully");
           if (result && result.isNewBest && window.parent.showNewBestScore) {
-            window.parent.showNewBestScore("Memory", { turns: turns });
+            window.parent.showNewBestScore("Memory", { turns: turns, difficulty: difficulty });
           }
         }).catch(err => {
           console.error("Error saving Memory score:", err);
@@ -153,7 +182,11 @@ function resetTurn() {
 }
 
 // Reset button
-resetButton.addEventListener("click", initGame);
+resetButton.addEventListener("click", () => {
+  if (gameStarted) {
+    initGame();
+  }
+});
 
-// Auto-shuffle and start on load
-window.addEventListener("DOMContentLoaded", initGame);
+// Show menu on startup
+document.getElementById("menuOverlay").style.display = "flex";

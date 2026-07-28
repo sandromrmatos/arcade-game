@@ -1,5 +1,5 @@
 const rows = 3;
-const cols = 10;
+let cols = 10;
 let safeTiles = []; // safeTiles[col] = row index
 let currentCol = -1; // -1 = start pad, 0..9 = bridge columns
 let currentRow = 1; // middle row as default
@@ -7,6 +7,8 @@ let attempts = 0;
 let timerSeconds = 180;
 let timerInterval = null;
 let gameOver = false;
+let difficulty = "long";
+let gameStarted = false;
 
 const bridgeElement = document.getElementById("bridge");
 const pawElement = document.getElementById("paw");
@@ -114,11 +116,12 @@ function onTileClick(e) {
       // Save score to leaderboard (time left)
       if (window.parent && window.parent.saveGameScore) {
         window.parent.saveGameScore("Cross the Bridge", {
-          timeLeft: timerSeconds
+          timeLeft: timerSeconds,
+          difficulty: difficulty
         }).then((result) => {
           console.log("Cross the Bridge score saved successfully");
           if (result && result.isNewBest && window.parent.showNewBestScore) {
-            window.parent.showNewBestScore("Cross the Bridge", { timeLeft: timerSeconds });
+            window.parent.showNewBestScore("Cross the Bridge", { timeLeft: timerSeconds, difficulty: difficulty });
           }
         }).catch(err => {
           console.error("Error saving Cross the Bridge score:", err);
@@ -166,9 +169,33 @@ function restartGame() {
   startTimer();
 }
 
+function startGameWithDifficulty(mode) {
+  difficulty = mode;
+  
+  if (mode === "short") {
+    cols = 6;
+  } else {
+    cols = 12;
+  }
+  
+  // Hide menu
+  document.getElementById("menuOverlay").style.display = "none";
+  
+  gameStarted = true;
+  restartGame();
+}
+
+// Menu buttons
+document.getElementById("btnShort").addEventListener("click", () => {
+  startGameWithDifficulty("short");
+});
+
+document.getElementById("btnLong").addEventListener("click", () => {
+  startGameWithDifficulty("long");
+});
+
 // Init
 restartBtn.addEventListener("click", restartGame);
 
-generateSafeTiles();
-resetToStart(false);
-startTimer();
+// Show menu on startup
+document.getElementById("menuOverlay").style.display = "flex";

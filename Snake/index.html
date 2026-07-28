@@ -11,7 +11,7 @@
     }
     #gameContainer {
         margin: 20px auto;
-        width: 300px;
+        width: 360px;
     }
     #lengthCounter {
         font-size: 20px;
@@ -29,11 +29,60 @@
         margin: 0 auto;
         border: 3px solid #555;
     }
+    #menuOverlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.85);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 100;
+        color: white;
+    }
+    .menu-content {
+        background: #333;
+        padding: 30px;
+        border-radius: 10px;
+        text-align: center;
+    }
+    .menu-content h2 {
+        margin-top: 0;
+    }
+    .menu-content button {
+        padding: 10px 20px;
+        font-size: 16px;
+        margin: 10px;
+        cursor: pointer;
+        background: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+    }
+    .menu-content button:hover {
+        background: #45a049;
+    }
+    .hidden {
+        display: none !important;
+    }
 </style>
 </head>
 <body>
 
 <h2>Snake Game</h2>
+
+<div id="menuOverlay">
+    <div class="menu-content">
+        <h2>Snake</h2>
+        <p>Select Size:</p>
+        <button id="btnSmall">Small (15x15)</button>
+        <button id="btnBig">Big (18x18)</button>
+    </div>
+</div>
+
 <div id="gameContainer">
     <div id="lengthCounter">Length: 1</div>
     <canvas id="gameCanvas" width="300" height="300"></canvas>
@@ -44,19 +93,64 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-// 15x15 grid
-const gridSize = 20;
-const tileCount = 15;
+let gridSize = 20;
+let tileCount = 15;
+let difficulty = "small";
+let canvasSize = 300;
 
 let snake = [{ x: 7, y: 7 }];
 let velocity = { x: 0, y: 0 };
 let nextVelocity = { x: 0, y: 0 };
 let food = { x: 5, y: 5 };
 let gameOver = false;
+let gameStarted = false;
 
 let speed = 150;
 
 document.addEventListener("keydown", keyPress);
+
+// Menu buttons
+document.getElementById("btnSmall").addEventListener("click", () => {
+    startGame("small");
+});
+
+document.getElementById("btnBig").addEventListener("click", () => {
+    startGame("big");
+});
+
+function startGame(mode) {
+    difficulty = mode;
+    
+    if (mode === "small") {
+        tileCount = 15;
+        canvasSize = 300;
+    } else {
+        tileCount = 18;
+        canvasSize = 360;
+    }
+    
+    gridSize = canvasSize / tileCount;
+    canvas.width = canvasSize;
+    canvas.height = canvasSize;
+    document.getElementById("gameContainer").style.width = canvasSize + "px";
+    
+    // Hide menu
+    document.getElementById("menuOverlay").classList.add("hidden");
+    
+    // Reset game
+    snake = [{ x: Math.floor(tileCount / 2), y: Math.floor(tileCount / 2) }];
+    velocity = { x: 0, y: 0 };
+    nextVelocity = { x: 0, y: 0 };
+    gameOver = false;
+    gameStarted = true;
+    speed = 150;
+    
+    spawnFood();
+    document.getElementById("lengthCounter").textContent = "Length: 1";
+    document.getElementById("gameMessage").textContent = "";
+    
+    gameLoop();
+}
 
 function keyPress(e) {
     if (e.key === "ArrowUp" && velocity.y !== 1) nextVelocity = { x: 0, y: -1 };
@@ -153,11 +247,12 @@ function endGame() {
     // Save score to leaderboard
     if (window.parent && window.parent.saveGameScore) {
         window.parent.saveGameScore("Snake", {
-            length: snake.length
+            length: snake.length,
+            difficulty: difficulty
         }).then((result) => {
             console.log("Snake score saved successfully");
             if (result && result.isNewBest && window.parent.showNewBestScore) {
-                window.parent.showNewBestScore("Snake", { length: snake.length });
+                window.parent.showNewBestScore("Snake", { length: snake.length, difficulty: difficulty });
             }
         }).catch(err => {
             console.error("Error saving Snake score:", err);
@@ -167,7 +262,8 @@ function endGame() {
     }
 }
 
-gameLoop();
+// Show menu on startup
+document.getElementById("menuOverlay").classList.remove("hidden");
 </script>
 
 </body>
