@@ -468,24 +468,25 @@ document.addEventListener("keydown", e => {
 });
 
 // Mobile touch controls
-document.getElementById("btnLeft").addEventListener("click", () => {
-    if (!gameOver) playerMove(-1);
-});
+function setupMobileControl(buttonId, action) {
+    const btn = document.getElementById(buttonId);
+    
+    // Handle both click and touch events
+    const handleAction = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!gameOver) action();
+    };
+    
+    btn.addEventListener("touchstart", handleAction, { passive: false });
+    btn.addEventListener("click", handleAction);
+}
 
-document.getElementById("btnRight").addEventListener("click", () => {
-    if (!gameOver) playerMove(1);
-});
-
-document.getElementById("btnDown").addEventListener("click", () => {
-    if (!gameOver) playerDrop();
-});
-
-document.getElementById("btnRotate").addEventListener("click", () => {
-    if (!gameOver) playerRotate(1);
-});
-
-document.getElementById("btnDrop").addEventListener("click", () => {
-    if (gameOver) return;
+setupMobileControl("btnLeft", () => playerMove(-1));
+setupMobileControl("btnRight", () => playerMove(1));
+setupMobileControl("btnDown", () => playerDrop());
+setupMobileControl("btnRotate", () => playerRotate(1));
+setupMobileControl("btnDrop", () => {
     while (!collide(board, player)) {
         player.pos.y++;
     }
@@ -496,12 +497,10 @@ document.getElementById("btnDrop").addEventListener("click", () => {
     dropCounter = 0;
 });
 
-// Touch event optimization - prevent double-tap zoom
-document.querySelectorAll('.control-btn').forEach(btn => {
-    btn.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-    }, { passive: false });
-});
+// Prevent scroll on touch controls
+document.getElementById("mobileControls").addEventListener("touchmove", (e) => {
+    e.preventDefault();
+}, { passive: false });
 
 // Difficulty menu logic
 function showMenu() {
