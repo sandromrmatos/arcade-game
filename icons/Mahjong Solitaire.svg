@@ -1,0 +1,18 @@
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100" height="100" fill="#2d5016"/>
+  <!-- Mahjong tiles stacked -->
+  <rect x="15" y="45" width="25" height="35" fill="#f5f5dc" stroke="#8b7355" stroke-width="2" rx="2"/>
+  <rect x="18" y="42" width="25" height="35" fill="#faf0e6" stroke="#8b7355" stroke-width="2" rx="2"/>
+  <rect x="21" y="39" width="25" height="35" fill="#fff8dc" stroke="#8b7355" stroke-width="2" rx="2"/>
+  <!-- Bamboo symbol -->
+  <circle cx="28" cy="52" r="3" fill="#2d5016"/>
+  <circle cx="28" cy="60" r="3" fill="#2d5016"/>
+  <circle cx="38" cy="52" r="3" fill="#2d5016"/>
+  <circle cx="38" cy="60" r="3" fill="#2d5016"/>
+  <line x1="28" y1="55" x2="28" y2="57" stroke="#2d5016" stroke-width="2"/>
+  <line x1="38" y1="55" x2="38" y2="57" stroke="#2d5016" stroke-width="2"/>
+  <!-- More tiles -->
+  <rect x="55" y="50" width="25" height="35" fill="#f5f5dc" stroke="#8b7355" stroke-width="2" rx="2"/>
+  <!-- Character symbol -->
+  <text x="62" y="72" font-family="serif" font-size="16" font-weight="bold" fill="#c41e3a">中</text>
+</svg>

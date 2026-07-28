@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Image Puzzle</title>
+
+<!-- Load CSS -->
+<link rel="stylesheet" href="style.css">
+
+<!-- Load JS -->
+<script src="script.js" defer></script>
+</head>
+
+<body>
+
+<h1>Image Puzzle</h1>
+
+<div id="controls">
+  <button data-mode="easy" class="active">Easy (4×4)</button>
+  <button data-mode="medium">Medium (6×6)</button>
+  <button data-mode="hard">Hard (7×7)</button>
+  <span id="timer">00:00</span>
+</div>
+
+<div id="preview"></div>
+
+<div id="game">
+  <div id="pieces"></div>
+  <div id="board"></div>
+</div>
+
+<div id="message"></div>
+
+</body>
+</html>

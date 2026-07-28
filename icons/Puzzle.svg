@@ -1,0 +1,14 @@
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100" height="100" fill="#e8e8e8"/>
+  <!-- Puzzle pieces with tab/slot connections -->
+  <!-- Top left piece -->
+  <path d="M 15 15 L 40 15 L 40 20 Q 45 20 45 25 Q 45 30 40 30 L 40 40 L 35 40 Q 35 35 30 35 Q 25 35 25 40 L 15 40 Z" fill="#ff6b6b" stroke="#333" stroke-width="1.5"/>
+  <!-- Top right piece -->
+  <path d="M 45 15 L 85 15 L 85 40 L 80 40 Q 80 35 75 35 Q 70 35 70 40 L 45 40 L 45 30 Q 50 30 50 25 Q 50 20 45 20 Z" fill="#4ecdc4" stroke="#333" stroke-width="1.5"/>
+  <!-- Bottom left piece -->
+  <path d="M 15 45 L 25 45 Q 25 50 30 50 Q 35 50 35 45 L 40 45 L 40 85 L 15 85 Z" fill="#ffd93d" stroke="#333" stroke-width="1.5"/>
+  <!-- Bottom right piece -->
+  <path d="M 45 45 L 70 45 Q 70 50 75 50 Q 80 50 80 45 L 85 45 L 85 85 L 45 85 Z" fill="#a29bfe" stroke="#333" stroke-width="1.5"/>
+  <!-- Highlight on top left piece -->
+  <ellipse cx="25" cy="25" rx="5" ry="4" fill="white" opacity="0.4"/>
+</svg>

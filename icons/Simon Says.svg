@@ -1,0 +1,12 @@
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100" height="100" fill="#2d3436"/>
+  <!-- Quadrants -->
+  <path d="M 10 10 L 48 10 L 48 48 L 10 48 Z" fill="#00b894" stroke="#000" stroke-width="2"/>
+  <path d="M 52 10 L 90 10 L 90 48 L 52 48 Z" fill="#d63031" stroke="#000" stroke-width="2"/>
+  <path d="M 10 52 L 48 52 L 48 90 L 10 90 Z" fill="#fdcb6e" stroke="#000" stroke-width="2"/>
+  <path d="M 52 52 L 90 52 L 90 90 L 52 90 Z" fill="#0984e3" stroke="#000" stroke-width="2"/>
+  <!-- Center circle -->
+  <circle cx="50" cy="50" r="15" fill="#2d3436" stroke="#000" stroke-width="3"/>
+  <!-- Highlight on top button -->
+  <path d="M 10 10 L 48 10 L 48 48 L 10 48 Z" fill="white" opacity="0.4"/>
+</svg>

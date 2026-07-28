@@ -1,0 +1,157 @@
+/* ------------------------------
+   ROOT VARIABLES
+------------------------------ */
+:root {
+  --tile-w: 80px;
+  --tile-h: 120px;
+  --rows: 4;
+  --cols: 4;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #2a2a2a;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+h1 {
+  margin-bottom: 10px;
+  font-size: 32px;
+}
+
+#controls {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#controls button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background: #444;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+#controls button:hover {
+  background: #555;
+}
+
+#controls button.active {
+  background: #00aaff;
+  font-weight: bold;
+}
+
+#timer {
+  font-size: 20px;
+  font-weight: bold;
+  color: #00ff88;
+  margin-left: 10px;
+}
+
+#preview {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  border: 3px solid #555;
+  border-radius: 8px;
+  width: 160px;
+  height: 240px; /* 2:3 aspect ratio */
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+#game {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+#pieces {
+  background: #1a1a1a;
+  padding: 15px;
+  border-radius: 10px;
+  border: 2px solid #444;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(4, var(--tile-w));
+}
+
+#board {
+  background: #1a1a1a;
+  padding: 15px;
+  border-radius: 10px;
+  border: 2px solid #444;
+  display: grid;
+  gap: 2px;
+}
+
+.piece, .cell {
+  width: var(--tile-w);
+  height: var(--tile-h);
+  background-size: calc(var(--tile-w) * var(--cols)) calc(var(--tile-h) * var(--rows));
+  background-repeat: no-repeat;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.piece:hover {
+  transform: scale(1.05);
+  border-color: #666;
+}
+
+.cell.empty {
+  background: #333;
+  border: 2px dashed #555;
+}
+
+.cell.empty:hover {
+  background: #3a3a3a;
+  border-color: #777;
+}
+
+.piece.selected {
+  outline: 4px solid #ffcc00;
+  outline-offset: 2px;
+  transform: scale(1.08);
+  box-shadow: 0 0 20px rgba(255, 204, 0, 0.6);
+}
+
+.piece.used {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.cell.locked {
+  outline: 3px solid #00ff88;
+  outline-offset: -3px;
+  cursor: default;
+  animation: lockFlash 0.5s ease;
+}
+
+@keyframes lockFlash {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+#message {
+  margin-top: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffcc00;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+

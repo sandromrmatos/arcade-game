@@ -129,7 +129,9 @@ async function buildMenu() {
     const btn = document.createElement("button");
 
     const img = document.createElement("img");
-    img.src = `icons/${folder}.png`;
+    // Try SVG first, fallback to PNG
+    img.src = `icons/${folder}.svg`;
+    img.onerror = function() { this.src = `icons/${folder}.png`; };
     img.className = "menu-icon";
 
     const span = document.createElement("span");
@@ -172,7 +174,9 @@ function showLeaderboard() {
       btn.className = "leaderboard-game-btn";
       
       const img = document.createElement("img");
-      img.src = `icons/${folder}.png`;
+      // Try SVG first, fallback to PNG
+      img.src = `icons/${folder}.svg`;
+      img.onerror = function() { this.src = `icons/${folder}.png`; };
       img.className = "leaderboard-game-icon";
       
       const span = document.createElement("span");
@@ -252,6 +256,12 @@ function showGameLeaderboard(gameName) {
   // Special handling for Memory (turns - lower is better)
   if (gameName === "Memory") {
     showTurnsBasedDifficultyLeaderboard(db, content, gameName);
+    return;
+  }
+  
+  // Special handling for Puzzle (bestTime - lower is better, with difficulty modes)
+  if (gameName === "Puzzle") {
+    showPuzzleLeaderboard(db, content, gameName);
     return;
   }
   
@@ -669,6 +679,99 @@ function showTurnsBasedDifficultyLeaderboard(db, content, gameName) {
             <td>${i + 1}</td>
             <td>${doc.playerName}</td>
             <td>${doc.turns}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div></div>';
+      
+      content.innerHTML = html;
+    })
+    .catch(err => {
+      content.textContent = "Error loading scores: " + err.message;
+      console.error("Leaderboard error:", err);
+    });
+}
+
+function showPuzzleLeaderboard(db, content, gameName) {
+  db.collection("games")
+    .limit(200)
+    .get()
+    .then(snapshot => {
+      const allDocs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+      // Filter for game and separate by difficulty
+      const easyDocs = allDocs
+        .filter(doc => doc.gameName === gameName && doc.difficulty === "easy")
+        .sort((a, b) => a.bestTime - b.bestTime)
+        .slice(0, 10);
+      
+      const mediumDocs = allDocs
+        .filter(doc => doc.gameName === gameName && doc.difficulty === "medium")
+        .sort((a, b) => a.bestTime - b.bestTime)
+        .slice(0, 10);
+      
+      const hardDocs = allDocs
+        .filter(doc => doc.gameName === gameName && doc.difficulty === "hard")
+        .sort((a, b) => a.bestTime - b.bestTime)
+        .slice(0, 10);
+      
+      let html = '<div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">';
+      
+      // Easy mode table
+      html += '<div style="flex: 1; min-width: 280px;"><h3>Easy (4×4)</h3>';
+      if (easyDocs.length === 0) {
+        html += '<p style="color: #666;">No scores yet.</p>';
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Time</th><th>Date</th></tr></thead><tbody>';
+        easyDocs.forEach((doc, i) => {
+          const timeFormatted = formatTime(doc.bestTime);
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${timeFormatted}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div>';
+      
+      // Medium mode table
+      html += '<div style="flex: 1; min-width: 280px;"><h3>Medium (6×6)</h3>';
+      if (mediumDocs.length === 0) {
+        html += '<p style="color: #666;">No scores yet.</p>';
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Time</th><th>Date</th></tr></thead><tbody>';
+        mediumDocs.forEach((doc, i) => {
+          const timeFormatted = formatTime(doc.bestTime);
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${timeFormatted}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div>';
+      
+      // Hard mode table
+      html += '<div style="flex: 1; min-width: 280px;"><h3>Hard (7×7)</h3>';
+      if (hardDocs.length === 0) {
+        html += '<p style="color: #666;">No scores yet.</p>';
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Time</th><th>Date</th></tr></thead><tbody>';
+        hardDocs.forEach((doc, i) => {
+          const timeFormatted = formatTime(doc.bestTime);
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${timeFormatted}</td>
             <td>${date}</td>
           </tr>`;
         });

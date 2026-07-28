@@ -1,0 +1,27 @@
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100" height="100" fill="#121213"/>
+  <!-- Row 1 - Correct letters (green) -->
+  <rect x="12" y="15" width="14" height="14" fill="#538d4e" stroke="#3a3a3c" stroke-width="2" rx="2"/>
+  <rect x="28" y="15" width="14" height="14" fill="#538d4e" stroke="#3a3a3c" stroke-width="2" rx="2"/>
+  <rect x="44" y="15" width="14" height="14" fill="#538d4e" stroke="#3a3a3c" stroke-width="2" rx="2"/>
+  <rect x="60" y="15" width="14" height="14" fill="#538d4e" stroke="#3a3a3c" stroke-width="2" rx="2"/>
+  <rect x="76" y="15" width="14" height="14" fill="#538d4e" stroke="#3a3a3c" stroke-width="2" rx="2"/>
+  <!-- Row 2 - Mix -->
+  <rect x="12" y="32" width="14" height="14" fill="#b59f3b" stroke="#3a3a3c" stroke-width="2" rx="2"/>
+  <rect x="28" y="32" width="14" height="14" fill="#3a3a3c" stroke="#3a3a3c" stroke-width="2" rx="2"/>
+  <rect x="44" y="32" width="14" height="14" fill="#538d4e" stroke="#3a3a3c" stroke-width="2" rx="2"/>
+  <rect x="60" y="32" width="14" height="14" fill="#b59f3b" stroke="#3a3a3c" stroke-width="2" rx="2"/>
+  <rect x="76" y="32" width="14" height="14" fill="#3a3a3c" stroke="#3a3a3c" stroke-width="2" rx="2"/>
+  <!-- Row 3 - Empty -->
+  <rect x="12" y="49" width="14" height="14" fill="none" stroke="#3a3a3c" stroke-width="2" rx="2"/>
+  <rect x="28" y="49" width="14" height="14" fill="none" stroke="#3a3a3c" stroke-width="2" rx="2"/>
+  <rect x="44" y="49" width="14" height="14" fill="none" stroke="#3a3a3c" stroke-width="2" rx="2"/>
+  <rect x="60" y="49" width="14" height="14" fill="none" stroke="#3a3a3c" stroke-width="2" rx="2"/>
+  <rect x="76" y="49" width="14" height="14" fill="none" stroke="#3a3a3c" stroke-width="2" rx="2"/>
+  <!-- Letters -->
+  <text x="19" y="25" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white">W</text>
+  <text x="35" y="25" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white">O</text>
+  <text x="51" y="25" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white">R</text>
+  <text x="67" y="25" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white">D</text>
+  <text x="83" y="25" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white">S</text>
+</svg>
