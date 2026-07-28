@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <title>Arcade Games by Sandro</title>
   <link rel="stylesheet" href="style.css">
+  
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
@@ -18,6 +23,7 @@
 
   <div id="leaderboard-section" class="leaderboard-section hidden">
     <div class="leaderboard-content">
+      <button class="close-leaderboard-btn">×</button>
       <h2>Game Leaderboards</h2>
       <p>Select a game to view its high scores:</p>
       <div id="leaderboard-game-list" class="leaderboard-game-list"></div>

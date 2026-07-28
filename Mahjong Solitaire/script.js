@@ -188,6 +188,24 @@ function checkWin() {
   if (tiles.every(t => t.matched)) {
     clearInterval(timerInterval);
     messageEl.textContent = `You won in ${formatTime(secondsElapsed)}!`;
+    
+    // Save score to leaderboard
+    const difficulty = currentLayers === EASY_LAYERS ? "easy" : "hard";
+    if (window.parent && window.parent.saveGameScore) {
+      window.parent.saveGameScore("Mahjong Solitaire", {
+        bestTime: secondsElapsed,
+        difficulty: difficulty
+      }).then((result) => {
+        console.log("Mahjong Solitaire score saved successfully");
+        if (result && result.isNewBest && window.parent.showNewBestScore) {
+          window.parent.showNewBestScore("Mahjong Solitaire", { bestTime: secondsElapsed, difficulty: difficulty });
+        }
+      }).catch(err => {
+        console.error("Error saving Mahjong Solitaire score:", err);
+      });
+    } else {
+      console.error("saveGameScore function not found in parent window");
+    }
   } else if (!anyMovesLeft()) {
     clearInterval(timerInterval);
     messageEl.textContent = "You got to a dead end, this puzzle can't be finished";

@@ -108,9 +108,69 @@ function renderBoard() {
     tile.addEventListener("dragover", dragOver);
     tile.addEventListener("drop", dragDrop);
     tile.addEventListener("dragend", dragEnd);
+    tile.addEventListener("click", tileClick);
 
     boardElement.appendChild(tile);
   }
+}
+
+let selectedTileId = null;
+
+// Click handler for selecting tiles
+function tileClick(e) {
+  if (gameOver) return;
+  
+  const clickedId = parseInt(e.target.getAttribute("data-id"), 10);
+  
+  if (board[clickedId] === null) return;
+  
+  // First tile selected
+  if (selectedTileId === null) {
+    selectedTileId = clickedId;
+    e.target.classList.add("selected");
+    return;
+  }
+  
+  // Same tile clicked again - deselect
+  if (selectedTileId === clickedId) {
+    selectedTileId = null;
+    e.target.classList.remove("selected");
+    return;
+  }
+  
+  // Second tile clicked - check if adjacent
+  const validMoves = getAdjacentIndices(selectedTileId);
+  const isValidMove = validMoves.includes(clickedId);
+  
+  if (!isValidMove) {
+    // Not adjacent - select new tile instead
+    const tiles = document.querySelectorAll(".tile");
+    tiles[selectedTileId].classList.remove("selected");
+    selectedTileId = clickedId;
+    e.target.classList.add("selected");
+    return;
+  }
+  
+  // Valid adjacent swap
+  const tiles = document.querySelectorAll(".tile");
+  tiles[selectedTileId].classList.remove("selected");
+  
+  // Swap
+  const temp = board[selectedTileId];
+  board[selectedTileId] = board[clickedId];
+  board[clickedId] = temp;
+
+  const matches = findMatches();
+  if (matches.length === 0) {
+    // revert
+    board[clickedId] = board[selectedTileId];
+    board[selectedTileId] = temp;
+  } else {
+    resolveMatches(matches);
+  }
+
+  renderBoard();
+  selectedTileId = null;
 }
 
 // Drag handlers
@@ -381,6 +441,22 @@ function startTimer() {
       gameOver = true;
       messageElement.textContent = `Time's up! Final score: ${score}`;
       renderBoard();
+      
+      // Save score to leaderboard
+      if (window.parent && window.parent.saveGameScore) {
+        window.parent.saveGameScore("Candy Crush", {
+          score: score
+        }).then((result) => {
+          console.log("Candy Crush score saved successfully");
+          if (result && result.isNewBest && window.parent.showNewBestScore) {
+            window.parent.showNewBestScore("Candy Crush", { score: score });
+          }
+        }).catch(err => {
+          console.error("Error saving Candy Crush score:", err);
+        });
+      } else {
+        console.error("saveGameScore function not found in parent window");
+      }
     }
   }, 1000);
 }

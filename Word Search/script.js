@@ -274,10 +274,21 @@ function finishGame() {
 
   finishMessageEl.textContent = `You finished in ${minutes} minutes and ${seconds} seconds`;
   
-  // Save score to leaderboard
-  saveGameScore("Word Search", {
-    bestTime: totalSeconds
-  });
+  // Save score to leaderboard (call parent window function)
+  if (window.parent && window.parent.saveGameScore) {
+    window.parent.saveGameScore("Word Search", {
+      bestTime: totalSeconds
+    }).then((result) => {
+      console.log("Score saved successfully");
+      if (result && result.isNewBest && window.parent.showNewBestScore) {
+        window.parent.showNewBestScore("Word Search", { bestTime: totalSeconds });
+      }
+    }).catch(err => {
+      console.error("Error saving score:", err);
+    });
+  } else {
+    console.error("saveGameScore function not found in parent window");
+  }
 }
 
 resetSelectionButton.addEventListener("click", () => {

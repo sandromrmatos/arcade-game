@@ -140,6 +140,30 @@ body {
   max-width: 800px;
   margin: 0 auto;
   text-align: center;
+  position: relative;
+}
+
+.close-leaderboard-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: #ff5555;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.close-leaderboard-btn:hover {
+  background: #ff3333;
 }
 
 .leaderboard-content h2 {
@@ -205,6 +229,7 @@ body {
   max-width: 600px;
   margin: 0 auto;
   text-align: center;
+  position: relative;
 }
 
 #game-leaderboard-page h2 {

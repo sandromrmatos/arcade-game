@@ -149,6 +149,22 @@ function endGame() {
     gameOver = true;
     document.getElementById("gameMessage").textContent =
         "Game Over! Final length: " + snake.length;
+    
+    // Save score to leaderboard
+    if (window.parent && window.parent.saveGameScore) {
+        window.parent.saveGameScore("Snake", {
+            length: snake.length
+        }).then((result) => {
+            console.log("Snake score saved successfully");
+            if (result && result.isNewBest && window.parent.showNewBestScore) {
+                window.parent.showNewBestScore("Snake", { length: snake.length });
+            }
+        }).catch(err => {
+            console.error("Error saving Snake score:", err);
+        });
+    } else {
+        console.error("saveGameScore function not found in parent window");
+    }
 }
 
 gameLoop();

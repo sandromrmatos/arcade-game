@@ -101,6 +101,12 @@ h1 {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.tile.selected {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 4px 8px rgba(0, 0, 0, 0.25);
+  z-index: 10;
+}
+
 /* Glossy highlight */
 .tile::before {
   content: "";

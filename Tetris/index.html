@@ -230,7 +230,24 @@ function playerReset() {
 
     if (collide(board, player)) {
         gameOver = true;
-        document.getElementById("message").textContent = "Game Over!";
+        document.getElementById("message").textContent = "Game Over! Final Score: " + score;
+        
+        // Save score to leaderboard
+        if (window.parent && window.parent.saveGameScore) {
+            window.parent.saveGameScore("Tetris", {
+                score: score,
+                difficulty: difficulty
+            }).then((result) => {
+                console.log("Tetris score saved successfully");
+                if (result && result.isNewBest && window.parent.showNewBestScore) {
+                    window.parent.showNewBestScore("Tetris", { score: score, difficulty: difficulty });
+                }
+            }).catch(err => {
+                console.error("Error saving Tetris score:", err);
+            });
+        } else {
+            console.error("saveGameScore function not found in parent window");
+        }
     }
 }
 

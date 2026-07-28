@@ -4,7 +4,7 @@ let safeTiles = []; // safeTiles[col] = row index
 let currentCol = -1; // -1 = start pad, 0..9 = bridge columns
 let currentRow = 1; // middle row as default
 let attempts = 0;
-let timerSeconds = 60;
+let timerSeconds = 180;
 let timerInterval = null;
 let gameOver = false;
 
@@ -110,6 +110,22 @@ function onTileClick(e) {
       finishPad.appendChild(pawElement);
 
       messageElement.textContent = `You crossed the bridge! Attempts: ${attempts}`;
+      
+      // Save score to leaderboard (time left)
+      if (window.parent && window.parent.saveGameScore) {
+        window.parent.saveGameScore("Cross the Bridge", {
+          timeLeft: timerSeconds
+        }).then((result) => {
+          console.log("Cross the Bridge score saved successfully");
+          if (result && result.isNewBest && window.parent.showNewBestScore) {
+            window.parent.showNewBestScore("Cross the Bridge", { timeLeft: timerSeconds });
+          }
+        }).catch(err => {
+          console.error("Error saving Cross the Bridge score:", err);
+        });
+      } else {
+        console.error("saveGameScore function not found in parent window");
+      }
     }
   } else {
     // Wrong tile
@@ -123,7 +139,7 @@ function onTileClick(e) {
 // Timer
 function startTimer() {
   clearInterval(timerInterval);
-  timerSeconds = 60;
+  timerSeconds = 180;
   timerElement.textContent = formatTime(timerSeconds);
   gameOver = false;
   messageElement.textContent = "";

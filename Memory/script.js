@@ -113,6 +113,22 @@ function checkForMatch() {
     if (matchedPairs === pairImagePaths.length) {
       // All pairs found
       messageDiv.textContent = `You won in ${turns} turns`;
+      
+      // Save score to leaderboard
+      if (window.parent && window.parent.saveGameScore) {
+        window.parent.saveGameScore("Memory", {
+          turns: turns
+        }).then((result) => {
+          console.log("Memory score saved successfully");
+          if (result && result.isNewBest && window.parent.showNewBestScore) {
+            window.parent.showNewBestScore("Memory", { turns: turns });
+          }
+        }).catch(err => {
+          console.error("Error saving Memory score:", err);
+        });
+      } else {
+        console.error("saveGameScore function not found in parent window");
+      }
     }
 
     resetTurn();

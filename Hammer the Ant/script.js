@@ -215,6 +215,24 @@ function endGame(hitBomb) {
   } else {
     messageEl.textContent = `You scored ${score} points!`;
   }
+  
+  // Save score to leaderboard
+  const difficulty = currentConfig === EASY_CONFIG ? "easy" : "hard";
+  if (window.parent && window.parent.saveGameScore) {
+    window.parent.saveGameScore("Hammer the Ant", {
+      score: score,
+      difficulty: difficulty
+    }).then((result) => {
+      console.log("Hammer the Ant score saved successfully");
+      if (result && result.isNewBest && window.parent.showNewBestScore) {
+        window.parent.showNewBestScore("Hammer the Ant", { score: score, difficulty: difficulty });
+      }
+    }).catch(err => {
+      console.error("Error saving Hammer the Ant score:", err);
+    });
+  } else {
+    console.error("saveGameScore function not found in parent window");
+  }
 }
 
 function shuffleArray(arr) {
