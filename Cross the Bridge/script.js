@@ -36,6 +36,14 @@ function generateSafeTiles() {
 // Render bridge
 function renderBridge() {
   bridgeElement.innerHTML = "";
+  
+  // Update bridge class based on columns
+  bridgeElement.className = "bridge";
+  if (cols === 6) {
+    bridgeElement.classList.add("cols-6");
+  } else if (cols === 12) {
+    bridgeElement.classList.add("cols-12");
+  }
 
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {

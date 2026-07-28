@@ -107,6 +107,67 @@ let gameStarted = false;
 
 let speed = 150;
 
+// Translation system
+let currentLang = 'en';
+
+// Get language from parent safely
+function getParentLanguage() {
+    try {
+        return window.parent.currentLanguage || 'en';
+    } catch (e) {
+        return 'en';
+    }
+}
+
+const translations = {
+    en: {
+        title: 'Snake Game',
+        menuTitle: 'Snake',
+        selectSize: 'Select Size:',
+        small: 'Small (15x15)',
+        big: 'Big (18x18)',
+        length: 'Length',
+        gameOver: 'Game Over! Final length'
+    },
+    pt: {
+        title: 'Jogo da Cobra',
+        menuTitle: 'Cobra',
+        selectSize: 'Selecione o Tamanho:',
+        small: 'Pequeno (15x15)',
+        big: 'Grande (18x18)',
+        length: 'Comprimento',
+        gameOver: 'Fim do Jogo! Comprimento final'
+    }
+};
+
+function t(key) {
+    return translations[currentLang][key] || key;
+}
+
+function updateLanguage() {
+    currentLang = getParentLanguage();
+    document.querySelector('h2').textContent = t('title');
+    document.querySelector('.menu-content h2').textContent = t('menuTitle');
+    document.querySelector('.menu-content p').textContent = t('selectSize');
+    document.getElementById('btnSmall').textContent = t('small');
+    document.getElementById('btnBig').textContent = t('big');
+    
+    if (!gameOver && gameStarted) {
+        document.getElementById("lengthCounter").textContent = t('length') + ': ' + snake.length;
+    }
+}
+
+// Listen for language changes
+window.addEventListener('message', function(event) {
+    if (event.data.type === 'languageChange') {
+        updateLanguage();
+    }
+});
+
+// Update language on load and after a short delay to ensure parent is ready
+setTimeout(updateLanguage, 100);
+updateLanguage();
+
 document.addEventListener("keydown", keyPress);
 
 // Menu buttons
@@ -146,7 +207,7 @@ function startGame(mode) {
     speed = 150;
     
     spawnFood();
-    document.getElementById("lengthCounter").textContent = "Length: 1";
+    document.getElementById("lengthCounter").textContent = t('length') + ': 1';
     document.getElementById("gameMessage").textContent = "";
     
     gameLoop();
@@ -201,7 +262,7 @@ function update() {
     }
 
     document.getElementById("lengthCounter").textContent =
-        "Length: " + snake.length;
+        t('length') + ': ' + snake.length;
 }
 
 function spawnFood() {
@@ -242,7 +303,7 @@ function draw() {
 function endGame() {
     gameOver = true;
     document.getElementById("gameMessage").textContent =
-        "Game Over! Final length: " + snake.length;
+        t('gameOver') + ': ' + snake.length;
     
     // Save score to leaderboard
     if (window.parent && window.parent.saveGameScore) {

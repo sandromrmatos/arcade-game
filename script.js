@@ -4,6 +4,217 @@ function loadGame(name) {
   frame.src = name === "home" ? "home.html" : `launch.html?game=${name}`;
 }
 
+// Language translations
+let currentLanguage = localStorage.getItem("arcadeLanguage") || "en";
+
+// Ensure valid language
+if (currentLanguage !== "en" && currentLanguage !== "pt") {
+  currentLanguage = "en";
+  localStorage.setItem("arcadeLanguage", "en");
+}
+
+const translations = {
+  en: {
+    title: "Arcade Games by Sandro",
+    home: "Home",
+    info: "Info",
+    leaderboard: "Leaderboard",
+    leaderboardTitle: "Game Leaderboards",
+    leaderboardSubtitle: "Select a game to view its high scores:",
+    infoTitle: "Game Information",
+    infoSubtitle: "Click on any game to learn how to play:",
+    close: "×",
+    refresh: "🔄 Refresh",
+    rank: "Rank",
+    player: "Player",
+    score: "Score",
+    date: "Date",
+    bestTime: "Best Time",
+    timeLeft: "Time Left",
+    length: "Length",
+    turns: "Turns",
+    time: "Time",
+    noScores: "No scores yet. Be the first!",
+    loading: "Loading scores...",
+    errorLoading: "Error loading scores:",
+    welcomeTitle: "Welcome!",
+    welcomeMessage: "Please enter your name:",
+    namePlaceholder: "Your name",
+    startPlaying: "Start Playing",
+    enterName: "Please enter a name to continue!",
+    easyMode: "Easy Mode",
+    mediumMode: "Medium Mode",
+    hardMode: "Hard Mode",
+    small: "Small",
+    large: "Large",
+    short: "Short",
+    long: "Long",
+    big: "Big",
+    newBestScore: "NEW BEST SCORE!",
+    noTrack: "No track playing",
+    noInfo: "No information available for",
+    // Game names
+    "Memory": "Memory",
+    "Snake": "Snake",
+    "Tetris": "Tetris",
+    "Candy Crush": "Candy Crush",
+    "Tic Tac Toe": "Tic Tac Toe",
+    "Puzzle Bobble": "Puzzle Bobble",
+    "Cross the Bridge": "Cross the Bridge",
+    "Simon Says": "Simon Says",
+    "Snakes and Ladders": "Snakes and Ladders",
+    "Wordle": "Wordle",
+    "Minefield": "Minefield",
+    "Arkanoid": "Arkanoid",
+    "Word Search": "Word Search",
+    "Mahjong Solitaire": "Mahjong Solitaire",
+    "Hammer the Ant": "Hammer the Ant",
+    "PacMan": "Pac-Man",
+    "Puzzle": "Puzzle",
+    "Domino": "Domino"
+  },
+  pt: {
+    title: "Jogos Arcade por Sandro",
+    home: "Início",
+    info: "Informação",
+    leaderboard: "Classificação",
+    leaderboardTitle: "Classificações dos Jogos",
+    leaderboardSubtitle: "Selecione um jogo para ver as pontuações mais altas:",
+    infoTitle: "Informação dos Jogos",
+    infoSubtitle: "Clique em qualquer jogo para aprender a jogar:",
+    close: "×",
+    refresh: "🔄 Atualizar",
+    rank: "Posição",
+    player: "Jogador",
+    score: "Pontuação",
+    date: "Data",
+    bestTime: "Melhor Tempo",
+    timeLeft: "Tempo Restante",
+    length: "Comprimento",
+    turns: "Jogadas",
+    time: "Tempo",
+    noScores: "Ainda sem pontuações. Seja o primeiro!",
+    loading: "A carregar pontuações...",
+    errorLoading: "Erro ao carregar pontuações:",
+    welcomeTitle: "Bem-vindo!",
+    welcomeMessage: "Por favor insira o seu nome:",
+    namePlaceholder: "O seu nome",
+    startPlaying: "Começar a Jogar",
+    enterName: "Por favor insira um nome para continuar!",
+    easyMode: "Modo Fácil",
+    mediumMode: "Modo Médio",
+    hardMode: "Modo Difícil",
+    small: "Pequeno",
+    large: "Grande",
+    short: "Curto",
+    long: "Longo",
+    big: "Grande",
+    newBestScore: "NOVA MELHOR PONTUAÇÃO!",
+    noTrack: "Nenhuma faixa a tocar",
+    noInfo: "Nenhuma informação disponível para",
+    // Game names in Portuguese
+    "Memory": "Memória",
+    "Snake": "Cobra",
+    "Tetris": "Tetris",
+    "Candy Crush": "Candy Crush",
+    "Tic Tac Toe": "Jogo do Galo",
+    "Puzzle Bobble": "Puzzle Bobble",
+    "Cross the Bridge": "Atravessar a Ponte",
+    "Simon Says": "Simon Diz",
+    "Snakes and Ladders": "Cobras e Escadas",
+    "Wordle": "Wordle",
+    "Minefield": "Campo Minado",
+    "Arkanoid": "Arkanoid",
+    "Word Search": "Sopa de Letras",
+    "Mahjong Solitaire": "Mahjong Solitário",
+    "Hammer the Ant": "Esmagar a Formiga",
+    "PacMan": "Pac-Man",
+    "Puzzle": "Puzzle",
+    "Domino": "Dominó"
+  }
+};
+
+function t(key) {
+  const result = translations[currentLanguage][key] || key;
+  console.log(`t("${key}") with lang="${currentLanguage}" => "${result}"`);
+  return result;
+}
+
+function updateLanguage() {
+  console.log("updateLanguage() called with currentLanguage =", currentLanguage);
+  
+  // Update page title
+  document.querySelector(".banner h1").textContent = t("title");
+  
+  // Update menu buttons - first 3 are special buttons (Home, Info, Leaderboard)
+  const menuButtons = document.querySelectorAll(".menu button");
+  if (menuButtons.length >= 3) {
+    menuButtons[0].textContent = t("home");
+    menuButtons[1].textContent = t("info");
+    menuButtons[2].textContent = t("leaderboard");
+    
+    // Update game buttons (they have span elements with game names)
+    for (let i = 3; i < menuButtons.length; i++) {
+      const span = menuButtons[i].querySelector("span");
+      if (span) {
+        const gameName = span.getAttribute("data-game-name");
+        if (gameName) {
+          span.textContent = t(gameName);
+        }
+      }
+    }
+  }
+  
+  // Update modal if visible
+  const modal = document.getElementById("name-modal");
+  if (modal && !modal.classList.contains("hidden")) {
+    modal.querySelector("h2").textContent = t("welcomeTitle");
+    modal.querySelector("p").textContent = t("welcomeMessage");
+    document.getElementById("player-name-input").placeholder = t("namePlaceholder");
+    document.getElementById("save-name-btn").textContent = t("startPlaying");
+  }
+  
+  // Update leaderboard section if visible
+  const leaderboardSection = document.getElementById("leaderboard-section");
+  if (leaderboardSection && !leaderboardSection.classList.contains("hidden")) {
+    const h2 = leaderboardSection.querySelector("h2");
+    if (h2) {
+      const currentText = h2.textContent;
+      // Check if it's the main info page
+      if (currentText.includes("Information") || currentText.includes("Informação")) {
+        h2.textContent = t("infoTitle");
+        const p = leaderboardSection.querySelector("p");
+        if (p) p.textContent = t("infoSubtitle");
+      }
+      // Check if it's the main leaderboard page
+      else if ((currentText.includes("Leaderboards") || currentText.includes("Classificações")) && 
+               !currentText.includes("Leaderboard") && !currentText.includes("Classificação")) {
+        h2.textContent = t("leaderboardTitle");
+        const p = leaderboardSection.querySelector("p");
+        if (p) p.textContent = t("leaderboardSubtitle");
+      }
+    }
+    
+    // Update game list buttons in info/leaderboard sections if visible
+    const gameListButtons = leaderboardSection.querySelectorAll(".leaderboard-game-btn span");
+    gameListButtons.forEach(span => {
+      const gameName = span.getAttribute("data-game-name");
+      if (gameName) {
+        span.textContent = t(gameName);
+      }
+    });
+  }
+  
+  // Notify iframe about language change
+  const iframe = document.getElementById("game-frame");
+  if (iframe && iframe.contentWindow) {
+    iframe.contentWindow.postMessage({ type: 'languageChange', language: currentLanguage }, '*');
+  }
+  
+  // Update track display
+  updateTrackDisplay();
+}
+
 // Firebase configuration (optional - app works without it)
 const firebaseConfig = {
   apiKey: "AIzaSyDaxTpbasYOjVhm13D1Zi6lyqCatEqTn-M",
@@ -48,7 +259,7 @@ const setupNameModal = () => {
   saveBtn.onclick = () => {
     const name = input.value;
     if (!name || name.trim() === "") {
-      alert("Please enter a name to continue!");
+      alert(t("enterName"));
       return;
     }
     
@@ -112,12 +323,18 @@ async function buildMenu() {
   const menu = document.getElementById("menu");
 
   const homeBtn = document.createElement("button");
-  homeBtn.textContent = "Home";
+  homeBtn.textContent = t("home");
   homeBtn.onclick = () => loadGame("home");
   menu.appendChild(homeBtn);
 
+  const infoBtn = document.createElement("button");
+  infoBtn.textContent = t("info");
+  infoBtn.className = "info-btn";
+  infoBtn.onclick = showInfo;
+  menu.appendChild(infoBtn);
+
   const leaderboardBtn = document.createElement("button");
-  leaderboardBtn.textContent = "Leaderboard";
+  leaderboardBtn.textContent = t("leaderboard");
   leaderboardBtn.className = "leaderboard-btn";
   leaderboardBtn.onclick = showLeaderboard;
   menu.appendChild(leaderboardBtn);
@@ -135,7 +352,8 @@ async function buildMenu() {
     img.className = "menu-icon";
 
     const span = document.createElement("span");
-    span.textContent = folder;
+    span.textContent = t(folder);
+    span.setAttribute("data-game-name", folder); // Store original name for translation updates
 
     btn.appendChild(img);
     btn.appendChild(span);
@@ -152,9 +370,9 @@ function showLeaderboard() {
   // Reset to main leaderboard view
   section.innerHTML = `
     <div class="leaderboard-content">
-      <button class="close-leaderboard-btn">×</button>
-      <h2>Game Leaderboards</h2>
-      <p>Select a game to view its high scores:</p>
+      <button class="close-leaderboard-btn">${t("close")}</button>
+      <h2>${t("leaderboardTitle")}</h2>
+      <p>${t("leaderboardSubtitle")}</p>
       <div id="leaderboard-game-list" class="leaderboard-game-list"></div>
     </div>
   `;
@@ -180,7 +398,442 @@ function showLeaderboard() {
       img.className = "leaderboard-game-icon";
       
       const span = document.createElement("span");
-      span.textContent = folder;
+      span.textContent = t(folder);
+      span.setAttribute("data-game-name", folder); // Store original name for translation updates
+      
+      btn.appendChild(img);
+      btn.appendChild(span);
+      btn.onclick = () => showGameLeaderboard(folder);
+      
+      gameList.appendChild(btn);
+    });
+  });
+}
+
+// Info functions
+const gameDescriptions = {
+  "Memory": {
+    title: "Memory Card Game",
+    description: "Match pairs of cards by flipping them over two at a time. Find all matching pairs to win!",
+    modes: "Small (4×4): 8 pairs to match\nLarge (6×6): 18 pairs to match",
+    scoring: "Lowest number of turns wins. The fewer flips it takes to find all pairs, the better your score!",
+    controls: "Click on cards to flip them over. Match two cards with the same image to keep them revealed."
+  },
+  "Snake": {
+    title: "Snake",
+    description: "Control a snake that grows longer as it eats food. Avoid hitting walls or your own tail!",
+    modes: "Small (15×15 grid)\nBig (18×18 grid)",
+    scoring: "Longest snake length wins. Each food item makes your snake grow by 1.",
+    controls: "Use arrow keys to change direction. On mobile, use W/A/S/Z keys or swipe gestures."
+  },
+  "Tetris": {
+    title: "Tetris",
+    description: "Classic block-stacking game. Arrange falling pieces to create complete horizontal lines that disappear.",
+    modes: "Easy: Slower falling speed\nHard: Faster falling speed with more challenge",
+    scoring: "Points are awarded for clearing lines. Multiple lines at once give bonus points. Highest score wins!",
+    controls: "Arrow keys: Left/Right to move, Down to drop faster, Up to rotate. Space bar for instant drop."
+  },
+  "Candy Crush": {
+    title: "Candy Crush",
+    description: "Match 3 or more candies of the same color in a row or column to clear them and score points.",
+    modes: "Single mode with limited moves",
+    scoring: "Match more candies for higher scores. Combos and special candy combinations give bonus points. Highest score wins!",
+    controls: "Click two adjacent candies to swap them, or drag one candy onto an adjacent candy."
+  },
+  "Tic Tac Toe": {
+    title: "Tic Tac Toe",
+    description: "Classic 3×3 grid game. Get three of your symbols in a row (horizontally, vertically, or diagonally) to win!",
+    modes: "Single mode - play against the computer",
+    scoring: "No scoring - just wins, losses, or draws",
+    controls: "Click on any empty square to place your mark (X). Computer plays as O."
+  },
+  "Puzzle Bobble": {
+    title: "Puzzle Bobble (Bubble Shooter)",
+    description: "Shoot colored bubbles to match 3 or more of the same color. Clear all bubbles before they reach the bottom!",
+    modes: "Easy: Standard bubble falling speed\nHard: Bubbles descend faster with increasing speed over time",
+    scoring: "Points for each bubble popped. Clear more bubbles at once for bonus points. Highest score wins!",
+    controls: "Move mouse to aim, click to shoot. Match 3+ bubbles of the same color to pop them."
+  },
+  "Cross the Bridge": {
+    title: "Cross the Bridge",
+    description: "Navigate across a bridge by choosing the correct tiles. One tile per column is safe - the others teleport you back to start!",
+    modes: "Short: 3 rows × 6 columns\nLong: 3 rows × 12 columns",
+    scoring: "Complete the bridge with the most time remaining. Timer starts at 3 minutes. Higher time left wins!",
+    controls: "Click on tiles to test them. Right-click to place flags as reminders."
+  },
+  "Simon Says": {
+    title: "Simon Says",
+    description: "Memory game where you repeat increasingly long sequences of colors. Watch the pattern, then repeat it!",
+    modes: "Single mode with progressively harder levels",
+    scoring: "No leaderboard - just see how many rounds you can complete!",
+    controls: "Click the colored buttons in the same order as shown. Each round adds one more color to remember."
+  },
+  "Snakes and Ladders": {
+    title: "Snakes and Ladders",
+    description: "Classic board game. Roll the dice and race to square 100. Climb ladders to advance, avoid snakes that send you back!",
+    modes: "Single mode - race against the computer",
+    scoring: "No leaderboard - first to reach square 100 wins the game!",
+    controls: "Click 'Roll Dice' to take your turn. Your piece moves automatically based on the dice roll."
+  },
+  "Wordle": {
+    title: "Wordle",
+    description: "Guess the 5-letter word in 6 attempts. After each guess, tiles change color to show how close you are!",
+    modes: "Single mode - new word each game",
+    scoring: "No leaderboard - try to guess the word in as few attempts as possible!",
+    controls: "Type your 5-letter guess and press Enter. Green = correct letter & position, Yellow = correct letter wrong position, Gray = letter not in word."
+  },
+  "Minefield": {
+    title: "Minefield (Minesweeper)",
+    description: "Clear a grid by revealing safe cells while avoiding hidden bombs. Numbers show how many bombs are adjacent.",
+    modes: "Easy (5×5): 5 bombs\nMedium (6×6): 8 bombs\nHard (8×8): 12 bombs",
+    scoring: "Fastest time to clear all safe cells wins. Lower time is better!",
+    controls: "Left-click to reveal a cell. Right-click to place a flag on suspected bombs. Clear all non-bomb cells to win!"
+  },
+  "Arkanoid": {
+    title: "Arkanoid (Breakout)",
+    description: "Bounce a ball with your paddle to break all the bricks. Don't let the ball fall off the bottom!",
+    modes: "Single mode with multiple levels",
+    scoring: "No leaderboard - break all bricks to advance to the next level!",
+    controls: "Move mouse left/right to control paddle. Ball bounces automatically. Clear all bricks to win the level."
+  },
+  "Word Search": {
+    title: "Word Search",
+    description: "Find all hidden words in a grid of letters. Words can be horizontal, vertical, or diagonal in any direction.",
+    modes: "Single mode with random word placement each game",
+    scoring: "Fastest time to find all words wins. Lower time is better!",
+    controls: "Click and drag to select words. Release when you've highlighted a complete word."
+  },
+  "Mahjong Solitaire": {
+    title: "Mahjong Solitaire",
+    description: "Match pairs of identical tiles that are free (not blocked by other tiles). Clear all tiles to win!",
+    modes: "Easy: Simpler tile layout\nHard: More complex stacked layout",
+    scoring: "Fastest time to clear all tiles wins. Lower time is better!",
+    controls: "Click two matching tiles that are free on at least one side. They'll disappear if they match."
+  },
+  "Hammer the Ant": {
+    title: "Hammer the Ant",
+    description: "Click on ants as they appear to squash them before time runs out. React quickly for higher scores!",
+    modes: "Easy: Ants appear slower\nHard: Ants appear faster and disappear quicker",
+    scoring: "Most ants squashed wins. Highest score wins!",
+    controls: "Click on ants as soon as they appear. Speed and accuracy are key!"
+  },
+  "PacMan": {
+    title: "Pac-Man",
+    description: "Guide Pac-Man through a maze, eating dots while avoiding ghosts. Eat power pellets to turn the tables and chase ghosts!",
+    modes: "Single mode with classic gameplay",
+    scoring: "No leaderboard - eat all dots to complete the level!",
+    controls: "Arrow keys to move. Eat all small dots and power pellets while avoiding ghosts (unless you've eaten a power pellet)."
+  },
+  "Puzzle": {
+    title: "Picture Puzzle",
+    description: "Rearrange scrambled image pieces to recreate the original picture. Click pieces then click empty board spaces.",
+    modes: "Easy (4×4): 16 pieces\nMedium (6×6): 36 pieces\nHard (7×7): 49 pieces",
+    scoring: "Fastest time to complete the puzzle wins. Lower time is better!",
+    controls: "Click a piece on the left, then click where it should go on the right board. Correct pieces stay in place."
+  },
+  "Domino": {
+    title: "Dominoes",
+    description: "Play dominoes against the computer. Match numbers on tiles to build a chain. First to play all tiles wins!",
+    modes: "Single mode - Player vs Computer",
+    scoring: "When you win, you score points equal to all dots on opponent's remaining tiles. Highest cumulative score wins!",
+    controls: "Click your tile to select it, then click a yellow placeholder to play it. Click 'Draw' if you have no valid moves."
+  }
+};
+
+const gameDescriptionsPT = {
+  "Memory": {
+    title: "Jogo de Memória",
+    description: "Combine pares de cartas virando-as duas de cada vez. Encontre todos os pares correspondentes para ganhar!",
+    modes: "Pequeno (4×4): 8 pares para combinar\nGrande (6×6): 18 pares para combinar",
+    scoring: "Menor número de jogadas ganha. Quanto menos viragens para encontrar todos os pares, melhor a pontuação!",
+    controls: "Clique nas cartas para as virar. Combine duas cartas com a mesma imagem para as manter reveladas."
+  },
+  "Snake": {
+    title: "Cobra",
+    description: "Controle uma cobra que cresce à medida que come. Evite bater nas paredes ou na própria cauda!",
+    modes: "Pequeno (grelha 15×15)\nGrande (grelha 18×18)",
+    scoring: "Maior comprimento da cobra ganha. Cada item de comida faz a cobra crescer 1.",
+    controls: "Use as setas para mudar de direção. No telemóvel, use as teclas W/A/S/Z ou gestos de deslizar."
+  },
+  "Tetris": {
+    title: "Tetris",
+    description: "Jogo clássico de empilhar blocos. Organize as peças que caem para criar linhas horizontais completas que desaparecem.",
+    modes: "Fácil: Velocidade de queda mais lenta\nDifícil: Velocidade de queda mais rápida com mais desafio",
+    scoring: "Pontos são atribuídos por limpar linhas. Várias linhas ao mesmo tempo dão pontos bónus. Pontuação mais alta ganha!",
+    controls: "Setas: Esquerda/Direita para mover, Baixo para cair mais rápido, Cima para rodar. Barra de espaço para queda instantânea."
+  },
+  "Candy Crush": {
+    title: "Candy Crush",
+    description: "Combine 3 ou mais doces da mesma cor numa linha ou coluna para os limpar e marcar pontos.",
+    modes: "Modo único com movimentos limitados",
+    scoring: "Combine mais doces para pontuações mais altas. Combos e combinações especiais dão pontos bónus. Pontuação mais alta ganha!",
+    controls: "Clique em dois doces adjacentes para os trocar, ou arraste um doce para um adjacente."
+  },
+  "Tic Tac Toe": {
+    title: "Jogo do Galo",
+    description: "Jogo clássico de grelha 3×3. Consiga três dos seus símbolos numa linha (horizontal, vertical ou diagonal) para ganhar!",
+    modes: "Modo único - jogue contra o computador",
+    scoring: "Sem pontuação - apenas vitórias, derrotas ou empates",
+    controls: "Clique em qualquer quadrado vazio para colocar a sua marca (X). O computador joga como O."
+  },
+  "Puzzle Bobble": {
+    title: "Puzzle Bobble",
+    description: "Atire bolhas coloridas para combinar 3 ou mais da mesma cor. Limpe todas as bolhas antes que cheguem ao fundo!",
+    modes: "Fácil: Velocidade de queda padrão das bolhas\nDifícil: Bolhas descem mais rápido com velocidade crescente ao longo do tempo",
+    scoring: "Pontos por cada bolha rebentada. Limpe mais bolhas de uma vez para pontos bónus. Pontuação mais alta ganha!",
+    controls: "Mova o rato para apontar, clique para atirar. Combine 3+ bolhas da mesma cor para as rebentar."
+  },
+  "Cross the Bridge": {
+    title: "Atravessar a Ponte",
+    description: "Navegue pela ponte escolhendo os blocos corretos. Um bloco por coluna é seguro - os outros teleportam-no de volta ao início!",
+    modes: "Curto: 3 linhas × 6 colunas\nLongo: 3 linhas × 12 colunas",
+    scoring: "Complete a ponte com mais tempo restante. O temporizador começa em 3 minutos. Mais tempo restante ganha!",
+    controls: "Clique nos blocos para os testar. Clique direito para colocar bandeiras como lembretes."
+  },
+  "Simon Says": {
+    title: "Simon Diz",
+    description: "Jogo de memória onde repete sequências cada vez mais longas de cores. Observe o padrão e depois repita-o!",
+    modes: "Modo único com níveis progressivamente mais difíceis",
+    scoring: "Sem classificação - veja quantas rondas consegue completar!",
+    controls: "Clique nos botões coloridos na mesma ordem mostrada. Cada ronda adiciona mais uma cor para memorizar."
+  },
+  "Snakes and Ladders": {
+    title: "Cobras e Escadas",
+    description: "Jogo de tabuleiro clássico. Lance o dado e corra até ao quadrado 100. Suba escadas para avançar, evite cobras que o enviam para trás!",
+    modes: "Modo único - corrida contra o computador",
+    scoring: "Sem classificação - o primeiro a chegar ao quadrado 100 ganha o jogo!",
+    controls: "Clique em 'Lançar Dado' para jogar. A sua peça move-se automaticamente com base no lançamento do dado."
+  },
+  "Wordle": {
+    title: "Wordle",
+    description: "Adivinhe a palavra de 5 letras em 6 tentativas. Após cada tentativa, os blocos mudam de cor para mostrar quão perto está!",
+    modes: "Modo único - nova palavra em cada jogo",
+    scoring: "Sem classificação - tente adivinhar a palavra no menor número de tentativas possível!",
+    controls: "Digite a sua tentativa de 5 letras e pressione Enter. Verde = letra e posição corretas, Amarelo = letra correta posição errada, Cinzento = letra não está na palavra."
+  },
+  "Minefield": {
+    title: "Campo Minado",
+    description: "Limpe uma grelha revelando células seguras enquanto evita bombas escondidas. Os números mostram quantas bombas estão adjacentes.",
+    modes: "Fácil (5×5): 5 bombas\nMédio (6×6): 8 bombas\nDifícil (8×8): 12 bombas",
+    scoring: "Tempo mais rápido para limpar todas as células seguras ganha. Tempo mais baixo é melhor!",
+    controls: "Clique esquerdo para revelar uma célula. Clique direito para colocar uma bandeira em bombas suspeitas. Limpe todas as células sem bomba para ganhar!"
+  },
+  "Arkanoid": {
+    title: "Arkanoid",
+    description: "Rebata uma bola com a sua raquete para partir todos os tijolos. Não deixe a bola cair no fundo!",
+    modes: "Modo único com vários níveis",
+    scoring: "Sem classificação - parta todos os tijolos para avançar para o próximo nível!",
+    controls: "Mova o rato esquerda/direita para controlar a raquete. A bola ressalta automaticamente. Limpe todos os tijolos para ganhar o nível."
+  },
+  "Word Search": {
+    title: "Sopa de Letras",
+    description: "Encontre todas as palavras escondidas numa grelha de letras. As palavras podem estar horizontal, vertical ou diagonal em qualquer direção.",
+    modes: "Modo único com colocação aleatória de palavras em cada jogo",
+    scoring: "Tempo mais rápido para encontrar todas as palavras ganha. Tempo mais baixo é melhor!",
+    controls: "Clique e arraste para selecionar palavras. Solte quando tiver destacado uma palavra completa."
+  },
+  "Mahjong Solitaire": {
+    title: "Mahjong Solitário",
+    description: "Combine pares de peças idênticas que estejam livres (não bloqueadas por outras peças). Limpe todas as peças para ganhar!",
+    modes: "Fácil: Disposição de peças mais simples\nDifícil: Disposição empilhada mais complexa",
+    scoring: "Tempo mais rápido para limpar todas as peças ganha. Tempo mais baixo é melhor!",
+    controls: "Clique em duas peças correspondentes que estejam livres em pelo menos um lado. Elas desaparecerão se combinarem."
+  },
+  "Hammer the Ant": {
+    title: "Esmagar a Formiga",
+    description: "Clique nas formigas à medida que aparecem para as esmagar antes que o tempo acabe. Reaja rapidamente para pontuações mais altas!",
+    modes: "Fácil: Formigas aparecem mais devagar\nDifícil: Formigas aparecem mais rápido e desaparecem mais depressa",
+    scoring: "Mais formigas esmagadas ganha. Pontuação mais alta ganha!",
+    controls: "Clique nas formigas assim que aparecem. Velocidade e precisão são fundamentais!"
+  },
+  "PacMan": {
+    title: "Pac-Man",
+    description: "Guie o Pac-Man por um labirinto, comendo pontos enquanto evita fantasmas. Coma pílulas de poder para virar a mesa e perseguir fantasmas!",
+    modes: "Modo único com jogabilidade clássica",
+    scoring: "Sem classificação - coma todos os pontos para completar o nível!",
+    controls: "Setas para mover. Coma todos os pontos pequenos e pílulas de poder enquanto evita fantasmas (a menos que tenha comido uma pílula de poder)."
+  },
+  "Puzzle": {
+    title: "Puzzle de Imagem",
+    description: "Reorganize peças de imagem embaralhadas para recriar a imagem original. Clique nas peças e depois clique nos espaços vazios do tabuleiro.",
+    modes: "Fácil (4×4): 16 peças\nMédio (6×6): 36 peças\nDifícil (7×7): 49 peças",
+    scoring: "Tempo mais rápido para completar o puzzle ganha. Tempo mais baixo é melhor!",
+    controls: "Clique numa peça à esquerda, depois clique onde deve ir no tabuleiro direito. Peças corretas ficam no lugar."
+  },
+  "Domino": {
+    title: "Dominó",
+    description: "Jogue dominó contra o computador. Combine números nas peças para construir uma cadeia. O primeiro a jogar todas as peças ganha!",
+    modes: "Modo único - Jogador vs Computador",
+    scoring: "Quando ganha, marca pontos iguais a todos os pontos nas peças restantes do adversário. Pontuação cumulativa mais alta ganha!",
+    controls: "Clique na sua peça para a selecionar, depois clique num espaço amarelo para a jogar. Clique em 'Comprar' se não tiver jogadas válidas."
+  }
+};
+
+function showInfo() {
+  const section = document.getElementById("leaderboard-section");
+  
+  section.innerHTML = `
+    <div class="leaderboard-content">
+      <button class="close-leaderboard-btn">${t("close")}</button>
+      <h2>${t("infoTitle")}</h2>
+      <p>${t("infoSubtitle")}</p>
+      <div id="info-game-list" class="leaderboard-game-list"></div>
+    </div>
+  `;
+  
+  section.classList.remove("hidden");
+  
+  const closeBtn = section.querySelector(".close-leaderboard-btn");
+  closeBtn.addEventListener("click", closeLeaderboard);
+  
+  const gameList = document.getElementById("info-game-list");
+  
+  fetch("games.json").then(res => res.json()).then(data => {
+    data.games.forEach(folder => {
+      const btn = document.createElement("button");
+      btn.className = "leaderboard-game-btn";
+      
+      const img = document.createElement("img");
+      img.src = `icons/${folder}.svg`;
+      img.onerror = function() { this.src = `icons/${folder}.png`; };
+      img.className = "leaderboard-game-icon";
+      
+      const span = document.createElement("span");
+      span.textContent = t(folder);
+      span.setAttribute("data-game-name", folder); // Store original name for translation updates
+      
+      btn.appendChild(img);
+      btn.appendChild(span);
+      btn.onclick = () => showGameInfo(folder);
+      
+      gameList.appendChild(btn);
+    });
+  });
+}
+
+function showGameInfo(gameName) {
+  const descriptions = currentLanguage === "pt" ? gameDescriptionsPT : gameDescriptions;
+  const info = descriptions[gameName];
+  
+  if (!info) {
+    alert(`${t("noInfo")} ${t(gameName)}.`);
+    return;
+  }
+  
+  const howToPlay = currentLanguage === "pt" ? "📖 Como Jogar" : "📖 How to Play";
+  const gameModes = currentLanguage === "pt" ? "🎮 Modos de Jogo" : "🎮 Game Modes";
+  const scoringLabel = currentLanguage === "pt" ? "🏆 Pontuação" : "🏆 Scoring";
+  const controlsLabel = currentLanguage === "pt" ? "🕹️ Controlos" : "🕹️ Controls";
+  
+  // Create modal overlay
+  const modal = document.createElement("div");
+  modal.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10001;
+    animation: fadeIn 0.2s ease-out;
+  `;
+  
+  const content = document.createElement("div");
+  content.style.cssText = `
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    position: relative;
+  `;
+  
+  content.innerHTML = `
+    <button style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 30px; cursor: pointer; color: #666;">×</button>
+    <h2 style="margin-top: 0; color: #333;">${info.title}</h2>
+    <div style="margin: 20px 0;">
+      <h3 style="color: #555; margin-bottom: 8px;">${howToPlay}</h3>
+      <p style="color: #666; line-height: 1.6;">${info.description}</p>
+    </div>
+    <div style="margin: 20px 0;">
+      <h3 style="color: #555; margin-bottom: 8px;">${gameModes}</h3>
+      <p style="color: #666; line-height: 1.6; white-space: pre-line;">${info.modes}</p>
+    </div>
+    <div style="margin: 20px 0;">
+      <h3 style="color: #555; margin-bottom: 8px;">${scoringLabel}</h3>
+      <p style="color: #666; line-height: 1.6;">${info.scoring}</p>
+    </div>
+    <div style="margin: 20px 0;">
+      <h3 style="color: #555; margin-bottom: 8px;">${controlsLabel}</h3>
+      <p style="color: #666; line-height: 1.6;">${info.controls}</p>
+    </div>
+  `;
+  
+  const closeBtn = content.querySelector("button");
+  closeBtn.onclick = () => modal.remove();
+  modal.onclick = (e) => {
+    if (e.target === modal) modal.remove();
+  };
+  
+  modal.appendChild(content);
+  document.body.appendChild(modal);
+  
+  // Add animation
+  if (!document.getElementById("infoModalStyles")) {
+    const style = document.createElement("style");
+    style.id = "infoModalStyles";
+    style.textContent = `
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+}
+
+// Leaderboard functions
+function showLeaderboard() {
+  const section = document.getElementById("leaderboard-section");
+  
+  // Reset to main leaderboard view
+  section.innerHTML = `
+    <div class="leaderboard-content">
+      <button class="close-leaderboard-btn">${t("close")}</button>
+      <h2>${t("leaderboardTitle")}</h2>
+      <p>${t("leaderboardSubtitle")}</p>
+      <div id="leaderboard-game-list" class="leaderboard-game-list"></div>
+    </div>
+  `;
+  
+  section.classList.remove("hidden");
+  
+  // Re-attach close button listener for main leaderboard
+  const closeBtn = section.querySelector(".close-leaderboard-btn");
+  closeBtn.addEventListener("click", closeLeaderboard);
+  
+  const gameList = document.getElementById("leaderboard-game-list");
+  
+  // Populate game list
+  fetch("games.json").then(res => res.json()).then(data => {
+    data.games.forEach(folder => {
+      const btn = document.createElement("button");
+      btn.className = "leaderboard-game-btn";
+      
+      const img = document.createElement("img");
+      // Try SVG first, fallback to PNG
+      img.src = `icons/${folder}.svg`;
+      img.onerror = function() { this.src = `icons/${folder}.png`; };
+      img.className = "leaderboard-game-icon";
+      
+      const span = document.createElement("span");
+      span.textContent = t(folder);
+      span.setAttribute("data-game-name", folder); // Store original name for translation updates
       
       btn.appendChild(img);
       btn.appendChild(span);
@@ -195,9 +848,9 @@ function showGameLeaderboard(gameName) {
   const section = document.getElementById("leaderboard-section");
   section.innerHTML = `
     <div class="leaderboard-content" id="game-leaderboard-page">
-      <h2>${gameName} Leaderboard</h2>
-      <button class="close-leaderboard-btn">×</button>
-      <button class="refresh-leaderboard-btn" style="position: absolute; top: 20px; right: 60px; padding: 8px 15px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px;">🔄 Refresh</button>
+      <h2>${t(gameName)} ${t("leaderboard")}</h2>
+      <button class="close-leaderboard-btn">${t("close")}</button>
+      <button class="refresh-leaderboard-btn" style="position: absolute; top: 20px; right: 60px; padding: 8px 15px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px;">${t("refresh")}</button>
       <div id="leaderboard-content"></div>
     </div>
   `;
@@ -217,11 +870,11 @@ function showGameLeaderboard(gameName) {
   
   // If Firebase not available, show local storage scores (if any)
   if (!db) {
-    content.textContent = "Leaderboard requires Firebase (not available in this environment)";
+    content.textContent = t("errorLoading") + " Firebase";
     return;
   }
   
-  content.textContent = "Loading scores...";
+  content.textContent = t("loading");
   
   // Special handling for score-based games with difficulty modes
   if (gameName === "Tetris" || gameName === "Hammer the Ant") {
@@ -235,21 +888,15 @@ function showGameLeaderboard(gameName) {
     return;
   }
   
-  // Special handling for Cross the Bridge (timeLeft - higher is better)
+  // Special handling for Cross the Bridge (timeLeft - higher is better, with difficulty modes)
   if (gameName === "Cross the Bridge") {
-    showTimeLeftLeaderboard(db, content, gameName);
+    showTimeLeftDifficultyLeaderboard(db, content, gameName);
     return;
   }
   
   // Special handling for Snake (length - higher is better)
   if (gameName === "Snake") {
     showLengthBasedDifficultyLeaderboard(db, content, gameName);
-    return;
-  }
-  
-  // Special handling for Cross the Bridge (timeLeft - higher is better)
-  if (gameName === "Cross the Bridge") {
-    showTimeLeftDifficultyLeaderboard(db, content, gameName);
     return;
   }
   
@@ -277,6 +924,18 @@ function showGameLeaderboard(gameName) {
     return;
   }
   
+  // Special handling for Puzzle Bobble (score - higher is better, with difficulty modes)
+  if (gameName === "Puzzle Bobble") {
+    showScoreBasedLeaderboard(db, content, gameName);
+    return;
+  }
+  
+  // Special handling for Minefield (bestTime - lower is better, with difficulty modes)
+  if (gameName === "Minefield") {
+    showTimeBasedDifficultyLeaderboard(db, content, gameName);
+    return;
+  }
+  
   // Get all games, then filter and sort client-side (no index needed)
   // Note: This fetches all games, which is fine for low volumes
   db.collection("games")
@@ -291,7 +950,7 @@ function showGameLeaderboard(gameName) {
         .slice(0, 10);
       
       if (docs.length === 0) {
-        content.innerHTML = '<p style="color: #666;">No scores yet. Be the first!</p>';
+        content.innerHTML = `<p style="color: #666;">${t("noScores")}</p>`;
         return;
       }
       
@@ -314,7 +973,7 @@ function showGameLeaderboard(gameName) {
       content.innerHTML = html;
     })
     .catch(err => {
-      document.getElementById("leaderboard-content").textContent = "Error loading scores: " + err.message;
+      document.getElementById("leaderboard-content").textContent = t("errorLoading") + " " + err.message;
       console.error("Leaderboard error:", err);
     });
 }
@@ -323,6 +982,27 @@ function formatTime(seconds) {
   const mins = Math.floor(seconds / 60);
   const secs = Math.floor(seconds % 60);
   return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+}
+
+function getTableHeader(type) {
+  const rank = t("rank");
+  const player = t("player");
+  const date = t("date");
+  
+  if (type === "score") {
+    return `<thead><tr><th>${rank}</th><th>${player}</th><th>${t("score")}</th><th>${date}</th></tr></thead>`;
+  } else if (type === "bestTime") {
+    return `<thead><tr><th>${rank}</th><th>${player}</th><th>${t("bestTime")}</th><th>${date}</th></tr></thead>`;
+  } else if (type === "timeLeft") {
+    return `<thead><tr><th>${rank}</th><th>${player}</th><th>${t("timeLeft")}</th><th>${date}</th></tr></thead>`;
+  } else if (type === "length") {
+    return `<thead><tr><th>${rank}</th><th>${player}</th><th>${t("length")}</th><th>${date}</th></tr></thead>`;
+  } else if (type === "turns") {
+    return `<thead><tr><th>${rank}</th><th>${player}</th><th>${t("turns")}</th><th>${date}</th></tr></thead>`;
+  } else if (type === "time") {
+    return `<thead><tr><th>${rank}</th><th>${player}</th><th>${t("time")}</th><th>${date}</th></tr></thead>`;
+  }
+  return `<thead><tr><th>${rank}</th><th>${player}</th><th>${date}</th></tr></thead>`;
 }
 
 function showScoreBasedLeaderboard(db, content, gameName) {
@@ -346,11 +1026,11 @@ function showScoreBasedLeaderboard(db, content, gameName) {
       let html = '<div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">';
       
       // Easy mode table
-      html += '<div style="flex: 1; min-width: 300px;"><h3>Easy Mode</h3>';
+      html += `<div style="flex: 1; min-width: 300px;"><h3>${t("easyMode")}</h3>`;
       if (easyDocs.length === 0) {
-        html += '<p style="color: #666;">No scores yet.</p>';
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
       } else {
-        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Score</th><th>Date</th></tr></thead><tbody>';
+        html += `<table class="leaderboard-table">${getTableHeader("score")}<tbody>`;
         easyDocs.forEach((doc, i) => {
           const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
           html += `<tr>
@@ -365,11 +1045,11 @@ function showScoreBasedLeaderboard(db, content, gameName) {
       html += '</div>';
       
       // Hard mode table
-      html += '<div style="flex: 1; min-width: 300px;"><h3>Hard Mode</h3>';
+      html += `<div style="flex: 1; min-width: 300px;"><h3>${t("hardMode")}</h3>`;
       if (hardDocs.length === 0) {
-        html += '<p style="color: #666;">No scores yet.</p>';
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
       } else {
-        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Score</th><th>Date</th></tr></thead><tbody>';
+        html += `<table class="leaderboard-table">${getTableHeader("score")}<tbody>`;
         hardDocs.forEach((doc, i) => {
           const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
           html += `<tr>
@@ -386,14 +1066,14 @@ function showScoreBasedLeaderboard(db, content, gameName) {
       content.innerHTML = html;
     })
     .catch(err => {
-      content.textContent = "Error loading scores: " + err.message;
+      content.textContent = t("errorLoading") + " " + err.message;
       console.error("Leaderboard error:", err);
     });
 }
 
 function showTimeBasedDifficultyLeaderboard(db, content, gameName) {
   db.collection("games")
-    .limit(200)
+    .limit(300)
     .get()
     .then(snapshot => {
       const allDocs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -404,17 +1084,25 @@ function showTimeBasedDifficultyLeaderboard(db, content, gameName) {
         .sort((a, b) => a.bestTime - b.bestTime)
         .slice(0, 10);
       
+      const mediumDocs = allDocs
+        .filter(doc => doc.gameName === gameName && doc.difficulty === "medium")
+        .sort((a, b) => a.bestTime - b.bestTime)
+        .slice(0, 10);
+      
       const hardDocs = allDocs
         .filter(doc => doc.gameName === gameName && doc.difficulty === "hard")
         .sort((a, b) => a.bestTime - b.bestTime)
         .slice(0, 10);
       
+      // Check if game has 3 difficulties (like Minefield) or 2 (like Mahjong)
+      const hasThreeDifficulties = mediumDocs.length > 0 || gameName === "Minefield";
+      
       let html = '<div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">';
       
       // Easy mode table
-      html += '<div style="flex: 1; min-width: 300px;"><h3>Easy Mode</h3>';
+      html += `<div style="flex: 1; min-width: 280px;"><h3>${t("easyMode")}</h3>`;
       if (easyDocs.length === 0) {
-        html += '<p style="color: #666;">No scores yet.</p>';
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
       } else {
         html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Best Time</th><th>Date</th></tr></thead><tbody>';
         easyDocs.forEach((doc, i) => {
@@ -431,10 +1119,32 @@ function showTimeBasedDifficultyLeaderboard(db, content, gameName) {
       }
       html += '</div>';
       
+      // Medium mode table (only for games with 3 difficulties)
+      if (hasThreeDifficulties) {
+        html += `<div style="flex: 1; min-width: 280px;"><h3>${t("mediumMode")}</h3>`;
+        if (mediumDocs.length === 0) {
+          html += `<p style="color: #666;">${t("noScores")}</p>`;
+        } else {
+          html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Best Time</th><th>Date</th></tr></thead><tbody>';
+          mediumDocs.forEach((doc, i) => {
+            const timeFormatted = formatTime(doc.bestTime);
+            const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+            html += `<tr>
+              <td>${i + 1}</td>
+              <td>${doc.playerName}</td>
+              <td>${timeFormatted}</td>
+              <td>${date}</td>
+            </tr>`;
+          });
+          html += '</tbody></table>';
+        }
+        html += '</div>';
+      }
+      
       // Hard mode table
-      html += '<div style="flex: 1; min-width: 300px;"><h3>Hard Mode</h3>';
+      html += `<div style="flex: 1; min-width: 280px;"><h3>${t("hardMode")}</h3>`;
       if (hardDocs.length === 0) {
-        html += '<p style="color: #666;">No scores yet.</p>';
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
       } else {
         html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Best Time</th><th>Date</th></tr></thead><tbody>';
         hardDocs.forEach((doc, i) => {
@@ -454,48 +1164,7 @@ function showTimeBasedDifficultyLeaderboard(db, content, gameName) {
       content.innerHTML = html;
     })
     .catch(err => {
-      content.textContent = "Error loading scores: " + err.message;
-      console.error("Leaderboard error:", err);
-    });
-}
-
-function showTimeLeftLeaderboard(db, content, gameName) {
-  db.collection("games")
-    .limit(100)
-    .get()
-    .then(snapshot => {
-      // Filter for Cross the Bridge and sort by timeLeft (higher is better)
-      const docs = snapshot.docs
-        .map(doc => ({ id: doc.id, ...doc.data() }))
-        .filter(doc => doc.gameName === gameName)
-        .sort((a, b) => b.timeLeft - a.timeLeft)
-        .slice(0, 10);
-      
-      if (docs.length === 0) {
-        content.innerHTML = '<p style="color: #666;">No scores yet. Be the first!</p>';
-        return;
-      }
-      
-      let html = '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Time Left</th><th>Date</th></tr></thead><tbody>';
-      
-      let rank = 1;
-      docs.forEach(doc => {
-        const timeFormatted = formatTime(doc.timeLeft);
-        const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
-        
-        html += `<tr>
-          <td>${rank++}</td>
-          <td>${doc.playerName}</td>
-          <td>${timeFormatted}</td>
-          <td>${date}</td>
-        </tr>`;
-      });
-      
-      html += "</tbody></table>";
-      content.innerHTML = html;
-    })
-    .catch(err => {
-      content.textContent = "Error loading scores: " + err.message;
+      content.textContent = t("errorLoading") + " " + err.message;
       console.error("Leaderboard error:", err);
     });
 }
@@ -521,9 +1190,9 @@ function showLengthBasedDifficultyLeaderboard(db, content, gameName) {
       let html = '<div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">';
       
       // Small mode table
-      html += '<div style="flex: 1; min-width: 300px;"><h3>Small (15x15)</h3>';
+      html += `<div style="flex: 1; min-width: 300px;"><h3>${t("small")} (15x15)</h3>`;
       if (smallDocs.length === 0) {
-        html += '<p style="color: #666;">No scores yet.</p>';
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
       } else {
         html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Length</th><th>Date</th></tr></thead><tbody>';
         smallDocs.forEach((doc, i) => {
@@ -540,9 +1209,9 @@ function showLengthBasedDifficultyLeaderboard(db, content, gameName) {
       html += '</div>';
       
       // Big mode table
-      html += '<div style="flex: 1; min-width: 300px;"><h3>Big (18x18)</h3>';
+      html += `<div style="flex: 1; min-width: 300px;"><h3>${t("big")} (18x18)</h3>`;
       if (bigDocs.length === 0) {
-        html += '<p style="color: #666;">No scores yet.</p>';
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
       } else {
         html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Length</th><th>Date</th></tr></thead><tbody>';
         bigDocs.forEach((doc, i) => {
@@ -561,7 +1230,7 @@ function showLengthBasedDifficultyLeaderboard(db, content, gameName) {
       content.innerHTML = html;
     })
     .catch(err => {
-      content.textContent = "Error loading scores: " + err.message;
+      content.textContent = t("errorLoading") + " " + err.message;
       console.error("Leaderboard error:", err);
     });
 }
@@ -587,9 +1256,9 @@ function showTimeLeftDifficultyLeaderboard(db, content, gameName) {
       let html = '<div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">';
       
       // Short mode table
-      html += '<div style="flex: 1; min-width: 300px;"><h3>Short (3x6)</h3>';
+      html += `<div style="flex: 1; min-width: 300px;"><h3>${t("short")} (3x6)</h3>`;
       if (shortDocs.length === 0) {
-        html += '<p style="color: #666;">No scores yet.</p>';
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
       } else {
         html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Time Left</th><th>Date</th></tr></thead><tbody>';
         shortDocs.forEach((doc, i) => {
@@ -607,9 +1276,9 @@ function showTimeLeftDifficultyLeaderboard(db, content, gameName) {
       html += '</div>';
       
       // Long mode table
-      html += '<div style="flex: 1; min-width: 300px;"><h3>Long (3x12)</h3>';
+      html += `<div style="flex: 1; min-width: 300px;"><h3>${t("long")} (3x12)</h3>`;
       if (longDocs.length === 0) {
-        html += '<p style="color: #666;">No scores yet.</p>';
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
       } else {
         html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Time Left</th><th>Date</th></tr></thead><tbody>';
         longDocs.forEach((doc, i) => {
@@ -629,7 +1298,7 @@ function showTimeLeftDifficultyLeaderboard(db, content, gameName) {
       content.innerHTML = html;
     })
     .catch(err => {
-      content.textContent = "Error loading scores: " + err.message;
+      content.textContent = t("errorLoading") + " " + err.message;
       console.error("Leaderboard error:", err);
     });
 }
@@ -655,9 +1324,9 @@ function showTurnsBasedDifficultyLeaderboard(db, content, gameName) {
       let html = '<div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">';
       
       // Small mode table
-      html += '<div style="flex: 1; min-width: 300px;"><h3>Small (4x4)</h3>';
+      html += `<div style="flex: 1; min-width: 300px;"><h3>${t("small")} (4x4)</h3>`;
       if (smallDocs.length === 0) {
-        html += '<p style="color: #666;">No scores yet.</p>';
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
       } else {
         html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Turns</th><th>Date</th></tr></thead><tbody>';
         smallDocs.forEach((doc, i) => {
@@ -674,9 +1343,9 @@ function showTurnsBasedDifficultyLeaderboard(db, content, gameName) {
       html += '</div>';
       
       // Large mode table
-      html += '<div style="flex: 1; min-width: 300px;"><h3>Large (6x6)</h3>';
+      html += `<div style="flex: 1; min-width: 300px;"><h3>${t("large")} (6x6)</h3>`;
       if (largeDocs.length === 0) {
-        html += '<p style="color: #666;">No scores yet.</p>';
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
       } else {
         html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Turns</th><th>Date</th></tr></thead><tbody>';
         largeDocs.forEach((doc, i) => {
@@ -695,7 +1364,7 @@ function showTurnsBasedDifficultyLeaderboard(db, content, gameName) {
       content.innerHTML = html;
     })
     .catch(err => {
-      content.textContent = "Error loading scores: " + err.message;
+      content.textContent = t("errorLoading") + " " + err.message;
       console.error("Leaderboard error:", err);
     });
 }
@@ -726,9 +1395,9 @@ function showPuzzleLeaderboard(db, content, gameName) {
       let html = '<div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">';
       
       // Easy mode table
-      html += '<div style="flex: 1; min-width: 280px;"><h3>Easy (4×4)</h3>';
+      html += `<div style="flex: 1; min-width: 280px;"><h3>${t("easyMode")} (4×4)</h3>`;
       if (easyDocs.length === 0) {
-        html += '<p style="color: #666;">No scores yet.</p>';
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
       } else {
         html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Time</th><th>Date</th></tr></thead><tbody>';
         easyDocs.forEach((doc, i) => {
@@ -746,9 +1415,9 @@ function showPuzzleLeaderboard(db, content, gameName) {
       html += '</div>';
       
       // Medium mode table
-      html += '<div style="flex: 1; min-width: 280px;"><h3>Medium (6×6)</h3>';
+      html += `<div style="flex: 1; min-width: 280px;"><h3>${t("mediumMode")} (6×6)</h3>`;
       if (mediumDocs.length === 0) {
-        html += '<p style="color: #666;">No scores yet.</p>';
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
       } else {
         html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Time</th><th>Date</th></tr></thead><tbody>';
         mediumDocs.forEach((doc, i) => {
@@ -766,9 +1435,9 @@ function showPuzzleLeaderboard(db, content, gameName) {
       html += '</div>';
       
       // Hard mode table
-      html += '<div style="flex: 1; min-width: 280px;"><h3>Hard (7×7)</h3>';
+      html += `<div style="flex: 1; min-width: 280px;"><h3>${t("hardMode")} (7×7)</h3>`;
       if (hardDocs.length === 0) {
-        html += '<p style="color: #666;">No scores yet.</p>';
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
       } else {
         html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Time</th><th>Date</th></tr></thead><tbody>';
         hardDocs.forEach((doc, i) => {
@@ -788,7 +1457,7 @@ function showPuzzleLeaderboard(db, content, gameName) {
       content.innerHTML = html;
     })
     .catch(err => {
-      content.textContent = "Error loading scores: " + err.message;
+      content.textContent = t("errorLoading") + " " + err.message;
       console.error("Leaderboard error:", err);
     });
 }
@@ -806,7 +1475,7 @@ function showCandyCrushLeaderboard(db, content, gameName) {
         .slice(0, 10);
       
       if (docs.length === 0) {
-        content.innerHTML = '<p style="color: #666;">No scores yet. Be the first!</p>';
+        content.innerHTML = `<p style="color: #666;">${t("noScores")}</p>`;
         return;
       }
       
@@ -828,7 +1497,7 @@ function showCandyCrushLeaderboard(db, content, gameName) {
       content.innerHTML = html;
     })
     .catch(err => {
-      content.textContent = "Error loading scores: " + err.message;
+      content.textContent = t("errorLoading") + " " + err.message;
       console.error("Leaderboard error:", err);
     });
 }
@@ -846,7 +1515,7 @@ function showDominoLeaderboard(db, content, gameName) {
         .slice(0, 10);
       
       if (docs.length === 0) {
-        content.innerHTML = '<p style="color: #666;">No scores yet. Be the first!</p>';
+        content.innerHTML = `<p style="color: #666;">${t("noScores")}</p>`;
         return;
       }
       
@@ -868,7 +1537,7 @@ function showDominoLeaderboard(db, content, gameName) {
       content.innerHTML = html;
     })
     .catch(err => {
-      content.textContent = "Error loading scores: " + err.message;
+      content.textContent = t("errorLoading") + " " + err.message;
       console.error("Leaderboard error:", err);
     });
 }
@@ -883,93 +1552,111 @@ function closeLeaderboard() {
     // Reset to main leaderboard view when closed so next open shows game selection
     section.innerHTML = `
       <div class="leaderboard-content">
-        <button class="close-leaderboard-btn">×</button>
-        <h2>Game Leaderboards</h2>
-        <p>Select a game to view its high scores:</p>
+        <button class="close-leaderboard-btn">${t("close")}</button>
+        <h2>${t("leaderboardTitle")}</h2>
+        <p>${t("leaderboardSubtitle")}</p>
         <div id="leaderboard-game-list" class="leaderboard-game-list"></div>
       </div>
     `;
   }
 }
 
-buildMenu();
+buildMenu().then(() => {
+  updateLanguage();
+});
 
 // Show name modal if no name stored
 if (!playerName) {
   showNameModal();
 }
 
+// Language selector - set initial value and add listener
+const languageSelect = document.getElementById("language-select");
+languageSelect.value = currentLanguage;
+
+languageSelect.addEventListener("change", (e) => {
+  currentLanguage = e.target.value;
+  localStorage.setItem("arcadeLanguage", currentLanguage);
+  updateLanguage();
+});
+
 // MUSIC PLAYER
 const audioFiles = [
-  "audio/Moss_Path.mp3",
-  "audio/Poisonous_Lavender.mp3",
-  "audio/Sunlight_Sprout.mp3",
-  "audio/Voltage_Collapse.mp3",
-  "audio/Haunted_Corridor.mp3",
-  "audio/Hidden_Glade.mp3",
-  "audio/Pocket_Kingdom.mp3"
+  { name: "Moss Path", file: "audio/Moss_Path.mp3" },
+  { name: "Poisonous Lavender", file: "audio/Poisonous_Lavender.mp3" },
+  { name: "Sunlight Sprout", file: "audio/Sunlight_Sprout.mp3" },
+  { name: "Voltage Collapse", file: "audio/Voltage_Collapse.mp3" },
+  { name: "Haunted Corridor", file: "audio/Haunted_Corridor.mp3" },
+  { name: "Hidden Glade", file: "audio/Hidden_Glade.mp3" },
+  { name: "Pocket Kingdom", file: "audio/Pocket_Kingdom.mp3" }
 ];
 
 let currentTrack = 0;
 let isPlaying = false;
 let audioPlayer = new Audio();
 
-audioPlayer.addEventListener("ended", () => {
-  currentTrack = (currentTrack + 1) % audioFiles.length;
-  audioPlayer.src = audioFiles[currentTrack];
+const playBtn = document.getElementById("music-play");
+const prevBtn = document.getElementById("music-prev");
+const nextBtn = document.getElementById("music-next");
+const trackName = document.getElementById("music-track-name");
+
+function updateTrackDisplay() {
+  if (isPlaying) {
+    trackName.textContent = audioFiles[currentTrack].name;
+  } else {
+    trackName.textContent = t("noTrack");
+  }
+}
+
+function playTrack() {
+  audioPlayer.src = audioFiles[currentTrack].file;
   audioPlayer.play();
-});
+  isPlaying = true;
+  playBtn.textContent = "⏸";
+  updateTrackDisplay();
+}
 
-document.getElementById("music-btn").onclick = () => {
-  const btn = document.getElementById("music-btn");
+function pauseTrack() {
+  audioPlayer.pause();
+  isPlaying = false;
+  playBtn.textContent = "▶️";
+  updateTrackDisplay();
+}
 
-  if (!isPlaying) {
-    audioPlayer.src = audioFiles[currentTrack];
-    audioPlayer.play();
-    isPlaying = true;
-    btn.textContent = "⏸️";
+function nextTrack() {
+  currentTrack = (currentTrack + 1) % audioFiles.length;
+  if (isPlaying) {
+    playTrack();
   } else {
-    audioPlayer.pause();
-    isPlaying = false;
-    btn.textContent = "▶️";
+    updateTrackDisplay();
   }
-};
+}
 
-// MOBILE KEYBOARD INPUT
-const keyboardBtn = document.getElementById("keyboard-toggle");
-const mobileInput = document.getElementById("mobile-keyboard-input");
-
-keyboardBtn.addEventListener("click", () => {
-  if (mobileInput.style.display === "none") {
-    mobileInput.style.display = "block";
-    mobileInput.focus();
+function prevTrack() {
+  currentTrack = (currentTrack - 1 + audioFiles.length) % audioFiles.length;
+  if (isPlaying) {
+    playTrack();
   } else {
-    mobileInput.style.display = "none";
+    updateTrackDisplay();
+  }
+}
+
+audioPlayer.addEventListener("ended", () => {
+  nextTrack();
+});
+
+playBtn.addEventListener("click", () => {
+  if (isPlaying) {
+    pauseTrack();
+  } else {
+    playTrack();
   }
 });
 
-// Map mobile keys → Arrow keys
-mobileInput.addEventListener("keydown", e => {
-  const frame = document.getElementById("game-frame");
+nextBtn.addEventListener("click", nextTrack);
+prevBtn.addEventListener("click", prevTrack);
 
-  const map = {
-    "a": "ArrowLeft",
-    "s": "ArrowRight",
-    "w": "ArrowUp",
-    "z": "ArrowDown",
-    " ": " "
-  };
-
-  const key = map[e.key.toLowerCase()];
-  if (!key) return;
-
-  const event = new KeyboardEvent("keydown", {
-    key,
-    bubbles: true
-  });
-
-  frame.contentWindow.document.dispatchEvent(event);
-});
+updateTrackDisplay();
 
 // Export functions for use in game pages
 window.saveGameScore = function(gameName, scoreData) {
@@ -1085,7 +1772,7 @@ window.showNewBestScore = function(gameName, scoreData) {
   
   message.innerHTML = `
     <div style="font-size: 48px; margin-bottom: 10px;">🎉</div>
-    <div>NEW BEST SCORE!</div>
+    <div>${t("newBestScore")}</div>
   `;
   
   // Add animation keyframes

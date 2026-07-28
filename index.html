@@ -17,8 +17,19 @@
 
     <div id="menu" class="menu"></div>
 
-    <button id="music-btn" class="music-btn">▶️</button>
-    <button id="keyboard-toggle" class="keyboard-btn">⌨️</button>
+    <div class="controls-row">
+      <div class="music-controls">
+        <button id="music-prev" class="control-btn" title="Previous">⏮</button>
+        <button id="music-play" class="control-btn" title="Play/Pause">▶️</button>
+        <button id="music-next" class="control-btn" title="Next">⏭</button>
+        <span id="music-track-name" class="track-name">No track playing</span>
+      </div>
+      
+      <select id="language-select" class="language-select">
+        <option value="en">EN</option>
+        <option value="pt">PT</option>
+      </select>
+    </div>
   </div>
 
   <div id="leaderboard-section" class="leaderboard-section hidden">
@@ -33,14 +44,6 @@
   <div class="game-area">
     <iframe id="game-frame" src="home.html"></iframe>
   </div>
-
-  <!-- Tiny visible input to trigger mobile keyboard -->
-  <input id="mobile-keyboard-input"
-         autocomplete="off"
-         autocorrect="off"
-         autocapitalize="off"
-         spellcheck="false"
-         placeholder="Mobile controls active">
 
   <!-- Name Input Modal -->
   <div id="name-modal" class="modal hidden">

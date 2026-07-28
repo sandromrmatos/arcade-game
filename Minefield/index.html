@@ -9,6 +9,12 @@
         text-align: center;
         background: #f0f0f0;
     }
+    #timer {
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+        margin: 10px 0;
+    }
     #grid {
         display: grid;
         grid-gap: 5px;
@@ -46,10 +52,11 @@
 
 <h2>Minefield</h2>
 
-<button onclick="startGame('easy')">Easy</button>
-<button onclick="startGame('medium')">Medium</button>
-<button onclick="startGame('hard')">Hard</button>
+<button onclick="startGame('easy')">Easy (5×5)</button>
+<button onclick="startGame('medium')">Medium (6×6)</button>
+<button onclick="startGame('hard')">Hard (8×8)</button>
 
+<p id="timer">Time: 00:00</p>
 <p>Safe cells clicked: <span id="counter">0</span></p>
 <p id="message"></p>
 <p id="reward"></p>
@@ -67,6 +74,10 @@ let gameOver = false;
 
 let currentMode = null;
 
+// Timer variables
+let timerSeconds = 0;
+let timerInterval = null;
+
 let finalGridState = {
     easy: null,
     medium: null,
@@ -78,6 +89,27 @@ let playedModes = {
     medium: false,
     hard: false
 };
+
+function formatTime(seconds) {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+}
+
+function startTimer() {
+    clearInterval(timerInterval);
+    timerSeconds = 0;
+    document.getElementById("timer").textContent = "Time: 00:00";
+    
+    timerInterval = setInterval(() => {
+        timerSeconds++;
+        document.getElementById("timer").textContent = "Time: " + formatTime(timerSeconds);
+    }, 1000);
+}
+
+function stopTimer() {
+    clearInterval(timerInterval);
+}
 
 function startGame(mode) {
     const msg = document.getElementById("message");
@@ -94,6 +126,7 @@ function startGame(mode) {
             document.getElementById("counter").textContent = finalGridState[mode].counter;
             document.getElementById("reward").textContent = finalGridState[mode].reward;
             document.getElementById("message").textContent = finalGridState[mode].message;
+            document.getElementById("timer").textContent = "Time: " + formatTime(finalGridState[mode].time);
         }
 
         disableGridInteraction();
@@ -114,6 +147,7 @@ function startGame(mode) {
     }
 
     setupGame();
+    startTimer();
 }
 
 function setupGame() {
@@ -275,10 +309,26 @@ function computeRewards(win) {
 
 function endGame(win) {
     gameOver = true;
+    stopTimer();
     const msg = document.getElementById("message");
 
     if (win) {
         msg.textContent = "🎉 You win! All bombs avoided.";
+        
+        // Save score to leaderboard
+        if (window.parent && window.parent.saveGameScore) {
+            window.parent.saveGameScore("Minefield", {
+                bestTime: timerSeconds,
+                difficulty: currentMode
+            }).then((result) => {
+                console.log("Minefield score saved successfully");
+                if (result && result.isNewBest && window.parent.showNewBestScore) {
+                    window.parent.showNewBestScore("Minefield", { bestTime: timerSeconds, difficulty: currentMode });
+                }
+            }).catch(err => {
+                console.error("Error saving Minefield score:", err);
+            });
+        }
     } else {
         msg.textContent = "💥 You clicked a bomb! Game over.";
         revealAllBombs();
@@ -292,7 +342,8 @@ function endGame(win) {
         size: SIZE,
         counter: revealedCount,
         reward: document.getElementById("reward").textContent,
-        message: document.getElementById("message").textContent
+        message: document.getElementById("message").textContent,
+        time: timerSeconds
     };
 
     playedModes[currentMode] = true;

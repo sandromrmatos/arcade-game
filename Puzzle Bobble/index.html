@@ -527,6 +527,21 @@ function endGame(msg) {
         easyFinished = true;
         document.getElementById("hardBtn").disabled = false;
     }
+    
+    // Save score to leaderboard if game was won
+    if (msg === "You win!" && window.parent && window.parent.saveGameScore) {
+        window.parent.saveGameScore("Puzzle Bobble", {
+            score: score,
+            difficulty: mode
+        }).then((result) => {
+            console.log("Puzzle Bobble score saved successfully");
+            if (result && result.isNewBest && window.parent.showNewBestScore) {
+                window.parent.showNewBestScore("Puzzle Bobble", { score: score, difficulty: mode });
+            }
+        }).catch(err => {
+            console.error("Error saving Puzzle Bobble score:", err);
+        });
+    }
 }
 
 let lastTime = 0;

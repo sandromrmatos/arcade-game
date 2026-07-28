@@ -1,7 +1,41 @@
 <!DOCTYPE html>
 <html>
 <body style="text-align:center; padding-top:40px; font-family:system-ui;">
-  <h2>Welcome to Sandro's Arcade!</h2>
-  <p>Select a game from the menu above.</p>
+  <h2 id="welcome-title">Welcome to Sandro's Arcade!</h2>
+  <p id="welcome-subtitle">Select a game from the menu above.</p>
+  
+  <script>
+    // Get language from parent safely
+    function getParentLanguage() {
+      try {
+        return window.parent.currentLanguage || 'en';
+      } catch (e) {
+        return 'en';
+      }
+    }
+    
+    function updateHomeLanguage() {
+      const lang = getParentLanguage();
+      
+      if (lang === 'pt') {
+        document.getElementById('welcome-title').textContent = 'Bem-vindo à Arcada do Sandro!';
+        document.getElementById('welcome-subtitle').textContent = 'Selecione um jogo no menu acima.';
+      } else {
+        document.getElementById('welcome-title').textContent = 'Welcome to Sandro\'s Arcade!';
+        document.getElementById('welcome-subtitle').textContent = 'Select a game from the menu above.';
+      }
+    }
+    
+    // Update on load with delay to ensure parent is ready
+    setTimeout(updateHomeLanguage, 100);
+    updateHomeLanguage();
+    
+    // Listen for language changes from parent
+    window.addEventListener('message', function(event) {
+      if (event.data.type === 'languageChange') {
+        updateHomeLanguage();
+      }
+    });
+  </script>
 </body>
 </html>
