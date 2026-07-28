@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dominoes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Domine:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="fonts_stylesheet.css" />
+    <style>
+        body {
+            margin: 25px;
+            background-color: midnightblue;
+            color: turquoise;
+        }
+        .title {
+            font-size: 48px;
+            font-family: Domine;
+            text-align: center;
+            color: springgreen;
+        }
+        .play {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .play button {
+            cursor: pointer;
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .feltTableCover {
+            text-align: center;
+            background-color: seagreen;
+            padding: 40px 25px;
+            min-height: 180px;
+            margin-top: 20px;
+        }
+        .feltTableCover .layout {
+            text-align: center;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            min-height: 160px;
+        }
+        .feltTableCover .layout .domino {
+            color: palegoldenrod;
+            box-sizing:border-box;
+            display: inline-block;
+            font-family: GamePi;
+            width: 70px;
+            height: 140px;
+            margin: 10px 5px 10px;
+            background-color: black;
+            border-radius: 10px 16px;
+            outline: 1px solid black;
+            animation: highlight 1500ms forwards;
+            box-shadow: 0 0 10px 5px yellow;
+        }
+        .feltTableCover .layout .placeholder {
+            width: 70px;
+            height: 140px;
+            margin: 10px 5px 10px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border: 3px dashed yellow;
+            border-radius: 10px 16px;
+            cursor: pointer;
+            display: inline-block;
+            box-sizing: border-box;
+        }
+        .feltTableCover .layout .placeholder.hor {
+            width: 140px;
+            height: 70px;
+            margin: 35px 5px 35px;
+        }
+        .feltTableCover .layout .placeholder:hover {
+            background-color: rgba(255, 255, 255, 0.5);
+            border-color: white;
+        }
+        @keyframes highlight {
+            10% {
+                box-shadow: 0 0 10px 5px yellow;
+            }
+            100% {
+                box-shadow: 0 0 10px 5px transparent;
+            }
+        }
+        .blink {
+            animation: blinker 1s linear infinite;
+        }
+        @keyframes blinker {
+            0% {
+                opacity: 1;
+            }
+            49% {
+                opacity: 1;
+            }
+            51% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+        .feltTableCover .layout .domino.hor {
+            width: 140px;
+            height: 70px;
+            margin: 35px 5px 35px;
+            text-align: left;
+            vertical-align: 25px;
+        }
+        .feltTableCover .layout .domino .inner {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 64px;
+            height: 140px;
+            width: 70px;
+            line-height: 64px;
+            box-sizing: border-box;
+        }
+        .feltTableCover .layout .domino.hor .inner {
+            flex-direction: row;
+            height: 70px;
+            width: 140px;
+            line-height: 64px;
+        }
+        .players {
+            display: flex;
+            margin-bottom: 30px;
+            min-height: 120px;
+        }
+        .players .player.play {
+            color: yellow;
+        }
+        .players .player, .players .boneyard {
+            font-size: 20px;
+            font-family: Domine;
+            flex: 1;
+            margin: 10px;
+        }
+        .players .player .tiles, .players .boneyard .tiles {
+            word-break: break-all;
+            text-align: center;
+            font-family: DejaVuSans;
+            line-height: 40px;
+            font-size: 32px;
+        }
+        .players .player .tiles .tile {
+            display: inline-block;
+            cursor: pointer;
+            padding: 4px 6px;
+            margin: 3px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .players .player .tiles .tile:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+        .players .player .tiles .tile.selected {
+            background-color: yellow;
+            color: black;
+            transform: scale(1.15);
+            box-shadow: 0 0 10px yellow;
+        }
+        .players .player .count, .players .boneyard .count {
+            white-space: nowrap;
+            text-align: center;
+            font-family: DejaVuSans;
+        }
+        .players .player .name, .players .boneyard .name {
+            whitespace: nowrap;
+            text-align: center;
+        }
+        #overall {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 120px;
+            height: 50px;
+            font-size: 12px;
+            font-family: DejaVuSans;
+            padding: 5px 5px 0 0;
+            color: royalblue;
+        }
+        #overall .label {
+            display: inline-block;
+            width: 75px;
+        }
+        #overall .value {
+            display: inline-block;
+            width: 45px;
+            text-align: right;
+        }
+        #message {
+            text-align: center;
+            font-size: 20px;
+            margin-top: 20px;
+            min-height: 30px;
+            color: yellow;
+            font-family: Domine;
+        }
+        #drawBtn {
+            display: none;
+            margin: 10px auto;
+            padding: 8px 16px;
+            background: #FF9800;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        #drawBtn:hover {
+            background: #F57C00;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script>
+        const SLEEP_PERIOD = 1000; // ms - increased for slower computer moves
+        const VER_TOP = ['G', 'A', 'B', 'C', 'D', 'E', 'F'];
+        const VER_BOT = ['N', 'H', 'I', 'J', 'K', 'L', 'M'];
+        const HOR_LEF = ['g', 'a', 'b', 'c', 'd', 'e', 'f'];
+        const HOR_RIG = ['n', 'h', 'i', 'j', 'k', 'l', 'm'];
+        const SYMBOLS = [ '🁣', '🁤', '🁥', '🁦', '🁧', '🁨', '🁩', '🁫', '🁬', '🁭', '🁮', '🁯', '🁰', '🁳', '🁴', '🁵', '🁶', '🁷', '🁻', '🁼', '🁽', '🁾', '🂃', '🂄', '🂅', '🂋', '🂌', '🂓' ];
+        let symbols = {};
+        let tiles = [];
+        let player = [[], []];
+        let head = undefined;
+        let tail = undefined;
+        let currentPlayer = 0;
+        let maxPlayer = [];
+        let rounds = 0;
+        let score = [0, 0];
+        let selectedTile = null;
+        let playerTurn = false;
+        let gameActive = false;
+        
+        let shuffleArray = array => {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+        
+        let appendDomino = (i, j) => {
+            $('.layout').append(makeDomino(i, j));
+        }
+        
+        let prependDomino = (i, j) => {
+            $('.layout').prepend(makeDomino(i, j));
+        }
+        
+        let makeDomino = (i, j) => {
+            $domino = $('<span class="domino" />');
+            if (i !== j) $domino.addClass('hor');
+            $inner = $('<span class="inner" />');
+            $domino.append($inner);
+            if (i !== j) $inner.append(HOR_LEF[i] + HOR_RIG[j]);
+            else $inner.append(VER_TOP[i] + '<br />' + VER_BOT[j]);
+            return $domino;
+        }
+        
+        let playerBegin = (playerIndex, double) => {
+            let index = 0;
+            for (const tile of player[playerIndex]) {
+                if (tile[0] == double && tile[1] == tile[0]) {
+                    player[playerIndex].splice(index, 1);
+                    appendDomino(double, double);
+                    head = double;
+                    tail = double;
+                    break;
+                }
+                index++;
+            }
+        }
+        
+        let playerDraw = async playerIndex => {
+            if (tiles.length === 0) return false;
+            let tile = tiles.pop();
+            player[playerIndex].push(tile);
+            updateDisplay(playerIndex);
+            await sleep(SLEEP_PERIOD);
+            return true;
+        }
+        
+        let computerPlay = async playerIndex => {
+            const i = 0, j = 1;
+            let found = false;
+            while (!found) {
+                let index = 0;
+                let possibilities = [];
+                for (const tile of player[playerIndex]) {
+                    if (tile[i] === head) {
+                        possibilities.push({
+                            A: tile[j],
+                            B: tile[i],
+                            index: index,
+                            head: tile[j]
+                        });
+                    }
+                    if (tile[i] === tail) {
+                        possibilities.push({
+                            A: tile[i],
+                            B: tile[j],
+                            index: index,
+                            tail: tile[j]
+                        });
+                    }
+                    if (tile[j] === head) {
+                        possibilities.push({
+                            A: tile[i],
+                            B: tile[j],
+                            index: index,
+                            head: tile[i]
+                        });
+                    }
+                    if (tile[j] === tail) {
+                        possibilities.push({
+                            A: tile[j],
+                            B: tile[i],
+                            index: index,
+                            tail: tile[i]
+                        });
+                    }
+                    index++;
+                }
+                if (possibilities.length >= 1) {
+                    let params = possibilities[Math.floor(Math.random() * possibilities.length)];
+                    player[playerIndex].splice(params.index, 1);
+                    if (params.tail !== undefined) {
+                        tail = params.tail;
+                        appendDomino(params.A, params.B);
+                    } else if (params.head !== undefined) {
+                        head = params.head;
+                        prependDomino(params.A, params.B);
+                    }
+                    found = true;
+                    updateDisplay(playerIndex);
+                    await sleep(SLEEP_PERIOD);
+                }
+                if (!found) {
+                    if (tiles.length === 0) return false;
+                    await playerDraw(playerIndex);
+                    updateDisplay(playerIndex);
+                    await sleep(SLEEP_PERIOD);
+                }
+            }
+            return true;
+        }
+        
+        let getPlayerPossibilities = () => {
+            let possibilities = [];
+            const i = 0, j = 1;
+            let index = 0;
+            for (const tile of player[1]) {
+                if (tile[i] === head) {
+                    possibilities.push({
+                        A: tile[j],
+                        B: tile[i],
+                        index: index,
+                        head: tile[j],
+                        tile: tile
+                    });
+                }
+                if (tile[i] === tail) {
+                    possibilities.push({
+                        A: tile[i],
+                        B: tile[j],
+                        index: index,
+                        tail: tile[j],
+                        tile: tile
+                    });
+                }
+                if (tile[j] === head) {
+                    possibilities.push({
+                        A: tile[i],
+                        B: tile[j],
+                        index: index,
+                        head: tile[i],
+                        tile: tile
+                    });
+                }
+                if (tile[j] === tail) {
+                    possibilities.push({
+                        A: tile[j],
+                        B: tile[i],
+                        index: index,
+                        tail: tile[i],
+                        tile: tile
+                    });
+                }
+                index++;
+            }
+            return possibilities;
+        }
+        
+        let showPlayerMoves = () => {
+            $('.layout .placeholder').remove();
+            let possibilities = getPlayerPossibilities();
+            
+            if (possibilities.length === 0) {
+                if (tiles.length > 0) {
+                    $('#message').text('No valid moves! Draw a tile or click Draw button.');
+                    $('#drawBtn').show();
+                } else {
+                    $('#message').text('No valid moves and no tiles left!');
+                    endRound();
+                }
+                return;
+            }
+            
+            $('#drawBtn').hide();
+            $('#message').text('Your turn! Select a domino and click a yellow placeholder.');
+            
+            // Show placeholders for head and tail
+            let hasHead = possibilities.some(p => p.head !== undefined);
+            let hasTail = possibilities.some(p => p.tail !== undefined);
+            
+            if (hasHead) {
+                let $ph = $('<span class="placeholder" data-position="head" />');
+                if (head === head) $ph.addClass('ver'); // Check if double
+                $ph.on('click', function() {
+                    if (selectedTile !== null) {
+                        placeTile(selectedTile, 'head');
+                    }
+                });
+                $('.layout').prepend($ph);
+            }
+            
+            if (hasTail) {
+                let $ph = $('<span class="placeholder" data-position="tail" />');
+                if (tail === tail) $ph.addClass('ver');
+                $ph.on('click', function() {
+                    if (selectedTile !== null) {
+                        placeTile(selectedTile, 'tail');
+                    }
+                });
+                $('.layout').append($ph);
+            }
+        }
+        
+        let placeTile = async (tileIndex, position) => {
+            let tile = player[1][tileIndex];
+            let possibilities = getPlayerPossibilities();
+            let validMove = possibilities.find(p => 
+                p.index === tileIndex && 
+                ((position === 'head' && p.head !== undefined) || 
+                 (position === 'tail' && p.tail !== undefined))
+            );
+            
+            if (!validMove) {
+                $('#message').text('Invalid move! Try again.');
+                return;
+            }
+            
+            player[1].splice(tileIndex, 1);
+            
+            if (validMove.tail !== undefined) {
+                tail = validMove.tail;
+                appendDomino(validMove.A, validMove.B);
+            } else if (validMove.head !== undefined) {
+                head = validMove.head;
+                prependDomino(validMove.A, validMove.B);
+            }
+            
+            selectedTile = null;
+            $('.tile.selected').removeClass('selected');
+            $('.layout .placeholder').remove();
+            updateDisplay(1);
+            
+            if (player[1].length === 0) {
+                endRound();
+                return;
+            }
+            
+            playerTurn = false;
+            await sleep(SLEEP_PERIOD);
+            await playComputerTurn();
+        }
+        
+        let playComputerTurn = async () => {
+            setDisplayPlayer(0);
+            $('#message').text("Computer's turn...");
+            await sleep(SLEEP_PERIOD);
+            
+            if (! await computerPlay(0)) {
+                endRound();
+                return;
+            }
+            
+            updateAllDisplay();
+            
+            if (player[0].length === 0) {
+                endRound();
+                return;
+            }
+            
+            await sleep(SLEEP_PERIOD);
+            playerTurn = true;
+            setDisplayPlayer(1);
+            showPlayerMoves();
+        }
+        
+        let countDots = (playerTiles) => {
+            let total = 0;
+            for (const tile of playerTiles) {
+                total += tile[0] + tile[1];
+            }
+            return total;
+        }
+        
+        let endRound = async () => {
+            gameActive = false;
+            playerTurn = false;
+            $('.layout .placeholder').remove();
+            $('#drawBtn').hide();
+            updateAllDisplay();
+            
+            let playerDots = countDots(player[1]);
+            let computerDots = countDots(player[0]);
+            
+            rounds++;
+            
+            if (player[1].length === 0) {
+                // Player wins
+                score[1] += computerDots;
+                $('#player2 .count').html('WON! +' + computerDots).addClass('blink');
+                setDisplayPlayer(1);
+                $('#message').text('You win! You earned ' + computerDots + ' points!');
+                
+                // Save score to leaderboard
+                if (window.parent && window.parent.saveGameScore) {
+                    window.parent.saveGameScore("Domino", {
+                        score: score[1]
+                    }).then((result) => {
+                        console.log("Domino score saved successfully");
+                        if (result && result.isNewBest && window.parent.showNewBestScore) {
+                            window.parent.showNewBestScore("Domino", { score: score[1] });
+                        }
+                    }).catch(err => {
+                        console.error("Error saving Domino score:", err);
+                    });
+                }
+                
+                setTimeout(() => {
+                    $('#player2 .count').removeClass('blink');
+                }, 3000);
+            } else if (player[0].length === 0) {
+                // Computer wins
+                score[0] += playerDots;
+                $('#player1 .count').html('WON! +' + playerDots).addClass('blink');
+                setDisplayPlayer(0);
+                $('#message').text('Computer wins! Computer earned ' + playerDots + ' points.');
+                setTimeout(() => {
+                    $('#player1 .count').removeClass('blink');
+                }, 3000);
+            } else if (playerDots < computerDots) {
+                // Player wins by lower count
+                score[1] += computerDots;
+                $('#player2 .count').html('WON! +' + computerDots).addClass('blink');
+                setDisplayPlayer(1);
+                $('#message').text('You win! You earned ' + computerDots + ' points!');
+                
+                // Save score
+                if (window.parent && window.parent.saveGameScore) {
+                    window.parent.saveGameScore("Domino", {
+                        score: score[1]
+                    }).then((result) => {
+                        if (result && result.isNewBest && window.parent.showNewBestScore) {
+                            window.parent.showNewBestScore("Domino", { score: score[1] });
+                        }
+                    });
+                }
+                
+                setTimeout(() => {
+                    $('#player2 .count').removeClass('blink');
+                }, 3000);
+            } else if (computerDots < playerDots) {
+                // Computer wins by lower count
+                score[0] += playerDots;
+                $('#player1 .count').html('WON! +' + playerDots).addClass('blink');
+                setDisplayPlayer(0);
+                $('#message').text('Computer wins! Computer earned ' + playerDots + ' points.');
+                setTimeout(() => {
+                    $('#player1 .count').removeClass('blink');
+                }, 3000);
+            } else {
+                $('.players .player.play').removeClass('play');
+                $('#message').text('Draw! No points awarded.');
+            }
+            
+            updateRounds();
+            let $button = $('#playBtn');
+            $button.prop('disabled', false);
+            $button.text('Play Again');
+            
+            setTimeout(() => {
+                if (!gameActive) $button.trigger('click');
+            }, 10000);
+        }
+        
+        let init = () => {
+            tiles = [];
+            player = [[], []];
+            head = undefined;
+            tail = undefined;
+            currentPlayer = 0;
+            maxPlayer = [];
+            selectedTile = null;
+            let n = 0;
+            for (let i = 0; i <= 6; i++) for (let j = 0; j <= 6; j++) if (j >= i) {
+                tiles.push([i, j]);
+                symbols[[i, j]] = SYMBOLS[n];
+                n++;
+            }
+            tiles = shuffleArray(tiles);
+        }
+        
+        let distribute = () => {
+            for (let i = 0; i < 5; i++) {
+                player[0].push(tiles.pop());
+                player[1].push(tiles.pop());
+            }
+        }
+        
+        let findStarter = () => {
+            for (let i = 0; i < 2; i++) {
+                maxPlayer[i] = 0;
+                for (const tile of player[i]) {
+                    if (tile[0] === tile[1]) maxPlayer[i] = Math.max(maxPlayer[i], tile[0]);
+                }
+            }
+            if (maxPlayer[0] > maxPlayer[1]) return 0;
+            else if (maxPlayer[0] < maxPlayer[1]) return 1;
+            return false;
+        }
+        
+        let sleep = ms => {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        
+        let updateAllDisplay = () => {
+            for (let i = 0; i < 2; i++) updateDisplay(i);
+        }
+        
+        let updateDisplay = playerIndex => {
+            updatePlayerDisplay(playerIndex);
+            updateBoneyard();
+        }
+        
+        let updatePlayerDisplay = playerIndex => {
+            let n = playerIndex + 1;
+            $('.players #player' + n + ' .count').text(player[playerIndex].length);
+            let $tiles = $('.players #player' + n + ' .tiles');
+            $tiles.empty();
+            
+            if (playerIndex === 1) {
+                // Player - show clickable tiles
+                player[playerIndex].forEach((tile, index) => {
+                    let $tile = $('<span class="tile" />');
+                    $tile.text(symbols[tile]);
+                    $tile.attr('data-index', index);
+                    $tile.on('click', function() {
+                        if (!playerTurn) return;
+                        $('.tile.selected').removeClass('selected');
+                        $(this).addClass('selected');
+                        selectedTile = parseInt($(this).attr('data-index'));
+                    });
+                    $tiles.append($tile);
+                });
+            } else {
+                // Computer - show empty dominoes (back side)
+                let list = '🁢'.repeat(player[playerIndex].length);
+                $tiles.text(list);
+            }
+        }
+        
+        let updateBoneyard = () => {
+            $('.players .boneyard .count').text(tiles.length);
+            $('.players .boneyard .tiles').text('🁢'.repeat(tiles.length));
+        }
+        
+        let setDisplayPlayer = playerIndex => {
+            let n = playerIndex + 1;
+            $('.players .player.play').removeClass('play');
+            $('.players #player' + n).addClass('play');
+        }
+        
+        let appendRoundLine = (label, value) => {
+            let $label = $('<span class="label" />');
+            $label.text(label);
+            let $value = $('<span class="value" />');
+            $value.text(value);
+            $('#overall').append($label).append($value);
+        }
+        
+        let updateRounds = () => {
+            $('#overall').empty();
+            appendRoundLine('Computer:', score[0]);
+            appendRoundLine('You:', score[1]);
+            appendRoundLine('Rounds:', rounds);
+        }
+        
+        let run = async () => {
+            gameActive = true;
+            let starter = undefined;
+            do {
+                init();
+                updateAllDisplay();
+                await sleep(SLEEP_PERIOD);
+                distribute();
+                updateAllDisplay();
+                await sleep(SLEEP_PERIOD);
+            } while ((starter = findStarter()) === false);
+            
+            setDisplayPlayer(starter);
+            await sleep(SLEEP_PERIOD);
+            playerBegin(starter, maxPlayer[starter]);
+            currentPlayer = starter;
+            updatePlayerDisplay(starter);
+            await sleep(SLEEP_PERIOD);
+
+            if (starter === 0) {
+                // Computer starts
+                await playComputerTurn();
+            } else {
+                // Player starts
+                playerTurn = true;
+                setDisplayPlayer(1);
+                showPlayerMoves();
+            }
+        }
+        
+        $(() => {
+            let $button = $('#playBtn');
+            $button.on('click', async () => {
+                $('.feltTableCover .layout').empty();
+                $('#message').text('');
+                $('.tile.selected').removeClass('selected');
+                $('.layout .placeholder').remove();
+                $('#drawBtn').hide();
+                $button.prop('disabled', true);
+                $button.text('Playing');
+                await run();
+            });
+            
+            $('#drawBtn').on('click', async () => {
+                if (!playerTurn || !gameActive) return;
+                $('#drawBtn').hide();
+                $('#message').text('Drawing a tile...');
+                let drawn = await playerDraw(1);
+                if (drawn) {
+                    await sleep(SLEEP_PERIOD);
+                    showPlayerMoves();
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="title">Dominoes</div>
+    <div class="play">
+        <button type="button" id="playBtn">Play</button>
+        <button type="button" id="drawBtn">Draw Tile</button>
+    </div>
+    <div class="players">
+        <div id="player1" class="player"><div class="name">Computer</div><div class="count"></div><div class="tiles"></div></div>
+        <div class="boneyard"><div class="name">Boneyard</div><div class="count"></div><div class="tiles"></div></div>
+        <div id="player2" class="player"><div class="name">You</div><div class="count"></div><div class="tiles"></div></div>
+    </div>
+    <div class="feltTableCover"><div class="layout"></div></div>
+    <div id="message"></div>
+    <div id="overall"></div>
+</body>
+</html>

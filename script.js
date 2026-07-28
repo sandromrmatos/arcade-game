@@ -271,6 +271,12 @@ function showGameLeaderboard(gameName) {
     return;
   }
   
+  // Special handling for Domino (score - higher is better)
+  if (gameName === "Domino") {
+    showDominoLeaderboard(db, content, gameName);
+    return;
+  }
+  
   // Get all games, then filter and sort client-side (no index needed)
   // Note: This fetches all games, which is fine for low volumes
   db.collection("games")
@@ -793,6 +799,46 @@ function showCandyCrushLeaderboard(db, content, gameName) {
     .get()
     .then(snapshot => {
       // Filter for Candy Crush and sort by score (higher is better)
+      const docs = snapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .filter(doc => doc.gameName === gameName)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 10);
+      
+      if (docs.length === 0) {
+        content.innerHTML = '<p style="color: #666;">No scores yet. Be the first!</p>';
+        return;
+      }
+      
+      let html = '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Score</th><th>Date</th></tr></thead><tbody>';
+      
+      let rank = 1;
+      docs.forEach(doc => {
+        const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+        
+        html += `<tr>
+          <td>${rank++}</td>
+          <td>${doc.playerName}</td>
+          <td>${doc.score}</td>
+          <td>${date}</td>
+        </tr>`;
+      });
+      
+      html += "</tbody></table>";
+      content.innerHTML = html;
+    })
+    .catch(err => {
+      content.textContent = "Error loading scores: " + err.message;
+      console.error("Leaderboard error:", err);
+    });
+}
+
+function showDominoLeaderboard(db, content, gameName) {
+  db.collection("games")
+    .limit(100)
+    .get()
+    .then(snapshot => {
+      // Filter for Domino and sort by score (higher is better)
       const docs = snapshot.docs
         .map(doc => ({ id: doc.id, ...doc.data() }))
         .filter(doc => doc.gameName === gameName)
