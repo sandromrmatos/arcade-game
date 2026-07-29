@@ -20,6 +20,7 @@
     "Domino",
     "Maze",
     "Connect Four",
-    "2048"
+    "2048",
+    "TCG Game"
   ]
 }

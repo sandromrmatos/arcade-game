@@ -72,17 +72,28 @@ h1 {
 }
 
 .board {
-  width: 360px;
-  height: 360px;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  grid-template-rows: repeat(6, 1fr);
   gap: 4px;
   padding: 8px;
   background: linear-gradient(135deg, #cfd9df 0%, #e2ebf0 100%);
   border-radius: 16px;
   box-shadow: inset 0 4px 10px rgba(255, 255, 255, 0.8),
               0 10px 24px rgba(0, 0, 0, 0.15);
+  margin: 0 auto;
+}
+
+.board.grid-6x6 {
+  width: 360px;
+  height: 360px;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+}
+
+.board.grid-8x8 {
+  width: 480px;
+  height: 480px;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
 }
 
 .tile {
@@ -150,6 +161,156 @@ h1 {
   background: transparent;
   box-shadow: none;
   cursor: default;
+}
+
+/* Broken gem (Level 2+) */
+.broken {
+  background: radial-gradient(circle at 30% 20%, #555 0%, #222 40%, #000 100%);
+  cursor: not-allowed;
+  position: relative;
+  overflow: hidden;
+}
+
+.broken::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.1) 45%, transparent 50%);
+  opacity: 0.5;
+}
+
+.crack {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  height: 70%;
+  background: linear-gradient(135deg, transparent 48%, #ff4444 48%, #ff4444 52%, transparent 52%),
+              linear-gradient(45deg, transparent 48%, #ff4444 48%, #ff4444 52%, transparent 52%);
+  opacity: 0.8;
+}
+
+/* Blocked cell (Level 3) */
+.blocked {
+  background: radial-gradient(circle at 30% 20%, #3a3a3a 0%, #1a1a1a 40%, #000 100%);
+  cursor: not-allowed;
+  position: relative;
+  opacity: 0.7;
+}
+
+.blocked::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 5px,
+    rgba(80, 80, 80, 0.3) 5px,
+    rgba(80, 80, 80, 0.3) 10px
+  );
+}
+
+/* Level Selection Menu */
+.level-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at top, #ffe6ff 0%, #f0f4ff 40%, #d7e0ff 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.menu-content {
+  text-align: center;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.menu-content h1 {
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+.menu-subtitle {
+  font-size: 20px;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.level-buttons {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.level-btn {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+  border: none;
+  border-radius: 16px;
+  padding: 24px 32px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(255, 154, 158, 0.4);
+  transition: all 0.3s ease;
+  min-width: 180px;
+}
+
+.level-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(255, 154, 158, 0.6);
+}
+
+.level-btn:active {
+  transform: translateY(-2px);
+}
+
+.level-number {
+  font-size: 24px;
+  font-weight: bold;
+  color: #4a1f3d;
+  margin-bottom: 8px;
+}
+
+.level-desc {
+  font-size: 18px;
+  color: #6a3f5d;
+  margin-bottom: 4px;
+}
+
+.level-detail {
+  font-size: 14px;
+  color: #8a5f7d;
+}
+
+#menu-btn {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, #a8a8a8 0%, #d0d0d0 100%);
+  color: #333;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+#menu-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
 }
 
 .message {

@@ -6,10 +6,40 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="game-container">
+  <!-- Level Selection Menu -->
+  <div id="levelMenu" class="level-menu">
+    <div class="menu-content">
+      <h1>Candy Crush</h1>
+      <p class="menu-subtitle">Select Level:</p>
+      <div class="level-buttons">
+        <button class="level-btn" data-level="1">
+          <div class="level-number">Level 1</div>
+          <div class="level-desc">6×6 Grid</div>
+          <div class="level-detail">Classic Match-3</div>
+        </button>
+        <button class="level-btn" data-level="2">
+          <div class="level-number">Level 2</div>
+          <div class="level-desc">8×8 Grid</div>
+          <div class="level-detail">With Broken Gems (10%)</div>
+        </button>
+        <button class="level-btn" data-level="3">
+          <div class="level-number">Level 3</div>
+          <div class="level-desc">8×8 Grid</div>
+          <div class="level-detail">Blocked Corners + Center (15% Broken)</div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Screen -->
+  <div class="game-container" id="gameContainer" style="display: none;">
     <h1>Candy Crush</h1>
 
     <div class="hud">
+      <div class="hud-item">
+        <span class="label">Level:</span>
+        <span id="levelDisplay">1</span>
+      </div>
       <div class="hud-item">
         <span class="label">Score:</span>
         <span id="score">0</span>
@@ -19,6 +49,7 @@
         <span id="timer">03:00</span>
       </div>
       <button id="restart-btn">Restart</button>
+      <button id="menu-btn">Menu</button>
     </div>
 
     <div id="board" class="board"></div>

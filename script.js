@@ -438,9 +438,9 @@ const gameDescriptions = {
   "Candy Crush": {
     title: "Candy Crush",
     description: "Match 3 or more candies of the same color in a row or column to clear them and score points.",
-    modes: "Single mode with limited moves",
-    scoring: "Match more candies for higher scores. Combos and special candy combinations give bonus points. Highest score wins!",
-    controls: "Click two adjacent candies to swap them, or drag one candy onto an adjacent candy."
+    modes: "Level 1 (6×6): Classic match-3 gameplay, 2 minutes\nLevel 2 (8×8): Bigger grid with 10% broken gems that can only be destroyed by matching adjacent gems, 3 minutes\nLevel 3 (8×8): 15% broken gems, blocked corners and center cells creating a cross-shaped playing field, 3 minutes",
+    scoring: "Match more candies for higher scores. Combos and special candy combinations give bonus points. Clearing broken gems awards +20 bonus points. Highest score wins!",
+    controls: "Click two adjacent candies to swap them, or drag one candy onto an adjacent candy. Match 3+ of the same color to score!"
   },
   "Tic Tac Toe": {
     title: "Tic Tac Toe",
@@ -453,8 +453,8 @@ const gameDescriptions = {
     title: "Puzzle Bobble (Bubble Shooter)",
     description: "Shoot colored bubbles to match 3 or more of the same color. Clear all bubbles before they reach the bottom!",
     modes: "Easy: Standard bubble falling speed\nHard: Bubbles descend faster with increasing speed over time",
-    scoring: "Points for each bubble popped. Clear more bubbles at once for bonus points. Highest score wins!",
-    controls: "Move mouse to aim, click to shoot. Match 3+ bubbles of the same color to pop them."
+    scoring: "Points for each bubble popped (match 3+ or floating bubbles). Time bonus: if you complete under 3 minutes, add (180 - seconds) to your score. Example: 2:30 completion = 30 bonus points. Total score = base points + time bonus. Highest score wins!",
+    controls: "Move mouse to aim, click to shoot. Match 3+ bubbles of the same color to pop them. Timer shows elapsed time."
   },
   "Cross the Bridge": {
     title: "Cross the Bridge",
@@ -560,6 +560,13 @@ const gameDescriptions = {
     modes: "4×4 Grid: Classic mode with standard difficulty\n5×5 Grid: Larger grid with more space and strategy",
     scoring: "Highest score wins! Points are earned by merging tiles. Higher value tiles give more points. Best score is saved per grid size!",
     controls: "Use arrow keys (↑ ↓ ← →) to slide all tiles in that direction. On mobile, swipe in the direction you want to move. Tiles slide until they hit another tile or the edge!"
+  },
+  "TCG Game": {
+    title: "Elemental Awakening TCG",
+    description: "Battle against the computer AI in a strategic trading card game! Build your deck, play creatures, evolve them through stages, and use items strategically to knock out your opponent's creatures.",
+    modes: "4 Unique Decks to choose from:\n• Mystic Deck: Purple psychic creatures\n• Wind Deck: Flying and neutral creatures\n• Celestial Deck: Grass and nature creatures\n• Mechanic Deck: Metal and mechanical creatures\n\nAI randomly selects a deck each game.",
+    scoring: "Win/Loss record is tracked! First player to score 3 points wins (1 point per knocked out creature). Leaderboard ranks players by win rate: wins/(wins+losses). Higher win rate = better rank!",
+    controls: "Setup Phase (Turn 0):\n• Must place 1 Stage 1 creature in active spot first\n• Can place other Stage 1 creatures on bench (optional)\n• Click Done when ready to start\n\nEach Turn:\n• Draw 1 card at start of turn\n• Attach 1 energy to any creature (once per turn)\n• Play Stage 1 creatures to empty bench slots\n• Evolve creatures (from Turn 3 onwards only):\n  - Can't evolve cards played this turn\n  - Can't evolve a card twice in same turn\n  - Stage 1→Stage 2→Stage 3\n• Use 1 item card per turn (max):\n  - Potion: Heal 20 HP\n  - Card Draw: Draw 2 cards\n  - Booster: +20 damage to next attack\n• Attack with active creature (ends turn immediately)\n  - Requires energy equal to move cost\n  - Shows move name and damage in button\n• Retreat active to bench (costs energy shown in button)\n  - Can't retreat after attacking\n\nWin Conditions:\n• Score 3 points (knock out 3 opponent creatures)\n• Opponent has no creatures left\n• 30 turns max - highest points wins"
   }
 };
 
@@ -588,9 +595,9 @@ const gameDescriptionsPT = {
   "Candy Crush": {
     title: "Candy Crush",
     description: "Combine 3 ou mais doces da mesma cor numa linha ou coluna para os limpar e marcar pontos.",
-    modes: "Modo único com movimentos limitados",
-    scoring: "Combine mais doces para pontuações mais altas. Combos e combinações especiais dão pontos bónus. Pontuação mais alta ganha!",
-    controls: "Clique em dois doces adjacentes para os trocar, ou arraste um doce para um adjacente."
+    modes: "Nível 1 (6×6): Jogo clássico de combinar 3, 2 minutos\nNível 2 (8×8): Grelha maior com 10% gemas quebradas que só podem ser destruídas ao combinar gemas adjacentes, 3 minutos\nNível 3 (8×8): 15% gemas quebradas, cantos e centro bloqueados criando um campo de jogo em forma de cruz, 3 minutos",
+    scoring: "Combine mais doces para pontuações mais altas. Combos e combinações especiais dão pontos bónus. Limpar gemas quebradas dá +20 pontos bónus. Pontuação mais alta ganha!",
+    controls: "Clique em dois doces adjacentes para os trocar, ou arraste um doce para um adjacente. Combine 3+ da mesma cor para pontuar!"
   },
   "Tic Tac Toe": {
     title: "Jogo do Galo",
@@ -603,8 +610,8 @@ const gameDescriptionsPT = {
     title: "Puzzle Bobble",
     description: "Atire bolhas coloridas para combinar 3 ou mais da mesma cor. Limpe todas as bolhas antes que cheguem ao fundo!",
     modes: "Fácil: Velocidade de queda padrão das bolhas\nDifícil: Bolhas descem mais rápido com velocidade crescente ao longo do tempo",
-    scoring: "Pontos por cada bolha rebentada. Limpe mais bolhas de uma vez para pontos bónus. Pontuação mais alta ganha!",
-    controls: "Mova o rato para apontar, clique para atirar. Combine 3+ bolhas da mesma cor para as rebentar."
+    scoring: "Pontos por cada bolha rebentada (combinar 3+ ou bolhas flutuantes). Bónus de tempo: se completar em menos de 3 minutos, adicione (180 - segundos) à sua pontuação. Exemplo: conclusão em 2:30 = 30 pontos de bónus. Pontuação total = pontos base + bónus de tempo. Pontuação mais alta ganha!",
+    controls: "Mova o rato para apontar, clique para atirar. Combine 3+ bolhas da mesma cor para as rebentar. O temporizador mostra o tempo decorrido."
   },
   "Cross the Bridge": {
     title: "Atravessar a Ponte",
@@ -710,6 +717,13 @@ const gameDescriptionsPT = {
     modes: "Grelha 4×4: Modo clássico com dificuldade padrão\nGrelha 5×5: Grelha maior com mais espaço e estratégia",
     scoring: "Maior pontuação ganha! Pontos são ganhos ao fundir blocos. Blocos de maior valor dão mais pontos. Melhor pontuação é guardada por tamanho de grelha!",
     controls: "Use as setas (↑ ↓ ← →) para deslizar todos os blocos nessa direção. No telemóvel, deslize na direção que quer mover. Os blocos deslizam até bater noutro bloco ou na borda!"
+  },
+  "TCG Game": {
+    title: "Elemental Awakening TCG",
+    description: "Batalhe contra a IA do computador num jogo estratégico de cartas colecionáveis! Construa o seu baralho, jogue criaturas, evolua-as através de estágios e use itens estrategicamente para derrotar as criaturas do oponente.",
+    modes: "4 Baralhos Únicos para escolher:\n• Baralho Místico: Criaturas psíquicas roxas\n• Baralho Vento: Criaturas voadoras e neutras\n• Baralho Celestial: Criaturas de grama e natureza\n• Baralho Mecânico: Criaturas metálicas e mecânicas\n\nA IA seleciona aleatoriamente um baralho em cada jogo.",
+    scoring: "Registo de vitórias/derrotas é rastreado! Primeiro jogador a marcar 3 pontos ganha (1 ponto por criatura derrotada). O placar classifica os jogadores por taxa de vitórias: vitórias/(vitórias+derrotas). Maior taxa de vitórias = melhor classificação!",
+    controls: "Fase de Configuração (Turno 0):\n• Deve colocar 1 criatura Estágio 1 no espaço ativo primeiro\n• Pode colocar outras criaturas Estágio 1 no banco (opcional)\n• Clique em Concluído quando estiver pronto para começar\n\nCada Turno:\n• Compre 1 carta no início do turno\n• Anexe 1 energia a qualquer criatura (uma vez por turno)\n• Jogue criaturas Estágio 1 em espaços vazios do banco\n• Evolua criaturas (apenas a partir do Turno 3):\n  - Não pode evoluir cartas jogadas neste turno\n  - Não pode evoluir a mesma carta duas vezes no mesmo turno\n  - Estágio 1→Estágio 2→Estágio 3\n• Use 1 carta de item por turno (máximo):\n  - Poção: Cure 20 HP\n  - Compra de Carta: Compre 2 cartas\n  - Reforço: +20 de dano no próximo ataque\n• Ataque com criatura ativa (termina o turno imediatamente)\n  - Requer energia igual ao custo do movimento\n  - Mostra nome do movimento e dano no botão\n• Recue ativo para o banco (custa energia mostrada no botão)\n  - Não pode recuar após atacar\n\nCondições de Vitória:\n• Marque 3 pontos (derrote 3 criaturas do oponente)\n• Oponente não tem mais criaturas\n• Máximo de 30 turnos - mais pontos ganha"
   }
 };
 
@@ -995,6 +1009,12 @@ function showGameLeaderboard(gameName) {
   // Special handling for 2048 (score - higher is better, with grid size modes)
   if (gameName === "2048") {
     show2048Leaderboard(db, content, gameName);
+    return;
+  }
+  
+  // Special handling for TCG Game (win/loss record)
+  if (gameName === "TCG Game") {
+    showTCGLeaderboard(db, content, gameName);
     return;
   }
   
@@ -1526,36 +1546,87 @@ function showPuzzleLeaderboard(db, content, gameName) {
 
 function showCandyCrushLeaderboard(db, content, gameName) {
   db.collection("games")
-    .limit(100)
+    .limit(300)
     .get()
     .then(snapshot => {
-      // Filter for Candy Crush and sort by score (higher is better)
-      const docs = snapshot.docs
-        .map(doc => ({ id: doc.id, ...doc.data() }))
-        .filter(doc => doc.gameName === gameName)
+      const allDocs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+      // Filter for game and separate by level
+      // Include old entries without difficulty (treat as Level 1)
+      const level1Docs = allDocs
+        .filter(doc => doc.gameName === gameName && (!doc.difficulty || doc.difficulty === "level1"))
         .sort((a, b) => b.score - a.score)
         .slice(0, 10);
       
-      if (docs.length === 0) {
-        content.innerHTML = `<p style="color: #666;">${t("noScores")}</p>`;
-        return;
+      const level2Docs = allDocs
+        .filter(doc => doc.gameName === gameName && doc.difficulty === "level2")
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 10);
+      
+      const level3Docs = allDocs
+        .filter(doc => doc.gameName === gameName && doc.difficulty === "level3")
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 10);
+      
+      let html = '<div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">';
+      
+      // Level 1 table
+      html += `<div style="flex: 1; min-width: 280px;"><h3>Level 1 (6×6)</h3>`;
+      if (level1Docs.length === 0) {
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Score</th><th>Date</th></tr></thead><tbody>';
+        level1Docs.forEach((doc, i) => {
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${doc.score}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
       }
+      html += '</div>';
       
-      let html = '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Score</th><th>Date</th></tr></thead><tbody>';
+      // Level 2 table
+      html += `<div style="flex: 1; min-width: 280px;"><h3>Level 2 (8×8)</h3>`;
+      if (level2Docs.length === 0) {
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Score</th><th>Date</th></tr></thead><tbody>';
+        level2Docs.forEach((doc, i) => {
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${doc.score}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div>';
       
-      let rank = 1;
-      docs.forEach(doc => {
-        const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
-        
-        html += `<tr>
-          <td>${rank++}</td>
-          <td>${doc.playerName}</td>
-          <td>${doc.score}</td>
-          <td>${date}</td>
-        </tr>`;
-      });
+      // Level 3 table
+      html += `<div style="flex: 1; min-width: 280px;"><h3>Level 3 (8×8)</h3>`;
+      if (level3Docs.length === 0) {
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Score</th><th>Date</th></tr></thead><tbody>';
+        level3Docs.forEach((doc, i) => {
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${doc.score}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div></div>';
       
-      html += "</tbody></table>";
       content.innerHTML = html;
     })
     .catch(err => {
@@ -1737,6 +1808,86 @@ function show2048Leaderboard(db, content, gameName) {
     });
 }
 
+function showTCGLeaderboard(db, content, gameName) {
+  db.collection("games")
+    .limit(200)
+    .get()
+    .then(snapshot => {
+      const allDocs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+      // Group by player and calculate win/loss records
+      const playerStats = {};
+      
+      allDocs
+        .filter(doc => doc.gameName === gameName)
+        .forEach(doc => {
+          if (!playerStats[doc.playerName]) {
+            playerStats[doc.playerName] = {
+              playerName: doc.playerName,
+              wins: 0,
+              losses: 0,
+              lastPlayed: doc.timestamp
+            };
+          }
+          
+          if (doc.result === 'win') {
+            playerStats[doc.playerName].wins++;
+          } else if (doc.result === 'loss') {
+            playerStats[doc.playerName].losses++;
+          }
+          
+          // Track most recent game
+          if (doc.timestamp && (!playerStats[doc.playerName].lastPlayed || 
+              doc.timestamp.toDate() > playerStats[doc.playerName].lastPlayed.toDate())) {
+            playerStats[doc.playerName].lastPlayed = doc.timestamp;
+          }
+        });
+      
+      // Convert to array and calculate win rate
+      const playerArray = Object.values(playerStats)
+        .map(player => {
+          const totalGames = player.wins + player.losses;
+          const winRate = totalGames > 0 ? (player.wins / totalGames) * 100 : 0;
+          return {
+            ...player,
+            totalGames,
+            winRate
+          };
+        })
+        .filter(player => player.totalGames > 0) // Only show players with at least 1 game
+        .sort((a, b) => b.winRate - a.winRate) // Sort by win rate (highest first)
+        .slice(0, 20); // Top 20
+      
+      if (playerArray.length === 0) {
+        content.innerHTML = `<p style="color: #666;">${t("noScores")}</p>`;
+        return;
+      }
+      
+      let html = '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Wins</th><th>Losses</th><th>Win Rate</th><th>Last Played</th></tr></thead><tbody>';
+      
+      playerArray.forEach((player, i) => {
+        const date = player.lastPlayed ? new Date(player.lastPlayed.toDate()).toLocaleDateString() : 'N/A';
+        const winRateStr = player.winRate.toFixed(1) + '%';
+        
+        html += `<tr>
+          <td>${i + 1}</td>
+          <td>${player.playerName}</td>
+          <td style="color: #4CAF50; font-weight: bold;">${player.wins}</td>
+          <td style="color: #f44336; font-weight: bold;">${player.losses}</td>
+          <td style="color: #FFD700; font-weight: bold;">${winRateStr}</td>
+          <td>${date}</td>
+        </tr>`;
+      });
+      
+      html += "</tbody></table>";
+      content.innerHTML = html;
+    })
+    .catch(err => {
+      content.textContent = t("errorLoading") + " " + err.message;
+      console.error("Leaderboard error:", err);
+    });
+}
+
 // Close leaderboard section when clicking back to menu
 // Close button is handled via onclick attribute
 
@@ -1885,6 +2036,21 @@ window.saveGameScore = function(gameName, scoreData) {
     const isTimeLeftBased = scoreData.hasOwnProperty("timeLeft");
     const isLengthBased = scoreData.hasOwnProperty("length");
     const isTurnsBased = scoreData.hasOwnProperty("turns");
+    const isTCGGame = scoreData.hasOwnProperty("result"); // TCG Game uses result field
+    
+    // Special handling for TCG Game - always create new record (don't update)
+    if (isTCGGame) {
+      console.log("Creating new TCG Game record");
+      return db.collection("games").add({
+        playerName: name,
+        gameName: gameName,
+        ...scoreData,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(docRef => {
+        console.log("TCG Game result saved with ID:", docRef.id);
+        return { isNewBest: false }; // Never show "new best" for TCG
+      });
+    }
     
     return query.limit(1).get()
       .then(snapshot => {

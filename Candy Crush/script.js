@@ -1,5 +1,7 @@
-const width = 6;
-const height = 6;
+// Game configuration
+let currentLevel = 1;
+let width = 6;
+let height = 6;
 const numColors = 6;
 const board = [];
 let score = 0;
@@ -12,9 +14,31 @@ const scoreElement = document.getElementById("score");
 const timerElement = document.getElementById("timer");
 const messageElement = document.getElementById("message");
 const restartBtn = document.getElementById("restart-btn");
+const menuBtn = document.getElementById("menu-btn");
+const levelMenu = document.getElementById("levelMenu");
+const gameContainer = document.getElementById("gameContainer");
+const levelDisplay = document.getElementById("levelDisplay");
 
 let draggedId = null;
 let replacedId = null;
+
+// Level configurations
+const LEVELS = {
+  1: { width: 6, height: 6, brokenGemChance: 0, time: 120, blockedCells: [] },
+  2: { width: 8, height: 8, brokenGemChance: 0.1, time: 180, blockedCells: [] },
+  3: { width: 8, height: 8, brokenGemChance: 0.15, time: 180, blockedCells: [
+    // Top-left corner
+    0, 1, 8, 9,
+    // Top-right corner
+    6, 7, 14, 15,
+    // Bottom-left corner
+    48, 49, 56, 57,
+    // Bottom-right corner
+    54, 55, 62, 63,
+    // Center 4 cells (indices 27, 28, 35, 36 for 8x8 grid)
+    27, 28, 35, 36
+  ]}
+};
 
 // Helpers
 function indexToCoord(index) {
@@ -27,6 +51,26 @@ function coordToIndex(x, y) {
 
 function randomCandy() {
   return Math.floor(Math.random() * numColors);
+}
+
+// Check if a candy should be broken (Level 2+ feature)
+function shouldBeBroken() {
+  const levelConfig = LEVELS[currentLevel];
+  return Math.random() < levelConfig.brokenGemChance;
+}
+
+// Check if a cell is blocked (Level 3 feature)
+function isBlockedCell(index) {
+  const levelConfig = LEVELS[currentLevel];
+  return levelConfig.blockedCells.includes(index);
+}
+
+// Candy types: 0-5 = colors, -1 = broken gem, -2 = blocked cell
+function generateCandy() {
+  if (shouldBeBroken()) {
+    return -1; // Broken gem
+  }
+  return randomCandy();
 }
 
 // Check if a position is part of a match (used for initial board)
@@ -66,8 +110,14 @@ function isPartOfMatch(x, y, grid) {
 // Generate board with no initial matches
 function generateInitialBoard() {
   board.length = 0;
+  
+  // Initialize board with blocked cells marked
   for (let i = 0; i < width * height; i++) {
-    board.push(randomCandy());
+    if (isBlockedCell(i)) {
+      board.push(-2); // Blocked cell
+    } else {
+      board.push(generateCandy());
+    }
   }
 
   let changed = true;
@@ -76,11 +126,14 @@ function generateInitialBoard() {
     for (let y = 0; y < height; y++) {
       for (let x = 0; x < width; x++) {
         const idx = coordToIndex(x, y);
+        // Skip broken gems and blocked cells in match checking
+        if (board[idx] === -1 || board[idx] === -2) continue;
+        
         if (isPartOfMatch(x, y, board)) {
           let newColor;
           do {
-            newColor = randomCandy();
-          } while (newColor === board[idx]);
+            newColor = generateCandy();
+          } while (newColor === board[idx] || newColor === -1);
           board[idx] = newColor;
           changed = true;
         }
@@ -92,16 +145,26 @@ function generateInitialBoard() {
 // Render board
 function renderBoard() {
   boardElement.innerHTML = "";
+  boardElement.className = `board grid-${width}x${height}`;
+  
   for (let i = 0; i < width * height; i++) {
     const tile = document.createElement("div");
     tile.classList.add("tile");
     const color = board[i];
+    
     if (color === null) {
       tile.classList.add("empty");
+    } else if (color === -1) {
+      tile.classList.add("broken");
+      tile.innerHTML = '<div class="crack"></div>';
+    } else if (color === -2) {
+      tile.classList.add("blocked");
     } else {
       tile.classList.add(`color-${color}`);
     }
-    tile.setAttribute("draggable", !gameOver && color !== null);
+    
+    // Broken gems and blocked cells can't be dragged
+    tile.setAttribute("draggable", !gameOver && color !== null && color !== -1 && color !== -2);
     tile.setAttribute("data-id", i);
 
     tile.addEventListener("dragstart", dragStart);
@@ -120,21 +183,23 @@ let selectedTileId = null;
 function tileClick(e) {
   if (gameOver) return;
   
-  const clickedId = parseInt(e.target.getAttribute("data-id"), 10);
+  const clickedId = parseInt(e.target.closest('.tile').getAttribute("data-id"), 10);
   
-  if (board[clickedId] === null) return;
+  // Can't select null, broken gems, or blocked cells
+  if (board[clickedId] === null || board[clickedId] === -1 || board[clickedId] === -2) return;
   
   // First tile selected
   if (selectedTileId === null) {
     selectedTileId = clickedId;
-    e.target.classList.add("selected");
+    const tiles = document.querySelectorAll(".tile");
+    tiles[clickedId].classList.add("selected");
     return;
   }
   
   // Same tile clicked again - deselect
   if (selectedTileId === clickedId) {
     selectedTileId = null;
-    e.target.classList.remove("selected");
+    e.target.closest('.tile').classList.remove("selected");
     return;
   }
   
@@ -147,7 +212,7 @@ function tileClick(e) {
     const tiles = document.querySelectorAll(".tile");
     tiles[selectedTileId].classList.remove("selected");
     selectedTileId = clickedId;
-    e.target.classList.add("selected");
+    tiles[clickedId].classList.add("selected");
     return;
   }
   
@@ -304,9 +369,15 @@ function findMatches() {
 // Check if any move is possible
 function hasPossibleMoves() {
   for (let i = 0; i < width * height; i++) {
+    // Skip null, broken gems, and blocked cells
+    if (board[i] === null || board[i] === -1 || board[i] === -2) continue;
+    
     const neighbors = getAdjacentIndices(i);
 
     for (const n of neighbors) {
+      // Skip if neighbor is null, broken gem, or blocked cell
+      if (board[n] === null || board[n] === -1 || board[n] === -2) continue;
+      
       const temp = board[i];
       board[i] = board[n];
       board[n] = temp;
@@ -329,12 +400,31 @@ function shuffleBoard() {
   do {
     attempts++;
 
-    for (let i = board.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      const temp = board[i];
-      board[i] = board[j];
-      board[j] = temp;
+    // Extract only movable candies (exclude null, broken gems, and blocked cells)
+    const movableCandies = [];
+    const movableIndices = [];
+    
+    for (let i = 0; i < board.length; i++) {
+      if (board[i] !== null && board[i] !== -1 && board[i] !== -2) {
+        movableCandies.push(board[i]);
+        movableIndices.push(i);
+      }
     }
+    
+    // Shuffle only the movable candies
+    for (let i = movableCandies.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const temp = movableCandies[i];
+      movableCandies[i] = movableCandies[j];
+      movableCandies[j] = temp;
+    }
+    
+    // Put shuffled candies back in their positions
+    for (let i = 0; i < movableIndices.length; i++) {
+      board[movableIndices[i]] = movableCandies[i];
+    }
+    
+    // Blocked cells and broken gems remain unchanged
 
   } while ((!hasPossibleMoves() || findMatches().length > 0) && attempts < 50);
 
@@ -354,6 +444,25 @@ function resolveMatches(matches) {
     else if (len >= 5) bonus = 25;
     score += len * 10 + bonus;
   });
+
+  // Check for broken gems adjacent to matches (Level 2 feature)
+  if (currentLevel >= 2) {
+    const adjacentBroken = new Set();
+    toClear.forEach(idx => {
+      const neighbors = getAdjacentIndices(idx);
+      neighbors.forEach(n => {
+        if (board[n] === -1) {
+          adjacentBroken.add(n);
+        }
+      });
+    });
+    
+    // Clear adjacent broken gems and award bonus points
+    adjacentBroken.forEach(idx => {
+      toClear.add(idx);
+      score += 20; // Bonus for clearing broken gems
+    });
+  }
 
   scoreElement.textContent = score;
 
@@ -408,11 +517,14 @@ function applyGravity() {
   }
 }
 
-// Refill empty cells at top
+// Refill empty cells at top (but not blocked cells)
 function refillBoard() {
   for (let i = 0; i < width * height; i++) {
-    if (board[i] === null) {
-      board[i] = randomCandy();
+    if (board[i] === null && !isBlockedCell(i)) {
+      board[i] = generateCandy();
+    } else if (isBlockedCell(i) && board[i] !== -2) {
+      // Ensure blocked cells stay blocked
+      board[i] = -2;
     }
   }
 }
@@ -426,7 +538,8 @@ function formatTime(seconds) {
 
 function startTimer() {
   clearInterval(timerInterval);
-  timerSeconds = 120;
+  const levelConfig = LEVELS[currentLevel];
+  timerSeconds = levelConfig.time;
   timerElement.textContent = formatTime(timerSeconds);
   gameOver = false;
   messageElement.textContent = "";
@@ -442,14 +555,15 @@ function startTimer() {
       messageElement.textContent = `Time's up! Final score: ${score}`;
       renderBoard();
       
-      // Save score to leaderboard
+      // Save score to leaderboard with difficulty (level)
       if (window.parent && window.parent.saveGameScore) {
         window.parent.saveGameScore("Candy Crush", {
-          score: score
+          score: score,
+          difficulty: `level${currentLevel}`
         }).then((result) => {
           console.log("Candy Crush score saved successfully");
           if (result && result.isNewBest && window.parent.showNewBestScore) {
-            window.parent.showNewBestScore("Candy Crush", { score: score });
+            window.parent.showNewBestScore("Candy Crush", { score: score, difficulty: `level${currentLevel}` });
           }
         }).catch(err => {
           console.error("Error saving Candy Crush score:", err);
@@ -465,14 +579,47 @@ function startTimer() {
 function restartGame() {
   score = 0;
   scoreElement.textContent = score;
+  const levelConfig = LEVELS[currentLevel];
+  width = levelConfig.width;
+  height = levelConfig.height;
   generateInitialBoard();
   renderBoard();
   startTimer();
 }
 
-// Init
-restartBtn.addEventListener("click", restartGame);
+// Level selection
+function startLevel(level) {
+  currentLevel = level;
+  levelDisplay.textContent = level;
+  
+  const levelConfig = LEVELS[level];
+  width = levelConfig.width;
+  height = levelConfig.height;
+  
+  // Hide menu, show game
+  levelMenu.style.display = 'none';
+  gameContainer.style.display = 'block';
+  
+  restartGame();
+}
 
-generateInitialBoard();
-renderBoard();
-startTimer();
+function showMenu() {
+  clearInterval(timerInterval);
+  gameContainer.style.display = 'none';
+  levelMenu.style.display = 'flex';
+}
+
+// Event Listeners
+restartBtn.addEventListener("click", restartGame);
+menuBtn.addEventListener("click", showMenu);
+
+// Level selection buttons
+document.querySelectorAll('.level-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const level = parseInt(btn.getAttribute('data-level'));
+    startLevel(level);
+  });
+});
+
+// Start with menu visible
+showMenu();

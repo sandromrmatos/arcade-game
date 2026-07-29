@@ -33,6 +33,12 @@
         margin-bottom: 10px;
     }
 
+    #timer {
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: #ffff44;
+    }
+
     #message {
         font-size: 18px;
         margin-top: 8px;
@@ -80,6 +86,7 @@
 <div id="gameContainer">
     <div id="leftPanel">
         <div id="score">Score: 0</div>
+        <div id="timer">Time: 0:00</div>
         <!-- canvas width reduced so right border matches bubbles -->
         <canvas id="gameCanvas" width="272" height="500"></canvas>
         <div id="message"></div>
@@ -119,6 +126,9 @@ let easyFinished = false;
 
 let mode = "easy";
 
+let gameStartTime = 0;
+let elapsedSeconds = 0;
+
 let ceilingOffset = 0;
 let ceilingDropTimer = 0;
 let ceilingDropIntervalBase = 5000;
@@ -157,8 +167,12 @@ function resetGame(selectedMode) {
     mode = selectedMode;
     score = 0;
     document.getElementById("score").textContent = "Score: " + score;
+    document.getElementById("timer").textContent = "Time: 0:00";
     document.getElementById("message").textContent = "";
     gameOver = false;
+
+    gameStartTime = Date.now();
+    elapsedSeconds = 0;
 
     ceilingOffset = 0;
     ceilingDropTimer = 0;
@@ -263,8 +277,22 @@ function rowToY(row) {
     return BUBBLE_RADIUS + row * ROW_HEIGHT + ceilingOffset;
 }
 
+function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return mins + ":" + (secs < 10 ? "0" : "") + secs;
+}
+
+function updateTimer() {
+    if (gameOver) return;
+    elapsedSeconds = Math.floor((Date.now() - gameStartTime) / 1000);
+    document.getElementById("timer").textContent = "Time: " + formatTime(elapsedSeconds);
+}
+
 function update(delta) {
     if (gameOver) return;
+
+    updateTimer();
 
     ceilingDropTimer += delta;
     if (ceilingDropTimer > ceilingDropInterval) {
@@ -465,7 +493,22 @@ function checkWin() {
             if (grid[row][col].exists) return false;
         }
     }
-    endGame("You win!");
+    
+    // Calculate time bonus
+    let timeBonus = 0;
+    if (elapsedSeconds < 180) {
+        timeBonus = 180 - elapsedSeconds;
+    }
+    const totalScore = score + timeBonus;
+    
+    // Update the score display
+    score = totalScore;
+    document.getElementById("score").textContent = "Score: " + score;
+    
+    // Create win message with time and total score
+    const timeStr = formatTime(elapsedSeconds);
+    const msg = "You win! Time: " + timeStr + " | Total Score: " + totalScore;
+    endGame(msg);
     return true;
 }
 
@@ -529,7 +572,7 @@ function endGame(msg) {
     }
     
     // Save score to leaderboard if game was won
-    if (msg === "You win!" && window.parent && window.parent.saveGameScore) {
+    if (msg.startsWith("You win!") && window.parent && window.parent.saveGameScore) {
         window.parent.saveGameScore("Puzzle Bobble", {
             score: score,
             difficulty: mode
