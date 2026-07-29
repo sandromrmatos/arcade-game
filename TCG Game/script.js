@@ -1,41 +1,41 @@
 // Card database from CSV
 const cardDatabase = [
-    {id: "Elemental Awakening_04.png", name: "Traplet", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "M", move1Name: "Aura Whisper", move1Damage: 10, move2Cost: null, move2Name: null, move2Damage: null, prevStage: null},
-    {id: "Elemental Awakening_05.png", name: "Traphex", stage: "Stage 2", hp: 120, retreat: 2, move1Cost: "M", move1Name: "Lunar Glow", move1Damage: 30, move2Cost: "MM", move2Name: "Ethereal Snare", move2Damage: 50, prevStage: "Traplet"},
-    {id: "Elemental Awakening_06.png", name: "Chimerasprout", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "M", move1Name: "Psycho Drift", move1Damage: 10, move2Cost: null, move2Name: null, move2Damage: null, prevStage: null},
-    {id: "Elemental Awakening_07.png", name: "Chimerafluff", stage: "Stage 2", hp: 90, retreat: 1, move1Cost: "MN", move1Name: "Mental Tackle", move1Damage: 30, move2Cost: null, move2Name: null, move2Damage: null, prevStage: "Chimerasprout"},
-    {id: "Elemental Awakening_08.png", name: "Chimereal", stage: "Stage 3", hp: 140, retreat: 3, move1Cost: "MN", move1Name: "Illusion Mist", move1Damage: 40, move2Cost: "MMMN", move2Name: "Vision Beam", move2Damage: 100, prevStage: "Chimerafluff"},
-    {id: "Elemental Awakening_12.png", name: "Spiritfoil", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "N", move1Name: "Shade Tackle", move1Damage: 10, move2Cost: null, move2Name: null, move2Damage: null, prevStage: null},
-    {id: "Elemental Awakening_13.png", name: "Nebulicorn", stage: "Stage 2", hp: 80, retreat: 1, move1Cost: "M", move1Name: "Nebula Howl", move1Damage: 30, move2Cost: null, move2Name: null, move2Damage: null, prevStage: "Spiritfoil"},
-    {id: "Elemental Awakening_14.png", name: "Wraithhorn", stage: "Stage 3", hp: 90, retreat: 2, move1Cost: "MM", move1Name: "Wraith Dash", move1Damage: 50, move2Cost: null, move2Name: null, move2Damage: null, prevStage: "Nebulicorn"},
-    {id: "Elemental Awakening_15.png", name: "Zephyrquill", stage: "Stage 1", hp: 40, retreat: 1, move1Cost: "W", move1Name: "Gale Flow", move1Damage: 30, move2Cost: null, move2Name: null, move2Damage: null, prevStage: null},
-    {id: "Elemental Awakening_17.png", name: "Stormbud", stage: "Stage 1", hp: 30, retreat: 1, move1Cost: "W", move1Name: "Budding Wind", move1Damage: 30, move2Cost: null, move2Name: null, move2Damage: null, prevStage: null},
-    {id: "Elemental Awakening_18.png", name: "Blossomgale", stage: "Stage 2", hp: 80, retreat: 0, move1Cost: "WW", move1Name: "Gale Strike", move1Damage: 40, move2Cost: "NNN", move2Name: "Petal Tornado", move2Damage: 90, prevStage: "Stormbud"},
-    {id: "Elemental Awakening_28.png", name: "Baklavaff", stage: "Stage 1", hp: 70, retreat: 1, move1Cost: "NN", move1Name: "Honey Drizzle", move1Damage: 40, move2Cost: null, move2Name: null, move2Damage: null, prevStage: null},
-    {id: "Elemental Awakening_29.png", name: "Galaktikreme", stage: "Stage 2", hp: 110, retreat: 1, move1Cost: "NN", move1Name: "Pastry Crunch", move1Damage: 50, move2Cost: "NNNN", move2Name: "Creamy Confection", move2Damage: 80, prevStage: "Baklavaff"},
-    {id: "Elemental Awakening_34.png", name: "Babybara", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "N", move1Name: "Muddy Tackle", move1Damage: 20, move2Cost: null, move2Name: null, move2Damage: null, prevStage: null},
-    {id: "Elemental Awakening_35.png", name: "Carmibara", stage: "Stage 2", hp: 80, retreat: 1, move1Cost: "N", move1Name: "Crimson Chomp", move1Damage: 30, move2Cost: null, move2Name: null, move2Damage: null, prevStage: "Babybara"},
-    {id: "Elemental Awakening_36.png", name: "Reddybara", stage: "Stage 3", hp: 130, retreat: 2, move1Cost: "NN", move1Name: "River Rush", move1Damage: 50, move2Cost: "NNNN", move2Name: "Risky Recoil", move2Damage: 130, prevStage: "Carmibara"},
-    {id: "Elemental Awakening_37.png", name: "Serafini", stage: "Stage 1", hp: 30, retreat: 1, move1Cost: "N", move1Name: "Heavenly Retreat", move1Damage: 0, move2Cost: null, move2Name: null, move2Damage: null, prevStage: null},
-    {id: "Elemental Awakening_38.png", name: "Serafina", stage: "Stage 2", hp: 60, retreat: 2, move1Cost: "NN", move1Name: "Serene Light", move1Damage: 30, move2Cost: null, move2Name: null, move2Damage: null, prevStage: "Serafini"},
-    {id: "Elemental Awakening_39.png", name: "Alpakina", stage: "Stage 1", hp: 120, retreat: 2, move1Cost: "NNN", move1Name: "Energy Snatch", move1Damage: 40, move2Cost: null, move2Name: null, move2Damage: null, prevStage: null},
-    {id: "Elemental Awakening_40.png", name: "Floonleef", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "N", move1Name: "Swirl", move1Damage: 20, move2Cost: null, move2Name: null, move2Damage: null, prevStage: null},
-    {id: "Elemental Awakening_41.png", name: "Aerobloom", stage: "Stage 2", hp: 80, retreat: 1, move1Cost: "C", move1Name: "Balloon Burst", move1Damage: 40, move2Cost: null, move2Name: null, move2Damage: null, prevStage: "Floonleef"},
-    {id: "Elemental Awakening_45.png", name: "Faeclover", stage: "Stage 1", hp: 30, retreat: 1, move1Cost: "C", move1Name: "Leaf Tickle", move1Damage: 10, move2Cost: null, move2Name: null, move2Damage: null, prevStage: null},
-    {id: "Elemental Awakening_46.png", name: "Sunbloss", stage: "Stage 2", hp: 90, retreat: 1, move1Cost: "CCC", move1Name: "Nature's Clap", move1Damage: 60, move2Cost: null, move2Name: null, move2Damage: null, prevStage: "Faeclover"},
-    {id: "Elemental Awakening_47.png", name: "Aloebud", stage: "Stage 1", hp: 50, retreat: 1, move1Cost: "C", move1Name: "Aloe Slash", move1Damage: 20, move2Cost: null, move2Name: null, move2Damage: null, prevStage: null},
-    {id: "Elemental Awakening_48.png", name: "Aloeflora", stage: "Stage 2", hp: 70, retreat: 1, move1Cost: "C", move1Name: "Vera Tackle", move1Damage: 40, move2Cost: null, move2Name: null, move2Damage: null, prevStage: "Aloebud"},
-    {id: "Elemental Awakening_49.png", name: "Aloetide", stage: "Stage 3", hp: 90, retreat: 3, move1Cost: "CCC", move1Name: "Healing Sap", move1Damage: 50, move2Cost: null, move2Name: null, move2Damage: null, prevStage: "Aloeflora"},
-    {id: "Elemental Awakening_52.png", name: "Voltveil", stage: "Stage 1", hp: 80, retreat: 2, move1Cost: "NN", move1Name: "Iron Spin", move1Damage: 40, move2Cost: null, move2Name: null, move2Damage: null, prevStage: null},
-    {id: "Elemental Awakening_53.png", name: "Byteblade", stage: "Stage 1", hp: 90, retreat: 3, move1Cost: "KKK", move1Name: "Shadow Byte", move1Damage: 60, move2Cost: null, move2Name: null, move2Damage: null, prevStage: null},
-    {id: "Elemental Awakening_59.png", name: "Ponimetal", stage: "Stage 1", hp: 70, retreat: 1, move1Cost: "N", move1Name: "Iron Tail Whip", move1Damage: 10, move2Cost: null, move2Name: null, move2Damage: null, prevStage: null},
-    {id: "Elemental Awakening_60.png", name: "Equinix", stage: "Stage 2", hp: 90, retreat: 1, move1Cost: "N", move1Name: "Titan Kick", move1Damage: 20, move2Cost: null, move2Name: null, move2Damage: null, prevStage: "Ponimetal"},
-    {id: "Elemental Awakening_61.png", name: "Equinox", stage: "Stage 3", hp: 110, retreat: 3, move1Cost: "KNN", move1Name: "Metal Burst", move1Damage: 60, move2Cost: null, move2Name: null, move2Damage: null, prevStage: "Equinix"},
-    {id: "Elemental Awakening_63.png", name: "Aeglet", stage: "Stage 1", hp: 60, retreat: 3, move1Cost: "KK", move1Name: "Metalic Buzz", move1Damage: 30, move2Cost: null, move2Name: null, move2Damage: null, prevStage: null},
-    {id: "Elemental Awakening_64.png", name: "Aegiscelis", stage: "Stage 2", hp: 130, retreat: 3, move1Cost: "KK", move1Name: "Guardian Glow", move1Damage: 50, move2Cost: null, move2Name: null, move2Damage: null, prevStage: "Aeglet"},
-    {id: "Elemental Awakening_65.png", name: "Potion", stage: "Item", hp: 0, retreat: 0, move1Cost: null, move1Name: null, move1Damage: null, move2Cost: null, move2Name: null, move2Damage: null, prevStage: null},
-    {id: "Elemental Awakening_66.png", name: "Card Draw", stage: "Item", hp: 0, retreat: 0, move1Cost: null, move1Name: null, move1Damage: null, move2Cost: null, move2Name: null, move2Damage: null, prevStage: null},
-    {id: "Elemental Awakening_67.png", name: "Booster", stage: "Item", hp: 0, retreat: 0, move1Cost: null, move1Name: null, move1Damage: null, move2Cost: null, move2Name: null, move2Damage: null, prevStage: null}
+    {id: "Elemental Awakening_04.png", name: "Traplet", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "M", move1Name: "Aura Whisper", move1Damage: 10, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_05.png", name: "Traphex", stage: "Stage 2", hp: 120, retreat: 2, move1Cost: "M", move1Name: "Lunar Glow", move1Damage: 30, move1Effect: null, move2Cost: "MM", move2Name: "Ethereal Snare", move2Damage: 50, move2Effect: "cantRetreat", prevStage: "Traplet"},
+    {id: "Elemental Awakening_06.png", name: "Chimerasprout", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "M", move1Name: "Psycho Drift", move1Damage: 10, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_07.png", name: "Chimerafluff", stage: "Stage 2", hp: 90, retreat: 1, move1Cost: "MN", move1Name: "Mental Tackle", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Chimerasprout"},
+    {id: "Elemental Awakening_08.png", name: "Chimereal", stage: "Stage 3", hp: 140, retreat: 3, move1Cost: "MN", move1Name: "Illusion Mist", move1Damage: 40, move1Effect: null, move2Cost: "MMMN", move2Name: "Vision Beam", move2Damage: 100, move2Effect: "discard2Energy", prevStage: "Chimerafluff"},
+    {id: "Elemental Awakening_12.png", name: "Spiritfoil", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "N", move1Name: "Shade Tackle", move1Damage: 10, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_13.png", name: "Nebulicorn", stage: "Stage 2", hp: 80, retreat: 1, move1Cost: "M", move1Name: "Nebula Howl", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Spiritfoil"},
+    {id: "Elemental Awakening_14.png", name: "Wraithhorn", stage: "Stage 3", hp: 90, retreat: 2, move1Cost: "MM", move1Name: "Wraith Dash", move1Damage: 50, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Nebulicorn"},
+    {id: "Elemental Awakening_15.png", name: "Zephyrquill", stage: "Stage 1", hp: 40, retreat: 1, move1Cost: "W", move1Name: "Gale Flow", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_17.png", name: "Stormbud", stage: "Stage 1", hp: 30, retreat: 1, move1Cost: "W", move1Name: "Budding Wind", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_18.png", name: "Blossomgale", stage: "Stage 2", hp: 80, retreat: 0, move1Cost: "WW", move1Name: "Gale Strike", move1Damage: 40, move1Effect: null, move2Cost: "NNN", move2Name: "Petal Tornado", move2Damage: 90, move2Effect: "recoil20", prevStage: "Stormbud"},
+    {id: "Elemental Awakening_28.png", name: "Baklavaff", stage: "Stage 1", hp: 70, retreat: 1, move1Cost: "NN", move1Name: "Honey Drizzle", move1Damage: 40, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_29.png", name: "Galaktikreme", stage: "Stage 2", hp: 110, retreat: 1, move1Cost: "NN", move1Name: "Pastry Crunch", move1Damage: 50, move1Effect: null, move2Cost: "NNNN", move2Name: "Creamy Confection", move2Damage: 80, move2Effect: "creamyConfection", prevStage: "Baklavaff"},
+    {id: "Elemental Awakening_34.png", name: "Babybara", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "N", move1Name: "Muddy Tackle", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_35.png", name: "Carmibara", stage: "Stage 2", hp: 80, retreat: 1, move1Cost: "N", move1Name: "Crimson Chomp", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Babybara"},
+    {id: "Elemental Awakening_36.png", name: "Reddybara", stage: "Stage 3", hp: 130, retreat: 2, move1Cost: "NN", move1Name: "River Rush", move1Damage: 50, move1Effect: null, move2Cost: "NNNN", move2Name: "Risky Recoil", move2Damage: 130, move2Effect: "riskyRecoil", prevStage: "Carmibara"},
+    {id: "Elemental Awakening_37.png", name: "Serafini", stage: "Stage 1", hp: 30, retreat: 1, move1Cost: "N", move1Name: "Heavenly Retreat", move1Damage: 0, move1Effect: "heavenlyRetreat", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_38.png", name: "Serafina", stage: "Stage 2", hp: 60, retreat: 2, move1Cost: "NN", move1Name: "Serene Light", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Serafini"},
+    {id: "Elemental Awakening_39.png", name: "Alpakina", stage: "Stage 1", hp: 120, retreat: 2, move1Cost: "NNN", move1Name: "Energy Snatch", move1Damage: 40, move1Effect: "energySnatch", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_40.png", name: "Floonleef", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "N", move1Name: "Swirl", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_41.png", name: "Aerobloom", stage: "Stage 2", hp: 80, retreat: 1, move1Cost: "C", move1Name: "Balloon Burst", move1Damage: 40, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Floonleef"},
+    {id: "Elemental Awakening_45.png", name: "Faeclover", stage: "Stage 1", hp: 30, retreat: 1, move1Cost: "C", move1Name: "Leaf Tickle", move1Damage: 10, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_46.png", name: "Sunbloss", stage: "Stage 2", hp: 90, retreat: 1, move1Cost: "CCC", move1Name: "Nature's Clap", move1Damage: 60, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Faeclover"},
+    {id: "Elemental Awakening_47.png", name: "Aloebud", stage: "Stage 1", hp: 50, retreat: 1, move1Cost: "C", move1Name: "Aloe Slash", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_48.png", name: "Aloeflora", stage: "Stage 2", hp: 70, retreat: 1, move1Cost: "C", move1Name: "Vera Tackle", move1Damage: 40, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Aloebud"},
+    {id: "Elemental Awakening_49.png", name: "Aloetide", stage: "Stage 3", hp: 90, retreat: 3, move1Cost: "CCC", move1Name: "Healing Sap", move1Damage: 50, move1Effect: "healingSap", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Aloeflora"},
+    {id: "Elemental Awakening_52.png", name: "Voltveil", stage: "Stage 1", hp: 80, retreat: 2, move1Cost: "NN", move1Name: "Iron Spin", move1Damage: 40, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_53.png", name: "Byteblade", stage: "Stage 1", hp: 90, retreat: 3, move1Cost: "KKK", move1Name: "Shadow Byte", move1Damage: 60, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_59.png", name: "Ponimetal", stage: "Stage 1", hp: 70, retreat: 1, move1Cost: "N", move1Name: "Iron Tail Whip", move1Damage: 10, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_60.png", name: "Equinix", stage: "Stage 2", hp: 90, retreat: 1, move1Cost: "N", move1Name: "Titan Kick", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Ponimetal"},
+    {id: "Elemental Awakening_61.png", name: "Equinox", stage: "Stage 3", hp: 110, retreat: 3, move1Cost: "KNN", move1Name: "Metal Burst", move1Damage: 60, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Equinix"},
+    {id: "Elemental Awakening_63.png", name: "Aeglet", stage: "Stage 1", hp: 60, retreat: 3, move1Cost: "KK", move1Name: "Metalic Buzz", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_64.png", name: "Aegiscelis", stage: "Stage 2", hp: 130, retreat: 3, move1Cost: "KK", move1Name: "Guardian Glow", move1Damage: 50, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Aeglet"},
+    {id: "Elemental Awakening_65.png", name: "Potion", stage: "Item", hp: 0, retreat: 0, move1Cost: null, move1Name: null, move1Damage: null, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_66.png", name: "Card Draw", stage: "Item", hp: 0, retreat: 0, move1Cost: null, move1Name: null, move1Damage: null, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_67.png", name: "Booster", stage: "Item", hp: 0, retreat: 0, move1Cost: null, move1Name: null, move1Damage: null, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null}
 ];
 
 // Deck definitions
@@ -119,7 +119,8 @@ const gameState = {
         hasAttacked: false,
         itemUsedThisTurn: false,
         discardPile: [],
-        selectedDeck: null
+        selectedDeck: null,
+        boosterActive: false
     },
     opponent: {
         deck: [],
@@ -131,7 +132,8 @@ const gameState = {
         hasAttacked: false,
         itemUsedThisTurn: false,
         discardPile: [],
-        selectedDeck: null
+        selectedDeck: null,
+        boosterActive: false
     },
     currentTurn: null, // 'player' or 'opponent'
     turnNumber: 0,
@@ -139,7 +141,6 @@ const gameState = {
     selectedCard: null,
     selectedSlot: null,
     waitingForSelection: false,
-    boosterActive: false,
     setupReady: {player: false, opponent: false}
 };
 
@@ -180,7 +181,7 @@ function drawInitialHands() {
         for (let i = 0; i < 5; i++) {
             const cardId = gameState.player.deck.pop();
             const cardData = getCardData(cardId);
-            gameState.player.hand.push({id: cardId, data: cardData, energy: 0, damage: 0});
+            gameState.player.hand.push({id: cardId, data: cardData, energy: 0, damage: 0, cantRetreat: false});
         }
         validHand = gameState.player.hand.some(card => card.data.stage === "Stage 1");
     }
@@ -191,7 +192,7 @@ function drawInitialHands() {
         for (let i = 0; i < 5; i++) {
             const cardId = gameState.opponent.deck.pop();
             const cardData = getCardData(cardId);
-            gameState.opponent.hand.push({id: cardId, data: cardData, energy: 0, damage: 0});
+            gameState.opponent.hand.push({id: cardId, data: cardData, energy: 0, damage: 0, cantRetreat: false});
         }
         validHand = gameState.opponent.hand.some(card => card.data.stage === "Stage 1");
     }
@@ -837,7 +838,7 @@ function useBoosterCard(handIndex) {
     const usedCard = gameState.player.hand[handIndex];
     gameState.player.discardPile.push(usedCard);
     
-    gameState.boosterActive = true;
+    gameState.player.boosterActive = true;
     
     // Remove card from hand
     gameState.player.hand.splice(handIndex, 1);
@@ -917,26 +918,357 @@ function handleAttack(moveNumber) {
     }
     
     let damage = moveNumber === 1 ? attacker.data.move1Damage : attacker.data.move2Damage;
+    const effect = moveNumber === 1 ? attacker.data.move1Effect : attacker.data.move2Effect;
     
     // Apply booster
-    if (gameState.boosterActive) {
+    if (gameState.player.boosterActive) {
         damage += 20;
-        gameState.boosterActive = false;
+        gameState.player.boosterActive = false;
     }
     
-    // Apply damage
+    // Apply base damage to defender
     defender.damage += damage;
-    
-    // Check if defender is knocked out
-    if (defender.damage >= defender.data.hp) {
-        knockoutCreature('opponent');
-    }
     
     gameState.player.hasAttacked = true;
     renderGame();
     
-    // End turn after attack
-    setTimeout(endTurn, 1000);
+    // Check if defender is knocked out by base damage
+    const defenderKnockedOut = defender.damage >= defender.data.hp;
+    
+    if (defenderKnockedOut) {
+        // Apply effect first (if any), then handle knockout
+        if (effect) {
+            handleMoveEffectBeforeKnockout(effect, attacker, 'player', () => {
+                knockoutCreature('opponent');
+            });
+        } else {
+            // No effect, just handle knockout
+            knockoutCreature('opponent');
+        }
+    } else {
+        // Defender survives, handle all effects normally
+        handleMoveEffect(effect, attacker, defender, 'player');
+    }
+}
+
+// Coin flip utility
+function flipCoin() {
+    return Math.random() < 0.5 ? 'heads' : 'tails';
+}
+
+// Handle attacker-only effects before knockout (when defender is already knocked out by base damage)
+function handleMoveEffectBeforeKnockout(effect, attacker, attackingPlayer, callback) {
+    if (!effect) {
+        callback();
+        return;
+    }
+    
+    const opponent = attackingPlayer === 'player' ? 'opponent' : 'player';
+    
+    switch(effect) {
+        case 'cantRetreat':
+            // Ethereal Snare - defender can't retreat, but defender is knocked out so skip this
+            setTimeout(() => {
+                alert("Defender was knocked out!");
+                callback();
+            }, 500);
+            break;
+            
+        case 'discard2Energy':
+            // Vision Beam - attacker loses 2 energy
+            attacker.energy = Math.max(0, attacker.energy - 2);
+            setTimeout(() => {
+                alert(`${attacker.data.name} discarded 2 energy!`);
+                renderGame();
+                callback();
+            }, 500);
+            break;
+            
+        case 'recoil20':
+            // Petal Tornado - 20 damage to self
+            attacker.damage += 20;
+            setTimeout(() => {
+                alert(`${attacker.data.name} took 20 recoil damage!`);
+                renderGame();
+                // Check if attacker knocked itself out
+                if (attacker.damage >= attacker.data.hp) {
+                    knockoutCreature(attackingPlayer);
+                } else {
+                    callback();
+                }
+            }, 500);
+            break;
+            
+        case 'creamyConfection':
+            // Creamy Confection - coin flip for energy attach or discard
+            setTimeout(() => {
+                const result = flipCoin();
+                if (result === 'heads') {
+                    // Attach energy to random bench
+                    const bench = gameState[attackingPlayer].bench.filter(c => c !== null);
+                    if (bench.length > 0) {
+                        const randomBench = bench[Math.floor(Math.random() * bench.length)];
+                        randomBench.energy++;
+                        alert(`Coin flip: HEADS! Attached 1 energy to ${randomBench.data.name} on bench!`);
+                    } else {
+                        alert(`Coin flip: HEADS! But no bench creatures to attach energy to.`);
+                    }
+                } else {
+                    // Discard 2 energy
+                    attacker.energy = Math.max(0, attacker.energy - 2);
+                    alert(`Coin flip: TAILS! ${attacker.data.name} discarded 2 energy!`);
+                }
+                renderGame();
+                callback();
+            }, 500);
+            break;
+            
+        case 'riskyRecoil':
+            // Risky Recoil - coin flip for random friendly damage
+            setTimeout(() => {
+                const result = flipCoin();
+                if (result === 'tails') {
+                    // Damage random friendly creature
+                    const allFriendly = [gameState[attackingPlayer].active, ...gameState[attackingPlayer].bench].filter(c => c !== null);
+                    if (allFriendly.length > 0) {
+                        const randomTarget = allFriendly[Math.floor(Math.random() * allFriendly.length)];
+                        randomTarget.damage += 50;
+                        alert(`Coin flip: TAILS! ${randomTarget.data.name} took 50 damage!`);
+                        renderGame();
+                        // Check if that creature was knocked out
+                        if (randomTarget.damage >= randomTarget.data.hp) {
+                            if (randomTarget === gameState[attackingPlayer].active) {
+                                knockoutCreature(attackingPlayer);
+                            } else {
+                                // Bench creature knocked out - remove it
+                                const benchIndex = gameState[attackingPlayer].bench.indexOf(randomTarget);
+                                if (benchIndex !== -1) {
+                                    gameState[attackingPlayer].discardPile.push(randomTarget);
+                                    gameState[attackingPlayer].bench[benchIndex] = null;
+                                }
+                                callback();
+                            }
+                        } else {
+                            callback();
+                        }
+                    } else {
+                        alert(`Coin flip: TAILS! But no creatures to damage.`);
+                        callback();
+                    }
+                } else {
+                    alert(`Coin flip: HEADS! No recoil damage.`);
+                    callback();
+                }
+            }, 500);
+            break;
+            
+        case 'heavenlyRetreat':
+            // Heavenly Retreat - free swap (but defender is knocked out, so probably won't happen)
+            const bench = gameState[attackingPlayer].bench.filter(c => c !== null);
+            if (bench.length > 0) {
+                showBenchSelectionModal(attackingPlayer, 'heavenlyRetreat');
+                // Note: endTurn is called in the modal handler
+            } else {
+                alert("No bench creatures to swap with!");
+                callback();
+            }
+            break;
+            
+        case 'energySnatch':
+            // Energy Snatch - coin flip to remove opponent energy
+            setTimeout(() => {
+                const result = flipCoin();
+                if (result === 'heads') {
+                    const allOpponent = [gameState[opponent].active, ...gameState[opponent].bench].filter(c => c !== null && c.energy > 0);
+                    if (allOpponent.length > 0) {
+                        const randomTarget = allOpponent[Math.floor(Math.random() * allOpponent.length)];
+                        randomTarget.energy--;
+                        alert(`Coin flip: HEADS! Removed 1 energy from ${randomTarget.data.name}!`);
+                    } else {
+                        alert(`Coin flip: HEADS! But no opponent creatures with energy.`);
+                    }
+                } else {
+                    alert(`Coin flip: TAILS! No energy removed.`);
+                }
+                renderGame();
+                callback();
+            }, 500);
+            break;
+            
+        case 'healingSap':
+            // Healing Sap - heal attacker 20 HP
+            attacker.damage = Math.max(0, attacker.damage - 20);
+            setTimeout(() => {
+                alert(`${attacker.data.name} healed 20 HP!`);
+                renderGame();
+                callback();
+            }, 500);
+            break;
+            
+        default:
+            callback();
+    }
+}
+
+// Handle move effects
+function handleMoveEffect(effect, attacker, defender, attackingPlayer) {
+    if (!effect) {
+        // No effect, check for defender knockout and end turn
+        checkKnockoutsAndContinue(attackingPlayer);
+        return;
+    }
+    
+    const opponent = attackingPlayer === 'player' ? 'opponent' : 'player';
+    
+    switch(effect) {
+        case 'cantRetreat':
+            // Ethereal Snare - defender can't retreat next turn
+            defender.cantRetreat = true;
+            setTimeout(() => {
+                alert(`${defender.data.name} can't retreat on its next turn!`);
+                checkKnockoutsAndContinue(attackingPlayer);
+            }, 500);
+            break;
+            
+        case 'discard2Energy':
+            // Vision Beam - attacker loses 2 energy
+            attacker.energy = Math.max(0, attacker.energy - 2);
+            setTimeout(() => {
+                alert(`${attacker.data.name} discarded 2 energy!`);
+                checkKnockoutsAndContinue(attackingPlayer);
+            }, 500);
+            break;
+            
+        case 'recoil20':
+            // Petal Tornado - 20 damage to self
+            attacker.damage += 20;
+            setTimeout(() => {
+                alert(`${attacker.data.name} took 20 recoil damage!`);
+                // Check if attacker knocked itself out
+                if (attacker.damage >= attacker.data.hp) {
+                    knockoutCreature(attackingPlayer);
+                } else {
+                    checkKnockoutsAndContinue(attackingPlayer);
+                }
+            }, 500);
+            break;
+            
+        case 'creamyConfection':
+            // Creamy Confection - coin flip for energy attach or discard
+            setTimeout(() => {
+                const result = flipCoin();
+                if (result === 'heads') {
+                    // Attach energy to random bench
+                    const bench = gameState[attackingPlayer].bench.filter(c => c !== null);
+                    if (bench.length > 0) {
+                        const randomBench = bench[Math.floor(Math.random() * bench.length)];
+                        randomBench.energy++;
+                        alert(`Coin flip: HEADS! Attached 1 energy to ${randomBench.data.name} on bench!`);
+                    } else {
+                        alert(`Coin flip: HEADS! But no bench creatures to attach energy to.`);
+                    }
+                } else {
+                    // Discard 2 energy
+                    attacker.energy = Math.max(0, attacker.energy - 2);
+                    alert(`Coin flip: TAILS! ${attacker.data.name} discarded 2 energy!`);
+                }
+                checkKnockoutsAndContinue(attackingPlayer);
+            }, 500);
+            break;
+            
+        case 'riskyRecoil':
+            // Risky Recoil - coin flip for random friendly damage
+            setTimeout(() => {
+                const result = flipCoin();
+                if (result === 'tails') {
+                    // Damage random friendly creature
+                    const allFriendly = [gameState[attackingPlayer].active, ...gameState[attackingPlayer].bench].filter(c => c !== null);
+                    if (allFriendly.length > 0) {
+                        const randomTarget = allFriendly[Math.floor(Math.random() * allFriendly.length)];
+                        randomTarget.damage += 50;
+                        alert(`Coin flip: TAILS! ${randomTarget.data.name} took 50 damage!`);
+                        // Check if that creature was knocked out
+                        if (randomTarget.damage >= randomTarget.data.hp) {
+                            if (randomTarget === gameState[attackingPlayer].active) {
+                                knockoutCreature(attackingPlayer);
+                            } else {
+                                // Bench creature knocked out - remove it
+                                const benchIndex = gameState[attackingPlayer].bench.indexOf(randomTarget);
+                                if (benchIndex !== -1) {
+                                    gameState[attackingPlayer].discardPile.push(randomTarget);
+                                    gameState[attackingPlayer].bench[benchIndex] = null;
+                                }
+                                checkKnockoutsAndContinue(attackingPlayer);
+                            }
+                        } else {
+                            checkKnockoutsAndContinue(attackingPlayer);
+                        }
+                    } else {
+                        alert(`Coin flip: TAILS! But no creatures to damage.`);
+                        checkKnockoutsAndContinue(attackingPlayer);
+                    }
+                } else {
+                    alert(`Coin flip: HEADS! No recoil damage.`);
+                    checkKnockoutsAndContinue(attackingPlayer);
+                }
+            }, 500);
+            break;
+            
+        case 'heavenlyRetreat':
+            // Heavenly Retreat - free swap
+            const bench = gameState[attackingPlayer].bench.filter(c => c !== null);
+            if (bench.length > 0) {
+                showBenchSelectionModal(attackingPlayer, 'heavenlyRetreat');
+            } else {
+                alert("No bench creatures to swap with!");
+                setTimeout(endTurn, 500);
+            }
+            break;
+            
+        case 'energySnatch':
+            // Energy Snatch - coin flip to remove opponent energy
+            setTimeout(() => {
+                const result = flipCoin();
+                if (result === 'heads') {
+                    const allOpponent = [gameState[opponent].active, ...gameState[opponent].bench].filter(c => c !== null && c.energy > 0);
+                    if (allOpponent.length > 0) {
+                        const randomTarget = allOpponent[Math.floor(Math.random() * allOpponent.length)];
+                        randomTarget.energy--;
+                        alert(`Coin flip: HEADS! Removed 1 energy from ${randomTarget.data.name}!`);
+                    } else {
+                        alert(`Coin flip: HEADS! But no opponent creatures with energy.`);
+                    }
+                } else {
+                    alert(`Coin flip: TAILS! No energy removed.`);
+                }
+                checkKnockoutsAndContinue(attackingPlayer);
+            }, 500);
+            break;
+            
+        case 'healingSap':
+            // Healing Sap - heal attacker 20 HP
+            attacker.damage = Math.max(0, attacker.damage - 20);
+            setTimeout(() => {
+                alert(`${attacker.data.name} healed 20 HP!`);
+                checkKnockoutsAndContinue(attackingPlayer);
+            }, 500);
+            break;
+            
+        default:
+            setTimeout(endTurn, 1000);
+    }
+}
+
+function checkKnockoutsAndContinue(attackingPlayer) {
+    const defender = attackingPlayer === 'player' ? gameState.opponent.active : gameState.player.active;
+    
+    // Check if defender is knocked out
+    if (defender && defender.damage >= defender.data.hp) {
+        const defenderPlayer = attackingPlayer === 'player' ? 'opponent' : 'player';
+        knockoutCreature(defenderPlayer);
+    } else {
+        setTimeout(endTurn, 1000);
+    }
 }
 
 // Retreat system
@@ -965,7 +1297,13 @@ function showBenchSelectionModal(player, action) {
     const title = document.getElementById('modal-title');
     const options = document.getElementById('modal-options');
     
-    title.textContent = action === 'retreat' ? 'Select a creature to switch with' : 'Select a new active creature';
+    if (action === 'retreat') {
+        title.textContent = 'Select a creature to switch with';
+    } else if (action === 'heavenlyRetreat') {
+        title.textContent = 'Select a creature to swap with (no cost)';
+    } else {
+        title.textContent = 'Select a new active creature';
+    }
     options.innerHTML = '';
     
     gameState[player].bench.forEach((card, index) => {
@@ -981,8 +1319,13 @@ function showBenchSelectionModal(player, action) {
             cardDiv.addEventListener('click', () => {
                 if (action === 'retreat') {
                     performRetreat(player, index);
+                } else if (action === 'heavenlyRetreat') {
+                    performHeavenlyRetreat(player, index);
                 } else {
+                    // Knockout - selecting new active
                     selectNewActiveCreature(player, index);
+                    // End turn after knockout replacement
+                    setTimeout(endTurn, 1000);
                 }
                 modal.style.display = 'none';
             });
@@ -992,6 +1335,23 @@ function showBenchSelectionModal(player, action) {
     });
     
     modal.style.display = 'flex';
+}
+
+function performHeavenlyRetreat(player, benchIndex) {
+    const activeCard = gameState[player].active;
+    const benchCard = gameState[player].bench[benchIndex];
+    
+    // Swap without discarding energy (free retreat)
+    gameState[player].active = benchCard;
+    gameState[player].bench[benchIndex] = activeCard;
+    
+    // Mark as attacked to end turn
+    gameState[player].hasAttacked = true;
+    
+    renderGame();
+    
+    // Check for knockouts and continue
+    setTimeout(endTurn, 1000);
 }
 
 function performRetreat(player, benchIndex) {
@@ -1073,6 +1433,8 @@ function aiSelectNewActive() {
     
     if (bestIndex !== -1) {
         selectNewActiveCreature('opponent', bestIndex);
+        // End turn after AI selects new active from knockout
+        setTimeout(endTurn, 1000);
     }
 }
 
@@ -1101,6 +1463,11 @@ function handleDone() {
 }
 
 function endTurn() {
+    // Reset cantRetreat flags for current player's active creature (effect lasts one turn)
+    if (gameState[gameState.currentTurn].active) {
+        gameState[gameState.currentTurn].active.cantRetreat = false;
+    }
+    
     // Switch turns
     gameState.currentTurn = gameState.currentTurn === 'player' ? 'opponent' : 'player';
     
@@ -1117,10 +1484,11 @@ function endTurn() {
     gameState.player.energyAttachedThisTurn = false;
     gameState.player.hasAttacked = false;
     gameState.player.itemUsedThisTurn = false;
+    gameState.player.boosterActive = false;
     gameState.opponent.energyAttachedThisTurn = false;
     gameState.opponent.hasAttacked = false;
     gameState.opponent.itemUsedThisTurn = false;
-    gameState.boosterActive = false;
+    gameState.opponent.boosterActive = false;
     
     // Clear turn tracker
     turnTracker.playedThisTurn.clear();
@@ -1199,7 +1567,8 @@ function resetAndStartNewGame() {
         hasAttacked: false,
         itemUsedThisTurn: false,
         discardPile: [],
-        selectedDeck: null
+        selectedDeck: null,
+        boosterActive: false
     };
     gameState.opponent = {
         deck: [],
@@ -1211,7 +1580,8 @@ function resetAndStartNewGame() {
         hasAttacked: false,
         itemUsedThisTurn: false,
         discardPile: [],
-        selectedDeck: null
+        selectedDeck: null,
+        boosterActive: false
     };
     gameState.currentTurn = null;
     gameState.turnNumber = 0;
@@ -1219,7 +1589,6 @@ function resetAndStartNewGame() {
     gameState.selectedCard = null;
     gameState.selectedSlot = null;
     gameState.waitingForSelection = false;
-    gameState.boosterActive = false;
     gameState.setupReady = {player: false, opponent: false};
     
     turnTracker.playedThisTurn.clear();
@@ -1369,6 +1738,22 @@ function aiUseItems(callback) {
         }
     }
     
+    // Use Booster if available (prioritize before Card Draw)
+    const boosterIndex = gameState.opponent.hand.findIndex(card => card.data.name === "Booster");
+    if (boosterIndex !== -1) {
+        const booster = gameState.opponent.hand[boosterIndex];
+        flashItemCard(booster.id, () => {
+            if (gameState.phase === 'gameOver') return;
+            gameState.opponent.boosterActive = true;
+            gameState.opponent.discardPile.push(booster);
+            gameState.opponent.hand.splice(boosterIndex, 1);
+            gameState.opponent.itemUsedThisTurn = true;
+            renderGame();
+            callback();
+        });
+        return;
+    }
+    
     // Use Card Draw if available
     const cardDrawIndex = gameState.opponent.hand.findIndex(card => card.data.name === "Card Draw");
     if (cardDrawIndex !== -1) {
@@ -1445,26 +1830,49 @@ function aiAttack() {
     
     // Choose best move (move with highest damage that AI can afford)
     let damage = 0;
+    let effect = null;
+    let moveNumber = 1;
     let canUseMove2 = attacker.data.move2Cost && attacker.energy >= attacker.data.move2Cost.length;
     
     if (canUseMove2 && attacker.data.move2Damage > attacker.data.move1Damage) {
         damage = attacker.data.move2Damage;
+        effect = attacker.data.move2Effect;
+        moveNumber = 2;
     } else {
         damage = attacker.data.move1Damage;
+        effect = attacker.data.move1Effect;
+        moveNumber = 1;
     }
     
+    // Apply opponent's booster if active
+    if (gameState.opponent.boosterActive) {
+        damage += 20;
+        gameState.opponent.boosterActive = false;
+    }
+    
+    // Apply damage to defender
     defender.damage += damage;
-    
-    // Check if defender is knocked out
-    if (defender.damage >= defender.data.hp) {
-        knockoutCreature('player');
-    }
     
     gameState.opponent.hasAttacked = true;
     renderGame();
     
-    // End turn after attack
-    setTimeout(endTurn, 1500);
+    // Check if defender is knocked out by base damage
+    const defenderKnockedOut = defender.damage >= defender.data.hp;
+    
+    if (defenderKnockedOut) {
+        // Apply effect first (if any), then handle knockout
+        if (effect) {
+            handleMoveEffectBeforeKnockout(effect, attacker, 'opponent', () => {
+                knockoutCreature('player');
+            });
+        } else {
+            // No effect, just handle knockout
+            knockoutCreature('player');
+        }
+    } else {
+        // Defender survives, handle all effects normally
+        handleMoveEffect(effect, attacker, defender, 'opponent');
+    }
 }
 
 // Update action buttons
@@ -1531,12 +1939,18 @@ function updateActionButtons() {
         }
         
         const canRetreat = gameState.player.active &&
+                          !gameState.player.active.cantRetreat &&
                           gameState.player.active.energy >= gameState.player.active.data.retreat &&
                           !gameState.player.hasAttacked &&
                           gameState.player.bench.some(card => card !== null);
         if (canRetreat) {
             retreatBtn.style.display = 'inline-block';
             retreatBtn.textContent = `Retreat (${gameState.player.active.data.retreat})`;
+            retreatBtn.disabled = false;
+        } else if (gameState.player.active && gameState.player.active.cantRetreat && !gameState.player.hasAttacked) {
+            retreatBtn.style.display = 'inline-block';
+            retreatBtn.textContent = `Retreat (Can't Retreat!)`;
+            retreatBtn.disabled = true;
         } else {
             retreatBtn.style.display = 'none';
         }
