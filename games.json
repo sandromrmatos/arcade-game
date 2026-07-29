@@ -17,6 +17,9 @@
     "Hammer the Ant",
     "PacMan",
     "Puzzle",
-    "Domino"
+    "Domino",
+    "Maze",
+    "Connect Four",
+    "2048"
   ]
 }

@@ -1,10 +1,10 @@
 # HTML5 Arcade Game Collection
 
-A comprehensive collection of 17 classic arcade games built with vanilla HTML5, CSS, and JavaScript, featuring a unified leaderboard system powered by Firebase Firestore.
+A comprehensive collection of 18 classic arcade games built with vanilla HTML5, CSS, and JavaScript, featuring a unified leaderboard system powered by Firebase Firestore, bilingual support (English/Portuguese), and an information system with detailed game guides.
 
 ## 🎮 Overview
 
-This is a personal/family arcade game collection with a centralized launcher interface. All games run in the browser, track high scores, and sync across devices via Firebase.
+This is a personal/family arcade game collection with a centralized launcher interface. All games run in the browser, track high scores, and sync across devices via Firebase. The interface supports English and Portuguese languages and includes detailed game instructions accessible through the Info menu.
 
 ## 📁 Project Structure
 
@@ -33,18 +33,20 @@ Games/
 | Tetris | Easy, Hard | Score | Higher is better |
 | Candy Crush | Single | Score | Higher is better |
 | Tic Tac Toe | Single | - | No leaderboard |
-| Puzzle Bobble | Single | - | No leaderboard |
+| Puzzle Bobble | Easy, Hard | Score | Higher is better |
 | Cross the Bridge | Short (3×6), Long (3×12) | Time Left | Higher is better |
 | Simon Says | Single | - | No leaderboard |
 | Snakes and Ladders | Single | - | No leaderboard |
 | Wordle | Single | - | No leaderboard |
-| Minefield | Single | - | No leaderboard |
+| Minefield | Easy (5×5), Medium (6×6), Hard (8×8) | Best Time | Lower is better |
 | Arkanoid | Single | - | No leaderboard |
 | Word Search | Single | Best Time | Lower is better |
 | Mahjong Solitaire | Easy, Hard | Best Time | Lower is better |
 | Hammer the Ant | Easy, Hard | Score | Higher is better |
 | PacMan | Single | - | No leaderboard |
 | Puzzle | Easy (4×4), Medium (6×6), Hard (7×7) | Best Time | Lower is better |
+| Domino | Single | Score | Higher is better |
+| Maze | Easy (11×11), Medium (17×17), Hard (23×23) | Best Time | Lower is better |
 
 ## 🏆 Leaderboard System
 
@@ -116,48 +118,113 @@ service cloud.firestore {
 
 ### Main Launcher (`index.html`)
 - Grid of game icons (clickable buttons)
-- Top banner with Home, Leaderboard, Audio toggle, Keyboard toggle
+- Top banner with:
+  - **Home** button
+  - **Info** button (game descriptions, rules, and controls)
+  - **Leaderboard** button
+  - **Language selector** (EN/PT toggle)
+  - **Collapse/Expand** button (▲/▼ to minimize banner)
+  - Music player controls
 - Name input modal (shown on first visit)
 - Iframe container for loading games
 - Leaderboard overlay section
+- Info overlay section with game guides
+
+### Info System
+- **Game Descriptions**: Detailed explanations of each game
+- **Game Modes**: Lists all difficulty options with specifics
+- **Scoring System**: Explains how to win and what metrics matter
+- **Controls**: Instructions for keyboard, mouse, and mobile interaction
+- **Bilingual**: All info available in English and Portuguese
+- Modal overlay with styled cards for each game
+- Accessible via top banner "Info" button
+
+### Language System
+- **English/Portuguese Support**: Full bilingual interface
+- Language selector in top banner (dropdown)
+- Translations for:
+  - All menu items and buttons
+  - Game names
+  - Leaderboard labels and headers
+  - Info descriptions and instructions
+  - In-game messages and alerts
+  - Error messages
+- Stored in `localStorage.arcadeLanguage`
+- Games receive language updates via iframe `postMessage`
+- Each game has internal `translations` object with EN/PT text
+
+### Collapsible Banner
+- **Collapse button** (▲) in top banner next to language selector
+- Clicking collapses banner to minimal height showing only expand button (▼)
+- Expands back to full banner with all controls
+- Improves gameplay visibility on smaller screens
+- State maintained during session
 
 ### Leaderboard Interface
 - Accessible via top banner button
 - Game selection grid → Individual game leaderboards
 - Close button (×) to dismiss
-- Refresh button on each game leaderboard
+- Refresh button (🔄) on each game leaderboard
 - Side-by-side tables for multi-difficulty games
 - Top 10 scores per mode
+- Bilingual labels and headers
 
 ### Audio System
-- Background music toggle in top banner
+- Background music player in top banner
+- Controls: Play/Pause (▶️/⏸), Previous (⏮), Next (⏭)
+- Current track name display
 - Tracks stored in `audio/` folder
-- Playlist includes: Haunted Corridor, Hidden Glade, Moss Path, etc.
+- Playlist includes: Haunted Corridor, Hidden Glade, Moss Path, Pocket Kingdom, Poisonous Lavender, Sunlight Sprout, Voltage Collapse
+- Auto-advances to next track on completion
+- Bilingual "No track playing" message
 
 ## 🔧 Core Functions
 
 ### Main Script (`script.js`)
+
+**Language System:**
+- `t(key)`: Translation function - returns text in current language
+- `updateLanguage()`: Updates all UI text when language changes
+- `translations` object: Contains EN/PT text for all interface elements
+- `gameDescriptions` / `gameDescriptionsPT`: Game info in both languages
+- Language stored in `localStorage.arcadeLanguage`
+- Sends language change messages to iframes via `postMessage`
 
 **Firebase Integration:**
 - `initFirebase()`: Initialize Firestore connection
 - `saveGameScore(gameName, scoreData)`: Save/update scores
 - `showNewBestScore(gameName, scoreData)`: Display achievement popup
 
+**Info System:**
+- `showInfo()`: Display game selection grid for info
+- `showGameInfo(gameName)`: Show detailed modal with game description, modes, scoring, and controls
+- Modal includes:
+  - 📖 How to Play
+  - 🎮 Game Modes
+  - 🏆 Scoring
+  - 🕹️ Controls
+
 **Leaderboard Display:**
 - `showLeaderboard()`: Show game selection grid
 - `showGameLeaderboard(gameName)`: Display specific game's leaderboard
-- `showScoreBasedLeaderboard()`: For Tetris, Hammer the Ant
-- `showTimeBasedDifficultyLeaderboard()`: For Mahjong Solitaire
+- `showScoreBasedLeaderboard()`: For Tetris, Hammer the Ant, Puzzle Bobble
+- `showTimeBasedDifficultyLeaderboard()`: For Mahjong Solitaire, Minefield, Maze
 - `showLengthBasedDifficultyLeaderboard()`: For Snake
 - `showTimeLeftDifficultyLeaderboard()`: For Cross the Bridge
 - `showTurnsBasedDifficultyLeaderboard()`: For Memory
 - `showPuzzleLeaderboard()`: For Puzzle (3 modes)
 - `showCandyCrushLeaderboard()`: For Candy Crush
+- `showDominoLeaderboard()`: For Domino
 - `closeLeaderboard()`: Hide leaderboard overlay
 
 **Player Management:**
 - `getPlayerName()`: Retrieve or prompt for player name
-- Stored in `localStorage.playerName`
+- Stored in `localStorage.arcadePlayerName`
+
+**UI Controls:**
+- Collapse/expand banner functionality
+- Language selector event listener
+- Music player controls
 
 ## 🎮 Game Implementation Pattern
 
@@ -174,7 +241,14 @@ Each game folder contains:
    - Win/lose conditions
    - Score calculation
 
-3. **Leaderboard Integration**
+3. **Bilingual Support**
+   - `translations` object with `en` and `pt` keys
+   - `t(key)` function to get text in current language
+   - `updateLanguage()` function to refresh UI text
+   - `getParentLanguage()` to sync with main window
+   - Listens for `postMessage` language change events
+
+4. **Leaderboard Integration**
    ```javascript
    if (window.parent && window.parent.saveGameScore) {
      window.parent.saveGameScore("GameName", {
@@ -190,9 +264,34 @@ Each game folder contains:
 
 ## 🎯 Key Features
 
+### Bilingual Interface (EN/PT)
+- Complete English and Portuguese support
+- Language selector in top banner
+- All UI elements, game names, messages translated
+- Game instructions and info available in both languages
+- Individual games inherit language from main launcher
+- Automatic text updates when switching languages
+
+### Info System
+- Detailed game guides accessible via Info button
+- Each game has comprehensive documentation:
+  - How to play
+  - Game modes and grid sizes
+  - Scoring system explanation
+  - Control instructions (keyboard, mouse, touch)
+- Modal overlay with clean, styled presentation
+- Available in both English and Portuguese
+
+### Collapsible Menu Banner
+- Minimize/maximize top menu bar
+- Improves screen space for gameplay
+- Toggle button (▲/▼) next to language selector
+- Smooth collapse/expand animation
+
 ### Click & Drag Support
 - **Candy Crush**: Both drag-and-drop and click-to-select gameplay
 - **Puzzle**: Click piece, then click board cell to place
+- **Maze**: Click adjacent cells to move (mobile-friendly)
 
 ### Adaptive Grids
 - Games automatically adjust grid size based on difficulty
@@ -203,6 +302,7 @@ Each game folder contains:
 - Correct placements show green outline and animation
 - Hover effects on all interactive elements
 - Smooth transitions and animations
+- Highlighted clickable cells in Maze game
 
 ## 📊 Browser Requirements
 
@@ -223,8 +323,18 @@ Currently runs as static HTML files. Can be deployed to:
 
 ## 🔄 Recent Updates
 
+### Latest Features
+- **Bilingual Support**: Full English/Portuguese translation system
+- **Info System**: Comprehensive game guides with instructions, modes, and controls
+- **Collapsible Banner**: Minimize top menu for better gameplay visibility
+- **Maze Game**: New pathfinding game with 3 difficulty levels (11×11, 17×17, 23×23)
+- **Enhanced Music Player**: Full track controls with play/pause, previous/next
+
+### Previous Updates
 - Added difficulty modes to Snake, Cross the Bridge, Memory
 - Implemented Puzzle game with 3 difficulty levels
+- Added Minefield with 3 difficulty levels (Easy, Medium, Hard)
+- Added Domino game with score tracking
 - Fixed Tetris to prevent mid-game difficulty switching
 - Added click functionality to Candy Crush
 - Created SVG icons for all games
@@ -239,6 +349,10 @@ Currently runs as static HTML files. Can be deployed to:
 4. **Firebase Timestamps**: Use `.toDate()` to convert Firestore timestamps
 5. **Score Comparison**: Different games use different "better" logic (higher vs lower)
 6. **No Backend**: All logic runs client-side; Firebase is only for data persistence
+7. **Language System**: Main window stores language in localStorage, games sync via postMessage
+8. **Translation Keys**: Use consistent key names across `translations`, `gameDescriptions`, and game-specific objects
+9. **Variable Initialization**: Declare all game variables before calling `updateLanguage()` to avoid temporal dead zone errors
+10. **Maze Generation**: Start carving from (0,0) and ensure adjacent paths to start/finish positions
 
 ## 🎨 Styling Conventions
 

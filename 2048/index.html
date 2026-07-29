@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>2048</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2 id="title">2048</h2>
+
+<div id="menuOverlay">
+    <div class="menu-content">
+        <h2 id="menuTitle">2048</h2>
+        <p id="menuSubtitle">Select Grid Size:</p>
+        <button id="btn4x4">4×4 Grid</button>
+        <button id="btn5x5">5×5 Grid</button>
+    </div>
+</div>
+
+<div id="container">
+    <div id="gameInfo">
+        <div id="scoreContainer">
+            <div class="score-box">
+                <div class="score-label" id="scoreLabel">SCORE</div>
+                <div id="score">0</div>
+            </div>
+            <div class="score-box">
+                <div class="score-label" id="bestLabel">BEST</div>
+                <div id="bestScore">0</div>
+            </div>
+        </div>
+        <div id="gridSizeInfo"></div>
+    </div>
+    
+    <div id="boardContainer">
+        <div id="board"></div>
+        <div id="gameOverlay" class="hidden">
+            <div id="gameOverContent">
+                <div id="gameOverMessage"></div>
+                <div id="finalScore"></div>
+                <button id="tryAgainBtn">Try Again</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="controls">
+        <div id="instructions"></div>
+        <button id="newGameBtn">New Game</button>
+    </div>
+    
+    <!-- Mobile Touch Controls -->
+    <div id="mobileControls">
+        <div class="control-row">
+            <button class="control-btn" id="btnUp">↑</button>
+        </div>
+        <div class="control-row">
+            <button class="control-btn" id="btnLeft">←</button>
+            <button class="control-btn" id="btnDown">↓</button>
+            <button class="control-btn" id="btnRight">→</button>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

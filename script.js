@@ -71,7 +71,10 @@ const translations = {
     "Hammer the Ant": "Hammer the Ant",
     "PacMan": "Pac-Man",
     "Puzzle": "Puzzle",
-    "Domino": "Domino"
+    "Domino": "Domino",
+    "Maze": "Maze",
+    "Connect Four": "Connect Four",
+    "2048": "2048"
   },
   pt: {
     title: "Jogos Arcade por Sandro",
@@ -130,19 +133,18 @@ const translations = {
     "Hammer the Ant": "Esmagar a Formiga",
     "PacMan": "Pac-Man",
     "Puzzle": "Puzzle",
-    "Domino": "Dominó"
+    "Domino": "Dominó",
+    "Maze": "Labirinto",
+    "Connect Four": "Quatro em Linha",
+    "2048": "2048"
   }
 };
 
 function t(key) {
-  const result = translations[currentLanguage][key] || key;
-  console.log(`t("${key}") with lang="${currentLanguage}" => "${result}"`);
-  return result;
+  return translations[currentLanguage][key] || key;
 }
 
 function updateLanguage() {
-  console.log("updateLanguage() called with currentLanguage =", currentLanguage);
-  
   // Update page title
   document.querySelector(".banner h1").textContent = t("title");
   
@@ -537,6 +539,27 @@ const gameDescriptions = {
     modes: "Single mode - Player vs Computer",
     scoring: "When you win, you score points equal to all dots on opponent's remaining tiles. Highest cumulative score wins!",
     controls: "Click your tile to select it, then click a yellow placeholder to play it. Click 'Draw' if you have no valid moves."
+  },
+  "Maze": {
+    title: "Maze",
+    description: "Navigate through a maze from start to finish as quickly as possible!",
+    modes: "Easy (11×11): Small maze\nMedium (17×17): Bigger maze\nHard (23×23): Large maze",
+    scoring: "Fastest time to reach the finish wins. Lower time is better!",
+    controls: "Use arrow keys to move or click on adjacent cells to move the paw. Find your way from ▶️ to 🏁!"
+  },
+  "Connect Four": {
+    title: "Connect Four",
+    description: "Drop colored discs into a vertical grid. Get four in a row horizontally, vertically, or diagonally to win! Play against an AI opponent.",
+    modes: "Easy: AI makes simpler moves\nHard: AI uses strategic blocking and winning tactics",
+    scoring: "Win in the fewest turns (pieces played) possible! Lower number of turns is better. Most efficient wins are ranked highest!",
+    controls: "Click on any column to drop your disc (red). The disc falls to the lowest available position. Try to connect four before the AI (yellow) does!"
+  },
+  "2048": {
+    title: "2048",
+    description: "Slide numbered tiles on a grid to combine them and create a tile with the number 2048! When two tiles with the same number touch, they merge into one.",
+    modes: "4×4 Grid: Classic mode with standard difficulty\n5×5 Grid: Larger grid with more space and strategy",
+    scoring: "Highest score wins! Points are earned by merging tiles. Higher value tiles give more points. Best score is saved per grid size!",
+    controls: "Use arrow keys (↑ ↓ ← →) to slide all tiles in that direction. On mobile, swipe in the direction you want to move. Tiles slide until they hit another tile or the edge!"
   }
 };
 
@@ -666,6 +689,27 @@ const gameDescriptionsPT = {
     modes: "Modo único - Jogador vs Computador",
     scoring: "Quando ganha, marca pontos iguais a todos os pontos nas peças restantes do adversário. Pontuação cumulativa mais alta ganha!",
     controls: "Clique na sua peça para a selecionar, depois clique num espaço amarelo para a jogar. Clique em 'Comprar' se não tiver jogadas válidas."
+  },
+  "Maze": {
+    title: "Labirinto",
+    description: "Navegue por um labirinto do início ao fim o mais rápido possível!",
+    modes: "Fácil (11×11): Labirinto pequeno\nMédio (17×17): Labirinto maior\nDifícil (23×23): Labirinto grande",
+    scoring: "Tempo mais rápido para chegar ao fim ganha. Tempo mais baixo é melhor!",
+    controls: "Use as setas para mover ou clique nas células adjacentes para mover a pata. Encontre o caminho de ▶️ até 🏁!"
+  },
+  "Connect Four": {
+    title: "Quatro em Linha",
+    description: "Deixe cair discos coloridos numa grelha vertical. Consiga quatro seguidos horizontal, vertical ou diagonalmente para ganhar! Jogue contra uma IA.",
+    modes: "Fácil: IA faz movimentos mais simples\nDifícil: IA usa táticas estratégicas de bloqueio e vitória",
+    scoring: "Ganhe no menor número de jogadas (peças jogadas) possível! Menor número de jogadas é melhor. Vitórias mais eficientes são classificadas no topo!",
+    controls: "Clique em qualquer coluna para deixar cair o seu disco (vermelho). O disco cai para a posição mais baixa disponível. Tente conectar quatro antes da IA (amarelo)!"
+  },
+  "2048": {
+    title: "2048",
+    description: "Deslize blocos numerados numa grelha para os combinar e criar um bloco com o número 2048! Quando dois blocos com o mesmo número se tocam, fundem-se num só.",
+    modes: "Grelha 4×4: Modo clássico com dificuldade padrão\nGrelha 5×5: Grelha maior com mais espaço e estratégia",
+    scoring: "Maior pontuação ganha! Pontos são ganhos ao fundir blocos. Blocos de maior valor dão mais pontos. Melhor pontuação é guardada por tamanho de grelha!",
+    controls: "Use as setas (↑ ↓ ← →) para deslizar todos os blocos nessa direção. No telemóvel, deslize na direção que quer mover. Os blocos deslizam até bater noutro bloco ou na borda!"
   }
 };
 
@@ -936,6 +980,24 @@ function showGameLeaderboard(gameName) {
     return;
   }
   
+  // Special handling for Maze (bestTime - lower is better, with difficulty modes)
+  if (gameName === "Maze") {
+    showTimeBasedDifficultyLeaderboard(db, content, gameName);
+    return;
+  }
+  
+  // Special handling for Connect Four (turns - lower is better, with difficulty modes)
+  if (gameName === "Connect Four") {
+    showConnectFourLeaderboard(db, content, gameName);
+    return;
+  }
+  
+  // Special handling for 2048 (score - higher is better, with grid size modes)
+  if (gameName === "2048") {
+    show2048Leaderboard(db, content, gameName);
+    return;
+  }
+  
   // Get all games, then filter and sort client-side (no index needed)
   // Note: This fetches all games, which is fine for low volumes
   db.collection("games")
@@ -1094,8 +1156,8 @@ function showTimeBasedDifficultyLeaderboard(db, content, gameName) {
         .sort((a, b) => a.bestTime - b.bestTime)
         .slice(0, 10);
       
-      // Check if game has 3 difficulties (like Minefield) or 2 (like Mahjong)
-      const hasThreeDifficulties = mediumDocs.length > 0 || gameName === "Minefield";
+      // Check if game has 3 difficulties (like Minefield and Maze) or 2 (like Mahjong)
+      const hasThreeDifficulties = mediumDocs.length > 0 || gameName === "Minefield" || gameName === "Maze";
       
       let html = '<div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">';
       
@@ -1534,6 +1596,139 @@ function showDominoLeaderboard(db, content, gameName) {
       });
       
       html += "</tbody></table>";
+      content.innerHTML = html;
+    })
+    .catch(err => {
+      content.textContent = t("errorLoading") + " " + err.message;
+      console.error("Leaderboard error:", err);
+    });
+}
+
+function showConnectFourLeaderboard(db, content, gameName) {
+  db.collection("games")
+    .limit(200)
+    .get()
+    .then(snapshot => {
+      const allDocs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+      // Filter for game and separate by difficulty
+      // Only include entries that have a valid 'turns' field
+      const easyDocs = allDocs
+        .filter(doc => doc.gameName === gameName && doc.difficulty === "easy" && doc.turns !== undefined)
+        .sort((a, b) => a.turns - b.turns)
+        .slice(0, 10);
+      
+      const hardDocs = allDocs
+        .filter(doc => doc.gameName === gameName && doc.difficulty === "hard" && doc.turns !== undefined)
+        .sort((a, b) => a.turns - b.turns)
+        .slice(0, 10);
+      
+      let html = '<div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">';
+      
+      // Easy mode table
+      html += `<div style="flex: 1; min-width: 300px;"><h3>${t("easyMode")}</h3>`;
+      if (easyDocs.length === 0) {
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Turns</th><th>Date</th></tr></thead><tbody>';
+        easyDocs.forEach((doc, i) => {
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${doc.turns || 'N/A'}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div>';
+      
+      // Hard mode table
+      html += `<div style="flex: 1; min-width: 300px;"><h3>${t("hardMode")}</h3>`;
+      if (hardDocs.length === 0) {
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Turns</th><th>Date</th></tr></thead><tbody>';
+        hardDocs.forEach((doc, i) => {
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${doc.turns || 'N/A'}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div></div>';
+      
+      content.innerHTML = html;
+    })
+    .catch(err => {
+      content.textContent = t("errorLoading") + " " + err.message;
+      console.error("Leaderboard error:", err);
+    });
+}
+
+function show2048Leaderboard(db, content, gameName) {
+  db.collection("games")
+    .limit(200)
+    .get()
+    .then(snapshot => {
+      const allDocs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+      // Filter for game and separate by grid size
+      const grid4x4Docs = allDocs
+        .filter(doc => doc.gameName === gameName && doc.difficulty === "4x4")
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 10);
+      
+      const grid5x5Docs = allDocs
+        .filter(doc => doc.gameName === gameName && doc.difficulty === "5x5")
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 10);
+      
+      let html = '<div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">';
+      
+      // 4x4 grid table
+      html += `<div style="flex: 1; min-width: 300px;"><h3>4×4 Grid</h3>`;
+      if (grid4x4Docs.length === 0) {
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Score</th><th>Date</th></tr></thead><tbody>';
+        grid4x4Docs.forEach((doc, i) => {
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${doc.score}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div>';
+      
+      // 5x5 grid table
+      html += `<div style="flex: 1; min-width: 300px;"><h3>5×5 Grid</h3>`;
+      if (grid5x5Docs.length === 0) {
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Score</th><th>Date</th></tr></thead><tbody>';
+        grid5x5Docs.forEach((doc, i) => {
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${doc.score}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div></div>';
+      
       content.innerHTML = html;
     })
     .catch(err => {
