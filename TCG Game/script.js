@@ -646,6 +646,14 @@ function startGame() {
 
 // Handle playing cards during game
 function handlePlayCardClick(card, handIndex) {
+    // Cancel any previous selections when clicking a new card
+    if (gameState.selectedCard) {
+        // Clear highlights from previous selection
+        document.querySelectorAll('.can-select').forEach(s => s.classList.remove('can-select'));
+        document.querySelectorAll('.can-place').forEach(s => s.classList.remove('can-place'));
+        gameState.selectedCard = null;
+    }
+    
     if (card.data.stage === "Item") {
         // Check if item already used this turn
         if (gameState.player.itemUsedThisTurn) {
@@ -920,11 +928,16 @@ function handleAttack(moveNumber) {
     let damage = moveNumber === 1 ? attacker.data.move1Damage : attacker.data.move2Damage;
     const effect = moveNumber === 1 ? attacker.data.move1Effect : attacker.data.move2Effect;
     
+    const moveName = moveNumber === 1 ? attacker.data.move1Name : attacker.data.move2Name;
+    console.log("Player using move", moveNumber + ":", moveName, "with effect:", effect);
+    
     // Apply booster
     if (gameState.player.boosterActive) {
         damage += 20;
         gameState.player.boosterActive = false;
     }
+    
+    console.log("Total damage:", damage, "Defender HP:", defender.data.hp, "Current damage:", defender.damage);
     
     // Apply base damage to defender
     defender.damage += damage;
@@ -935,9 +948,12 @@ function handleAttack(moveNumber) {
     // Check if defender is knocked out by base damage
     const defenderKnockedOut = defender.damage >= defender.data.hp;
     
+    console.log("Defender knocked out?", defenderKnockedOut, "Effect:", effect);
+    
     if (defenderKnockedOut) {
         // Apply effect first (if any), then handle knockout
         if (effect) {
+            console.log("Calling handleMoveEffectBeforeKnockout with effect:", effect);
             handleMoveEffectBeforeKnockout(effect, attacker, 'player', () => {
                 knockoutCreature('opponent');
             });
@@ -947,6 +963,7 @@ function handleAttack(moveNumber) {
         }
     } else {
         // Defender survives, handle all effects normally
+        console.log("Calling handleMoveEffect with effect:", effect);
         handleMoveEffect(effect, attacker, defender, 'player');
     }
 }
@@ -958,6 +975,8 @@ function flipCoin() {
 
 // Handle attacker-only effects before knockout (when defender is already knocked out by base damage)
 function handleMoveEffectBeforeKnockout(effect, attacker, attackingPlayer, callback) {
+    console.log("handleMoveEffectBeforeKnockout called with effect:", effect);
+    
     if (!effect) {
         callback();
         return;
@@ -992,8 +1011,15 @@ function handleMoveEffectBeforeKnockout(effect, attacker, attackingPlayer, callb
                 renderGame();
                 // Check if attacker knocked itself out
                 if (attacker.damage >= attacker.data.hp) {
-                    knockoutCreature(attackingPlayer);
+                    // Both attacker and defender are knocked out
+                    // Handle defender knockout first, then attacker
+                    callback(); // This knocks out the defender
+                    // Then knock out the attacker after a delay
+                    setTimeout(() => {
+                        knockoutCreature(attackingPlayer);
+                    }, 1000);
                 } else {
+                    // Only defender knocked out, attacker survives
                     callback();
                 }
             }, 500);
@@ -1038,7 +1064,13 @@ function handleMoveEffectBeforeKnockout(effect, attacker, attackingPlayer, callb
                         // Check if that creature was knocked out
                         if (randomTarget.damage >= randomTarget.data.hp) {
                             if (randomTarget === gameState[attackingPlayer].active) {
-                                knockoutCreature(attackingPlayer);
+                                // Both attacker and defender are knocked out
+                                // Handle defender knockout first, then attacker
+                                callback(); // This knocks out the defender
+                                // Then knock out the attacker after a delay
+                                setTimeout(() => {
+                                    knockoutCreature(attackingPlayer);
+                                }, 1000);
                             } else {
                                 // Bench creature knocked out - remove it
                                 const benchIndex = gameState[attackingPlayer].bench.indexOf(randomTarget);
@@ -1112,6 +1144,8 @@ function handleMoveEffectBeforeKnockout(effect, attacker, attackingPlayer, callb
 
 // Handle move effects
 function handleMoveEffect(effect, attacker, defender, attackingPlayer) {
+    console.log("handleMoveEffect called with effect:", effect);
+    
     if (!effect) {
         // No effect, check for defender knockout and end turn
         checkKnockoutsAndContinue(attackingPlayer);
@@ -1135,6 +1169,7 @@ function handleMoveEffect(effect, attacker, defender, attackingPlayer) {
             attacker.energy = Math.max(0, attacker.energy - 2);
             setTimeout(() => {
                 alert(`${attacker.data.name} discarded 2 energy!`);
+                renderGame();
                 checkKnockoutsAndContinue(attackingPlayer);
             }, 500);
             break;
@@ -1144,6 +1179,7 @@ function handleMoveEffect(effect, attacker, defender, attackingPlayer) {
             attacker.damage += 20;
             setTimeout(() => {
                 alert(`${attacker.data.name} took 20 recoil damage!`);
+                renderGame();
                 // Check if attacker knocked itself out
                 if (attacker.damage >= attacker.data.hp) {
                     knockoutCreature(attackingPlayer);
@@ -1172,6 +1208,7 @@ function handleMoveEffect(effect, attacker, defender, attackingPlayer) {
                     attacker.energy = Math.max(0, attacker.energy - 2);
                     alert(`Coin flip: TAILS! ${attacker.data.name} discarded 2 energy!`);
                 }
+                renderGame();
                 checkKnockoutsAndContinue(attackingPlayer);
             }, 500);
             break;
@@ -1187,6 +1224,7 @@ function handleMoveEffect(effect, attacker, defender, attackingPlayer) {
                         const randomTarget = allFriendly[Math.floor(Math.random() * allFriendly.length)];
                         randomTarget.damage += 50;
                         alert(`Coin flip: TAILS! ${randomTarget.data.name} took 50 damage!`);
+                        renderGame();
                         // Check if that creature was knocked out
                         if (randomTarget.damage >= randomTarget.data.hp) {
                             if (randomTarget === gameState[attackingPlayer].active) {
@@ -1250,6 +1288,7 @@ function handleMoveEffect(effect, attacker, defender, attackingPlayer) {
             attacker.damage = Math.max(0, attacker.damage - 20);
             setTimeout(() => {
                 alert(`${attacker.data.name} healed 20 HP!`);
+                renderGame();
                 checkKnockoutsAndContinue(attackingPlayer);
             }, 500);
             break;
@@ -1838,10 +1877,12 @@ function aiAttack() {
         damage = attacker.data.move2Damage;
         effect = attacker.data.move2Effect;
         moveNumber = 2;
+        console.log("AI using move 2:", attacker.data.move2Name, "with effect:", effect);
     } else {
         damage = attacker.data.move1Damage;
         effect = attacker.data.move1Effect;
         moveNumber = 1;
+        console.log("AI using move 1:", attacker.data.move1Name, "with effect:", effect);
     }
     
     // Apply opponent's booster if active
@@ -1849,6 +1890,8 @@ function aiAttack() {
         damage += 20;
         gameState.opponent.boosterActive = false;
     }
+    
+    console.log("Total damage:", damage, "Defender HP:", defender.data.hp, "Current damage:", defender.damage);
     
     // Apply damage to defender
     defender.damage += damage;
@@ -1859,9 +1902,12 @@ function aiAttack() {
     // Check if defender is knocked out by base damage
     const defenderKnockedOut = defender.damage >= defender.data.hp;
     
+    console.log("Defender knocked out?", defenderKnockedOut, "Effect:", effect);
+    
     if (defenderKnockedOut) {
         // Apply effect first (if any), then handle knockout
         if (effect) {
+            console.log("Calling handleMoveEffectBeforeKnockout with effect:", effect);
             handleMoveEffectBeforeKnockout(effect, attacker, 'opponent', () => {
                 knockoutCreature('player');
             });
@@ -1871,6 +1917,7 @@ function aiAttack() {
         }
     } else {
         // Defender survives, handle all effects normally
+        console.log("Calling handleMoveEffect with effect:", effect);
         handleMoveEffect(effect, attacker, defender, 'opponent');
     }
 }
