@@ -131,6 +131,29 @@
         </div>
     </div>
 
+    <!-- Deck Builder Modal -->
+    <div id="deck-builder-modal" class="modal" style="display: none;">
+        <div class="modal-content deck-builder-content">
+            <button class="modal-close-btn" onclick="closeDeckBuilder()">×</button>
+            <h2>Create Custom Deck</h2>
+            <input type="text" id="custom-deck-name" placeholder="Enter deck name..." style="width: 300px; padding: 8px; margin: 10px 0; font-size: 16px;">
+            
+            <div class="deck-builder-container">
+                <div class="card-pool">
+                    <h3>Available Cards</h3>
+                    <div id="available-cards" class="builder-cards"></div>
+                </div>
+                
+                <div class="deck-composition">
+                    <h3>Your Deck (<span id="deck-card-count">0</span> cards)</h3>
+                    <div id="deck-validation" class="validation-message"></div>
+                    <div id="custom-deck-cards" class="builder-cards"></div>
+                    <button id="save-custom-deck-btn" class="main-btn" style="margin-top: 10px;">Save Deck</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>

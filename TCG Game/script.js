@@ -35,13 +35,62 @@ const cardDatabase = [
     {id: "Elemental Awakening_64.png", name: "Aegiscelis", stage: "Stage 2", hp: 130, retreat: 3, move1Cost: "KK", move1Name: "Guardian Glow", move1Damage: 50, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Aeglet"},
     {id: "Elemental Awakening_65.png", name: "Potion", stage: "Item", hp: 0, retreat: 0, move1Cost: null, move1Name: null, move1Damage: null, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
     {id: "Elemental Awakening_66.png", name: "Card Draw", stage: "Item", hp: 0, retreat: 0, move1Cost: null, move1Name: null, move1Damage: null, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
-    {id: "Elemental Awakening_67.png", name: "Booster", stage: "Item", hp: 0, retreat: 0, move1Cost: null, move1Name: null, move1Damage: null, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null}
+    {id: "Elemental Awakening_67.png", name: "Booster", stage: "Item", hp: 0, retreat: 0, move1Cost: null, move1Name: null, move1Damage: null, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_01.png", name: "Meditot", stage: "Stage 1", hp: 50, retreat: 2, move1Cost: "MM", move1Name: "Mind Mirage", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_02.png", name: "Zenquaza", stage: "Stage 2", hp: 100, retreat: 2, move1Cost: "MMN", move1Name: "Ethereal Echo", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Meditot"},
+    {id: "Elemental Awakening_03.png", name: "Harmoniqueon", stage: "Stage 1", hp: 110, retreat: 2, move1Cost: "M", move1Name: "Cosmic Calm", move1Damage: 20, move1Effect: null, move2Cost: "MMNN", move2Name: "Phantom Pulse", move2Damage: 60, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_09.png", name: "Pheonyx", stage: "Stage 1", hp: 90, retreat: 3, move1Cost: "N", move1Name: "Dizzy Shot", move1Damage: 10, move1Effect: null, move2Cost: "MMMN", move2Name: "Mystic Blaze", move2Damage: 30, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_10.png", name: "Mystikid", stage: "Stage 1", hp: 40, retreat: 1, move1Cost: "M", move1Name: "Dreamwave", move1Damage: 0, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_11.png", name: "Mystikeon", stage: "Stage 2", hp: 80, retreat: 1, move1Cost: "MM", move1Name: "Dream Booster", move1Damage: 30, move1Effect: null, move2Cost: "MMM", move2Name: "Zen Bolt", move2Damage: 60, move2Effect: null, prevStage: "Mystikid"},
+    {id: "Elemental Awakening_16.png", name: "Aeruffin", stage: "Stage 1", hp: 90, retreat: 2, move1Cost: "WN", move1Name: "Beak Gust", move1Damage: 30, move1Effect: null, move2Cost: "WWN", move2Name: "Gale Flip", move2Damage: 40, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_19.png", name: "Dodolet", stage: "Stage 1", hp: 40, retreat: 1, move1Cost: "N", move1Name: "Coin Clash", move1Damage: 0, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_20.png", name: "Dodrift", stage: "Stage 2", hp: 60, retreat: 1, move1Cost: "W", move1Name: "Dice Fury", move1Damage: 10, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Dodolet"},
+    {id: "Elemental Awakening_21.png", name: "Dodoryphon", stage: "Stage 3", hp: 100, retreat: 1, move1Cost: "WW", move1Name: "Dice Tempest", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Dodrift"},
+    {id: "Elemental Awakening_22.png", name: "Aeroquatic", stage: "Stage 1", hp: 70, retreat: 0, move1Cost: "WN", move1Name: "Rainbow Surge", move1Damage: 50, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_23.png", name: "Prismarine", stage: "Stage 2", hp: 90, retreat: 1, move1Cost: "WN", move1Name: "Aqua Radiance", move1Damage: 60, move1Effect: null, move2Cost: "WWWN", move2Name: "Prismatic Dive", move2Damage: 40, move2Effect: null, prevStage: "Aeroquatic"},
+    {id: "Elemental Awakening_24.png", name: "Pyrosora", stage: "Stage 1", hp: 100, retreat: 2, move1Cost: "W", move1Name: "Inferno Wing", move1Damage: 40, move1Effect: null, move2Cost: "WWW", move2Name: "Solar Ascend", move2Damage: 70, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_25.png", name: "Batakaze", stage: "Stage 1", hp: 50, retreat: 1, move1Cost: "W", move1Name: "Night Strike", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_26.png", name: "Shadowflit", stage: "Stage 2", hp: 80, retreat: 1, move1Cost: "W", move1Name: "Ethereal Pulse", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Batakaze"},
+    {id: "Elemental Awakening_27.png", name: "Dewmo", stage: "Stage 1", hp: 110, retreat: 2, move1Cost: "NNN", move1Name: "Neutral Surge", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_30.png", name: "Antheara", stage: "Stage 1", hp: 50, retreat: 0, move1Cost: "N", move1Name: "Tongue Sweep", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_31.png", name: "Antheara", stage: "Stage 1", hp: 70, retreat: 1, move1Cost: "N", move1Name: "Tongue Sweep", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_32.png", name: "Antheara", stage: "Stage 1", hp: 50, retreat: 1, move1Cost: "N", move1Name: "Long Tongue Sweep", move1Damage: 40, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_33.png", name: "Antheara", stage: "Stage 1", hp: 50, retreat: 1, move1Cost: "N", move1Name: "Tongue Sweep", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_42.png", name: "Rosbud", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "C", move1Name: "Petal Flick", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_43.png", name: "Rosalia", stage: "Stage 2", hp: 90, retreat: 1, move1Cost: "CCC", move1Name: "Fortune Smite", move1Damage: 50, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Rosbud"},
+    {id: "Elemental Awakening_44.png", name: "Verdanthorn", stage: "Stage 1", hp: 110, retreat: 3, move1Cost: "C", move1Name: "Thorny Vines", move1Damage: 10, move1Effect: null, move2Cost: "CCN", move2Name: "Healing Roots", move2Damage: 60, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_50.png", name: "Floretta", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "N", move1Name: "Minor Mend", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_51.png", name: "Lizaflora", stage: "Stage 2", hp: 80, retreat: 0, move1Cost: "NN", move1Name: "Major Mend", move1Damage: 40, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Floretta"},
+    {id: "Elemental Awakening_54.png", name: "Venomgear", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "K", move1Name: "Toxic Toss", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_55.png", name: "Toxiforge", stage: "Stage 2", hp: 110, retreat: 2, move1Cost: "KKK", move1Name: "Veno Slash", move1Damage: 50, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Venomgear"},
+    {id: "Elemental Awakening_56.png", name: "Envoye", stage: "Stage 1", hp: 100, retreat: 1, move1Cost: "K", move1Name: "Forceful Flip", move1Damage: 0, move1Effect: null, move2Cost: "KKN", move2Name: "Scrap Strike", move2Damage: 20, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_57.png", name: "Struto", stage: "Stage 1", hp: 80, retreat: 1, move1Cost: "K", move1Name: "Metallic Wing", move1Damage: 0, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_58.png", name: "Strutalon", stage: "Stage 2", hp: 130, retreat: 2, move1Cost: "KKKN", move1Name: "Turbo Charge", move1Damage: 70, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Struto"},
+    {id: "Elemental Awakening_62.png", name: "Metamonk", stage: "Stage 1", hp: 130, retreat: 2, move1Cost: "KK", move1Name: "Monastic Strike", move1Damage: 50, move1Effect: null, move2Cost: "KKKN", move2Name: "Monk's Fury", move2Damage: 70, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_68.png", name: "Power-Up", stage: "Item", hp: 0, retreat: 0, move1Cost: null, move1Name: null, move1Damage: null, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_69.png", name: "Remedy", stage: "Item", hp: 0, retreat: 0, move1Cost: null, move1Name: null, move1Damage: null, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_70.png", name: "Dragomind", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "M", move1Name: "Mind Blaze", move1Damage: 10, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_71.png", name: "Mindsheer", stage: "Stage 2", hp: 80, retreat: 1, move1Cost: "M", move1Name: "Blue Nova", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Dragomind"},
+    {id: "Elemental Awakening_72.png", name: "Psydrake", stage: "Stage 3", hp: 110, retreat: 2, move1Cost: "MM", move1Name: "Brain Freeze", move1Damage: 50, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Mindsheer"},
+    {id: "Elemental Awakening_73.png", name: "Blushbat", stage: "Stage 1", hp: 50, retreat: 1, move1Cost: "W", move1Name: "Echo Loop", move1Damage: 10, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_74.png", name: "Cerisebat", stage: "Stage 2", hp: 70, retreat: 1, move1Cost: "WN", move1Name: "Pink Gust", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Blushbat"},
+    {id: "Elemental Awakening_75.png", name: "Flutterwing", stage: "Stage 3", hp: 90, retreat: 1, move1Cost: "WN", move1Name: "Wing Slap", move1Damage: 80, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Cerisebat"},
+    {id: "Elemental Awakening_76.png", name: "Minkpaw", stage: "Stage 1", hp: 50, retreat: 1, move1Cost: "N", move1Name: "Claw Swipe", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_77.png", name: "Furstream", stage: "Stage 2", hp: 80, retreat: 1, move1Cost: "NN", move1Name: "Whisker Whip", move1Damage: 50, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Minkpaw"},
+    {id: "Elemental Awakening_78.png", name: "Lumbertail", stage: "Stage 3", hp: 100, retreat: 1, move1Cost: "NNN", move1Name: "Feline Fury", move1Damage: 70, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Furstream"},
+    {id: "Elemental Awakening_79.png", name: "Astromelon", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "C", move1Name: "Nebula Kiss", move1Damage: 10, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_80.png", name: "Lunamelon", stage: "Stage 2", hp: 80, retreat: 2, move1Cost: "C", move1Name: "Moonlight Slam", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Astromelon"},
+    {id: "Elemental Awakening_81.png", name: "Orbitmelon", stage: "Stage 3", hp: 110, retreat: 2, move1Cost: "C", move1Name: "Planet Burst", move1Damage: 50, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Lunamelon"},
+    {id: "Elemental Awakening_82.png", name: "Ghoulpole", stage: "Stage 1", hp: 70, retreat: 2, move1Cost: "KK", move1Name: "Soul Snare", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null},
+    {id: "Elemental Awakening_83.png", name: "Apparitron", stage: "Stage 2", hp: 90, retreat: 2, move1Cost: "KK", move1Name: "Eerie Attraction", move1Damage: 40, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Ghoulpole"},
+    {id: "Elemental Awakening_84.png", name: "Poltergnet", stage: "Stage 3", hp: 130, retreat: 3, move1Cost: "KKK", move1Name: "Spectral Burst", move1Damage: 60, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Apparitron"}
 ];
 
 // Deck definitions
 const deckTemplates = [
     {
         name: "Mystic Deck",
+        type: "preset",
         cards: [
             "Elemental Awakening_04.png", "Elemental Awakening_04.png",
             "Elemental Awakening_05.png", "Elemental Awakening_05.png",
@@ -58,6 +107,7 @@ const deckTemplates = [
     },
     {
         name: "Wind Deck",
+        type: "preset",
         cards: [
             "Elemental Awakening_15.png", "Elemental Awakening_15.png",
             "Elemental Awakening_17.png", "Elemental Awakening_17.png",
@@ -74,6 +124,7 @@ const deckTemplates = [
     },
     {
         name: "Celestial Deck",
+        type: "preset",
         cards: [
             "Elemental Awakening_39.png",
             "Elemental Awakening_40.png", "Elemental Awakening_40.png",
@@ -90,6 +141,7 @@ const deckTemplates = [
     },
     {
         name: "Mechanic Deck",
+        type: "preset",
         cards: [
             "Elemental Awakening_37.png",
             "Elemental Awakening_38.png",
@@ -106,6 +158,221 @@ const deckTemplates = [
         ]
     }
 ];
+
+// Load custom decks from localStorage
+function loadCustomDecks() {
+    const username = window.parent && window.parent.currentUsername ? window.parent.currentUsername : 'Guest';
+    const savedDecks = localStorage.getItem(`tcg_custom_decks_${username}`);
+    if (savedDecks) {
+        try {
+            const customDecks = JSON.parse(savedDecks);
+            customDecks.forEach(deck => {
+                deck.type = 'custom';
+                if (!deckTemplates.find(d => d.name === deck.name && d.type === 'custom')) {
+                    deckTemplates.push(deck);
+                }
+            });
+        } catch (e) {
+            console.error("Error loading custom decks:", e);
+        }
+    }
+}
+
+// Save custom deck
+function saveCustomDeck(deckName, cards) {
+    const username = window.parent && window.parent.currentUsername ? window.parent.currentUsername : 'Guest';
+    const savedDecks = localStorage.getItem(`tcg_custom_decks_${username}`);
+    let customDecks = savedDecks ? JSON.parse(savedDecks) : [];
+    
+    // Remove existing deck with same name
+    customDecks = customDecks.filter(d => d.name !== deckName);
+    
+    // Add new deck
+    customDecks.push({
+        name: deckName,
+        type: 'custom',
+        cards: cards
+    });
+    
+    localStorage.setItem(`tcg_custom_decks_${username}`, JSON.stringify(customDecks));
+    
+    // Add to deckTemplates if not already there
+    const existingIndex = deckTemplates.findIndex(d => d.name === deckName && d.type === 'custom');
+    if (existingIndex >= 0) {
+        deckTemplates[existingIndex].cards = cards;
+    } else {
+        deckTemplates.push({
+            name: deckName,
+            type: 'custom',
+            cards: cards
+        });
+    }
+}
+
+// Edit custom deck
+function editCustomDeck(deckName) {
+    const username = window.parent && window.parent.currentUsername ? window.parent.currentUsername : 'Guest';
+    const savedDecks = localStorage.getItem(`tcg_custom_decks_${username}`);
+    if (!savedDecks) return;
+    
+    const customDecks = JSON.parse(savedDecks);
+    const deck = customDecks.find(d => d.name === deckName);
+    
+    if (!deck) {
+        alert("Deck not found!");
+        return;
+    }
+    
+    // Load the deck into the builder
+    customDeckCards = [...deck.cards];
+    
+    const modal = document.getElementById('deck-builder-modal');
+    if (!modal) {
+        console.error("Deck builder modal not found!");
+        return;
+    }
+    
+    modal.style.display = 'flex';
+    
+    const deckNameInput = document.getElementById('custom-deck-name');
+    const availableCards = document.getElementById('available-cards');
+    const customDeckCardsDiv = document.getElementById('custom-deck-cards');
+    
+    if (!deckNameInput || !availableCards || !customDeckCardsDiv) {
+        console.error("Deck builder elements not found!");
+        return;
+    }
+    
+    deckNameInput.value = deckName;
+    availableCards.innerHTML = '';
+    customDeckCardsDiv.innerHTML = '';
+    
+    // Populate available cards
+    cardDatabase.forEach(cardData => {
+        const cardDiv = document.createElement('div');
+        cardDiv.className = 'builder-card';
+        cardDiv.dataset.cardId = cardData.id;
+        
+        const img = document.createElement('img');
+        img.src = `cards/${cardData.id}`;
+        img.alt = cardData.name;
+        
+        const cardType = getCardType(cardData);
+        const typeLabel = document.createElement('div');
+        typeLabel.className = 'card-type-label';
+        typeLabel.textContent = cardType;
+        typeLabel.style.fontSize = '10px';
+        typeLabel.style.padding = '2px 5px';
+        typeLabel.style.background = getTypeColor(cardType);
+        typeLabel.style.borderRadius = '3px';
+        typeLabel.style.marginTop = '5px';
+        
+        cardDiv.appendChild(img);
+        cardDiv.appendChild(typeLabel);
+        
+        cardDiv.addEventListener('mouseenter', () => showCardZoom(cardData.id));
+        cardDiv.addEventListener('mouseleave', hideCardZoom);
+        cardDiv.addEventListener('click', () => addCardToDeck(cardData.id));
+        
+        availableCards.appendChild(cardDiv);
+    });
+    
+    updateDeckBuilder();
+}
+
+// Delete custom deck
+function deleteCustomDeck(deckName) {
+    if (!confirm(`Are you sure you want to delete "${deckName}"?`)) {
+        return;
+    }
+    
+    const username = window.parent && window.parent.currentUsername ? window.parent.currentUsername : 'Guest';
+    const savedDecks = localStorage.getItem(`tcg_custom_decks_${username}`);
+    if (!savedDecks) return;
+    
+    let customDecks = JSON.parse(savedDecks);
+    customDecks = customDecks.filter(d => d.name !== deckName);
+    
+    localStorage.setItem(`tcg_custom_decks_${username}`, JSON.stringify(customDecks));
+    
+    // Remove from deckTemplates
+    const index = deckTemplates.findIndex(d => d.name === deckName && d.type === 'custom');
+    if (index >= 0) {
+        deckTemplates.splice(index, 1);
+    }
+    
+    alert(`Deck "${deckName}" deleted successfully!`);
+    showDeckSelection();
+}
+
+// Get card type from energy cost
+function getCardType(cardData) {
+    if (cardData.stage === "Item") return "Neutral";
+    
+    const move1Cost = cardData.move1Cost || "";
+    const move2Cost = cardData.move2Cost || "";
+    const allCosts = move1Cost + move2Cost;
+    
+    if (allCosts.includes('M')) return "Mystic";
+    if (allCosts.includes('W')) return "Wind";
+    if (allCosts.includes('C')) return "Celestial";
+    if (allCosts.includes('K')) return "Mechanic";
+    return "Neutral";
+}
+
+// Validate deck
+function validateDeck(cards) {
+    if (cards.length === 0) {
+        return { valid: false, error: "Deck is empty!" };
+    }
+    
+    // Check for exactly 20 cards
+    if (cards.length !== 20) {
+        return { valid: false, error: `Deck must have exactly 20 cards! Currently: ${cards.length}` };
+    }
+    
+    // Check for max 2 copies of each card
+    const cardCounts = {};
+    cards.forEach(cardId => {
+        cardCounts[cardId] = (cardCounts[cardId] || 0) + 1;
+    });
+    
+    for (const [cardId, count] of Object.entries(cardCounts)) {
+        if (count > 2) {
+            const cardData = getCardData(cardId);
+            return { valid: false, error: `You can only have up to 2 copies of ${cardData.name}!` };
+        }
+    }
+    
+    // Check for at least 1 Stage 1 creature
+    const hasStage1 = cards.some(cardId => {
+        const cardData = getCardData(cardId);
+        return cardData && cardData.stage === "Stage 1";
+    });
+    
+    if (!hasStage1) {
+        return { valid: false, error: "Deck must contain at least 1 Stage 1 creature!" };
+    }
+    
+    // Check type mixing
+    let primaryType = null;
+    for (const cardId of cards) {
+        const cardData = getCardData(cardId);
+        if (!cardData) continue;
+        
+        const cardType = getCardType(cardData);
+        
+        if (cardType === "Neutral") continue; // Neutral can mix with anything
+        
+        if (!primaryType) {
+            primaryType = cardType;
+        } else if (cardType !== primaryType) {
+            return { valid: false, error: `Cannot mix ${primaryType} and ${cardType} types! Only Neutral cards can be mixed.` };
+        }
+    }
+    
+    return { valid: true };
+}
 
 // Game state
 const gameState = {
@@ -152,6 +419,7 @@ const turnTracker = {
 
 // Initialize the game
 function initGame() {
+    loadCustomDecks(); // Load user's custom decks
     setupEventListeners();
     showDeckSelection();
 }
@@ -210,16 +478,74 @@ function showDeckSelection() {
     deckTemplates.forEach((deckTemplate, index) => {
         const deckOption = document.createElement('div');
         deckOption.className = 'deck-option';
+        deckOption.style.position = 'relative';
+        
+        const customBadge = deckTemplate.type === 'custom' ? ' <span style="color: gold;">★</span>' : '';
         
         deckOption.innerHTML = `
-            <h2>${deckTemplate.name}</h2>
-            <p>20 Cards</p>
+            <h2>${deckTemplate.name}${customBadge}</h2>
+            <p>${deckTemplate.cards.length} Cards</p>
             <p style="margin-top: 10px; font-size: 14px;">Click to preview</p>
         `;
         
         deckOption.addEventListener('click', () => showDeckPreview(index));
+        
+        // Add edit and delete buttons for custom decks
+        if (deckTemplate.type === 'custom') {
+            const actionsDiv = document.createElement('div');
+            actionsDiv.style.position = 'absolute';
+            actionsDiv.style.top = '10px';
+            actionsDiv.style.right = '10px';
+            actionsDiv.style.display = 'flex';
+            actionsDiv.style.gap = '5px';
+            
+            const editBtn = document.createElement('button');
+            editBtn.textContent = '✏️';
+            editBtn.style.backgroundColor = '#3498db';
+            editBtn.style.color = 'white';
+            editBtn.style.border = 'none';
+            editBtn.style.borderRadius = '5px';
+            editBtn.style.padding = '5px 10px';
+            editBtn.style.cursor = 'pointer';
+            editBtn.style.fontSize = '16px';
+            editBtn.title = 'Edit deck';
+            editBtn.onclick = (e) => {
+                e.stopPropagation();
+                editCustomDeck(deckTemplate.name);
+            };
+            
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = '🗑️';
+            deleteBtn.style.backgroundColor = '#e74c3c';
+            deleteBtn.style.color = 'white';
+            deleteBtn.style.border = 'none';
+            deleteBtn.style.borderRadius = '5px';
+            deleteBtn.style.padding = '5px 10px';
+            deleteBtn.style.cursor = 'pointer';
+            deleteBtn.style.fontSize = '16px';
+            deleteBtn.title = 'Delete deck';
+            deleteBtn.onclick = (e) => {
+                e.stopPropagation();
+                deleteCustomDeck(deckTemplate.name);
+            };
+            
+            actionsDiv.appendChild(editBtn);
+            actionsDiv.appendChild(deleteBtn);
+            deckOption.appendChild(actionsDiv);
+        }
+        
         deckList.appendChild(deckOption);
     });
+    
+    // Add "Create Custom Deck" button
+    const createDeckBtn = document.createElement('div');
+    createDeckBtn.className = 'deck-option create-deck-btn';
+    createDeckBtn.innerHTML = `
+        <h2 style="font-size: 32px;">+</h2>
+        <p>Create Custom Deck</p>
+    `;
+    createDeckBtn.addEventListener('click', () => showDeckBuilder());
+    deckList.appendChild(createDeckBtn);
 }
 
 function showDeckPreview(deckIndex) {
@@ -287,8 +613,13 @@ function closeDeckPreview() {
 function selectDeck(deckIndex) {
     gameState.player.selectedDeck = deckIndex;
     
-    // AI randomly selects a deck
-    gameState.opponent.selectedDeck = Math.floor(Math.random() * deckTemplates.length);
+    // AI randomly selects a preset deck only (not custom decks)
+    const presetDecks = deckTemplates.filter(d => d.type === 'preset');
+    const randomPresetIndex = Math.floor(Math.random() * presetDecks.length);
+    const selectedPresetDeck = presetDecks[randomPresetIndex];
+    
+    // Find the actual index in deckTemplates
+    gameState.opponent.selectedDeck = deckTemplates.findIndex(d => d === selectedPresetDeck);
     
     closeDeckPreview();
     
@@ -304,6 +635,202 @@ function selectDeck(deckIndex) {
 
 window.closeDeckPreview = closeDeckPreview;
 
+// Deck Builder Functions
+let customDeckCards = [];
+
+function showDeckBuilder() {
+    customDeckCards = [];
+    const modal = document.getElementById('deck-builder-modal');
+    
+    if (!modal) {
+        console.error("Deck builder modal not found!");
+        return;
+    }
+    
+    // Show modal first
+    modal.style.display = 'flex';
+    
+    // Then access elements inside it
+    const availableCards = document.getElementById('available-cards');
+    const deckName = document.getElementById('custom-deck-name');
+    const customDeckCardsDiv = document.getElementById('custom-deck-cards');
+    
+    if (!deckName || !availableCards || !customDeckCardsDiv) {
+        console.error("Deck builder elements not found!", {
+            deckName: !!deckName,
+            availableCards: !!availableCards,
+            customDeckCardsDiv: !!customDeckCardsDiv
+        });
+        return;
+    }
+    
+    deckName.value = '';
+    availableCards.innerHTML = '';
+    customDeckCardsDiv.innerHTML = '';
+    
+    // Group all creature and item cards
+    cardDatabase.forEach(cardData => {
+        const cardDiv = document.createElement('div');
+        cardDiv.className = 'builder-card';
+        cardDiv.dataset.cardId = cardData.id;
+        
+        const img = document.createElement('img');
+        img.src = `cards/${cardData.id}`;
+        img.alt = cardData.name;
+        
+        const cardType = getCardType(cardData);
+        const typeLabel = document.createElement('div');
+        typeLabel.className = 'card-type-label';
+        typeLabel.textContent = cardType;
+        typeLabel.style.fontSize = '10px';
+        typeLabel.style.padding = '2px 5px';
+        typeLabel.style.background = getTypeColor(cardType);
+        typeLabel.style.borderRadius = '3px';
+        typeLabel.style.marginTop = '5px';
+        
+        cardDiv.appendChild(img);
+        cardDiv.appendChild(typeLabel);
+        
+        // Add hover zoom
+        cardDiv.addEventListener('mouseenter', () => showCardZoom(cardData.id));
+        cardDiv.addEventListener('mouseleave', hideCardZoom);
+        
+        cardDiv.addEventListener('click', () => addCardToDeck(cardData.id));
+        
+        availableCards.appendChild(cardDiv);
+    });
+    
+    updateDeckBuilder();
+}
+
+function getTypeColor(type) {
+    switch(type) {
+        case 'Mystic': return '#9b59b6';
+        case 'Wind': return '#3498db';
+        case 'Celestial': return '#2ecc71';
+        case 'Mechanic': return '#95a5a6';
+        case 'Neutral': return '#f39c12';
+        default: return '#34495e';
+    }
+}
+
+function addCardToDeck(cardId) {
+    // Count how many copies of this card are already in the deck
+    const count = customDeckCards.filter(id => id === cardId).length;
+    
+    // Max 2 copies per card rule
+    if (count >= 2) {
+        alert("You can only have up to 2 copies of the same card in your deck!");
+        return;
+    }
+    
+    customDeckCards.push(cardId);
+    updateDeckBuilder();
+}
+
+function removeCardFromDeck(index) {
+    customDeckCards.splice(index, 1);
+    updateDeckBuilder();
+}
+
+function updateDeckBuilder() {
+    const deckCardsDiv = document.getElementById('custom-deck-cards');
+    const countSpan = document.getElementById('deck-card-count');
+    const validationDiv = document.getElementById('deck-validation');
+    
+    countSpan.textContent = customDeckCards.length;
+    deckCardsDiv.innerHTML = '';
+    
+    // Count unique cards
+    const cardCounts = {};
+    customDeckCards.forEach(cardId => {
+        cardCounts[cardId] = (cardCounts[cardId] || 0) + 1;
+    });
+    
+    // Display each unique card with count
+    Object.keys(cardCounts).sort().forEach(cardId => {
+        const cardData = getCardData(cardId);
+        const count = cardCounts[cardId];
+        
+        const cardDiv = document.createElement('div');
+        cardDiv.className = 'builder-card-in-deck';
+        
+        const img = document.createElement('img');
+        img.src = `cards/${cardId}`;
+        img.alt = cardData.name;
+        img.style.width = '60px';
+        img.style.cursor = 'pointer';
+        
+        const countDiv = document.createElement('div');
+        countDiv.textContent = `× ${count}`;
+        countDiv.style.fontSize = '14px';
+        countDiv.style.fontWeight = 'bold';
+        
+        const removeBtn = document.createElement('button');
+        removeBtn.textContent = '−';
+        removeBtn.style.marginLeft = '5px';
+        removeBtn.style.backgroundColor = '#e74c3c';
+        removeBtn.style.color = 'white';
+        removeBtn.style.border = 'none';
+        removeBtn.style.borderRadius = '5px';
+        removeBtn.style.padding = '5px 12px';
+        removeBtn.style.cursor = 'pointer';
+        removeBtn.style.fontSize = '18px';
+        removeBtn.style.fontWeight = 'bold';
+        removeBtn.onclick = () => {
+            const index = customDeckCards.indexOf(cardId);
+            if (index !== -1) removeCardFromDeck(index);
+        };
+        
+        cardDiv.appendChild(img);
+        cardDiv.appendChild(countDiv);
+        cardDiv.appendChild(removeBtn);
+        
+        // Add hover zoom
+        img.addEventListener('mouseenter', () => showCardZoom(cardId));
+        img.addEventListener('mouseleave', hideCardZoom);
+        
+        deckCardsDiv.appendChild(cardDiv);
+    });
+    
+    // Validate deck
+    const validation = validateDeck(customDeckCards);
+    if (!validation.valid) {
+        validationDiv.textContent = validation.error;
+        validationDiv.style.color = '#e74c3c';
+    } else {
+        validationDiv.textContent = '✓ Deck is valid!';
+        validationDiv.style.color = '#2ecc71';
+    }
+}
+
+function saveCustomDeckHandler() {
+    const deckName = document.getElementById('custom-deck-name').value.trim();
+    
+    if (!deckName) {
+        alert("Please enter a deck name!");
+        return;
+    }
+    
+    const validation = validateDeck(customDeckCards);
+    if (!validation.valid) {
+        alert(validation.error);
+        return;
+    }
+    
+    saveCustomDeck(deckName, [...customDeckCards]);
+    alert(`Deck "${deckName}" saved successfully!`);
+    closeDeckBuilder();
+    showDeckSelection();
+}
+
+function closeDeckBuilder() {
+    document.getElementById('deck-builder-modal').style.display = 'none';
+    customDeckCards = [];
+}
+
+window.closeDeckBuilder = closeDeckBuilder;
+
 // Setup event listeners
 function setupEventListeners() {
     document.getElementById('done-btn').addEventListener('click', handleDone);
@@ -314,6 +841,12 @@ function setupEventListeners() {
     document.getElementById('player-discard-btn').addEventListener('click', () => showDiscardPile('player'));
     document.getElementById('opponent-discard-btn').addEventListener('click', () => showDiscardPile('opponent'));
     document.getElementById('new-game-btn').addEventListener('click', resetAndStartNewGame);
+    
+    // Add event listener for save custom deck button (if it exists)
+    const saveBtn = document.getElementById('save-custom-deck-btn');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', saveCustomDeckHandler);
+    }
 }
 
 // Render the game

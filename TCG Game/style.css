@@ -535,3 +535,113 @@ body {
 .shake {
     animation: shake 0.3s;
 }
+
+/* Deck Builder Styles */
+.create-deck-btn {
+    background: rgba(255, 215, 0, 0.2) !important;
+    border: 3px dashed #FFD700 !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.create-deck-btn:hover {
+    background: rgba(255, 215, 0, 0.3) !important;
+}
+
+.deck-builder-content {
+    max-width: 95vw;
+    width: 1200px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.deck-builder-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.card-pool, .deck-composition {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 10px;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.card-pool h3, .deck-composition h3 {
+    margin-bottom: 15px;
+    text-align: center;
+    color: #FFD700;
+}
+
+.builder-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 10px;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.builder-card {
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    padding: 5px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.builder-card:hover {
+    transform: scale(1.05);
+    background: rgba(255, 215, 0, 0.2);
+}
+
+.builder-card img {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.builder-card-in-deck {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.builder-card-in-deck button {
+    background: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.builder-card-in-deck button:hover {
+    background: #d32f2f;
+}
+
+.validation-message {
+    text-align: center;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.3);
+    font-weight: bold;
+}
+
+.card-type-label {
+    color: #fff;
+    text-align: center;
+    font-size: 10px;
+    font-weight: bold;
+}
