@@ -446,7 +446,7 @@ const gameDescriptions = {
     title: "Tic Tac Toe",
     description: "Classic 3×3 grid game. Get three of your symbols in a row (horizontally, vertically, or diagonally) to win!",
     modes: "Single mode - play against the computer",
-    scoring: "No scoring - just wins, losses, or draws",
+    scoring: "Win/Loss record tracked! Leaderboard ranks players by win rate: wins/(wins+losses). Higher win rate = better rank!",
     controls: "Click on any empty square to place your mark (X). Computer plays as O."
   },
   "Puzzle Bobble": {
@@ -474,14 +474,14 @@ const gameDescriptions = {
     title: "Snakes and Ladders",
     description: "Classic board game. Roll the dice and race to square 100. Climb ladders to advance, avoid snakes that send you back!",
     modes: "Single mode - race against the computer",
-    scoring: "No leaderboard - first to reach square 100 wins the game!",
+    scoring: "Win/Loss record tracked! Leaderboard ranks players by win rate: wins/(wins+losses). Higher win rate = better rank!",
     controls: "Click 'Roll Dice' to take your turn. Your piece moves automatically based on the dice roll."
   },
   "Wordle": {
     title: "Wordle",
     description: "Guess the 5-letter word in 6 attempts. After each guess, tiles change color to show how close you are!",
     modes: "Single mode - new word each game",
-    scoring: "No leaderboard - try to guess the word in as few attempts as possible!",
+    scoring: "Total words correctly guessed tracked! Leaderboard ranks players by number of words guessed. More words = better rank!",
     controls: "Type your 5-letter guess and press Enter. Green = correct letter & position, Yellow = correct letter wrong position, Gray = letter not in word."
   },
   "Minefield": {
@@ -563,10 +563,10 @@ const gameDescriptions = {
   },
   "TCG Game": {
     title: "Elemental Awakening TCG",
-    description: "Battle against the computer AI in a strategic trading card game! Build your deck, play creatures, evolve them through stages, and use items strategically to knock out your opponent's creatures.",
-    modes: "4 Unique Decks to choose from:\n• Mystic Deck: Purple psychic creatures\n• Wind Deck: Flying and neutral creatures\n• Celestial Deck: Grass and nature creatures\n• Mechanic Deck: Metal and mechanical creatures\n\nAI randomly selects a deck each game.",
-    scoring: "Win/Loss record is tracked! First player to score 3 points wins (1 point per knocked out creature). Leaderboard ranks players by win rate: wins/(wins+losses). Higher win rate = better rank!",
-    controls: "Setup Phase (Turn 0):\n• Must place 1 Stage 1 creature in active spot first\n• Can place other Stage 1 creatures on bench (optional)\n• Click Done when ready to start\n\nEach Turn:\n• Draw 1 card at start of turn\n• Attach 1 energy to any creature (once per turn)\n• Play Stage 1 creatures to empty bench slots\n• Evolve creatures (from Turn 3 onwards only):\n  - Can't evolve cards played this turn\n  - Can't evolve a card twice in same turn\n  - Stage 1→Stage 2→Stage 3\n• Use 1 item card per turn (max):\n  - Potion: Heal 20 HP\n  - Card Draw: Draw 2 cards\n  - Booster: +20 damage to next attack\n• Attack with active creature (ends turn immediately)\n  - Requires energy equal to move cost\n  - Shows move name and damage in button\n• Retreat active to bench (costs energy shown in button)\n  - Can't retreat after attacking\n\nWin Conditions:\n• Score 3 points (knock out 3 opponent creatures)\n• Opponent has no creatures left\n• 30 turns max - highest points wins"
+    description: "Battle against an intelligent AI in this strategic trading card game! Build custom decks, play creatures with 5 elemental types, evolve them through stages, inflict special conditions, and use powerful items to knock out your opponent's creatures. Features 84 unique cards with special move effects!",
+    modes: "Choose from 4 starter decks OR create your own custom deck:\n• Mystic Deck: Psychic creatures with hallucination moves\n• Wind Deck: Flying creatures with dice/coin flip moves\n• Celestial Deck: Nature creatures with healing abilities\n• Mechanic Deck: Metal creatures with energy manipulation\n• Custom Decks: Build your own 40-card deck mixing types!\n\nDeck Building Rules:\n• Exactly 40 cards required\n• Mix 1 primary type with Neutral cards\n• Item cards can mix with any type\n• Evolved creatures need their base form\n\nAI randomly selects a deck and plays strategically!",
+    scoring: "Win/Loss record tracked! First to 3 points wins (1 point per knocked out creature - including bench!). Moves like Mystic Blaze can KO multiple creatures for multiple points. Leaderboard ranks by win rate: wins/(wins+losses). Higher win rate = better rank!",
+    controls: "Setup Phase (Turn 0):\n• Place 1 Stage 1 creature in active spot\n• Optionally place creatures on bench\n• Click Done when ready\n\nEach Turn:\n• Draw 1 card at start\n• Attach 1 energy to any creature (once/turn)\n• Play Stage 1 creatures to empty bench slots\n• Evolve creatures (Turn 3+):\n  - Can't evolve newly played cards\n  - Can't evolve twice in one turn\n  - Stage 1→Stage 2→Stage 3\n• Use 1 item card per turn:\n  - Potion: Heal 20 HP\n  - Card Draw: Draw 2 cards\n  - Booster: +20 damage next attack\n  - Power-Up: +10 damage for 3 turns\n• Attack with active creature (ends turn):\n  - Requires energy = move cost\n  - Special moves: dice rolls, coin flips, AoE damage, healing, stat changes\n  - Watch for type advantages (2x damage) & resistances (-20 damage)\n• Retreat to bench (costs energy, cures status)\n\nSpecial Conditions:\n• Hallucination 😵: Flip coin when attacking - Heads: +10 dmg, Tails: +40 self-dmg. Cured by retreating.\n\nWin: 3 points, no creatures left, or most points after 30 turns"
   }
 };
 
@@ -603,7 +603,7 @@ const gameDescriptionsPT = {
     title: "Jogo do Galo",
     description: "Jogo clássico de grelha 3×3. Consiga três dos seus símbolos numa linha (horizontal, vertical ou diagonal) para ganhar!",
     modes: "Modo único - jogue contra o computador",
-    scoring: "Sem pontuação - apenas vitórias, derrotas ou empates",
+    scoring: "Registo de vitórias/derrotas rastreado! O placar classifica os jogadores por taxa de vitórias: vitórias/(vitórias+derrotas). Maior taxa de vitórias = melhor classificação!",
     controls: "Clique em qualquer quadrado vazio para colocar a sua marca (X). O computador joga como O."
   },
   "Puzzle Bobble": {
@@ -631,14 +631,14 @@ const gameDescriptionsPT = {
     title: "Cobras e Escadas",
     description: "Jogo de tabuleiro clássico. Lance o dado e corra até ao quadrado 100. Suba escadas para avançar, evite cobras que o enviam para trás!",
     modes: "Modo único - corrida contra o computador",
-    scoring: "Sem classificação - o primeiro a chegar ao quadrado 100 ganha o jogo!",
+    scoring: "Registo de vitórias/derrotas rastreado! O placar classifica os jogadores por taxa de vitórias: vitórias/(vitórias+derrotas). Maior taxa de vitórias = melhor classificação!",
     controls: "Clique em 'Lançar Dado' para jogar. A sua peça move-se automaticamente com base no lançamento do dado."
   },
   "Wordle": {
     title: "Wordle",
     description: "Adivinhe a palavra de 5 letras em 6 tentativas. Após cada tentativa, os blocos mudam de cor para mostrar quão perto está!",
     modes: "Modo único - nova palavra em cada jogo",
-    scoring: "Sem classificação - tente adivinhar a palavra no menor número de tentativas possível!",
+    scoring: "Total de palavras corretamente adivinhadas rastreado! O placar classifica os jogadores por número de palavras adivinhadas. Mais palavras = melhor classificação!",
     controls: "Digite a sua tentativa de 5 letras e pressione Enter. Verde = letra e posição corretas, Amarelo = letra correta posição errada, Cinzento = letra não está na palavra."
   },
   "Minefield": {
@@ -720,10 +720,10 @@ const gameDescriptionsPT = {
   },
   "TCG Game": {
     title: "Elemental Awakening TCG",
-    description: "Batalhe contra a IA do computador num jogo estratégico de cartas colecionáveis! Construa o seu baralho, jogue criaturas, evolua-as através de estágios e use itens estrategicamente para derrotar as criaturas do oponente.",
-    modes: "4 Baralhos Únicos para escolher:\n• Baralho Místico: Criaturas psíquicas roxas\n• Baralho Vento: Criaturas voadoras e neutras\n• Baralho Celestial: Criaturas de grama e natureza\n• Baralho Mecânico: Criaturas metálicas e mecânicas\n\nA IA seleciona aleatoriamente um baralho em cada jogo.",
-    scoring: "Registo de vitórias/derrotas é rastreado! Primeiro jogador a marcar 3 pontos ganha (1 ponto por criatura derrotada). O placar classifica os jogadores por taxa de vitórias: vitórias/(vitórias+derrotas). Maior taxa de vitórias = melhor classificação!",
-    controls: "Fase de Configuração (Turno 0):\n• Deve colocar 1 criatura Estágio 1 no espaço ativo primeiro\n• Pode colocar outras criaturas Estágio 1 no banco (opcional)\n• Clique em Concluído quando estiver pronto para começar\n\nCada Turno:\n• Compre 1 carta no início do turno\n• Anexe 1 energia a qualquer criatura (uma vez por turno)\n• Jogue criaturas Estágio 1 em espaços vazios do banco\n• Evolua criaturas (apenas a partir do Turno 3):\n  - Não pode evoluir cartas jogadas neste turno\n  - Não pode evoluir a mesma carta duas vezes no mesmo turno\n  - Estágio 1→Estágio 2→Estágio 3\n• Use 1 carta de item por turno (máximo):\n  - Poção: Cure 20 HP\n  - Compra de Carta: Compre 2 cartas\n  - Reforço: +20 de dano no próximo ataque\n• Ataque com criatura ativa (termina o turno imediatamente)\n  - Requer energia igual ao custo do movimento\n  - Mostra nome do movimento e dano no botão\n• Recue ativo para o banco (custa energia mostrada no botão)\n  - Não pode recuar após atacar\n\nCondições de Vitória:\n• Marque 3 pontos (derrote 3 criaturas do oponente)\n• Oponente não tem mais criaturas\n• Máximo de 30 turnos - mais pontos ganha"
+    description: "Batalhe contra uma IA inteligente neste jogo estratégico de cartas colecionáveis! Construa baralhos personalizados, jogue criaturas de 5 tipos elementais, evolua-as através de estágios, inflija condições especiais e use itens poderosos para derrotar as criaturas do oponente. Apresenta 84 cartas únicas com efeitos especiais!",
+    modes: "Escolha entre 4 baralhos iniciais OU crie o seu próprio baralho personalizado:\n• Baralho Místico: Criaturas psíquicas com movimentos de alucinação\n• Baralho Vento: Criaturas voadoras com movimentos de dados/moedas\n• Baralho Celestial: Criaturas da natureza com habilidades de cura\n• Baralho Mecânico: Criaturas metálicas com manipulação de energia\n• Baralhos Personalizados: Construa seu próprio baralho de 40 cartas misturando tipos!\n\nRegras de Construção:\n• Exatamente 40 cartas necessárias\n• Misture 1 tipo primário com cartas Neutras\n• Cartas de Item podem misturar com qualquer tipo\n• Criaturas evoluídas precisam da forma base\n\nA IA seleciona aleatoriamente um baralho e joga estrategicamente!",
+    scoring: "Registo de vitórias/derrotas rastreado! Primeiro a marcar 3 pontos ganha (1 ponto por criatura derrotada - incluindo banco!). Movimentos como Mystic Blaze podem derrotar múltiplas criaturas por múltiplos pontos. Placar classifica por taxa de vitórias: vitórias/(vitórias+derrotas). Maior taxa = melhor classificação!",
+    controls: "Fase de Configuração (Turno 0):\n• Coloque 1 criatura Estágio 1 no espaço ativo\n• Opcionalmente coloque criaturas no banco\n• Clique em Concluído quando pronto\n\nCada Turno:\n• Compre 1 carta no início\n• Anexe 1 energia a qualquer criatura (1x/turno)\n• Jogue criaturas Estágio 1 em espaços vazios\n• Evolua criaturas (Turno 3+):\n  - Não pode evoluir cartas recém-jogadas\n  - Não pode evoluir duas vezes em um turno\n  - Estágio 1→Estágio 2→Estágio 3\n• Use 1 carta de item por turno:\n  - Poção: Cure 20 HP\n  - Compra de Carta: Compre 2 cartas\n  - Reforço: +20 dano próximo ataque\n  - Power-Up: +10 dano por 3 turnos\n• Ataque com criatura ativa (termina turno):\n  - Requer energia = custo movimento\n  - Movimentos especiais: dados, moedas, dano em área, cura, mudanças de stats\n  - Atenção a vantagens de tipo (2x dano) e resistências (-20 dano)\n• Recue para banco (custa energia, cura status)\n\nCondições Especiais:\n• Alucinação 😵: Lance moeda ao atacar - Cara: +10 dano, Coroa: +40 auto-dano. Curado ao recuar.\n\nVitória: 3 pontos, sem criaturas restantes, ou mais pontos após 30 turnos"
   }
 };
 
@@ -1015,6 +1015,24 @@ function showGameLeaderboard(gameName) {
   // Special handling for TCG Game (win/loss record)
   if (gameName === "TCG Game") {
     showTCGLeaderboard(db, content, gameName);
+    return;
+  }
+  
+  // Special handling for Tic Tac Toe (win/loss record)
+  if (gameName === "Tic Tac Toe") {
+    showWinLossLeaderboard(db, content, gameName);
+    return;
+  }
+  
+  // Special handling for Snakes and Ladders (win/loss record)
+  if (gameName === "Snakes and Ladders") {
+    showWinLossLeaderboard(db, content, gameName);
+    return;
+  }
+  
+  // Special handling for Wordle (words guessed count)
+  if (gameName === "Wordle") {
+    showWordleLeaderboard(db, content, gameName);
     return;
   }
   
@@ -1888,6 +1906,167 @@ function showTCGLeaderboard(db, content, gameName) {
     });
 }
 
+// Generic win/loss leaderboard (for Tic Tac Toe and Snakes and Ladders)
+function showWinLossLeaderboard(db, content, gameName) {
+  db.collection("games")
+    .limit(200)
+    .get()
+    .then(snapshot => {
+      const allDocs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+      // Group by player and calculate win/loss records
+      const playerStats = {};
+      
+      allDocs
+        .filter(doc => doc.gameName === gameName)
+        .forEach(doc => {
+          if (!playerStats[doc.playerName]) {
+            playerStats[doc.playerName] = {
+              playerName: doc.playerName,
+              wins: 0,
+              losses: 0,
+              draws: 0,
+              lastPlayed: doc.timestamp
+            };
+          }
+          
+          if (doc.result === 'win') {
+            playerStats[doc.playerName].wins++;
+          } else if (doc.result === 'loss') {
+            playerStats[doc.playerName].losses++;
+          } else if (doc.result === 'draw') {
+            playerStats[doc.playerName].draws++;
+          }
+          
+          // Track most recent game
+          if (doc.timestamp && (!playerStats[doc.playerName].lastPlayed || 
+              doc.timestamp.toDate() > playerStats[doc.playerName].lastPlayed.toDate())) {
+            playerStats[doc.playerName].lastPlayed = doc.timestamp;
+          }
+        });
+      
+      // Convert to array and calculate win rate
+      const playerArray = Object.values(playerStats)
+        .map(player => {
+          const totalGames = player.wins + player.losses; // Don't count draws in win rate calculation
+          const winRate = totalGames > 0 ? (player.wins / totalGames) * 100 : 0;
+          return {
+            ...player,
+            totalGames: player.wins + player.losses + player.draws,
+            winRate
+          };
+        })
+        .filter(player => player.totalGames > 0) // Only show players with at least 1 game
+        .sort((a, b) => b.winRate - a.winRate) // Sort by win rate (highest first)
+        .slice(0, 20); // Top 20
+      
+      if (playerArray.length === 0) {
+        content.innerHTML = `<p style="color: #666;">${t("noScores")}</p>`;
+        return;
+      }
+      
+      // Check if this game has draws
+      const hasDraws = playerArray.some(p => p.draws > 0);
+      
+      let html = '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Wins</th><th>Losses</th>';
+      if (hasDraws) {
+        html += '<th>Draws</th>';
+      }
+      html += '<th>Win Rate</th><th>Last Played</th></tr></thead><tbody>';
+      
+      playerArray.forEach((player, i) => {
+        const date = player.lastPlayed ? new Date(player.lastPlayed.toDate()).toLocaleDateString() : 'N/A';
+        const winRateStr = player.winRate.toFixed(1) + '%';
+        
+        html += `<tr>
+          <td>${i + 1}</td>
+          <td>${player.playerName}</td>
+          <td style="color: #4CAF50; font-weight: bold;">${player.wins}</td>
+          <td style="color: #f44336; font-weight: bold;">${player.losses}</td>`;
+        
+        if (hasDraws) {
+          html += `<td style="color: #FFA500; font-weight: bold;">${player.draws}</td>`;
+        }
+        
+        html += `<td style="color: #FFD700; font-weight: bold;">${winRateStr}</td>
+          <td>${date}</td>
+        </tr>`;
+      });
+      
+      html += "</tbody></table>";
+      content.innerHTML = html;
+    })
+    .catch(err => {
+      content.textContent = t("errorLoading") + " " + err.message;
+      console.error("Leaderboard error:", err);
+    });
+}
+
+// Wordle leaderboard (words guessed count)
+function showWordleLeaderboard(db, content, gameName) {
+  db.collection("games")
+    .limit(200)
+    .get()
+    .then(snapshot => {
+      const allDocs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+      // Group by player and sum words guessed
+      const playerStats = {};
+      
+      allDocs
+        .filter(doc => doc.gameName === gameName)
+        .forEach(doc => {
+          if (!playerStats[doc.playerName]) {
+            playerStats[doc.playerName] = {
+              playerName: doc.playerName,
+              wordsGuessed: 0,
+              lastPlayed: doc.timestamp
+            };
+          }
+          
+          // Add words guessed (should be 1 per successful game)
+          playerStats[doc.playerName].wordsGuessed += (doc.wordsGuessed || 1);
+          
+          // Track most recent game
+          if (doc.timestamp && (!playerStats[doc.playerName].lastPlayed || 
+              doc.timestamp.toDate() > playerStats[doc.playerName].lastPlayed.toDate())) {
+            playerStats[doc.playerName].lastPlayed = doc.timestamp;
+          }
+        });
+      
+      // Convert to array and sort by words guessed
+      const playerArray = Object.values(playerStats)
+        .filter(player => player.wordsGuessed > 0) // Only show players who guessed at least 1 word
+        .sort((a, b) => b.wordsGuessed - a.wordsGuessed) // Sort by words guessed (highest first)
+        .slice(0, 20); // Top 20
+      
+      if (playerArray.length === 0) {
+        content.innerHTML = `<p style="color: #666;">${t("noScores")}</p>`;
+        return;
+      }
+      
+      let html = '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Words Guessed</th><th>Last Played</th></tr></thead><tbody>';
+      
+      playerArray.forEach((player, i) => {
+        const date = player.lastPlayed ? new Date(player.lastPlayed.toDate()).toLocaleDateString() : 'N/A';
+        
+        html += `<tr>
+          <td>${i + 1}</td>
+          <td>${player.playerName}</td>
+          <td style="color: #4CAF50; font-weight: bold;">${player.wordsGuessed}</td>
+          <td>${date}</td>
+        </tr>`;
+      });
+      
+      html += "</tbody></table>";
+      content.innerHTML = html;
+    })
+    .catch(err => {
+      content.textContent = t("errorLoading") + " " + err.message;
+      console.error("Leaderboard error:", err);
+    });
+}
+
 // Close leaderboard section when clicking back to menu
 // Close button is handled via onclick attribute
 
@@ -2037,18 +2216,20 @@ window.saveGameScore = function(gameName, scoreData) {
     const isLengthBased = scoreData.hasOwnProperty("length");
     const isTurnsBased = scoreData.hasOwnProperty("turns");
     const isTCGGame = scoreData.hasOwnProperty("result"); // TCG Game uses result field
+    const isWinLossGame = (gameName === "Tic Tac Toe" || gameName === "Snakes and Ladders") && scoreData.hasOwnProperty("result");
+    const isWordleGame = gameName === "Wordle" && scoreData.hasOwnProperty("wordsGuessed");
     
-    // Special handling for TCG Game - always create new record (don't update)
-    if (isTCGGame) {
-      console.log("Creating new TCG Game record");
+    // Special handling for games that track all plays (not just best score)
+    if (isTCGGame || isWinLossGame || isWordleGame) {
+      console.log(`Creating new record for ${gameName}`);
       return db.collection("games").add({
         playerName: name,
         gameName: gameName,
         ...scoreData,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       }).then(docRef => {
-        console.log("TCG Game result saved with ID:", docRef.id);
-        return { isNewBest: false }; // Never show "new best" for TCG
+        console.log(`${gameName} result saved with ID:`, docRef.id);
+        return { isNewBest: false }; // Never show "new best" for these games
       });
     }
     

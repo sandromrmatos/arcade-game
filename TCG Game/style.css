@@ -172,6 +172,14 @@ body {
     gap: 10px;
 }
 
+.bench-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+
 .card-slot {
     width: 120px;
     height: 168px;
@@ -265,6 +273,32 @@ body {
     border-radius: 5px;
     font-size: 12px;
     font-weight: bold;
+}
+
+.hallucination-indicator {
+    position: absolute;
+    top: 30px;
+    left: 5px;
+    background: rgba(138, 43, 226, 0.9);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    border: 2px solid #9370DB;
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.8);
+    animation: hallucination-pulse 1.5s infinite;
+}
+
+@keyframes hallucination-pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
 }
 
 .hand-area {
@@ -644,4 +678,113 @@ body {
     text-align: center;
     font-size: 10px;
     font-weight: bold;
+}
+
+/* Info Modal Styling */
+.info-modal-content {
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.info-content {
+    text-align: left;
+    padding: 20px;
+}
+
+.info-content section {
+    margin-bottom: 25px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    border-left: 4px solid #FFD700;
+}
+
+.info-content h3 {
+    color: #FFD700;
+    margin-bottom: 10px;
+    font-size: 22px;
+}
+
+.info-content p {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.info-content ul {
+    margin-left: 20px;
+    line-height: 1.8;
+}
+
+.info-content li {
+    margin-bottom: 8px;
+}
+
+.info-content strong {
+    color: #FFD700;
+}
+
+.info-btn {
+    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+}
+
+.info-btn:hover {
+    background: linear-gradient(135deg, #8e44ad, #9b59b6);
+}
+
+/* Ability button styling - positioned with attack/retreat buttons */
+.ability-btn-active {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    border: 2px solid #FFD700;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    margin: 5px;
+}
+
+.ability-btn-active:hover:not(:disabled) {
+    background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(255, 215, 0, 0.5);
+}
+
+.ability-btn-active:disabled {
+    background: #666;
+    border-color: #999;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.ability-btn-bench {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    color: #333;
+    border: 2px solid #FFD700;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    margin-top: 5px;
+    width: 100%;
+}
+
+.ability-btn-bench:hover:not(:disabled) {
+    background: linear-gradient(135deg, #fee140 0%, #fa709a 100%);
+    transform: scale(1.03);
+    box-shadow: 0 4px 10px rgba(255, 215, 0, 0.4);
+}
+
+.ability-btn-bench:disabled {
+    background: #888;
+    border-color: #aaa;
+    cursor: not-allowed;
+    opacity: 0.5;
+    color: #ccc;
 }

@@ -441,6 +441,12 @@
           } else if (row === finishPos.row && col === finishPos.col) {
             cell.classList.add('finish');
             cell.textContent = '🏁';
+            
+            // Make finish cell clickable if adjacent to player
+            if (isAdjacent(row, col, playerPos.row, playerPos.col)) {
+              cell.classList.add('clickable');
+              cell.addEventListener('click', () => movePlayer(row, col));
+            }
           } else if (row === 0 && col === 0) {
             cell.classList.add('start');
             cell.textContent = '▶️';

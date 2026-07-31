@@ -236,6 +236,16 @@ function checkGuess(guess) {
         document.getElementById("message").textContent =
             `You guessed it! The word was ${target}.`;
         gameOver = true;
+        
+        // Save success to leaderboard
+        if (window.parent && window.parent.saveGameScore) {
+          window.parent.saveGameScore("Wordle", {
+            wordsGuessed: 1,
+            attempts: currentRow + 1
+          }).catch(err => {
+            console.error("Error saving score:", err);
+          });
+        }
         return;
     }
 

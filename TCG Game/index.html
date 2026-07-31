@@ -64,13 +64,23 @@
                     <div class="attack-buttons">
                         <button id="attack-btn" class="action-btn" style="display: none;">Attack</button>
                         <button id="attack2-btn" class="action-btn" style="display: none;">Attack 2</button>
+                        <button id="ability-active-btn" class="action-btn ability-btn-active" style="display: none;">Ability</button>
                     </div>
                     <button id="retreat-btn" class="action-btn retreat-btn" style="display: none;">Retreat</button>
                 </div>
                 <div class="bench-area">
-                    <div class="card-slot bench-slot" data-player="player" data-slot="0"></div>
-                    <div class="card-slot bench-slot" data-player="player" data-slot="1"></div>
-                    <div class="card-slot bench-slot" data-player="player" data-slot="2"></div>
+                    <div class="bench-container">
+                        <div class="card-slot bench-slot" data-player="player" data-slot="0"></div>
+                        <button id="bench-ability-btn-0" class="ability-btn-bench" style="display: none;">Ability</button>
+                    </div>
+                    <div class="bench-container">
+                        <div class="card-slot bench-slot" data-player="player" data-slot="1"></div>
+                        <button id="bench-ability-btn-1" class="ability-btn-bench" style="display: none;">Ability</button>
+                    </div>
+                    <div class="bench-container">
+                        <div class="card-slot bench-slot" data-player="player" data-slot="2"></div>
+                        <button id="bench-ability-btn-2" class="ability-btn-bench" style="display: none;">Ability</button>
+                    </div>
                 </div>
             </div>
             <div class="hand-area">
@@ -85,6 +95,7 @@
             <button id="player-discard-btn" class="main-btn discard-btn">Your Discard Pile (0)</button>
             <button id="energy-btn" class="main-btn energy-btn" disabled>Attach Energy</button>
             <button id="done-btn" class="main-btn">Done</button>
+            <button id="info-btn" class="main-btn info-btn">Info</button>
             <button id="new-game-btn" class="main-btn" style="display: none;">New Game</button>
             <button id="opponent-discard-btn" class="main-btn discard-btn">Opponent's Discard Pile (0)</button>
         </div>
@@ -150,6 +161,169 @@
                     <div id="custom-deck-cards" class="builder-cards"></div>
                     <button id="save-custom-deck-btn" class="main-btn" style="margin-top: 10px;">Save Deck</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Modal -->
+    <div id="info-modal" class="modal" style="display: none;">
+        <div class="modal-content info-modal-content">
+            <button class="modal-close-btn" onclick="closeInfoModal()">×</button>
+            <h2>Elemental Awakening - How to Play</h2>
+            <div class="info-content">
+
+    <!-- Debug Modal -->
+    <div id="debug-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeDebugModal()">×</button>
+            <h2>Debug Mode - Select Decks</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 20px;">
+                <div>
+                    <h3 style="margin-bottom: 10px;">Your Deck</h3>
+                    <select id="debug-player-deck" style="width: 100%; padding: 10px; font-size: 16px;">
+                        <!-- Options populated by JS -->
+                    </select>
+                </div>
+                <div>
+                    <h3 style="margin-bottom: 10px;">AI Deck</h3>
+                    <select id="debug-opponent-deck" style="width: 100%; padding: 10px; font-size: 16px;">
+                        <!-- Options populated by JS -->
+                    </select>
+                </div>
+            </div>
+            <button id="debug-start-game" class="main-btn" style="margin: 20px auto; display: block;">Start Game</button>
+        </div>
+    </div>
+
+    <!-- Info Modal -->
+    <div id="info-modal" class="modal" style="display: none;">
+        <div class="modal-content info-modal-content">
+            <button class="modal-close-btn" onclick="closeInfoModal()">×</button>
+            <h2>Elemental Awakening - How to Play</h2>
+            <div class="info-content">
+                <section>
+                    <h3>🎯 Objective</h3>
+                    <p>Be the first player to collect <strong>3 Prize Points</strong> by knocking out your opponent's creatures!</p>
+                </section>
+
+                <section>
+                    <h3>🎴 Deck Building</h3>
+                    <p><strong>Custom Decks:</strong> You can create your own custom decks! Click "Create Custom Deck" from the deck selection screen.</p>
+                    <ul>
+                        <li>Each deck must have exactly <strong>20 cards</strong></li>
+                        <li>You can mix <strong>one primary type</strong> (Mystic, Celestial, Wind, or Mechanic) with Neutral cards</li>
+                        <li><strong>Item cards</strong> can be mixed with any deck type</li>
+                        <li>Evolved creatures require their base form in the deck</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>⚡ Energy System</h3>
+                    <ul>
+                        <li>Attach <strong>1 energy per turn</strong> to any creature in play</li>
+                        <li>Energy is required to use attacks (check the move cost)</li>
+                        <li>Energy stays on creatures even when they retreat to the bench</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>🎮 Turn Actions</h3>
+                    <p>On your turn, you can perform these actions (in any order):</p>
+                    <ul>
+                        <li><strong>Play creatures</strong> from your hand to empty bench slots</li>
+                        <li><strong>Evolve creatures</strong> (after turn 3) by playing evolution cards on matching creatures</li>
+                        <li><strong>Attach 1 energy</strong> to a creature in play</li>
+                        <li><strong>Use 1 item card</strong> (Potion, Booster, Card Draw, Power-Up)</li>
+                        <li><strong>Use abilities</strong> from creatures in play (once per turn per creature)</li>
+                        <li><strong>Retreat</strong> your active creature to the bench (costs energy)</li>
+                        <li><strong>Attack once</strong> with your active creature (ends your turn)</li>
+                    </ul>
+                    <p><em>Note: Abilities must be used before attacking, as attacking ends your turn.</em></p>
+                </section>
+
+                <section>
+                    <h3>✨ Abilities</h3>
+                    <p>Some creatures have special abilities that can be activated during your turn:</p>
+                    <ul>
+                        <li><strong>Ability Buttons:</strong> Creatures with abilities show a button below the card</li>
+                        <li><strong>Once Per Turn:</strong> Each creature can use its ability once per turn</li>
+                        <li><strong>Location Requirements:</strong> Some abilities require the creature to be in the active spot, while others work from anywhere (active or bench)</li>
+                        <li><strong>Before Attacking:</strong> Abilities must be used before you attack, since attacking ends your turn</li>
+                        <li><strong>Greyed Out:</strong> Ability buttons are disabled when conditions aren't met or already used this turn</li>
+                    </ul>
+                    
+                    <p><strong>Example Abilities:</strong></p>
+                    <ul>
+                        <li><strong>Defense Aura</strong> (Antheara) - Active only: Reduce opponent's next attack damage by 10</li>
+                        <li><strong>Resourceful Recovery</strong> (Serafina) - Any location: Flip a coin, if heads attach energy to a random creature you control</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>⚔️ Combat</h3>
+                    <ul>
+                        <li>Attacking ends your turn automatically</li>
+                        <li>When a creature's damage equals or exceeds its HP, it's knocked out</li>
+                        <li>Each knockout earns you 1 Prize Point</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>🔥 Type Effectiveness</h3>
+                    <p><strong>Super Effective Matchups:</strong> When a move from one type hits a creature of a super-effective type, it deals an additional <strong>+10 damage</strong>.</p>
+                    <ul>
+                        <li><strong>Mystic</strong> is super effective against <strong>Wind</strong> 🔮→💨</li>
+                        <li><strong>Wind</strong> is super effective against <strong>Celestial</strong> 💨→🌿</li>
+                        <li><strong>Celestial</strong> is super effective against <strong>Mystic</strong> 🌿→🔮</li>
+                        <li><strong>Mechanic</strong> is super effective against <strong>Neutral</strong> ⚙️→⚪</li>
+                        <li><strong>Neutral</strong> has no super effective matchups</li>
+                    </ul>
+                    <p><em>Note: The +10 damage bonus stacks with other damage bonuses like Booster, Power-Up, and move effects!</em></p>
+                </section>
+
+                <section>
+                    <h3>🌟 Special Conditions</h3>
+                    <p><strong>Hallucination 😵:</strong></p>
+                    <ul>
+                        <li>Caused by certain Mystic-type moves (Mind Mirage, Ethereal Echo, Phantom Pulse, Dreamwave, Dream Booster)</li>
+                        <li>When attacking while hallucinating, flip a coin:</li>
+                        <li style="margin-left: 20px;">✓ <strong>Heads:</strong> Deal 10 extra damage</li>
+                        <li style="margin-left: 20px;">✗ <strong>Tails:</strong> Deal normal damage + 40 damage to yourself</li>
+                        <li><strong>Cured when:</strong> The creature moves from active slot to bench (retreat, swap, or forced swap)</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>🎁 Item Cards</h3>
+                    <ul>
+                        <li><strong>Potion:</strong> Heal a creature for 20 HP</li>
+                        <li><strong>Card Draw:</strong> Draw 2 cards from your deck</li>
+                        <li><strong>Booster:</strong> Your next attack deals +20 damage</li>
+                        <li><strong>Power-Up:</strong> Your next 3 attacks (over 3 turns) deal +10 damage each</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>🏆 Winning the Game</h3>
+                    <ul>
+                        <li>Collect <strong>3 Prize Points</strong> by knocking out opponent's creatures</li>
+                        <li>Each creature knockout = 1 point (including bench creatures)</li>
+                        <li>If your opponent has no creatures left to play, you win</li>
+                        <li>After 30 turns, the player with more points wins</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>💡 Tips</h3>
+                    <ul>
+                        <li>Build up energy on bench creatures while your active creature battles</li>
+                        <li>Retreat low-HP creatures to safety before they're knocked out</li>
+                        <li>Use item cards strategically to gain advantage</li>
+                        <li>Watch out for type weaknesses and resistances</li>
+                        <li>Some moves have special effects - read them carefully!</li>
+                        <li>Bench creatures can be knocked out by AoE moves like Mystic Blaze</li>
+                    </ul>
+                </section>
             </div>
         </div>
     </div>

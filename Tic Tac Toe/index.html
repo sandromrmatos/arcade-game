@@ -184,6 +184,24 @@ function endGame(msg) {
     // Disable board
     const cells = document.querySelectorAll(".cell");
     cells.forEach(cell => cell.classList.add("disabled"));
+
+    // Save result to leaderboard
+    let result;
+    if (msg === "You win!") {
+        result = "win";
+    } else if (msg === "PC wins!") {
+        result = "loss";
+    } else {
+        result = "draw";
+    }
+
+    if (window.parent && window.parent.saveGameScore) {
+        window.parent.saveGameScore("Tic Tac Toe", {
+            result: result
+        }).catch(err => {
+            console.error("Error saving score:", err);
+        });
+    }
 }
 
 function resetGame() {

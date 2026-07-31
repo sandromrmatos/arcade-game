@@ -258,6 +258,16 @@ function playTurn(who) {
           if (jumpPos === 49) {
             logEl.textContent = `${who.toUpperCase()} wins!`;
             gameOver = true;
+            
+            // Save result to leaderboard
+            const result = (who === "player") ? "win" : "loss";
+            if (window.parent && window.parent.saveGameScore) {
+              window.parent.saveGameScore("Snakes and Ladders", {
+                result: result
+              }).catch(err => {
+                console.error("Error saving score:", err);
+              });
+            }
             return;
           }
           switchTurn();
@@ -267,6 +277,16 @@ function playTurn(who) {
       if (finalPos === 49) {
         logEl.textContent = `${who.toUpperCase()} wins!`;
         gameOver = true;
+        
+        // Save result to leaderboard
+        const result = (who === "player") ? "win" : "loss";
+        if (window.parent && window.parent.saveGameScore) {
+          window.parent.saveGameScore("Snakes and Ladders", {
+            result: result
+          }).catch(err => {
+            console.error("Error saving score:", err);
+          });
+        }
         return;
       }
       switchTurn();
