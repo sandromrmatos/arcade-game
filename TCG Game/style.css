@@ -452,6 +452,7 @@ body {
     padding: 30px;
     border-radius: 15px;
     max-width: 600px;
+    position: relative;
 }
 
 .modal-content h2 {
@@ -787,4 +788,26 @@ body {
     cursor: not-allowed;
     opacity: 0.5;
     color: #ccc;
+}
+
+/* Debug modal specific styles */
+#debug-modal .modal-content {
+    max-width: 800px;
+    width: 90%;
+}
+
+#debug-modal select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 2px solid #FFD700;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    cursor: pointer;
+}
+
+#debug-modal select option {
+    background: #2a2a4a;
+    color: white;
 }

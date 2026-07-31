@@ -15,14 +15,14 @@ const cardDatabase = [
     {id: "Elemental Awakening_29.png", name: "Galaktikreme", stage: "Stage 2", hp: 110, retreat: 1, move1Cost: "NN", move1Name: "Pastry Crunch", move1Damage: 50, move1Effect: null, move2Cost: "NNNN", move2Name: "Creamy Confection", move2Damage: 80, move2Effect: "creamyConfection", prevStage: "Baklavaff", type: "Neutral"},
     {id: "Elemental Awakening_34.png", name: "Babybara", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "N", move1Name: "Muddy Tackle", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Neutral"},
     {id: "Elemental Awakening_35.png", name: "Carmibara", stage: "Stage 2", hp: 80, retreat: 1, move1Cost: "N", move1Name: "Crimson Chomp", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Babybara", type: "Neutral"},
-    {id: "Elemental Awakening_36.png", name: "Reddybara", stage: "Stage 3", hp: 130, retreat: 2, move1Cost: "NN", move1Name: "River Rush", move1Damage: 50, move1Effect: null, move2Cost: "NNNN", move2Name: "Risky Recoil", move2Damage: 130, move2Effect: "riskyRecoil", prevStage: "Carmibara", type: "Neutral"},
+    {id: "Elemental Awakening_36.png", name: "Reddybara", stage: "Stage 3", hp: 130, retreat: 2, move1Cost: "NN", move1Name: "River Rush", move1Damage: 50, move1Effect: null, move2Cost: "NNNN", move2Name: "Risky Recoil", move2Damage: 130, move2Effect: "riskyRecoil", prevStage: "Carmibara", type: "Neutral", abilityName: "Sturdy Presence", abilityEffect: "sturdyPresence", abilityLocation: "any"},
     {id: "Elemental Awakening_37.png", name: "Serafini", stage: "Stage 1", hp: 30, retreat: 1, move1Cost: "N", move1Name: "Heavenly Retreat", move1Damage: 0, move1Effect: "heavenlyRetreat", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Neutral"},
     {id: "Elemental Awakening_38.png", name: "Serafina", stage: "Stage 2", hp: 60, retreat: 2, move1Cost: "NN", move1Name: "Serene Light", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Serafini", type: "Neutral", abilityName: "Resourceful Recovery", abilityEffect: "resourcefulRecovery", abilityLocation: "any"},
     {id: "Elemental Awakening_39.png", name: "Alpakina", stage: "Stage 1", hp: 120, retreat: 2, move1Cost: "NNN", move1Name: "Energy Snatch", move1Damage: 40, move1Effect: "energySnatch", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Neutral"},
     {id: "Elemental Awakening_40.png", name: "Floonleef", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "N", move1Name: "Swirl", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Celestial"},
     {id: "Elemental Awakening_41.png", name: "Aerobloom", stage: "Stage 2", hp: 80, retreat: 1, move1Cost: "C", move1Name: "Balloon Burst", move1Damage: 40, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Floonleef", type: "Celestial"},
     {id: "Elemental Awakening_45.png", name: "Faeclover", stage: "Stage 1", hp: 30, retreat: 1, move1Cost: "C", move1Name: "Leaf Tickle", move1Damage: 10, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Celestial"},
-    {id: "Elemental Awakening_46.png", name: "Sunbloss", stage: "Stage 2", hp: 90, retreat: 1, move1Cost: "CCC", move1Name: "Nature's Clap", move1Damage: 60, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Faeclover", type: "Celestial"},
+    {id: "Elemental Awakening_46.png", name: "Sunbloss", stage: "Stage 2", hp: 90, retreat: 1, move1Cost: "CCC", move1Name: "Nature's Clap", move1Damage: 60, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Faeclover", type: "Celestial", abilityName: "Clarity Aura", abilityEffect: "clarityAura", abilityLocation: "any"},
     {id: "Elemental Awakening_47.png", name: "Aloebud", stage: "Stage 1", hp: 50, retreat: 1, move1Cost: "C", move1Name: "Aloe Slash", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Celestial"},
     {id: "Elemental Awakening_48.png", name: "Aloeflora", stage: "Stage 2", hp: 70, retreat: 1, move1Cost: "C", move1Name: "Vera Tackle", move1Damage: 40, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Aloebud", type: "Celestial"},
     {id: "Elemental Awakening_49.png", name: "Aloetide", stage: "Stage 3", hp: 90, retreat: 3, move1Cost: "CCC", move1Name: "Healing Sap", move1Damage: 50, move1Effect: "healingSap", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Aloeflora", type: "Celestial"},
@@ -30,24 +30,24 @@ const cardDatabase = [
     {id: "Elemental Awakening_53.png", name: "Byteblade", stage: "Stage 1", hp: 90, retreat: 3, move1Cost: "KKK", move1Name: "Shadow Byte", move1Damage: 60, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Mechanic"},
     {id: "Elemental Awakening_59.png", name: "Ponimetal", stage: "Stage 1", hp: 70, retreat: 1, move1Cost: "N", move1Name: "Iron Tail Whip", move1Damage: 10, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Mechanic"},
     {id: "Elemental Awakening_60.png", name: "Equinix", stage: "Stage 2", hp: 90, retreat: 1, move1Cost: "N", move1Name: "Titan Kick", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Ponimetal", type: "Mechanic"},
-    {id: "Elemental Awakening_61.png", name: "Equinox", stage: "Stage 3", hp: 110, retreat: 3, move1Cost: "KNN", move1Name: "Metal Burst", move1Damage: 60, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Equinix", type: "Mechanic"},
-    {id: "Elemental Awakening_63.png", name: "Aeglet", stage: "Stage 1", hp: 60, retreat: 3, move1Cost: "KK", move1Name: "Metalic Buzz", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Mechanic"},
-    {id: "Elemental Awakening_64.png", name: "Aegiscelis", stage: "Stage 2", hp: 130, retreat: 3, move1Cost: "KK", move1Name: "Guardian Glow", move1Damage: 50, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Aeglet", type: "Mechanic"},
+    {id: "Elemental Awakening_61.png", name: "Equinox", stage: "Stage 3", hp: 110, retreat: 3, move1Cost: "KNN", move1Name: "Metal Burst", move1Damage: 60, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Equinix", type: "Mechanic", abilityName: "Aura of Strength", abilityEffect: "auraOfStrength", abilityLocation: "any"},
+    {id: "Elemental Awakening_63.png", name: "Aeglet", stage: "Stage 1", hp: 60, retreat: 3, move1Cost: "KK", move1Name: "Metalic Buzz", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Mechanic", abilityName: "Guardian's Call", abilityEffect: "guardiansCall", abilityLocation: "any"},
+    {id: "Elemental Awakening_64.png", name: "Aegiscelis", stage: "Stage 2", hp: 130, retreat: 3, move1Cost: "KK", move1Name: "Guardian Glow", move1Damage: 50, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Aeglet", type: "Mechanic", abilityName: "Guardian", abilityEffect: "guardian", abilityLocation: "bench"},
     {id: "Elemental Awakening_65.png", name: "Potion", stage: "Item", hp: 0, retreat: 0, move1Cost: null, move1Name: null, move1Damage: null, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Item"},
     {id: "Elemental Awakening_66.png", name: "Card Draw", stage: "Item", hp: 0, retreat: 0, move1Cost: null, move1Name: null, move1Damage: null, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Item"},
     {id: "Elemental Awakening_67.png", name: "Booster", stage: "Item", hp: 0, retreat: 0, move1Cost: null, move1Name: null, move1Damage: null, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Item"},
     {id: "Elemental Awakening_01.png", name: "Meditot", stage: "Stage 1", hp: 50, retreat: 2, move1Cost: "MM", move1Name: "Mind Mirage", move1Damage: 20, move1Effect: "mindMirage", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Mystic"},
     {id: "Elemental Awakening_02.png", name: "Zenquaza", stage: "Stage 2", hp: 100, retreat: 2, move1Cost: "MMN", move1Name: "Ethereal Echo", move1Damage: 30, move1Effect: "etherealEcho", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Meditot", type: "Mystic"},
     {id: "Elemental Awakening_03.png", name: "Harmoniqueon", stage: "Stage 1", hp: 110, retreat: 2, move1Cost: "M", move1Name: "Cosmic Calm", move1Damage: 20, move1Effect: null, move2Cost: "MMNN", move2Name: "Phantom Pulse", move2Damage: 60, move2Effect: "phantomPulse", prevStage: null, type: "Mystic"},
-    {id: "Elemental Awakening_09.png", name: "Pheonyx", stage: "Stage 1", hp: 90, retreat: 3, move1Cost: "N", move1Name: "Dizzy Shot", move1Damage: 10, move1Effect: "dizzyShot", move2Cost: "MMMN", move2Name: "Mystic Blaze", move2Damage: 30, move2Effect: "mysticBlaze", prevStage: null, type: "Mystic"},
+    {id: "Elemental Awakening_09.png", name: "Pheonyx", stage: "Stage 1", hp: 90, retreat: 3, move1Cost: "N", move1Name: "Dizzy Shot", move1Damage: 10, move1Effect: "dizzyShot", move2Cost: "MMMN", move2Name: "Mystic Blaze", move2Damage: 30, move2Effect: "mysticBlaze", prevStage: null, type: "Mystic", abilityName: "Phase Shift", abilityEffect: "phaseShift", abilityLocation: "active"},
     {id: "Elemental Awakening_10.png", name: "Mystikid", stage: "Stage 1", hp: 40, retreat: 1, move1Cost: "M", move1Name: "Dreamwave", move1Damage: 0, move1Effect: "dreamwave", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Mystic"},
-    {id: "Elemental Awakening_11.png", name: "Mystikeon", stage: "Stage 2", hp: 80, retreat: 1, move1Cost: "MM", move1Name: "Dream Booster", move1Damage: 30, move1Effect: "dreamBooster", move2Cost: "MMM", move2Name: "Zen Bolt", move2Damage: 60, move2Effect: null, prevStage: "Mystikid", type: "Mystic"},
+    {id: "Elemental Awakening_11.png", name: "Mystikeon", stage: "Stage 2", hp: 80, retreat: 1, move1Cost: "MM", move1Name: "Dream Booster", move1Damage: 30, move1Effect: "dreamBooster", move2Cost: "MMM", move2Name: "Zen Bolt", move2Damage: 60, move2Effect: null, prevStage: "Mystikid", type: "Mystic", abilityName: "Camouflage", abilityEffect: "camouflage", abilityLocation: "any"},
     {id: "Elemental Awakening_16.png", name: "Aeruffin", stage: "Stage 1", hp: 90, retreat: 2, move1Cost: "WN", move1Name: "Beak Gust", move1Damage: 30, move1Effect: null, move2Cost: "WWN", move2Name: "Gale Flip", move2Damage: 0, move2Effect: "galeFlip", prevStage: null, type: "Wind"},
     {id: "Elemental Awakening_19.png", name: "Dodolet", stage: "Stage 1", hp: 40, retreat: 1, move1Cost: "N", move1Name: "Coin Clash", move1Damage: 0, move1Effect: "coinClash", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Wind"},
     {id: "Elemental Awakening_20.png", name: "Dodrift", stage: "Stage 2", hp: 60, retreat: 1, move1Cost: "W", move1Name: "Dice Fury", move1Damage: 0, move1Effect: "diceFury", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Dodolet", type: "Wind"},
     {id: "Elemental Awakening_21.png", name: "Dodoryphon", stage: "Stage 3", hp: 100, retreat: 1, move1Cost: "WW", move1Name: "Dice Tempest", move1Damage: 0, move1Effect: "diceTempest", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Dodrift", type: "Wind"},
     {id: "Elemental Awakening_22.png", name: "Aeroquatic", stage: "Stage 1", hp: 70, retreat: 0, move1Cost: "WN", move1Name: "Rainbow Surge", move1Damage: 50, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Wind"},
-    {id: "Elemental Awakening_23.png", name: "Prismarine", stage: "Stage 2", hp: 90, retreat: 1, move1Cost: "WN", move1Name: "Aqua Radiance", move1Damage: 60, move1Effect: null, move2Cost: "WWWN", move2Name: "Prismatic Dive", move2Damage: 40, move2Effect: "prismaticDive", prevStage: "Aeroquatic", type: "Wind"},
+    {id: "Elemental Awakening_23.png", name: "Prismarine", stage: "Stage 2", hp: 90, retreat: 1, move1Cost: "WN", move1Name: "Aqua Radiance", move1Damage: 60, move1Effect: null, move2Cost: "WWWN", move2Name: "Prismatic Dive", move2Damage: 40, move2Effect: "prismaticDive", prevStage: "Aeroquatic", type: "Wind", abilityName: "Rainbow Strike", abilityEffect: "rainbowStrike", abilityLocation: "active"},
     {id: "Elemental Awakening_24.png", name: "Pyrosora", stage: "Stage 1", hp: 100, retreat: 2, move1Cost: "W", move1Name: "Inferno Wing", move1Damage: 40, move1Effect: "infernoWing", move2Cost: "WWW", move2Name: "Solar Ascend", move2Damage: 70, move2Effect: "solarAscend", prevStage: null, type: "Wind"},
     {id: "Elemental Awakening_25.png", name: "Batakaze", stage: "Stage 1", hp: 50, retreat: 1, move1Cost: "W", move1Name: "Night Strike", move1Damage: 0, move1Effect: "nightStrike", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Wind"},
     {id: "Elemental Awakening_26.png", name: "Shadowflit", stage: "Stage 2", hp: 80, retreat: 1, move1Cost: "W", move1Name: "Ethereal Pulse", move1Damage: 0, move1Effect: "etherealPulse", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Batakaze", type: "Wind"},
@@ -57,15 +57,15 @@ const cardDatabase = [
     {id: "Elemental Awakening_32.png", name: "Antheara", stage: "Stage 1", hp: 50, retreat: 1, move1Cost: "N", move1Name: "Long Tongue Sweep", move1Damage: 40, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Neutral"},
     {id: "Elemental Awakening_33.png", name: "Antheara", stage: "Stage 1", hp: 50, retreat: 1, move1Cost: "N", move1Name: "Tongue Sweep", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Neutral", abilityName: "Defense Aura", abilityEffect: "defenseAura", abilityLocation: "active"},
     {id: "Elemental Awakening_42.png", name: "Rosbud", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "C", move1Name: "Petal Flick", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Celestial"},
-    {id: "Elemental Awakening_43.png", name: "Rosalia", stage: "Stage 2", hp: 90, retreat: 1, move1Cost: "CCC", move1Name: "Fortune Smite", move1Damage: 50, move1Effect: "fortuneSmite", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Rosbud", type: "Celestial"},
+    {id: "Elemental Awakening_43.png", name: "Rosalia", stage: "Stage 2", hp: 90, retreat: 1, move1Cost: "CCC", move1Name: "Fortune Smite", move1Damage: 50, move1Effect: "fortuneSmite", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Rosbud", type: "Celestial", abilityName: "Celestial Blessing", abilityEffect: "celestialBlessing", abilityLocation: "any"},
     {id: "Elemental Awakening_44.png", name: "Verdanthorn", stage: "Stage 1", hp: 110, retreat: 3, move1Cost: "C", move1Name: "Thorny Vines", move1Damage: 0, move1Effect: "thornyVines", move2Cost: "CCN", move2Name: "Healing Roots", move2Damage: 60, move2Effect: "healingRoots", prevStage: null, type: "Celestial"},
     {id: "Elemental Awakening_50.png", name: "Floretta", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "N", move1Name: "Minor Mend", move1Damage: 20, move1Effect: "minorMend", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Celestial"},
     {id: "Elemental Awakening_51.png", name: "Lizaflora", stage: "Stage 2", hp: 80, retreat: 0, move1Cost: "NN", move1Name: "Major Mend", move1Damage: 40, move1Effect: "majorMend", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Floretta", type: "Celestial"},
     {id: "Elemental Awakening_54.png", name: "Venomgear", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "K", move1Name: "Toxic Toss", move1Damage: 0, move1Effect: "toxicToss", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Mechanic"},
-    {id: "Elemental Awakening_55.png", name: "Toxiforge", stage: "Stage 2", hp: 110, retreat: 2, move1Cost: "KKK", move1Name: "Veno Slash", move1Damage: 50, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Venomgear", type: "Mechanic"},
+    {id: "Elemental Awakening_55.png", name: "Toxiforge", stage: "Stage 2", hp: 110, retreat: 2, move1Cost: "KKK", move1Name: "Veno Slash", move1Damage: 50, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Venomgear", type: "Mechanic", abilityName: "Quick Reflexes", abilityEffect: "quickReflexes", abilityLocation: "any"},
     {id: "Elemental Awakening_56.png", name: "Envoye", stage: "Stage 1", hp: 100, retreat: 1, move1Cost: "K", move1Name: "Forceful Flip", move1Damage: 0, move1Effect: "forcefulFlip", move2Cost: "KKN", move2Name: "Scrap Strike", move2Damage: 0, move2Effect: "scrapStrike", prevStage: null, type: "Mechanic"},
     {id: "Elemental Awakening_57.png", name: "Struto", stage: "Stage 1", hp: 80, retreat: 1, move1Cost: "K", move1Name: "Metallic Wing", move1Damage: 0, move1Effect: "metallicWing", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Mechanic"},
-    {id: "Elemental Awakening_58.png", name: "Strutalon", stage: "Stage 2", hp: 130, retreat: 2, move1Cost: "KKKN", move1Name: "Turbo Charge", move1Damage: 70, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Struto", type: "Mechanic"},
+    {id: "Elemental Awakening_58.png", name: "Strutalon", stage: "Stage 2", hp: 130, retreat: 2, move1Cost: "KKKN", move1Name: "Turbo Charge", move1Damage: 70, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Struto", type: "Mechanic", abilityName: "Hard as Steel", abilityEffect: "hardAsSteel", abilityLocation: "any"},
     {id: "Elemental Awakening_62.png", name: "Metamonk", stage: "Stage 1", hp: 130, retreat: 2, move1Cost: "KK", move1Name: "Monastic Strike", move1Damage: 50, move1Effect: null, move2Cost: "KKKN", move2Name: "Monk's Fury", move2Damage: 70, move2Effect: "monksFury", prevStage: null, type: "Mechanic"},
     {id: "Elemental Awakening_68.png", name: "Power-Up", stage: "Item", hp: 0, retreat: 0, move1Cost: null, move1Name: null, move1Damage: null, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Item"},
     {id: "Elemental Awakening_69.png", name: "Remedy", stage: "Item", hp: 0, retreat: 0, move1Cost: null, move1Name: null, move1Damage: null, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Item"},
@@ -77,7 +77,7 @@ const cardDatabase = [
     {id: "Elemental Awakening_75.png", name: "Flutterwing", stage: "Stage 3", hp: 90, retreat: 1, move1Cost: "WN", move1Name: "Wing Slap", move1Damage: 80, move1Effect: "wingSlap", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Cerisebat", type: "Wind"},
     {id: "Elemental Awakening_76.png", name: "Minkpaw", stage: "Stage 1", hp: 50, retreat: 1, move1Cost: "N", move1Name: "Claw Swipe", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Neutral"},
     {id: "Elemental Awakening_77.png", name: "Furstream", stage: "Stage 2", hp: 80, retreat: 1, move1Cost: "NN", move1Name: "Whisker Whip", move1Damage: 50, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Minkpaw", type: "Neutral"},
-    {id: "Elemental Awakening_78.png", name: "Lumbertail", stage: "Stage 3", hp: 100, retreat: 1, move1Cost: "NNN", move1Name: "Feline Fury", move1Damage: 70, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Furstream", type: "Neutral"},
+    {id: "Elemental Awakening_78.png", name: "Lumbertail", stage: "Stage 3", hp: 100, retreat: 1, move1Cost: "NNN", move1Name: "Feline Fury", move1Damage: 70, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Furstream", type: "Neutral", abilityName: "Energy Siphon", abilityEffect: "energySiphon", abilityLocation: "any"},
     {id: "Elemental Awakening_79.png", name: "Astromelon", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "C", move1Name: "Nebula Kiss", move1Damage: 10, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Celestial"},
     {id: "Elemental Awakening_80.png", name: "Lunamelon", stage: "Stage 2", hp: 80, retreat: 2, move1Cost: "C", move1Name: "Moonlight Slam", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Astromelon", type: "Celestial"},
     {id: "Elemental Awakening_81.png", name: "Orbitmelon", stage: "Stage 3", hp: 110, retreat: 2, move1Cost: "C", move1Name: "Planet Burst", move1Damage: 50, move1Effect: "planetBurst", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Lunamelon", type: "Celestial"},
@@ -321,8 +321,15 @@ function editCustomDeck(deckName) {
     availableCards.innerHTML = '';
     customDeckCardsDiv.innerHTML = '';
     
+    // Sort card database by output_id (the number in the filename)
+    const sortedCards = [...cardDatabase].sort((a, b) => {
+        const aNum = parseInt(a.id.match(/(\d+)/)?.[0] || '0');
+        const bNum = parseInt(b.id.match(/(\d+)/)?.[0] || '0');
+        return aNum - bNum;
+    });
+    
     // Populate available cards
-    cardDatabase.forEach(cardData => {
+    sortedCards.forEach(cardData => {
         const cardDiv = document.createElement('div');
         cardDiv.className = 'builder-card';
         cardDiv.dataset.cardId = cardData.id;
@@ -454,7 +461,13 @@ const gameState = {
         selectedDeck: null,
         boosterActive: false,
         powerUpTurnsRemaining: 0, // Power-Up item effect
-        monksFuryShield: false // Monk's Fury damage reduction
+        monksFuryShield: false, // Monk's Fury damage reduction
+        cantAttackNextTurn: false, // Quick Reflexes effect
+        clarityAuraActive: false, // Clarity Aura hallucination prevention
+        camouflageActive: false, // Camouflage bench protection
+        rainbowStrikeActive: false, // Rainbow Strike bench damage
+        phaseShiftActive: false, // Phase Shift forced switch
+        sturdyPresenceBonus: 0 // Sturdy Presence damage bonus
     },
     opponent: {
         deck: [],
@@ -469,7 +482,13 @@ const gameState = {
         selectedDeck: null,
         boosterActive: false,
         powerUpTurnsRemaining: 0,
-        monksFuryShield: false
+        monksFuryShield: false,
+        cantAttackNextTurn: false, // Quick Reflexes effect
+        clarityAuraActive: false, // Clarity Aura hallucination prevention
+        camouflageActive: false, // Camouflage bench protection
+        rainbowStrikeActive: false, // Rainbow Strike bench damage
+        phaseShiftActive: false, // Phase Shift forced switch
+        sturdyPresenceBonus: 0 // Sturdy Presence damage bonus
     },
     currentTurn: null, // 'player' or 'opponent'
     turnNumber: 0,
@@ -636,8 +655,13 @@ function showDeckSelection() {
         <h2 style="font-size: 32px;">🔧</h2>
         <p>Debug Mode</p>
     `;
-    debugBtn.addEventListener('click', () => showDebugModal());
+    console.log('Debug button created, adding click listener');
+    debugBtn.addEventListener('click', () => {
+        console.log('Debug button clicked!');
+        showDebugModal();
+    });
     deckList.appendChild(debugBtn);
+    console.log('Debug button appended to deck list');
 }
 
 function showDeckPreview(deckIndex) {
@@ -760,8 +784,15 @@ function showDeckBuilder() {
     availableCards.innerHTML = '';
     customDeckCardsDiv.innerHTML = '';
     
+    // Sort card database by output_id (the number in the filename)
+    const sortedCards = [...cardDatabase].sort((a, b) => {
+        const aNum = parseInt(a.id.match(/(\d+)/)?.[0] || '0');
+        const bNum = parseInt(b.id.match(/(\d+)/)?.[0] || '0');
+        return aNum - bNum;
+    });
+    
     // Group all creature and item cards
-    cardDatabase.forEach(cardData => {
+    sortedCards.forEach(cardData => {
         const cardDiv = document.createElement('div');
         cardDiv.className = 'builder-card';
         cardDiv.dataset.cardId = cardData.id;
@@ -1049,7 +1080,7 @@ function renderBoard(player) {
             if (player === 'player') {
                 const abilityBtn = document.getElementById(`bench-ability-btn-${index}`);
                 if (abilityBtn) {
-                    if (card.data.abilityName && card.data.abilityLocation === 'any') {
+                    if (card.data.abilityName && (card.data.abilityLocation === 'any' || card.data.abilityLocation === 'bench')) {
                         abilityBtn.textContent = card.data.abilityName;
                         abilityBtn.style.display = 'block';
                         
@@ -1462,6 +1493,9 @@ function evolveCard(player, location, index) {
 
 // Item cards
 function useItemCard(card, handIndex) {
+    // Track that player used an item this turn for Energy Siphon ability
+    gameState.player.usedItemThisTurn = true;
+    
     if (card.data.name === "Potion") {
         usePotionCard(handIndex);
     } else if (card.data.name === "Card Draw") {
@@ -1667,6 +1701,12 @@ function handleAttack(moveNumber) {
     
     if (!attacker || !defender) return;
     
+    // Check if player can't attack this turn due to Quick Reflexes or Wing Slap
+    if (gameState.player.cantAttackNextTurn) {
+        alert(`You can't attack this turn due to Quick Reflexes effect!`);
+        return;
+    }
+    
     // Check if attacker can't attack this turn due to Wing Slap
     if (attacker.cantAttackNextTurn) {
         alert(`${attacker.data.name} can't attack this turn due to Wing Slap effect!`);
@@ -1866,11 +1906,33 @@ function handleAttack(moveNumber) {
         alert(`Super Effective move! ${attackerType} is super effective against ${defenderType}! +10 damage!`);
     }
     
+    // Apply Aura of Strength bonus (must be applied before shields)
+    if (gameState.player.auraOfStrengthBonus) {
+        damage += gameState.player.auraOfStrengthBonus;
+        alert(`Aura of Strength bonus: +${gameState.player.auraOfStrengthBonus} damage! Total: ${damage}`);
+        gameState.player.auraOfStrengthBonus = 0; // Consumed after this attack
+    }
+    
+    // Apply Sturdy Presence bonus (must be applied before shields)
+    if (gameState.player.sturdyPresenceBonus) {
+        damage += gameState.player.sturdyPresenceBonus;
+        alert(`Sturdy Presence bonus: +${gameState.player.sturdyPresenceBonus} damage! Total: ${damage}`);
+        gameState.player.sturdyPresenceBonus = 0; // Consumed after this attack
+    }
+    
     // Apply Monk's Fury shield (opponent's shield reduces damage to them)
     if (gameState.opponent.monksFuryShield) {
         damage = Math.max(0, damage - 20);
         alert(`Monk's Fury shield reduces damage by 20! ${attacker.data.name} deals ${damage} damage!`);
         gameState.opponent.monksFuryShield = false; // Shield is consumed
+    }
+    
+    // Apply Hard as Steel shield (opponent's shield - only from Mechanic/Neutral attackers)
+    if (gameState.opponent.hardAsSteelShield && (attackerType === 'Mechanic' || attackerType === 'Neutral')) {
+        const shieldAmount = gameState.opponent.hardAsSteelShield;
+        damage = Math.max(0, damage - shieldAmount);
+        alert(`Hard as Steel shield reduces damage by ${shieldAmount}! ${attacker.data.name} deals ${damage} damage!`);
+        gameState.opponent.hardAsSteelShield = 0; // Shield is consumed
     }
     
     // Apply Spectral Burst shield (opponent's shield reduces damage to them)
@@ -1891,8 +1953,73 @@ function handleAttack(moveNumber) {
     
     console.log("Total damage:", damage, "Defender HP:", defender.data.hp, "Current damage:", defender.damage);
     
+    // Check for Guardian ability - redirect damage to bench creature
+    if (gameState.opponent.guardianBenchIndex !== null && gameState.opponent.guardianBenchIndex !== undefined) {
+        const guardianIndex = gameState.opponent.guardianBenchIndex;
+        const guardianCard = gameState.opponent.bench[guardianIndex];
+        if (guardianCard) {
+            alert(`${guardianCard.data.name} uses Guardian! It takes the damage instead of ${defender.data.name}!`);
+            guardianCard.damage += damage;
+            gameState.opponent.guardianBenchIndex = null; // Ability consumed
+            renderGame();
+            
+            // Check if guardian is knocked out
+            if (guardianCard.damage >= guardianCard.data.hp) {
+                alert(`${guardianCard.data.name} was knocked out protecting ${defender.data.name}!`);
+                gameState.opponent.bench[guardianIndex] = null;
+                gameState.opponent.points++;
+                updatePoints();
+                // Continue with the rest of the turn
+                if (gameState.player.hasAttacked) {
+                    setTimeout(() => endTurn(), 500);
+                }
+                return;
+            }
+            // If guardian survives, continue turn normally
+            if (gameState.player.hasAttacked) {
+                setTimeout(() => endTurn(), 500);
+            }
+            return;
+        } else {
+            // Guardian creature no longer exists, clear the index
+            gameState.opponent.guardianBenchIndex = null;
+        }
+    }
+    
     // Apply base damage to defender
     defender.damage += damage;
+    
+    // Apply Rainbow Strike - deal 30 damage to random opponent bench creature
+    if (gameState.player.rainbowStrikeActive) {
+        const opponentBench = gameState.opponent.bench.filter(c => c !== null);
+        if (opponentBench.length > 0) {
+            const randomIndex = Math.floor(Math.random() * opponentBench.length);
+            let actualIndex = 0;
+            let count = 0;
+            for (let i = 0; i < gameState.opponent.bench.length; i++) {
+                if (gameState.opponent.bench[i] !== null) {
+                    if (count === randomIndex) {
+                        actualIndex = i;
+                        break;
+                    }
+                    count++;
+                }
+            }
+            const benchTarget = gameState.opponent.bench[actualIndex];
+            benchTarget.damage += 30;
+            alert(`Rainbow Strike! ${benchTarget.data.name} on bench takes 30 damage!`);
+            
+            // Check if bench creature was knocked out
+            if (benchTarget.damage >= benchTarget.data.hp) {
+                alert(`${benchTarget.data.name} was knocked out!`);
+                gameState.opponent.bench[actualIndex] = null;
+                gameState.player.points++;
+                updatePoints();
+            }
+        }
+        gameState.player.rainbowStrikeActive = false; // Consumed
+        renderGame();
+    }
     
     // Apply hallucination self-damage if tails
     if (attacker.hallucinationFlip === 'tails') {
@@ -1916,6 +2043,58 @@ function handleAttack(moveNumber) {
     gameState.player.hasAttacked = true;
     renderGame();
     
+    // Check for Phase Shift - must switch after attacking
+    if (gameState.player.phaseShiftActive) {
+        const playerBench = gameState.player.bench.filter(c => c !== null);
+        if (playerBench.length > 0) {
+            // Prompt player to select bench creature to switch with
+            alert(`Phase Shift! You must switch ${gameState.player.active.data.name} with a bench creature.`);
+            
+            // Highlight bench creatures for selection
+            gameState.phase = 'phaseShiftSwitch';
+            gameState.player.bench.forEach((card, index) => {
+                if (card) {
+                    const benchSlot = document.querySelector(`.bench-slot[data-player="player"][data-slot="${index}"]`);
+                    if (benchSlot) {
+                        benchSlot.classList.add('can-select');
+                        
+                        // Use addEventListener with once:true to ensure handler is removed after use
+                        const handlePhaseShiftSwitch = () => {
+                            // Perform the switch
+                            const temp = gameState.player.active;
+                            gameState.player.active = gameState.player.bench[index];
+                            gameState.player.bench[index] = temp;
+                            
+                            // Clear hallucination on switched creature
+                            if (temp.hallucinating) {
+                                temp.hallucinating = false;
+                                alert(`${temp.data.name} is no longer hallucinating!`);
+                            }
+                            
+                            // Clean up
+                            document.querySelectorAll('.can-select').forEach(s => s.classList.remove('can-select'));
+                            gameState.player.phaseShiftActive = false;
+                            gameState.phase = 'main';
+                            
+                            alert(`Switched ${temp.data.name} with ${gameState.player.active.data.name}!`);
+                            renderGame();
+                            
+                            // Continue with knockout check
+                            continueAfterPhaseShift();
+                        };
+                        
+                        benchSlot.addEventListener('click', handlePhaseShiftSwitch, {once: true});
+                    }
+                }
+            });
+            return; // Exit to wait for player selection
+        } else {
+            alert("Phase Shift requires a bench creature to switch with, but you have none!");
+            gameState.player.phaseShiftActive = false;
+        }
+    }
+    
+    function continueAfterPhaseShift() {
     // Check if defender is knocked out by base damage
     const defenderKnockedOut = defender.damage >= defender.data.hp;
     
@@ -1941,14 +2120,18 @@ function handleAttack(moveNumber) {
                 const flip = flipCoin();
                 alert(`Solar Ascend: Coin flip result: ${flip}!`);
                 if (flip === 'heads') {
-                    let damageLog = "Solar Ascend hits all opponent's benched creatures for 10 damage!\n";
-                    gameState.opponent.bench.forEach((card, idx) => {
-                        if (card) {
-                            card.damage += 10;
-                            damageLog += `${card.data.name} on bench takes 10 damage!\n`;
-                        }
-                    });
-                    alert(damageLog);
+                    if (!gameState.opponent.camouflageActive) {
+                        let damageLog = "Solar Ascend hits all opponent's benched creatures for 10 damage!\n";
+                        gameState.opponent.bench.forEach((card, idx) => {
+                            if (card) {
+                                card.damage += 10;
+                                damageLog += `${card.data.name} on bench takes 10 damage!\n`;
+                            }
+                        });
+                        alert(damageLog);
+                    } else {
+                        alert("Solar Ascend aimed at bench, but Camouflage protected them!");
+                    }
                     renderGame();
                 } else {
                     alert("Coin was tails! No bench damage.");
@@ -1956,17 +2139,22 @@ function handleAttack(moveNumber) {
                 knockoutCreature('opponent');
             } else if (effect === 'mysticBlaze') {
                 // Deal 30 damage to all opponent's creatures on bench (active already KO'd)
-                let damageLog = "Mystic Blaze hits all opponent's benched creatures for 30 damage!\n";
-                gameState.opponent.bench.forEach((card, idx) => {
-                    if (card) {
-                        card.damage += 30;
-                        damageLog += `${card.data.name} on bench takes 30 damage!\n`;
-                    }
+                if (!gameState.opponent.camouflageActive) {
+                    let damageLog = "Mystic Blaze hits all opponent's benched creatures for 30 damage!\n";
+                    gameState.opponent.bench.forEach((card, idx) => {
+                        if (card) {
+                            card.damage += 30;
+                            damageLog += `${card.data.name} on bench takes 30 damage!\n`;
+                        }
                 });
-                alert(damageLog);
-                renderGame();
-                // Check bench knockouts first, then handle active
-                checkBenchKnockouts('opponent');
+                    alert(damageLog);
+                    renderGame();
+                    // Check bench knockouts first, then handle active
+                    checkBenchKnockouts('opponent');
+                } else {
+                    alert("Mystic Blaze aimed at bench, but Camouflage protected them!");
+                    renderGame();
+                }
                 knockoutCreature('opponent');
             } else if (effect === 'healingRoots') {
                 attacker.damage = Math.max(0, attacker.damage - 20);
@@ -2027,26 +2215,22 @@ function handleAttack(moveNumber) {
                 }
                 knockoutCreature('opponent');
             } else if (effect === 'mindMirage') {
-                defender.hallucinating = true;
-                alert(`${defender.data.name} is now hallucinating!`);
+                applyHallucination(defender, 'opponent');
                 renderGame();
                 knockoutCreature('opponent');
             } else if (effect === 'etherealEcho') {
-                defender.hallucinating = true;
-                alert(`${defender.data.name} is now hallucinating!`);
+                applyHallucination(defender, 'opponent');
                 renderGame();
                 knockoutCreature('opponent');
             } else if (effect === 'phantomPulse') {
-                defender.hallucinating = true;
-                alert(`${defender.data.name} is now hallucinating!`);
+                applyHallucination(defender, 'opponent');
                 renderGame();
                 knockoutCreature('opponent');
             } else if (effect === 'dreamwave') {
                 const flip = flipCoin();
                 alert(`Dreamwave: Coin flip result: ${flip}!`);
                 if (flip === 'heads') {
-                    defender.hallucinating = true;
-                    alert(`${defender.data.name} is now hallucinating!`);
+                    applyHallucination(defender, 'opponent');
                 } else {
                     alert("Coin was tails! No hallucination caused.");
                 }
@@ -2056,16 +2240,14 @@ function handleAttack(moveNumber) {
                 const flip = flipCoin();
                 alert(`Dream Booster: Coin flip result: ${flip}!`);
                 if (flip === 'heads') {
-                    defender.hallucinating = true;
-                    alert(`${defender.data.name} is now hallucinating!`);
+                    applyHallucination(defender, 'opponent');
                 } else {
                     alert("Coin was tails! No hallucination caused.");
                 }
                 renderGame();
                 knockoutCreature('opponent');
             } else if (effect === 'brainFreeze') {
-                defender.hallucinating = true;
-                alert(`${defender.data.name} is now hallucinating!`);
+                applyHallucination(defender, 'opponent');
                 renderGame();
                 knockoutCreature('opponent');
             } else if (effect === 'wingSlap') {
@@ -2107,14 +2289,18 @@ function handleAttack(moveNumber) {
                 }
             } else if (effect === 'mysticBlaze') {
                 // Deal 30 damage to all opponent's creatures
-                let damageLog = "Mystic Blaze hits all opponent's creatures for 30 damage!\n";
-                gameState.opponent.bench.forEach((card, idx) => {
-                    if (card) {
-                        card.damage += 30;
-                        damageLog += `${card.data.name} on bench takes 30 damage!\n`;
-                    }
-                });
-                alert(damageLog);
+                if (!gameState.opponent.camouflageActive) {
+                    let damageLog = "Mystic Blaze hits all opponent's creatures for 30 damage!\n";
+                    gameState.opponent.bench.forEach((card, idx) => {
+                        if (card) {
+                            card.damage += 30;
+                            damageLog += `${card.data.name} on bench takes 30 damage!\n`;
+                        }
+                    });
+                    alert(damageLog);
+                } else {
+                    alert("Mystic Blaze aimed at bench, but Camouflage protected them!");
+                }
                 checkKnockoutsAndContinue('player');
             } else if (effect === 'prismaticDive') {
                 let headsCount = 0;
@@ -2139,14 +2325,18 @@ function handleAttack(moveNumber) {
                 const flip = flipCoin();
                 alert(`Solar Ascend: Coin flip result: ${flip}!`);
                 if (flip === 'heads') {
-                    let damageLog = "Solar Ascend hits all opponent's benched creatures for 10 damage!\n";
-                    gameState.opponent.bench.forEach((card, idx) => {
-                        if (card) {
-                            card.damage += 10;
-                            damageLog += `${card.data.name} on bench takes 10 damage!\n`;
-                        }
-                    });
-                    alert(damageLog);
+                    if (!gameState.opponent.camouflageActive) {
+                        let damageLog = "Solar Ascend hits all opponent's benched creatures for 10 damage!\n";
+                        gameState.opponent.bench.forEach((card, idx) => {
+                            if (card) {
+                                card.damage += 10;
+                                damageLog += `${card.data.name} on bench takes 10 damage!\n`;
+                            }
+                        });
+                        alert(damageLog);
+                    } else {
+                        alert("Solar Ascend aimed at bench, but Camouflage protected them!");
+                    }
                     checkKnockoutsAndContinue('player');
                 } else {
                     alert("Coin was tails! No bench damage.");
@@ -2257,8 +2447,7 @@ function handleAttack(moveNumber) {
                 renderGame();
                 checkKnockoutsAndContinue('player');
             } else if (effect === 'brainFreeze') {
-                defender.hallucinating = true;
-                alert(`${defender.data.name} is now hallucinating!`);
+                applyHallucination(defender, 'opponent');
                 renderGame();
                 checkKnockoutsAndContinue('player');
             } else if (effect === 'wingSlap') {
@@ -2283,6 +2472,12 @@ function handleAttack(moveNumber) {
             }
         }
     }
+    } // Close continueAfterPhaseShift
+    
+    // If Phase Shift is not active, continue immediately
+    if (!gameState.player.phaseShiftActive) {
+        continueAfterPhaseShift();
+    }
 }
 
 // Coin flip utility
@@ -2292,6 +2487,22 @@ function flipCoin() {
 
 function rollDice() {
     return Math.floor(Math.random() * 6) + 1; // Returns 1-6
+}
+
+// Apply hallucination with protection checks
+// Returns true if hallucination was applied, false if blocked
+function applyHallucination(target, targetPlayer) {
+    // targetPlayer should be 'player' or 'opponent' indicating who owns the target creature
+    const isProtected = gameState[targetPlayer].clarityAuraActive;
+    
+    if (!isProtected) {
+        target.hallucinating = true;
+        alert(`${target.data.name} is now hallucinating!`);
+        return true;
+    } else {
+        alert(`${target.data.name} is protected from Hallucination by Clarity Aura!`);
+        return false;
+    }
 }
 
 // Check if attack is super effective
@@ -2996,6 +3207,199 @@ function useAbility(card, player, location, index) {
             renderGame();
             break;
             
+        case 'hardAsSteel':
+            // Hard as Steel - reduce damage from Mechanic/Neutral attacks by 30 next turn
+            gameState.player.hardAsSteelShield = 30;
+            card.abilityUsedThisTurn = true;
+            alert(`${card.data.name} used Hard as Steel! Next turn, damage from Mechanic/Neutral creatures will be reduced by 30.`);
+            renderGame();
+            break;
+            
+        case 'auraOfStrength':
+            // Aura of Strength - requires full bench, gives +30 damage bonus this turn
+            const fullBench = gameState.player.bench.filter(c => c !== null).length === 3;
+            if (!fullBench) {
+                alert(`${card.data.name}'s Aura of Strength requires a full bench (3 creatures)!`);
+                return;
+            }
+            gameState.player.auraOfStrengthBonus = 30;
+            card.abilityUsedThisTurn = true;
+            alert(`${card.data.name} used Aura of Strength! Your attacks this turn deal +30 damage!`);
+            renderGame();
+            break;
+            
+        case 'guardiansCall':
+            // Guardian's Call - flip coin, if heads can evolve Aeglet to Aegiscelis immediately
+            const hasAegiscelisInHand = gameState.player.hand.some(c => c.data.name === "Aegiscelis");
+            if (!hasAegiscelisInHand) {
+                alert(`${card.data.name}'s Guardian's Call requires Aegiscelis in your hand!`);
+                return;
+            }
+            const guardianFlip = flipCoin();
+            alert(`${card.data.name} used Guardian's Call! Coin flip: ${guardianFlip}!`);
+            if (guardianFlip === 'heads') {
+                // Find Aegiscelis in hand
+                const aegiscelisIndex = gameState.player.hand.findIndex(c => c.data.name === "Aegiscelis");
+                const aegiscelis = gameState.player.hand[aegiscelisIndex];
+                
+                // Evolve the card
+                const newCard = {
+                    id: aegiscelis.id, // Preserve card ID for image display
+                    data: aegiscelis.data,
+                    damage: card.damage, // Preserve damage
+                    energy: card.energy, // Preserve energy
+                    hallucinating: card.hallucinating || false,
+                    cantRetreat: card.cantRetreat || false,
+                    abilityUsedThisTurn: false,
+                    justPlayed: false,
+                    justEvolved: true
+                };
+                
+                // Replace in correct location
+                if (location === 'active') {
+                    gameState.player.active = newCard;
+                } else if (location === 'bench') {
+                    gameState.player.bench[index] = newCard;
+                }
+                
+                // Remove from hand
+                gameState.player.hand.splice(aegiscelisIndex, 1);
+                alert(`Heads! ${card.data.name} evolved into Aegiscelis!`);
+                card.abilityUsedThisTurn = true;
+                renderGame();
+            } else {
+                alert("Tails! Evolution failed.");
+                card.abilityUsedThisTurn = true;
+                renderGame();
+            }
+            break;
+            
+        case 'guardian':
+            // Guardian - next turn, this creature takes damage instead of active creature
+            if (location !== 'bench') {
+                alert(`${card.data.name}'s Guardian ability can only be used from the bench!`);
+                return;
+            }
+            gameState.player.guardianBenchIndex = index;
+            card.abilityUsedThisTurn = true;
+            alert(`${card.data.name} used Guardian! Next turn, it will take damage instead of your active creature!`);
+            renderGame();
+            break;
+            
+        case 'energySiphon':
+            // Energy Siphon - if opponent used item last turn, attach energy to this creature
+            if (!gameState.opponent.usedItemLastTurn) {
+                alert(`${card.data.name}'s Energy Siphon requires the opponent to have used an item card last turn!`);
+                return;
+            }
+            card.energy++;
+            card.abilityUsedThisTurn = true;
+            alert(`${card.data.name} used Energy Siphon! Attached 1 energy because opponent used an item last turn!`);
+            renderGame();
+            break;
+            
+        case 'quickReflexes':
+            // Quick Reflexes - flip 2 coins, if both heads opponent can't attack next turn
+            const flip1 = flipCoin();
+            const flip2 = flipCoin();
+            alert(`${card.data.name} used Quick Reflexes! Coin flips: ${flip1}, ${flip2}!`);
+            if (flip1 === 'heads' && flip2 === 'heads') {
+                gameState.opponent.cantAttackNextTurn = true;
+                gameState.opponent.cantAttackUntilTurn = gameState.turnNumber + 2; // Can't attack on opponent's next turn
+                card.abilityUsedThisTurn = true;
+                alert("Both heads! Opponent can't attack next turn!");
+                renderGame();
+            } else {
+                alert("Not both heads! No effect.");
+                card.abilityUsedThisTurn = true;
+                renderGame();
+            }
+            break;
+            
+        case 'clarityAura':
+            // Clarity Aura - prevents all creatures from getting hallucination
+            gameState.player.clarityAuraActive = true;
+            card.abilityUsedThisTurn = true;
+            alert(`${card.data.name} used Clarity Aura! Your creatures are protected from Hallucination this turn!`);
+            renderGame();
+            break;
+            
+        case 'celestialBlessing':
+            // Celestial Blessing - heal one random celestial creature by 30 HP
+            const allCelestials = [];
+            // Add player's celestial creatures
+            if (gameState.player.active && getCardType(gameState.player.active.data) === 'Celestial' && gameState.player.active.damage > 0) {
+                allCelestials.push({owner: 'player', location: 'active', card: gameState.player.active});
+            }
+            gameState.player.bench.forEach((benchCard, idx) => {
+                if (benchCard && getCardType(benchCard.data) === 'Celestial' && benchCard.damage > 0) {
+                    allCelestials.push({owner: 'player', location: 'bench', index: idx, card: benchCard});
+                }
+            });
+            // Add opponent's celestial creatures
+            if (gameState.opponent.active && getCardType(gameState.opponent.active.data) === 'Celestial' && gameState.opponent.active.damage > 0) {
+                allCelestials.push({owner: 'opponent', location: 'active', card: gameState.opponent.active});
+            }
+            gameState.opponent.bench.forEach((benchCard, idx) => {
+                if (benchCard && getCardType(benchCard.data) === 'Celestial' && benchCard.damage > 0) {
+                    allCelestials.push({owner: 'opponent', location: 'bench', index: idx, card: benchCard});
+                }
+            });
+            
+            if (allCelestials.length === 0) {
+                alert(`${card.data.name} used Celestial Blessing, but there are no damaged Celestial creatures to heal!`);
+                card.abilityUsedThisTurn = true;
+                renderGame();
+            } else {
+                const randomIndex = Math.floor(Math.random() * allCelestials.length);
+                const target = allCelestials[randomIndex];
+                target.card.damage = Math.max(0, target.card.damage - 30);
+                card.abilityUsedThisTurn = true;
+                alert(`${card.data.name} used Celestial Blessing! Healed ${target.card.data.name} for 30 HP!`);
+                renderGame();
+            }
+            break;
+            
+        case 'sturdyPresence':
+            // Sturdy Presence - +20 damage bonus this turn
+            gameState.player.sturdyPresenceBonus = 20;
+            card.abilityUsedThisTurn = true;
+            alert(`${card.data.name} used Sturdy Presence! Your attacks this turn deal +20 damage!`);
+            renderGame();
+            break;
+            
+        case 'rainbowStrike':
+            // Rainbow Strike - deals 30 damage to random bench creature when attacking
+            if (location !== 'active') {
+                alert(`${card.data.name}'s Rainbow Strike can only be used from the active spot!`);
+                return;
+            }
+            gameState.player.rainbowStrikeActive = true;
+            card.abilityUsedThisTurn = true;
+            alert(`${card.data.name} used Rainbow Strike! When you attack, it will also deal 30 damage to a random opponent bench creature!`);
+            renderGame();
+            break;
+            
+        case 'camouflage':
+            // Camouflage - protects bench creatures from damage
+            gameState.player.camouflageActive = true;
+            card.abilityUsedThisTurn = true;
+            alert(`${card.data.name} used Camouflage! Your bench creatures are protected from damage this turn!`);
+            renderGame();
+            break;
+            
+        case 'phaseShift':
+            // Phase Shift - after attacking, must switch with bench creature
+            if (location !== 'active') {
+                alert(`${card.data.name}'s Phase Shift can only be used from the active spot!`);
+                return;
+            }
+            gameState.player.phaseShiftActive = true;
+            card.abilityUsedThisTurn = true;
+            alert(`${card.data.name} used Phase Shift! After attacking, you must switch it with a bench creature!`);
+            renderGame();
+            break;
+            
         default:
             console.log("Unknown ability effect:", abilityEffect);
     }
@@ -3039,12 +3443,133 @@ function aiUseAbilities() {
                 
                 card.abilityUsedThisTurn = true;
                 renderGame();
+            } else if (abilityEffect === 'hardAsSteel') {
+                gameState.opponent.hardAsSteelShield = 30;
+                card.abilityUsedThisTurn = true;
+                alert(`AI's ${card.data.name} used Hard as Steel! Next turn, damage from Mechanic/Neutral creatures will be reduced by 30.`);
+                renderGame();
+            } else if (abilityEffect === 'auraOfStrength') {
+                const fullBench = gameState.opponent.bench.filter(c => c !== null).length === 3;
+                if (fullBench) {
+                    gameState.opponent.auraOfStrengthBonus = 30;
+                    card.abilityUsedThisTurn = true;
+                    alert(`AI's ${card.data.name} used Aura of Strength! AI's attacks this turn deal +30 damage!`);
+                    renderGame();
+                }
+            } else if (abilityEffect === 'guardiansCall') {
+                const hasAegiscelisInHand = gameState.opponent.hand.some(c => c.data.name === "Aegiscelis");
+                if (hasAegiscelisInHand) {
+                    const guardianFlip = flipCoin();
+                    alert(`AI's ${card.data.name} used Guardian's Call! Coin flip: ${guardianFlip}!`);
+                    if (guardianFlip === 'heads') {
+                        const aegiscelisIndex = gameState.opponent.hand.findIndex(c => c.data.name === "Aegiscelis");
+                        const aegiscelis = gameState.opponent.hand[aegiscelisIndex];
+                        
+                        const newCard = {
+                            id: aegiscelis.id, // Preserve card ID for image display
+                            data: aegiscelis.data,
+                            damage: card.damage,
+                            energy: card.energy,
+                            hallucinating: card.hallucinating || false,
+                            cantRetreat: card.cantRetreat || false,
+                            abilityUsedThisTurn: false,
+                            justPlaced: false,
+                            justEvolved: true
+                        };
+                        
+                        gameState.opponent.active = newCard;
+                        gameState.opponent.hand.splice(aegiscelisIndex, 1);
+                        alert(`Heads! AI's ${card.data.name} evolved into Aegiscelis!`);
+                        card.abilityUsedThisTurn = true;
+                        renderGame();
+                    } else {
+                        alert("Tails! Evolution failed.");
+                        card.abilityUsedThisTurn = true;
+                        renderGame();
+                    }
+                }
+            } else if (abilityEffect === 'energySiphon') {
+                if (gameState.player.usedItemLastTurn) {
+                    card.energy++;
+                    card.abilityUsedThisTurn = true;
+                    alert(`AI's ${card.data.name} used Energy Siphon! Attached 1 energy because you used an item last turn!`);
+                    renderGame();
+                }
+            } else if (abilityEffect === 'quickReflexes') {
+                const flip1 = flipCoin();
+                const flip2 = flipCoin();
+                alert(`AI's ${card.data.name} used Quick Reflexes! Coin flips: ${flip1}, ${flip2}!`);
+                if (flip1 === 'heads' && flip2 === 'heads') {
+                    gameState.player.cantAttackNextTurn = true;
+                    gameState.player.cantAttackUntilTurn = gameState.turnNumber + 2; // Can't attack on player's next turn
+                    card.abilityUsedThisTurn = true;
+                    alert("Both heads! You can't attack next turn!");
+                    renderGame();
+                } else {
+                    alert("Not both heads! No effect.");
+                    card.abilityUsedThisTurn = true;
+                    renderGame();
+                }
+            } else if (abilityEffect === 'clarityAura') {
+                gameState.opponent.clarityAuraActive = true;
+                card.abilityUsedThisTurn = true;
+                alert(`AI's ${card.data.name} used Clarity Aura! AI's creatures are protected from Hallucination this turn!`);
+                renderGame();
+            } else if (abilityEffect === 'celestialBlessing') {
+                const allCelestials = [];
+                if (gameState.opponent.active && getCardType(gameState.opponent.active.data) === 'Celestial' && gameState.opponent.active.damage > 0) {
+                    allCelestials.push({owner: 'opponent', location: 'active', card: gameState.opponent.active});
+                }
+                gameState.opponent.bench.forEach((benchCard, idx) => {
+                    if (benchCard && getCardType(benchCard.data) === 'Celestial' && benchCard.damage > 0) {
+                        allCelestials.push({owner: 'opponent', location: 'bench', index: idx, card: benchCard});
+                    }
+                });
+                if (gameState.player.active && getCardType(gameState.player.active.data) === 'Celestial' && gameState.player.active.damage > 0) {
+                    allCelestials.push({owner: 'player', location: 'active', card: gameState.player.active});
+                }
+                gameState.player.bench.forEach((benchCard, idx) => {
+                    if (benchCard && getCardType(benchCard.data) === 'Celestial' && benchCard.damage > 0) {
+                        allCelestials.push({owner: 'player', location: 'bench', index: idx, card: benchCard});
+                    }
+                });
+                
+                if (allCelestials.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * allCelestials.length);
+                    const target = allCelestials[randomIndex];
+                    target.card.damage = Math.max(0, target.card.damage - 30);
+                    card.abilityUsedThisTurn = true;
+                    alert(`AI's ${card.data.name} used Celestial Blessing! Healed ${target.card.data.name} for 30 HP!`);
+                    renderGame();
+                } else {
+                    card.abilityUsedThisTurn = true;
+                }
+            } else if (abilityEffect === 'sturdyPresence') {
+                gameState.opponent.sturdyPresenceBonus = 20;
+                card.abilityUsedThisTurn = true;
+                alert(`AI's ${card.data.name} used Sturdy Presence! AI's attacks this turn deal +20 damage!`);
+                renderGame();
+            } else if (abilityEffect === 'rainbowStrike') {
+                gameState.opponent.rainbowStrikeActive = true;
+                card.abilityUsedThisTurn = true;
+                alert(`AI's ${card.data.name} used Rainbow Strike! When AI attacks, it will also deal 30 damage to a random bench creature!`);
+                renderGame();
+            } else if (abilityEffect === 'camouflage') {
+                gameState.opponent.camouflageActive = true;
+                card.abilityUsedThisTurn = true;
+                alert(`AI's ${card.data.name} used Camouflage! AI's bench creatures are protected from damage this turn!`);
+                renderGame();
+            } else if (abilityEffect === 'phaseShift') {
+                gameState.opponent.phaseShiftActive = true;
+                card.abilityUsedThisTurn = true;
+                alert(`AI's ${card.data.name} used Phase Shift! After attacking, AI will switch it with a bench creature!`);
+                renderGame();
             }
         }
     }
     
     // Check bench creatures for abilities (only "any" location abilities)
-    gameState.opponent.bench.forEach((card) => {
+    gameState.opponent.bench.forEach((card, benchIndex) => {
         if (card && card.data.abilityName && card.data.abilityLocation === 'any' && !card.abilityUsedThisTurn) {
             const abilityEffect = card.data.abilityEffect;
             
@@ -3072,6 +3597,125 @@ function aiUseAbilities() {
                 }
                 
                 card.abilityUsedThisTurn = true;
+                renderGame();
+            } else if (abilityEffect === 'hardAsSteel') {
+                gameState.opponent.hardAsSteelShield = 30;
+                card.abilityUsedThisTurn = true;
+                alert(`AI's ${card.data.name} used Hard as Steel! Next turn, damage from Mechanic/Neutral creatures will be reduced by 30.`);
+                renderGame();
+            } else if (abilityEffect === 'auraOfStrength') {
+                const fullBench = gameState.opponent.bench.filter(c => c !== null).length === 3;
+                if (fullBench) {
+                    gameState.opponent.auraOfStrengthBonus = 30;
+                    card.abilityUsedThisTurn = true;
+                    alert(`AI's ${card.data.name} used Aura of Strength! AI's attacks this turn deal +30 damage!`);
+                    renderGame();
+                }
+            } else if (abilityEffect === 'guardiansCall') {
+                const hasAegiscelisInHand = gameState.opponent.hand.some(c => c.data.name === "Aegiscelis");
+                if (hasAegiscelisInHand) {
+                    const guardianFlip = flipCoin();
+                    alert(`AI's ${card.data.name} used Guardian's Call! Coin flip: ${guardianFlip}!`);
+                    if (guardianFlip === 'heads') {
+                        const aegiscelisIndex = gameState.opponent.hand.findIndex(c => c.data.name === "Aegiscelis");
+                        const aegiscelis = gameState.opponent.hand[aegiscelisIndex];
+                        
+                        const newCard = {
+                            id: aegiscelis.id, // Preserve card ID for image display
+                            data: aegiscelis.data,
+                            damage: card.damage,
+                            energy: card.energy,
+                            hallucinating: card.hallucinating || false,
+                            cantRetreat: card.cantRetreat || false,
+                            abilityUsedThisTurn: false,
+                            justPlayed: false,
+                            justEvolved: true
+                        };
+                        
+                        gameState.opponent.bench[benchIndex] = newCard;
+                        gameState.opponent.hand.splice(aegiscelisIndex, 1);
+                        alert(`Heads! AI's ${card.data.name} evolved into Aegiscelis!`);
+                        card.abilityUsedThisTurn = true;
+                        renderGame();
+                    } else {
+                        alert("Tails! Evolution failed.");
+                        card.abilityUsedThisTurn = true;
+                        renderGame();
+                    }
+                }
+            } else if (abilityEffect === 'guardian') {
+                // AI uses Guardian ability strategically - if active creature has low HP
+                if (gameState.opponent.active && gameState.opponent.active.damage >= gameState.opponent.active.data.hp * 0.6) {
+                    gameState.opponent.guardianBenchIndex = benchIndex;
+                    card.abilityUsedThisTurn = true;
+                    alert(`AI's ${card.data.name} used Guardian! Next turn, it will take damage instead of AI's active creature!`);
+                    renderGame();
+                }
+            } else if (abilityEffect === 'energySiphon') {
+                if (gameState.player.usedItemLastTurn) {
+                    card.energy++;
+                    card.abilityUsedThisTurn = true;
+                    alert(`AI's ${card.data.name} used Energy Siphon! Attached 1 energy because you used an item last turn!`);
+                    renderGame();
+                }
+            } else if (abilityEffect === 'quickReflexes') {
+                const flip1 = flipCoin();
+                const flip2 = flipCoin();
+                alert(`AI's ${card.data.name} used Quick Reflexes! Coin flips: ${flip1}, ${flip2}!`);
+                if (flip1 === 'heads' && flip2 === 'heads') {
+                    gameState.player.cantAttackNextTurn = true;
+                    gameState.player.cantAttackUntilTurn = gameState.turnNumber + 2; // Can't attack on player's next turn
+                    card.abilityUsedThisTurn = true;
+                    alert("Both heads! You can't attack next turn!");
+                    renderGame();
+                } else {
+                    alert("Not both heads! No effect.");
+                    card.abilityUsedThisTurn = true;
+                    renderGame();
+                }
+            } else if (abilityEffect === 'clarityAura') {
+                gameState.opponent.clarityAuraActive = true;
+                card.abilityUsedThisTurn = true;
+                alert(`AI's ${card.data.name} used Clarity Aura! AI's creatures are protected from Hallucination this turn!`);
+                renderGame();
+            } else if (abilityEffect === 'celestialBlessing') {
+                const allCelestials = [];
+                if (gameState.opponent.active && getCardType(gameState.opponent.active.data) === 'Celestial' && gameState.opponent.active.damage > 0) {
+                    allCelestials.push({owner: 'opponent', location: 'active', card: gameState.opponent.active});
+                }
+                gameState.opponent.bench.forEach((benchCard, idx) => {
+                    if (benchCard && getCardType(benchCard.data) === 'Celestial' && benchCard.damage > 0) {
+                        allCelestials.push({owner: 'opponent', location: 'bench', index: idx, card: benchCard});
+                    }
+                });
+                if (gameState.player.active && getCardType(gameState.player.active.data) === 'Celestial' && gameState.player.active.damage > 0) {
+                    allCelestials.push({owner: 'player', location: 'active', card: gameState.player.active});
+                }
+                gameState.player.bench.forEach((benchCard, idx) => {
+                    if (benchCard && getCardType(benchCard.data) === 'Celestial' && benchCard.damage > 0) {
+                        allCelestials.push({owner: 'player', location: 'bench', index: idx, card: benchCard});
+                    }
+                });
+                
+                if (allCelestials.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * allCelestials.length);
+                    const target = allCelestials[randomIndex];
+                    target.card.damage = Math.max(0, target.card.damage - 30);
+                    card.abilityUsedThisTurn = true;
+                    alert(`AI's ${card.data.name} used Celestial Blessing! Healed ${target.card.data.name} for 30 HP!`);
+                    renderGame();
+                } else {
+                    card.abilityUsedThisTurn = true;
+                }
+            } else if (abilityEffect === 'sturdyPresence') {
+                gameState.opponent.sturdyPresenceBonus = 20;
+                card.abilityUsedThisTurn = true;
+                alert(`AI's ${card.data.name} used Sturdy Presence! AI's attacks this turn deal +20 damage!`);
+                renderGame();
+            } else if (abilityEffect === 'camouflage') {
+                gameState.opponent.camouflageActive = true;
+                card.abilityUsedThisTurn = true;
+                alert(`AI's ${card.data.name} used Camouflage! AI's bench creatures are protected from damage this turn!`);
                 renderGame();
             }
         }
@@ -3114,12 +3758,20 @@ function endTurn() {
     // Increment turn counter at the start of each new turn
     gameState.turnNumber++;
     
-    // Check if cantAttackNextTurn should be cleared based on turn number
+    // Check if cantAttackNextTurn should be cleared based on turn number (for Wing Slap on individual creatures)
     // This happens AFTER turn increment so we check against the new turn number
     if (gameState[gameState.currentTurn].active && gameState[gameState.currentTurn].active.cantAttackNextTurn) {
         if (gameState.turnNumber >= gameState[gameState.currentTurn].active.cantAttackUntilTurn) {
             gameState[gameState.currentTurn].active.cantAttackNextTurn = false;
             delete gameState[gameState.currentTurn].active.cantAttackUntilTurn;
+        }
+    }
+    
+    // Check if player-level cantAttackNextTurn should be cleared (for Quick Reflexes on entire player)
+    if (gameState[gameState.currentTurn].cantAttackNextTurn) {
+        if (gameState.turnNumber >= gameState[gameState.currentTurn].cantAttackUntilTurn) {
+            gameState[gameState.currentTurn].cantAttackNextTurn = false;
+            delete gameState[gameState.currentTurn].cantAttackUntilTurn;
         }
     }
     
@@ -3134,10 +3786,43 @@ function endTurn() {
     gameState.player.hasAttacked = false;
     gameState.player.itemUsedThisTurn = false;
     gameState.player.boosterActive = false;
+    // Track item usage for Energy Siphon ability
+    gameState.player.usedItemLastTurn = gameState.player.usedItemThisTurn || false;
+    gameState.player.usedItemThisTurn = false;
+    // Clear Aura of Strength bonus at end of turn
+    gameState.player.auraOfStrengthBonus = 0;
+    // Clear Sturdy Presence bonus at end of turn
+    gameState.player.sturdyPresenceBonus = 0;
+    // Clear turn-based ability effects (Clarity Aura and Camouflage protect for opponent's turn, so don't clear them here)
+    // gameState.player.clarityAuraActive is cleared when player's next turn starts
+    // gameState.player.camouflageActive is cleared when player's next turn starts
+    gameState.player.rainbowStrikeActive = false;
+    gameState.player.phaseShiftActive = false;
+    // Note: cantAttackNextTurn is handled separately above based on turn number
+    
     gameState.opponent.energyAttachedThisTurn = false;
     gameState.opponent.hasAttacked = false;
     gameState.opponent.itemUsedThisTurn = false;
     gameState.opponent.boosterActive = false;
+    // Track item usage for Energy Siphon ability
+    gameState.opponent.usedItemLastTurn = gameState.opponent.usedItemThisTurn || false;
+    gameState.opponent.usedItemThisTurn = false;
+    // Clear Aura of Strength bonus at end of turn
+    gameState.opponent.auraOfStrengthBonus = 0;
+    // Clear Sturdy Presence bonus at end of turn
+    gameState.opponent.sturdyPresenceBonus = 0;
+    // Clear turn-based ability effects (Clarity Aura and Camouflage protect for opponent's turn, so don't clear them here)
+    // gameState.opponent.clarityAuraActive is cleared when opponent's next turn starts
+    // gameState.opponent.camouflageActive is cleared when opponent's next turn starts
+    gameState.opponent.rainbowStrikeActive = false;
+    gameState.opponent.phaseShiftActive = false;
+    // Note: cantAttackNextTurn is handled separately above based on turn number
+    
+    // Clear Clarity Aura and Camouflage for the player whose turn is STARTING (they've been protected during opponent's turn)
+    // This ensures: Turn 5 use ability → Turn 6 opponent attacks (protected) → Turn 7 starts (cleared)
+    const playerStartingTurn = gameState.currentTurn;
+    gameState[playerStartingTurn].clarityAuraActive = false;
+    gameState[playerStartingTurn].camouflageActive = false;
     
     // Reset ability used flags for all creatures
     if (gameState.player.active) gameState.player.active.abilityUsedThisTurn = false;
@@ -3476,6 +4161,7 @@ function aiUseItems(callback) {
                 gameState.opponent.discardPile.push(remedy);
                 gameState.opponent.hand.splice(remedyIndex, 1);
                 gameState.opponent.itemUsedThisTurn = true;
+                gameState.opponent.usedItemThisTurn = true; // Track for Energy Siphon
                 renderGame();
                 callback();
             });
@@ -3494,6 +4180,7 @@ function aiUseItems(callback) {
                 gameState.opponent.discardPile.push(potion);
                 gameState.opponent.hand.splice(potionIndex, 1);
                 gameState.opponent.itemUsedThisTurn = true;
+                gameState.opponent.usedItemThisTurn = true; // Track for Energy Siphon
                 renderGame();
                 callback();
             });
@@ -3511,6 +4198,7 @@ function aiUseItems(callback) {
             gameState.opponent.discardPile.push(booster);
             gameState.opponent.hand.splice(boosterIndex, 1);
             gameState.opponent.itemUsedThisTurn = true;
+            gameState.opponent.usedItemThisTurn = true; // Track for Energy Siphon
             renderGame();
             callback();
         });
@@ -3527,6 +4215,7 @@ function aiUseItems(callback) {
             gameState.opponent.discardPile.push(powerUp);
             gameState.opponent.hand.splice(powerUpIndex, 1);
             gameState.opponent.itemUsedThisTurn = true;
+            gameState.opponent.usedItemThisTurn = true; // Track for Energy Siphon
             renderGame();
             callback();
         });
@@ -3543,6 +4232,7 @@ function aiUseItems(callback) {
             gameState.opponent.discardPile.push(cardDraw);
             gameState.opponent.hand.splice(cardDrawIndex, 1);
             gameState.opponent.itemUsedThisTurn = true;
+            gameState.opponent.usedItemThisTurn = true; // Track for Energy Siphon
             renderGame();
             callback();
         });
@@ -3609,6 +4299,13 @@ function aiAttack() {
     const defender = gameState.player.active;
     
     if (!attacker || !defender) return;
+    
+    // Check if AI can't attack this turn due to Quick Reflexes
+    if (gameState.opponent.cantAttackNextTurn) {
+        alert(`AI can't attack this turn due to Quick Reflexes effect!`);
+        setTimeout(() => endTurn(), 500);
+        return;
+    }
     
     // Check if attacker can't attack this turn due to Wing Slap
     if (attacker.cantAttackNextTurn) {
@@ -3817,11 +4514,33 @@ function aiAttack() {
         alert(`Super Effective move! AI's ${attackerType} is super effective against ${defenderType}! +10 damage!`);
     }
     
+    // Apply Aura of Strength bonus (must be applied before shields)
+    if (gameState.opponent.auraOfStrengthBonus) {
+        damage += gameState.opponent.auraOfStrengthBonus;
+        alert(`AI's Aura of Strength bonus: +${gameState.opponent.auraOfStrengthBonus} damage! Total: ${damage}`);
+        gameState.opponent.auraOfStrengthBonus = 0; // Consumed after this attack
+    }
+    
+    // Apply Sturdy Presence bonus (must be applied before shields)
+    if (gameState.opponent.sturdyPresenceBonus) {
+        damage += gameState.opponent.sturdyPresenceBonus;
+        alert(`AI's Sturdy Presence bonus: +${gameState.opponent.sturdyPresenceBonus} damage! Total: ${damage}`);
+        gameState.opponent.sturdyPresenceBonus = 0; // Consumed after this attack
+    }
+    
     // Apply Monk's Fury shield (player's shield reduces damage to them)
     if (gameState.player.monksFuryShield) {
         damage = Math.max(0, damage - 20);
         alert(`Monk's Fury shield reduces AI's damage by 20! AI deals ${damage} damage!`);
         gameState.player.monksFuryShield = false; // Shield is consumed
+    }
+    
+    // Apply Hard as Steel shield (player's shield - only from Mechanic/Neutral attackers)
+    if (gameState.player.hardAsSteelShield && (attackerType === 'Mechanic' || attackerType === 'Neutral')) {
+        const shieldAmount = gameState.player.hardAsSteelShield;
+        damage = Math.max(0, damage - shieldAmount);
+        alert(`Hard as Steel shield reduces damage by ${shieldAmount}! AI deals ${damage} damage!`);
+        gameState.player.hardAsSteelShield = 0; // Shield is consumed
     }
     
     // Apply Spectral Burst shield (player's shield reduces damage to them)
@@ -3842,8 +4561,69 @@ function aiAttack() {
     
     console.log("Total damage:", damage, "Defender HP:", defender.data.hp, "Current damage:", defender.damage);
     
+    // Check for Guardian ability - redirect damage to bench creature
+    if (gameState.player.guardianBenchIndex !== null && gameState.player.guardianBenchIndex !== undefined) {
+        const guardianCard = gameState.player.bench[gameState.player.guardianBenchIndex];
+        if (guardianCard) {
+            alert(`${guardianCard.data.name} uses Guardian! It takes the damage instead of ${defender.data.name}!`);
+            guardianCard.damage += damage;
+            const guardianIndex = gameState.player.guardianBenchIndex;
+            gameState.player.guardianBenchIndex = null; // Ability consumed
+            renderGame();
+            
+            // Check if guardian is knocked out
+            if (guardianCard.damage >= guardianCard.data.hp) {
+                alert(`${guardianCard.data.name} was knocked out protecting ${defender.data.name}!`);
+                gameState.player.bench[guardianIndex] = null;
+                gameState.opponent.points++;
+                updatePoints();
+                // Continue with the rest of the turn
+                setTimeout(() => endTurn(), 500);
+                return;
+            }
+            // If guardian survives, continue turn normally
+            setTimeout(() => endTurn(), 500);
+            return;
+        } else {
+            // Guardian creature no longer exists, clear the index
+            gameState.player.guardianBenchIndex = null;
+        }
+    }
+    
     // Apply damage to defender
     defender.damage += damage;
+    
+    // Apply Rainbow Strike - deal 30 damage to random player bench creature
+    if (gameState.opponent.rainbowStrikeActive) {
+        const playerBench = gameState.player.bench.filter(c => c !== null);
+        if (playerBench.length > 0) {
+            const randomIndex = Math.floor(Math.random() * playerBench.length);
+            let actualIndex = 0;
+            let count = 0;
+            for (let i = 0; i < gameState.player.bench.length; i++) {
+                if (gameState.player.bench[i] !== null) {
+                    if (count === randomIndex) {
+                        actualIndex = i;
+                        break;
+                    }
+                    count++;
+                }
+            }
+            const benchTarget = gameState.player.bench[actualIndex];
+            benchTarget.damage += 30;
+            alert(`AI's Rainbow Strike! ${benchTarget.data.name} on bench takes 30 damage!`);
+            
+            // Check if bench creature was knocked out
+            if (benchTarget.damage >= benchTarget.data.hp) {
+                alert(`${benchTarget.data.name} was knocked out!`);
+                gameState.player.bench[actualIndex] = null;
+                gameState.opponent.points++;
+                updatePoints();
+            }
+        }
+        gameState.opponent.rainbowStrikeActive = false; // Consumed
+        renderGame();
+    }
     
     // Apply hallucination self-damage if tails
     if (attacker.hallucinationFlip === 'tails') {
@@ -3866,6 +4646,43 @@ function aiAttack() {
     
     gameState.opponent.hasAttacked = true;
     renderGame();
+    
+    // Check for Phase Shift - AI must switch after attacking
+    if (gameState.opponent.phaseShiftActive) {
+        const opponentBench = gameState.opponent.bench.filter(c => c !== null);
+        if (opponentBench.length > 0) {
+            // AI randomly selects a bench creature to switch with
+            const randomIndex = Math.floor(Math.random() * opponentBench.length);
+            let actualIndex = 0;
+            let count = 0;
+            for (let i = 0; i < gameState.opponent.bench.length; i++) {
+                if (gameState.opponent.bench[i] !== null) {
+                    if (count === randomIndex) {
+                        actualIndex = i;
+                        break;
+                    }
+                    count++;
+                }
+            }
+            
+            const temp = gameState.opponent.active;
+            gameState.opponent.active = gameState.opponent.bench[actualIndex];
+            gameState.opponent.bench[actualIndex] = temp;
+            
+            // Clear hallucination on switched creature
+            if (temp.hallucinating) {
+                temp.hallucinating = false;
+                alert(`AI's ${temp.data.name} is no longer hallucinating!`);
+            }
+            
+            gameState.opponent.phaseShiftActive = false;
+            alert(`AI's Phase Shift! Switched ${temp.data.name} with ${gameState.opponent.active.data.name}!`);
+            renderGame();
+        } else {
+            alert("AI's Phase Shift requires a bench creature to switch with, but AI has none!");
+            gameState.opponent.phaseShiftActive = false;
+        }
+    }
     
     // Check if defender is knocked out by base damage
     const defenderKnockedOut = defender.damage >= defender.data.hp;
@@ -3892,14 +4709,18 @@ function aiAttack() {
                 const flip = flipCoin();
                 alert(`AI's Solar Ascend: Coin flip result: ${flip}!`);
                 if (flip === 'heads') {
-                    let damageLog = "AI's Solar Ascend hits all your benched creatures for 10 damage!\n";
-                    gameState.player.bench.forEach((card, idx) => {
-                        if (card) {
-                            card.damage += 10;
-                            damageLog += `${card.data.name} on bench takes 10 damage!\n`;
-                        }
-                    });
-                    alert(damageLog);
+                    if (!gameState.player.camouflageActive) {
+                        let damageLog = "AI's Solar Ascend hits all your benched creatures for 10 damage!\n";
+                        gameState.player.bench.forEach((card, idx) => {
+                            if (card) {
+                                card.damage += 10;
+                                damageLog += `${card.data.name} on bench takes 10 damage!\n`;
+                            }
+                        });
+                        alert(damageLog);
+                    } else {
+                        alert("AI's Solar Ascend aimed at bench, but Camouflage protected them!");
+                    }
                     renderGame();
                 } else {
                     alert("Coin was tails! No bench damage.");
@@ -3907,17 +4728,22 @@ function aiAttack() {
                 knockoutCreature('player');
             } else if (effect === 'mysticBlaze') {
                 // Deal 30 damage to all player's creatures on bench (active already KO'd)
-                let damageLog = "AI's Mystic Blaze hits all your benched creatures for 30 damage!\n";
-                gameState.player.bench.forEach((card, idx) => {
-                    if (card) {
-                        card.damage += 30;
-                        damageLog += `${card.data.name} on bench takes 30 damage!\n`;
-                    }
-                });
-                alert(damageLog);
-                renderGame();
-                // Check bench knockouts first, then handle active
-                checkBenchKnockouts('player');
+                if (!gameState.player.camouflageActive) {
+                    let damageLog = "AI's Mystic Blaze hits all your benched creatures for 30 damage!\n";
+                    gameState.player.bench.forEach((card, idx) => {
+                        if (card) {
+                            card.damage += 30;
+                            damageLog += `${card.data.name} on bench takes 30 damage!\n`;
+                        }
+                    });
+                    alert(damageLog);
+                    renderGame();
+                    // Check bench knockouts first, then handle active
+                    checkBenchKnockouts('player');
+                } else {
+                    alert("AI's Mystic Blaze aimed at bench, but Camouflage protected them!");
+                    renderGame();
+                }
                 knockoutCreature('player');
             } else if (effect === 'healingRoots') {
                 attacker.damage = Math.max(0, attacker.damage - 20);
@@ -3978,26 +4804,22 @@ function aiAttack() {
                 }
                 knockoutCreature('player');
             } else if (effect === 'mindMirage') {
-                defender.hallucinating = true;
-                alert(`${defender.data.name} is now hallucinating!`);
+                applyHallucination(defender, 'player');
                 renderGame();
                 knockoutCreature('player');
             } else if (effect === 'etherealEcho') {
-                defender.hallucinating = true;
-                alert(`${defender.data.name} is now hallucinating!`);
+                applyHallucination(defender, 'player');
                 renderGame();
                 knockoutCreature('player');
             } else if (effect === 'phantomPulse') {
-                defender.hallucinating = true;
-                alert(`${defender.data.name} is now hallucinating!`);
+                applyHallucination(defender, 'player');
                 renderGame();
                 knockoutCreature('player');
             } else if (effect === 'dreamwave') {
                 const flip = flipCoin();
                 alert(`AI's Dreamwave: Coin flip result: ${flip}!`);
                 if (flip === 'heads') {
-                    defender.hallucinating = true;
-                    alert(`${defender.data.name} is now hallucinating!`);
+                    applyHallucination(defender, 'player');
                 } else {
                     alert("Coin was tails! No hallucination caused.");
                 }
@@ -4007,16 +4829,14 @@ function aiAttack() {
                 const flip = flipCoin();
                 alert(`AI's Dream Booster: Coin flip result: ${flip}!`);
                 if (flip === 'heads') {
-                    defender.hallucinating = true;
-                    alert(`${defender.data.name} is now hallucinating!`);
+                    applyHallucination(defender, 'player');
                 } else {
                     alert("Coin was tails! No hallucination caused.");
                 }
                 renderGame();
                 knockoutCreature('player');
             } else if (effect === 'brainFreeze') {
-                defender.hallucinating = true;
-                alert(`${defender.data.name} is now hallucinating!`);
+                applyHallucination(defender, 'player');
                 renderGame();
                 knockoutCreature('player');
             } else if (effect === 'wingSlap') {
@@ -4058,14 +4878,18 @@ function aiAttack() {
                 }
             } else if (effect === 'mysticBlaze') {
                 // Deal 30 damage to all player's creatures
-                let damageLog = "AI's Mystic Blaze hits all your creatures for 30 damage!\n";
-                gameState.player.bench.forEach((card, idx) => {
-                    if (card) {
-                        card.damage += 30;
-                        damageLog += `${card.data.name} on bench takes 30 damage!\n`;
-                    }
-                });
-                alert(damageLog);
+                if (!gameState.player.camouflageActive) {
+                    let damageLog = "AI's Mystic Blaze hits all your creatures for 30 damage!\n";
+                    gameState.player.bench.forEach((card, idx) => {
+                        if (card) {
+                            card.damage += 30;
+                            damageLog += `${card.data.name} on bench takes 30 damage!\n`;
+                        }
+                    });
+                    alert(damageLog);
+                } else {
+                    alert("AI's Mystic Blaze aimed at bench, but Camouflage protected them!");
+                }
                 checkKnockoutsAndContinue('opponent');
             } else if (effect === 'prismaticDive') {
                 let headsCount = 0;
@@ -4090,14 +4914,18 @@ function aiAttack() {
                 const flip = flipCoin();
                 alert(`AI's Solar Ascend: Coin flip result: ${flip}!`);
                 if (flip === 'heads') {
-                    let damageLog = "AI's Solar Ascend hits all your benched creatures for 10 damage!\n";
-                    gameState.player.bench.forEach((card, idx) => {
-                        if (card) {
-                            card.damage += 10;
-                            damageLog += `${card.data.name} on bench takes 10 damage!\n`;
-                        }
-                    });
-                    alert(damageLog);
+                    if (!gameState.player.camouflageActive) {
+                        let damageLog = "AI's Solar Ascend hits all your benched creatures for 10 damage!\n";
+                        gameState.player.bench.forEach((card, idx) => {
+                            if (card) {
+                                card.damage += 10;
+                                damageLog += `${card.data.name} on bench takes 10 damage!\n`;
+                            }
+                        });
+                        alert(damageLog);
+                    } else {
+                        alert("AI's Solar Ascend aimed at bench, but Camouflage protected them!");
+                    }
                     checkKnockoutsAndContinue('opponent');
                 } else {
                     alert("Coin was tails! No bench damage.");
@@ -4163,8 +4991,7 @@ function aiAttack() {
                 }
                 checkKnockoutsAndContinue('opponent');
             } else if (effect === 'mindMirage') {
-                defender.hallucinating = true;
-                alert(`${defender.data.name} is now hallucinating!`);
+                applyHallucination(defender, 'player');
                 renderGame();
                 checkKnockoutsAndContinue('opponent');
             } else if (effect === 'etherealEcho') {
@@ -4176,21 +5003,18 @@ function aiAttack() {
                     alert(`Coin was heads! Ethereal Echo deals 30 extra damage!`);
                     renderGame();
                 }
-                defender.hallucinating = true;
-                alert(`${defender.data.name} is now hallucinating!`);
+                applyHallucination(defender, 'player');
                 renderGame();
                 checkKnockoutsAndContinue('opponent');
             } else if (effect === 'phantomPulse') {
-                defender.hallucinating = true;
-                alert(`${defender.data.name} is now hallucinating!`);
+                applyHallucination(defender, 'player');
                 renderGame();
                 checkKnockoutsAndContinue('opponent');
             } else if (effect === 'dreamwave') {
                 const flip = flipCoin();
                 alert(`AI's Dreamwave: Coin flip result: ${flip}!`);
                 if (flip === 'heads') {
-                    defender.hallucinating = true;
-                    alert(`${defender.data.name} is now hallucinating!`);
+                    applyHallucination(defender, 'player');
                 } else {
                     alert("Coin was tails! No hallucination caused.");
                 }
@@ -4200,16 +5024,14 @@ function aiAttack() {
                 const flip = flipCoin();
                 alert(`AI's Dream Booster: Coin flip result: ${flip}!`);
                 if (flip === 'heads') {
-                    defender.hallucinating = true;
-                    alert(`${defender.data.name} is now hallucinating!`);
+                    applyHallucination(defender, 'player');
                 } else {
                     alert("Coin was tails! No hallucination caused.");
                 }
                 renderGame();
                 checkKnockoutsAndContinue('opponent');
             } else if (effect === 'brainFreeze') {
-                defender.hallucinating = true;
-                alert(`${defender.data.name} is now hallucinating!`);
+                applyHallucination(defender, 'player');
                 renderGame();
                 checkKnockoutsAndContinue('opponent');
             } else if (effect === 'wingSlap') {
@@ -4386,9 +5208,24 @@ document.getElementById('info-btn').addEventListener('click', showInfoModal);
 
 // Debug Mode Functions
 function showDebugModal() {
+    console.log('showDebugModal called');
     const modal = document.getElementById('debug-modal');
     const playerSelect = document.getElementById('debug-player-deck');
     const opponentSelect = document.getElementById('debug-opponent-deck');
+    
+    console.log('Modal element:', modal);
+    console.log('Player select:', playerSelect);
+    console.log('Opponent select:', opponentSelect);
+    
+    if (!modal) {
+        console.error('debug-modal element not found!');
+        return;
+    }
+    
+    if (!playerSelect || !opponentSelect) {
+        console.error('Select elements not found!');
+        return;
+    }
     
     // Clear existing options
     playerSelect.innerHTML = '';
@@ -4413,7 +5250,9 @@ function showDebugModal() {
     playerSelect.selectedIndex = 0;
     opponentSelect.selectedIndex = 1;
     
+    console.log('About to show modal');
     modal.style.display = 'flex';
+    console.log('Modal display set to flex');
 }
 
 function closeDebugModal() {

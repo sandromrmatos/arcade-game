@@ -1569,22 +1569,30 @@ function showCandyCrushLeaderboard(db, content, gameName) {
     .then(snapshot => {
       const allDocs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       
-      // Filter for game and separate by level
+      // Helper function to get best score per player for a level
+      const getBestScoresPerPlayer = (docs) => {
+        const playerBest = {};
+        docs.forEach(doc => {
+          if (!playerBest[doc.playerName] || doc.score > playerBest[doc.playerName].score) {
+            playerBest[doc.playerName] = doc;
+          }
+        });
+        return Object.values(playerBest).sort((a, b) => b.score - a.score).slice(0, 10);
+      };
+      
+      // Filter for game and separate by level, keeping only best score per player
       // Include old entries without difficulty (treat as Level 1)
-      const level1Docs = allDocs
-        .filter(doc => doc.gameName === gameName && (!doc.difficulty || doc.difficulty === "level1"))
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 10);
+      const level1Docs = getBestScoresPerPlayer(
+        allDocs.filter(doc => doc.gameName === gameName && (!doc.difficulty || doc.difficulty === "level1"))
+      );
       
-      const level2Docs = allDocs
-        .filter(doc => doc.gameName === gameName && doc.difficulty === "level2")
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 10);
+      const level2Docs = getBestScoresPerPlayer(
+        allDocs.filter(doc => doc.gameName === gameName && doc.difficulty === "level2")
+      );
       
-      const level3Docs = allDocs
-        .filter(doc => doc.gameName === gameName && doc.difficulty === "level3")
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 10);
+      const level3Docs = getBestScoresPerPlayer(
+        allDocs.filter(doc => doc.gameName === gameName && doc.difficulty === "level3")
+      );
       
       let html = '<div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">';
       
