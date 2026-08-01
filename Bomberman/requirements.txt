@@ -1,0 +1,153 @@
+Bomberman Game Requirements
+===========================
+
+Overview
+--------
+A real-time, grid-based Bomberman-style game implemented in HTML, CSS, and JavaScript.
+The game contains 3 levels. Each level increases in grid size, number of soft blocks,
+and difficulty. The player uses the arrow keys to move and the spacebar to place bombs.
+
+Assumptions
+-----------
+- Single-player game vs AI enemies.
+- One human player character.
+- Each level contains 1–3 AI enemies depending on difficulty.
+- Bombs explode after a fixed timer (2 seconds).
+- Explosions propagate in four directions.
+- Soft blocks are destructible; solid blocks are not.
+- Power-ups appear randomly when soft blocks are destroyed.
+- Player starts each level with default stats (no carry-over).
+- Canvas is used for rendering.
+- Game runs at 60 FPS using requestAnimationFrame.
+
+Level Layouts
+-------------
+Level 1:
+- Grid size: 13 x 11
+- Soft blocks: 40% of non-wall tiles
+- Enemies: 1
+- Bomb explosion range: 2 tiles
+- Player movement speed: 1 tile per 150ms
+
+Level 2:
+- Grid size: 15 x 13
+- Soft blocks: 50% of non-wall tiles
+- Enemies: 2
+- Bomb explosion range: 2 tiles
+- Player movement speed: 1 tile per 130ms
+
+Level 3:
+- Grid size: 17 x 15
+- Soft blocks: 60% of non-wall tiles
+- Enemies: 3
+- Bomb explosion range: 3 tiles
+- Player movement speed: 1 tile per 120ms
+
+Tile Types
+----------
+- Empty tile
+- Solid wall (indestructible)
+- Soft block (destructible)
+- Bomb
+- Explosion
+- Power-up
+- Player
+- Enemy
+
+Player Controls
+---------------
+- Arrow Up: move up
+- Arrow Down: move down
+- Arrow Left: move left
+- Arrow Right: move right
+- Spacebar: place bomb
+
+Player Rules
+------------
+- Player occupies one grid tile.
+- Player cannot move through solid walls, soft blocks, or bombs.
+- Player dies if standing on an explosion tile.
+- Player collects power-ups by walking over them.
+
+Enemy Rules
+-----------
+- Enemies move randomly.
+- Enemies avoid explosion tiles when possible.
+- Enemies place bombs occasionally (every 4–7 seconds).
+- Enemies die when hit by explosions.
+
+Bomb Rules
+----------
+- Bombs are placed on the player's current tile.
+- Bombs have a 2-second fuse.
+- Bombs explode in four directions.
+- Explosion range depends on level.
+- Explosion stops when hitting a solid wall.
+- Explosion destroys soft blocks.
+- Explosion triggers chain reactions with other bombs.
+- Explosion tiles last 300ms.
+
+Explosion Rules
+---------------
+- Explosion tiles kill players and enemies.
+- Explosion tiles disappear after 300ms.
+- Explosion propagation:
+  - Up, Down, Left, Right
+  - Up to N tiles depending on level
+  - Stops early if hitting a soft block
+
+Power-Ups
+---------
+Power-ups appear randomly (20% chance) when soft blocks are destroyed.
+
+Types:
+- Bomb Up: +1 bomb capacity
+- Fire Up: +1 explosion range
+- Speed Up: +10% movement speed
+
+Game Loop
+---------
+Runs every frame using requestAnimationFrame.
+
+Responsibilities:
+- Update player movement
+- Update enemy movement
+- Update bomb timers
+- Trigger explosions
+- Clear explosion tiles
+- Detect collisions
+- Render grid and sprites
+- Check win/loss conditions
+
+Rendering
+---------
+- Use HTML Canvas.
+- Each tile is drawn as a square.
+- Player and enemies have simple directional sprites.
+- Bombs and explosions have simple animations.
+
+Win Conditions
+--------------
+- Player wins when all enemies are defeated.
+- Player loses if they die.
+- If both player and last enemy die simultaneously, level restarts.
+
+Level Progression
+-----------------
+- Player starts at Level 1.
+- Completing a level loads the next one.
+- Completing Level 3 shows a victory screen.
+
+Files
+-----
+index.html
+style.css
+game.js
+grid.js
+player.js
+enemy.js
+bomb.js
+explosion.js
+powerups.js
+levels.js
+

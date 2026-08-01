@@ -7,16 +7,19 @@
 </head>
 <body>
     <div id="ui">
+        <h1>Pac-Man</h1>
         <div>
-            <span>Score: <span id="score">0</span></span>
+            <span id="scoreLabel">Score:</span> <span id="score">0</span>
             &nbsp;|&nbsp;
-            <span>Lives: <span id="lives">3</span></span>
+            <span id="livesLabel">Lives:</span> <span id="lives">3</span>
             &nbsp;|&nbsp;
-            <span>Time: <span id="timer">0.0</span>s</span>
+            <span id="timeLabel">Time:</span> <span id="timer">0.0</span>s
+            &nbsp;|&nbsp;
+            <span id="levelLabel">Level:</span> <span id="level">1</span>
         </div>
 
         <div id="difficulty-select">
-            Choose difficulty:
+            <span id="chooseDiffLabel">Choose difficulty:</span>
             <button data-diff="easy">Easy</button>
             <button data-diff="medium">Medium</button>
             <button data-diff="hard">Hard</button>
@@ -25,6 +28,18 @@
 
     <div id="game-container">
         <canvas id="game" width="600" height="600"></canvas>
+        
+        <!-- Mobile controls -->
+        <div class="mobile-controls">
+            <div class="control-row">
+                <button id="upArrow" class="arrow-btn">▲</button>
+            </div>
+            <div class="control-row">
+                <button id="leftArrow" class="arrow-btn">◀</button>
+                <button id="downArrow" class="arrow-btn">▼</button>
+                <button id="rightArrow" class="arrow-btn">▶</button>
+            </div>
+        </div>
     </div>
 
     <div id="overlay" class="hidden">

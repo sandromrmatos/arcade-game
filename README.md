@@ -1,6 +1,6 @@
 # HTML5 Arcade Game Collection
 
-A comprehensive collection of 18 classic arcade games built with vanilla HTML5, CSS, and JavaScript, featuring a unified leaderboard system powered by Firebase Firestore, bilingual support (English/Portuguese), and an information system with detailed game guides.
+A comprehensive collection of 23 classic arcade games built with vanilla HTML5, CSS, and JavaScript, featuring a unified leaderboard system powered by Firebase Firestore, bilingual support (English/Portuguese), and an information system with detailed game guides.
 
 ## 🎮 Overview
 
@@ -35,18 +35,19 @@ Games/
 | Tic Tac Toe | Single | - | No leaderboard |
 | Puzzle Bobble | Easy, Hard | Score | Higher is better |
 | Cross the Bridge | Short (3×6), Long (3×12) | Time Left | Higher is better |
-| Simon Says | Single | - | No leaderboard |
+| Simon Says | Single | Rounds | Higher is better |
 | Snakes and Ladders | Single | - | No leaderboard |
 | Wordle | Single | - | No leaderboard |
 | Minefield | Easy (5×5), Medium (6×6), Hard (8×8) | Best Time | Lower is better |
-| Arkanoid | Single | - | No leaderboard |
+| Arkanoid | Single | Score | Higher is better |
 | Word Search | Single | Best Time | Lower is better |
 | Mahjong Solitaire | Easy, Hard | Best Time | Lower is better |
 | Hammer the Ant | Easy, Hard | Score | Higher is better |
-| PacMan | Single | - | No leaderboard |
+| PacMan | Easy, Medium, Hard | Score | Higher is better |
 | Puzzle | Easy (4×4), Medium (6×6), Hard (7×7) | Best Time | Lower is better |
 | Domino | Single | Score | Higher is better |
 | Maze | Easy (11×11), Medium (17×17), Hard (23×23) | Best Time | Lower is better |
+| Sequence Builder | Easy (5 tiles), Medium (8 tiles), Hard (12 tiles) | Turns | Higher is better |
 
 ## 🏆 Leaderboard System
 
@@ -324,6 +325,10 @@ Currently runs as static HTML files. Can be deployed to:
 ## 🔄 Recent Updates
 
 ### Latest Features
+- **PacMan Leaderboard & Mobile Controls**: Added score tracking per difficulty level and directional arrow buttons for mobile play
+- **Arkanoid Leaderboard & Mobile Controls**: Added score tracking and mobile arrow buttons for easier gameplay
+- **Simon Says Leaderboard**: Added score tracking to Simon Says - compete for highest rounds completed!
+- **Sequence Builder**: New memory and speed game with 3 difficulty levels where players memorize number positions and click in sequence
 - **Bilingual Support**: Full English/Portuguese translation system
 - **Info System**: Comprehensive game guides with instructions, modes, and controls
 - **Collapsible Banner**: Minimize top menu for better gameplay visibility

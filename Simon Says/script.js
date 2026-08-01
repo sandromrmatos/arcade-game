@@ -12,6 +12,70 @@ let currentRound = 0;
 let playerIndex = 0;
 let isShowingSequence = false;
 let gameOver = false;
+let highestRoundReached = 0;
+
+// Bilingual translations
+let currentLanguage = "en";
+
+const translations = {
+  en: {
+    title: "Simon Says",
+    roundLabel: "Round:",
+    maxLengthLabel: "Max Length:",
+    restartButton: "Restart",
+    watchSequence: "Watch the sequence...",
+    repeatSequence: "Repeat the sequence!",
+    good: "Good! Watch the next sequence...",
+    mastered: "You mastered all 20 steps! 🎉",
+    wrong: "Wrong tile!",
+    gameOver: "Game Over! You reached round"
+  },
+  pt: {
+    title: "Simon Diz",
+    roundLabel: "Ronda:",
+    maxLengthLabel: "Comprimento Máx:",
+    restartButton: "Reiniciar",
+    watchSequence: "Observe a sequência...",
+    repeatSequence: "Repita a sequência!",
+    good: "Bom! Observe a próxima sequência...",
+    mastered: "Dominou todos os 20 passos! 🎉",
+    wrong: "Bloco errado!",
+    gameOver: "Jogo Terminado! Chegou à ronda"
+  }
+};
+
+function t(key) {
+  return translations[currentLanguage][key] || key;
+}
+
+function updateLanguage() {
+  document.querySelector("h1").textContent = t("title");
+  document.querySelector(".hud-item:nth-child(1) .label").textContent = t("roundLabel");
+  document.querySelector(".hud-item:nth-child(2) .label").textContent = t("maxLengthLabel");
+  document.getElementById("restart-btn").textContent = t("restartButton");
+}
+
+// Get language from parent window
+function getParentLanguage() {
+  if (window.parent && window.parent !== window) {
+    try {
+      const parentLang = window.parent.localStorage.getItem("arcadeLanguage");
+      if (parentLang) {
+        currentLanguage = parentLang;
+      }
+    } catch (e) {
+      console.log("Cannot access parent language, using default");
+    }
+  }
+}
+
+// Listen for language changes from parent
+window.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "languageChange") {
+    currentLanguage = event.data.language;
+    updateLanguage();
+  }
+});
 
 // Create grid
 function createGrid() {
@@ -50,7 +114,7 @@ function setTilesEnabled(enabled) {
 function showSequence() {
   isShowingSequence = true;
   setTilesEnabled(false);
-  messageElement.textContent = "Watch the sequence...";
+  messageElement.textContent = t("watchSequence");
 
   const tiles = document.querySelectorAll(".tile");
   let i = 0;
@@ -64,7 +128,7 @@ function showSequence() {
       isShowingSequence = false;
       setTilesEnabled(true);
       playerIndex = 0;
-      messageElement.textContent = "Repeat the sequence!";
+      messageElement.textContent = t("repeatSequence");
       return;
     }
 
@@ -98,31 +162,63 @@ function onTileClick(e) {
     if (playerIndex === currentRound) {
       // Round complete
       if (currentRound === MAX_LENGTH) {
-        // Game won
+        // Game won - completed all 20 rounds
         gameOver = true;
-        messageElement.textContent = "You mastered all 20 steps! 🎉";
+        highestRoundReached = currentRound; // They completed round 20
+        messageElement.textContent = t("mastered");
         setTilesEnabled(false);
+        saveScore();
       } else {
+        // Move to next round
         currentRound++;
         roundElement.textContent = currentRound;
-        messageElement.textContent = "Good! Watch the next sequence...";
+        messageElement.textContent = t("good");
         setTimeout(showSequence, 700);
       }
     }
   } else {
-    // Wrong tile
+    // Wrong tile - game over
     tile.classList.add("error");
     setTimeout(() => tile.classList.remove("error"), 400);
 
-    messageElement.textContent = "Wrong tile! New sequence starting.";
-
-    // NEW BEHAVIOUR: generate a new sequence
-    currentRound = 1;
-    roundElement.textContent = currentRound;
-    generateSequence();
-
+    gameOver = true;
+    // If they failed on round X, they successfully completed round X-1
+    // currentRound represents the round they were ATTEMPTING
+    highestRoundReached = currentRound - 1;
+    
+    if (highestRoundReached === 0) {
+      messageElement.textContent = t("wrong") + " " + t("gameOver") + " 0!";
+    } else {
+      messageElement.textContent = `${t("gameOver")} ${highestRoundReached}!`;
+    }
+    
     setTilesEnabled(false);
-    setTimeout(showSequence, 800);
+    
+    // Save score only if they completed at least 1 round
+    if (highestRoundReached > 0) {
+      saveScore();
+    }
+  }
+}
+
+// Save score to leaderboard
+function saveScore() {
+  if (highestRoundReached === 0) return;
+  
+  // Save score to leaderboard
+  if (window.parent && window.parent.saveGameScore) {
+    window.parent.saveGameScore("Simon Says", {
+      rounds: highestRoundReached
+    }).then((result) => {
+      console.log("Simon Says score saved successfully");
+      if (result && result.isNewBest && window.parent.showNewBestScore) {
+        window.parent.showNewBestScore("Simon Says", { rounds: highestRoundReached });
+      }
+    }).catch(err => {
+      console.error("Error saving Simon Says score:", err);
+    });
+  } else {
+    console.error("saveGameScore function not found in parent window");
   }
 }
 
@@ -131,9 +227,10 @@ function restartGame() {
   gameOver = false;
   currentRound = 1;
   playerIndex = 0;
+  highestRoundReached = 0;
   roundElement.textContent = currentRound;
   maxLengthElement.textContent = MAX_LENGTH;
-  messageElement.textContent = "Watch the sequence...";
+  messageElement.textContent = t("watchSequence");
   generateSequence();
   setTilesEnabled(false);
   showSequence();
@@ -141,6 +238,10 @@ function restartGame() {
 
 // Init
 restartBtn.addEventListener("click", restartGame);
+
+// Initialize language
+getParentLanguage();
+updateLanguage();
 
 createGrid();
 restartGame();

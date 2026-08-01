@@ -12,7 +12,7 @@
       <h1>Arkanoid</h1>
 
       <div class="controls">
-        <label for="difficulty">Difficulty:</label>
+        <label for="difficulty" id="difficultyLabel">Difficulty:</label>
         <select id="difficulty">
           <option value="easy">Easy</option>
           <option value="hard">Hard</option>
@@ -23,8 +23,8 @@
 
       <div class="hud">
         <div class="hud-left">
-          Score: <span id="score">0</span>
-          Lives: <span id="lives">3</span>
+          <span id="scoreLabel">Score:</span> <span id="score">0</span>
+          <span id="livesLabel">Lives:</span> <span id="lives">3</span>
         </div>
         <div id="statusMessage"></div>
       </div>
@@ -36,9 +36,11 @@
         <div id="paddle"></div>
       </div>
 
-      <!-- Mobile tap zones (only over game area) -->
-      <div id="leftZone" class="tap-zone tap-left"></div>
-      <div id="rightZone" class="tap-zone tap-right"></div>
+      <!-- Mobile controls -->
+      <div class="mobile-controls">
+        <button id="leftArrow" class="arrow-btn">◀</button>
+        <button id="rightArrow" class="arrow-btn">▶</button>
+      </div>
     </div>
   </div>
 

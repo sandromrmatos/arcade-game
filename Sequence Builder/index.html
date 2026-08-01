@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sequence Builder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="game-wrapper">
+    <h1>Sequence Builder</h1>
+
+    <div id="menuOverlay" class="menu-overlay">
+      <div class="menu-content">
+        <h2>Sequence Builder</h2>
+        <p id="menuDescription">Select Difficulty:</p>
+        <button id="btnEasy" class="menu-btn">Easy (5 tiles)</button>
+        <button id="btnMedium" class="menu-btn">Medium (8 tiles)</button>
+        <button id="btnHard" class="menu-btn">Hard (12 tiles)</button>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="turn-info">
+        <span id="turnLabel">Turn:</span> <span id="turnCount">0</span>
+      </div>
+      <div class="next-number">
+        <span id="nextLabel">Next:</span> <span id="nextNumberDisplay">-</span>
+      </div>
+      <button id="resetButton">Reset Game</button>
+    </div>
+
+    <div id="message" class="message"></div>
+
+    <div id="gameBoard" class="game-board">
+      <!-- Tiles will be injected by script.js -->
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

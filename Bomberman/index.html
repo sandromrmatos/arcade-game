@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bomberman</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="game-container">
+    <div class="header">
+      <h1 id="game-title">Bomberman</h1>
+      <div class="hud">
+        <div class="hud-item">
+          <span class="label" id="level-label">Level:</span>
+          <span id="level">1</span>
+        </div>
+        <div class="hud-item">
+          <span class="label" id="lives-label">Lives:</span>
+          <span id="lives">3</span>
+        </div>
+        <div class="hud-item">
+          <span class="label" id="score-label">Score:</span>
+          <span id="score">0</span>
+        </div>
+        <div class="hud-item">
+          <span class="label" id="enemies-label">Enemies:</span>
+          <span id="enemies">0</span>
+        </div>
+      </div>
+    </div>
+    
+    <div id="game-area">
+      <canvas id="gameCanvas"></canvas>
+    </div>
+    
+    <div class="controls">
+      <button id="start-btn">Start Game</button>
+      <button id="restart-btn" style="display: none;">Restart</button>
+    </div>
+    
+    <div id="message-overlay" class="message-overlay hidden">
+      <div class="message-content">
+        <h2 id="message-title"></h2>
+        <p id="message-text"></p>
+        <button id="message-btn">Continue</button>
+      </div>
+    </div>
+    
+    <div class="instructions">
+      <p id="controls-text">
+        <strong>Controls:</strong> Arrow Keys to move • Spacebar to place bomb
+      </p>
+      <p id="powerup-message" style="color: #FFD700; font-weight: bold; min-height: 20px; margin-top: 8px;"></p>
+    </div>
+  </div>
+
+  <script src="levels.js"></script>
+  <script src="grid.js"></script>
+  <script src="powerups.js"></script>
+  <script src="explosion.js"></script>
+  <script src="bomb.js"></script>
+  <script src="player.js"></script>
+  <script src="enemy.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

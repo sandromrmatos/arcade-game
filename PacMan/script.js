@@ -4,10 +4,88 @@ const ctx = canvas.getContext('2d');
 const scoreEl = document.getElementById('score');
 const livesEl = document.getElementById('lives');
 const timerEl = document.getElementById('timer');
+const levelEl = document.getElementById('level');
 const overlay = document.getElementById('overlay');
 const overlayText = document.getElementById('overlay-text');
 const restartBtn = document.getElementById('restart-btn');
 const diffButtons = document.querySelectorAll('#difficulty-select button');
+const upArrow = document.getElementById('upArrow');
+const downArrow = document.getElementById('downArrow');
+const leftArrow = document.getElementById('leftArrow');
+const rightArrow = document.getElementById('rightArrow');
+
+// Bilingual translations
+let currentLanguage = "en";
+
+const translations = {
+  en: {
+    title: "Pac-Man",
+    scoreLabel: "Score:",
+    livesLabel: "Lives:",
+    timeLabel: "Time:",
+    levelLabel: "Level:",
+    chooseDiffLabel: "Choose difficulty:",
+    easy: "Easy",
+    medium: "Medium",
+    hard: "Hard",
+    restart: "Restart",
+    gameOver: "Game Over",
+    youWin: "You win! Time:"
+  },
+  pt: {
+    title: "Pac-Man",
+    scoreLabel: "Pontuação:",
+    livesLabel: "Vidas:",
+    timeLabel: "Tempo:",
+    levelLabel: "Nível:",
+    chooseDiffLabel: "Escolha a dificuldade:",
+    easy: "Fácil",
+    medium: "Médio",
+    hard: "Difícil",
+    restart: "Reiniciar",
+    gameOver: "Jogo Terminado",
+    youWin: "Ganhou! Tempo:"
+  }
+};
+
+function t(key) {
+  return translations[currentLanguage][key] || key;
+}
+
+function updateLanguage() {
+  document.querySelector("h1").textContent = t("title");
+  document.getElementById("scoreLabel").textContent = t("scoreLabel");
+  document.getElementById("livesLabel").textContent = t("livesLabel");
+  document.getElementById("timeLabel").textContent = t("timeLabel");
+  document.getElementById("levelLabel").textContent = t("levelLabel");
+  document.getElementById("chooseDiffLabel").textContent = t("chooseDiffLabel");
+  diffButtons[0].textContent = t("easy");
+  diffButtons[1].textContent = t("medium");
+  diffButtons[2].textContent = t("hard");
+  restartBtn.textContent = t("restart");
+}
+
+// Get language from parent window
+function getParentLanguage() {
+  if (window.parent && window.parent !== window) {
+    try {
+      const parentLang = window.parent.localStorage.getItem("arcadeLanguage");
+      if (parentLang) {
+        currentLanguage = parentLang;
+      }
+    } catch (e) {
+      console.log("Cannot access parent language, using default");
+    }
+  }
+}
+
+// Listen for language changes from parent
+window.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "languageChange") {
+    currentLanguage = event.data.language;
+    updateLanguage();
+  }
+});
 
 const TILE_SIZE = 30;
 const ROWS = 20;
@@ -42,9 +120,11 @@ let pacman = { x: 9, y: 15, dirX: 0, dirY: 0 };
 let ghosts = [];
 let score = 0;
 let lives = 3;
+let level = 1;
 let startTime = null;
 let elapsed = 0;
 let gameRunning = false;
+let gameStarted = false;
 let difficulty = null;
 
 // Movement timers
@@ -89,6 +169,7 @@ function startGame() {
     initGhosts();
     score = 0;
     lives = 3;
+    level = 1;
     startTime = performance.now();
     elapsed = 0;
     pacmanMoveTimer = 0;
@@ -98,6 +179,7 @@ function startGame() {
     freezeEndTime = 0;
     edibleEndTime = 0;
     gameRunning = true;
+    gameStarted = true;
     overlay.classList.add('hidden');
     updateUI();
 
@@ -113,6 +195,44 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowDown') tryMove(0, 1);
     if (e.key === 'ArrowLeft') tryMove(-1, 0);
     if (e.key === 'ArrowRight') tryMove(1, 0);
+});
+
+// Mobile arrow controls
+upArrow.addEventListener('click', () => {
+    if (gameRunning) tryMove(0, -1);
+});
+
+downArrow.addEventListener('click', () => {
+    if (gameRunning) tryMove(0, 1);
+});
+
+leftArrow.addEventListener('click', () => {
+    if (gameRunning) tryMove(-1, 0);
+});
+
+rightArrow.addEventListener('click', () => {
+    if (gameRunning) tryMove(1, 0);
+});
+
+// Touch events for mobile
+upArrow.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    if (gameRunning) tryMove(0, -1);
+});
+
+downArrow.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    if (gameRunning) tryMove(0, 1);
+});
+
+leftArrow.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    if (gameRunning) tryMove(-1, 0);
+});
+
+rightArrow.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    if (gameRunning) tryMove(1, 0);
 });
 
 function tryMove(dx, dy) {
@@ -132,6 +252,7 @@ function isWall(x, y) {
 function updateUI() {
     scoreEl.textContent = score;
     livesEl.textContent = lives;
+    levelEl.textContent = level;
     timerEl.textContent = elapsed.toFixed(1);
 }
 
@@ -299,19 +420,51 @@ function checkCollisions() {
 
 function loseLife() {
     lives -= 1;
-
-    // Lose 25 points but never below 0
     score = Math.max(0, score - 25);
 
     if (lives <= 0) {
-        gameRunning = false;
-        overlayText.textContent = "Game Over";
-        overlay.classList.remove('hidden');
+        endGame(false);
         return;
     }
 
     pacman = { x: 9, y: 15, dirX: 0, dirY: 0 };
     initGhosts();
+}
+
+function endGame(won) {
+    gameRunning = false;
+    
+    if (won) {
+        overlayText.textContent = `${t("youWin")} ${elapsed.toFixed(1)}s | ${t("scoreLabel")} ${score}`;
+    } else {
+        overlayText.textContent = t("gameOver");
+    }
+    
+    overlay.classList.remove('hidden');
+    
+    // Save score to leaderboard
+    if (gameStarted && score > 0) {
+        saveScore();
+    }
+}
+
+function saveScore() {
+    if (window.parent && window.parent.saveGameScore) {
+        window.parent.saveGameScore("PacMan", {
+            score: score,
+            level: level,
+            difficulty: difficulty
+        }).then((result) => {
+            console.log("PacMan score saved successfully");
+            if (result && result.isNewBest && window.parent.showNewBestScore) {
+                window.parent.showNewBestScore("PacMan", { score: score, level: level, difficulty: difficulty });
+            }
+        }).catch(err => {
+            console.error("Error saving PacMan score:", err);
+        });
+    } else {
+        console.error("saveGameScore function not found in parent window");
+    }
 }
 
 function checkWin() {
@@ -321,9 +474,12 @@ function checkWin() {
         }
     }
 
-    gameRunning = false;
-    overlayText.textContent = `You win! Time: ${elapsed.toFixed(1)}s | Score: ${score}`;
-    overlay.classList.remove('hidden');
+    // Level complete
+    level++;
+    resetMaze();
+    pacman = { x: 9, y: 15, dirX: 0, dirY: 0 };
+    initGhosts();
+    score += 100;
 }
 
 function draw() {
@@ -412,3 +568,7 @@ function loop(now) {
         requestAnimationFrame(loop);
     }
 }
+
+// Initialize language
+getParentLanguage();
+updateLanguage();

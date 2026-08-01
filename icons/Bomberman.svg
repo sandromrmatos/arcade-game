@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Bomb body -->
+  <circle cx="50" cy="55" r="30" fill="#000"/>
+  
+  <!-- Fuse -->
+  <line x1="50" y1="25" x2="50" y2="15" stroke="#ff6600" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Spark -->
+  <circle cx="50" cy="12" r="5" fill="#ffff00"/>
+  <circle cx="50" cy="12" r="3" fill="#ff0000"/>
+  
+  <!-- Highlight on bomb -->
+  <ellipse cx="42" cy="45" rx="8" ry="12" fill="#333" opacity="0.5"/>
+</svg>

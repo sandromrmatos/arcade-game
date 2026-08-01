@@ -7,8 +7,75 @@ const statusMessageEl = document.getElementById("statusMessage");
 const difficultySelect = document.getElementById("difficulty");
 const startButton = document.getElementById("startButton");
 const resetButton = document.getElementById("resetButton");
-const leftZone = document.getElementById("leftZone");
-const rightZone = document.getElementById("rightZone");
+const leftArrow = document.getElementById("leftArrow");
+const rightArrow = document.getElementById("rightArrow");
+
+// Bilingual translations
+let currentLanguage = "en";
+
+const translations = {
+  en: {
+    title: "Arkanoid",
+    difficultyLabel: "Difficulty:",
+    easy: "Easy",
+    hard: "Hard",
+    startButton: "Start",
+    resetButton: "Reset",
+    scoreLabel: "Score:",
+    livesLabel: "Lives:",
+    youWin: "You win!",
+    gameOver: "Game over"
+  },
+  pt: {
+    title: "Arkanoid",
+    difficultyLabel: "Dificuldade:",
+    easy: "Fácil",
+    hard: "Difícil",
+    startButton: "Iniciar",
+    resetButton: "Reiniciar",
+    scoreLabel: "Pontuação:",
+    livesLabel: "Vidas:",
+    youWin: "Ganhou!",
+    gameOver: "Jogo Terminado"
+  }
+};
+
+function t(key) {
+  return translations[currentLanguage][key] || key;
+}
+
+function updateLanguage() {
+  document.querySelector("h1").textContent = t("title");
+  document.getElementById("difficultyLabel").textContent = t("difficultyLabel");
+  difficultySelect.options[0].textContent = t("easy");
+  difficultySelect.options[1].textContent = t("hard");
+  document.getElementById("startButton").textContent = t("startButton");
+  document.getElementById("resetButton").textContent = t("resetButton");
+  document.getElementById("scoreLabel").textContent = t("scoreLabel");
+  document.getElementById("livesLabel").textContent = t("livesLabel");
+}
+
+// Get language from parent window
+function getParentLanguage() {
+  if (window.parent && window.parent !== window) {
+    try {
+      const parentLang = window.parent.localStorage.getItem("arcadeLanguage");
+      if (parentLang) {
+        currentLanguage = parentLang;
+      }
+    } catch (e) {
+      console.log("Cannot access parent language, using default");
+    }
+  }
+}
+
+// Listen for language changes from parent
+window.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "languageChange") {
+    currentLanguage = event.data.language;
+    updateLanguage();
+  }
+});
 
 let gameWidth, gameHeight;
 
@@ -25,6 +92,7 @@ let score = 0;
 let lives = 3;
 let running = false;
 let difficulty = "easy";
+let gameStarted = false;
 
 let baseBallSpeed = 3;
 let speedMultiplier = 1;
@@ -164,17 +232,37 @@ function startGame() {
   centerPaddle();
   createInitialBall();
   running = true;
+  gameStarted = true;
   lastTime = performance.now();
   requestAnimationFrame(gameLoop);
 }
 
 function endGame(win) {
   running = false;
-  statusMessageEl.textContent = win ? "You win!" : "Game over";
+  statusMessageEl.textContent = win ? t("youWin") : t("gameOver");
+  
+  // Save score to leaderboard
+  if (gameStarted && score > 0) {
+    if (window.parent && window.parent.saveGameScore) {
+      window.parent.saveGameScore("Arkanoid", {
+        score: score
+      }).then((result) => {
+        console.log("Arkanoid score saved successfully");
+        if (result && result.isNewBest && window.parent.showNewBestScore) {
+          window.parent.showNewBestScore("Arkanoid", { score: score });
+        }
+      }).catch(err => {
+        console.error("Error saving Arkanoid score:", err);
+      });
+    } else {
+      console.error("saveGameScore function not found in parent window");
+    }
+  }
 }
 
 function resetGame() {
   running = false;
+  gameStarted = false;
   resetGameState();
   bricksContainer.innerHTML = "";
   const existingBalls = gameArea.querySelectorAll(".ball");
@@ -352,23 +440,91 @@ function movePaddleRight() {
   positionPaddle();
 }
 
-["click", "touchstart"].forEach(evt => {
-  leftZone.addEventListener(evt, e => {
+// Mobile arrow button controls
+let leftInterval = null;
+let rightInterval = null;
+
+// Initialize everything when DOM is ready
+window.addEventListener("load", () => {
+  // Mobile arrow button controls
+  leftArrow.addEventListener("mousedown", () => {
+    if (!running) return;
+    movePaddleLeft();
+    leftInterval = setInterval(movePaddleLeft, 50);
+  });
+
+  leftArrow.addEventListener("mouseup", () => {
+    if (leftInterval) {
+      clearInterval(leftInterval);
+      leftInterval = null;
+    }
+  });
+
+  leftArrow.addEventListener("mouseleave", () => {
+    if (leftInterval) {
+      clearInterval(leftInterval);
+      leftInterval = null;
+    }
+  });
+
+  leftArrow.addEventListener("touchstart", (e) => {
     e.preventDefault();
     if (!running) return;
     movePaddleLeft();
+    leftInterval = setInterval(movePaddleLeft, 50);
   });
-  rightZone.addEventListener(evt, e => {
+
+  leftArrow.addEventListener("touchend", (e) => {
+    e.preventDefault();
+    if (leftInterval) {
+      clearInterval(leftInterval);
+      leftInterval = null;
+    }
+  });
+
+  rightArrow.addEventListener("mousedown", () => {
+    if (!running) return;
+    movePaddleRight();
+    rightInterval = setInterval(movePaddleRight, 50);
+  });
+
+  rightArrow.addEventListener("mouseup", () => {
+    if (rightInterval) {
+      clearInterval(rightInterval);
+      rightInterval = null;
+    }
+  });
+
+  rightArrow.addEventListener("mouseleave", () => {
+    if (rightInterval) {
+      clearInterval(rightInterval);
+      rightInterval = null;
+    }
+  });
+
+  rightArrow.addEventListener("touchstart", (e) => {
     e.preventDefault();
     if (!running) return;
     movePaddleRight();
+    rightInterval = setInterval(movePaddleRight, 50);
   });
-});
 
-startButton.addEventListener("click", startGame);
-resetButton.addEventListener("click", resetGame);
+  rightArrow.addEventListener("touchend", (e) => {
+    e.preventDefault();
+    if (rightInterval) {
+      clearInterval(rightInterval);
+      rightInterval = null;
+    }
+  });
 
-window.addEventListener("load", () => {
+  startButton.addEventListener("click", startGame);
+  resetButton.addEventListener("click", resetGame);
+
+  // Initialize language
+  getParentLanguage();
+  updateLanguage();
+  
+  // Initialize game area
   resizeGameArea();
   centerPaddle();
 });

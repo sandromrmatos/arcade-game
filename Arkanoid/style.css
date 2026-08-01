@@ -111,19 +111,39 @@ body {
   box-shadow: 0 0 10px cyan;
 }
 
-/* Mobile tap zones – now only over game area wrapper */
+/* Mobile controls */
 
-.tap-zone {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 50%;
-  background: transparent;
-  pointer-events: auto;
+.mobile-controls {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 12px;
 }
 
-.tap-left { left: 0; }
-.tap-right { right: 0; }
+.arrow-btn {
+  flex: 1;
+  padding: 16px;
+  font-size: 24px;
+  background: linear-gradient(145deg, #1e3c72, #2a5298);
+  color: white;
+  border: 2px solid #4a6fa5;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  transition: all 0.1s ease;
+}
+
+.arrow-btn:active {
+  transform: scale(0.95);
+  background: linear-gradient(145deg, #2a5298, #1e3c72);
+}
+
+.arrow-btn:hover {
+  background: linear-gradient(145deg, #2a5298, #3a6eb8);
+  box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
+}
 
 @media (max-width: 480px) {
   .arkanoid-wrapper {
@@ -133,5 +153,10 @@ body {
   .hud {
     flex-direction: column;
     gap: 4px;
+  }
+  
+  .arrow-btn {
+    padding: 20px;
+    font-size: 28px;
   }
 }

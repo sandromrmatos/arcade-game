@@ -34,6 +34,7 @@ const translations = {
     length: "Length",
     turns: "Turns",
     time: "Time",
+    rounds: "Rounds",
     noScores: "No scores yet. Be the first!",
     loading: "Loading scores...",
     errorLoading: "Error loading scores:",
@@ -74,7 +75,9 @@ const translations = {
     "Domino": "Domino",
     "Maze": "Maze",
     "Connect Four": "Connect Four",
-    "2048": "2048"
+    "2048": "2048",
+    "Sequence Builder": "Sequence Builder",
+    "Bomberman": "Bomberman"
   },
   pt: {
     title: "Jogos Arcade por Sandro",
@@ -96,6 +99,7 @@ const translations = {
     length: "Comprimento",
     turns: "Jogadas",
     time: "Tempo",
+    rounds: "Rondas",
     noScores: "Ainda sem pontuações. Seja o primeiro!",
     loading: "A carregar pontuações...",
     errorLoading: "Erro ao carregar pontuações:",
@@ -136,7 +140,9 @@ const translations = {
     "Domino": "Dominó",
     "Maze": "Labirinto",
     "Connect Four": "Quatro em Linha",
-    "2048": "2048"
+    "2048": "2048",
+    "Sequence Builder": "Construtor de Sequência",
+    "Bomberman": "Bomberman"
   }
 };
 
@@ -466,8 +472,8 @@ const gameDescriptions = {
   "Simon Says": {
     title: "Simon Says",
     description: "Memory game where you repeat increasingly long sequences of colors. Watch the pattern, then repeat it!",
-    modes: "Single mode with progressively harder levels",
-    scoring: "No leaderboard - just see how many rounds you can complete!",
+    modes: "Single mode with progressively harder levels (up to 20 steps)",
+    scoring: "Highest round reached wins! Complete more rounds for a better score.",
     controls: "Click the colored buttons in the same order as shown. Each round adds one more color to remember."
   },
   "Snakes and Ladders": {
@@ -493,10 +499,10 @@ const gameDescriptions = {
   },
   "Arkanoid": {
     title: "Arkanoid (Breakout)",
-    description: "Bounce a ball with your paddle to break all the bricks. Don't let the ball fall off the bottom!",
-    modes: "Single mode with multiple levels",
-    scoring: "No leaderboard - break all bricks to advance to the next level!",
-    controls: "Move mouse left/right to control paddle. Ball bounces automatically. Clear all bricks to win the level."
+    description: "Bounce a ball with your paddle to break all the bricks. Don't let the ball fall off the bottom! Features power-ups and multiple difficulty levels.",
+    modes: "Easy: Standard brick breaking with moderate speed\nHard: Faster game with more frequent speed increases",
+    scoring: "Points for breaking bricks: Blue (10), Green (15), Red (20). Highest score wins!",
+    controls: "Move mouse left/right to control paddle. Ball bounces automatically. Use arrow buttons or arrow keys on mobile/keyboard. Clear all bricks to win the level."
   },
   "Word Search": {
     title: "Word Search",
@@ -522,9 +528,9 @@ const gameDescriptions = {
   "PacMan": {
     title: "Pac-Man",
     description: "Guide Pac-Man through a maze, eating dots while avoiding ghosts. Eat power pellets to turn the tables and chase ghosts!",
-    modes: "Single mode with classic gameplay",
-    scoring: "No leaderboard - eat all dots to complete the level!",
-    controls: "Arrow keys to move. Eat all small dots and power pellets while avoiding ghosts (unless you've eaten a power pellet)."
+    modes: "Easy: Ghosts move randomly at moderate speed\nMedium: Ghosts move randomly at faster speed\nHard: Ghosts actively chase you at high speed",
+    scoring: "Dots: 1 point | Power pellets: 5 points | Eating ghost: 50 points | Level complete: 100 bonus points. Hit by ghost: -25 points. Highest score wins!",
+    controls: "Arrow keys to move. Use arrow buttons on mobile. Eat all dots and power pellets while avoiding ghosts (unless you've eaten a power pellet)."
   },
   "Puzzle": {
     title: "Picture Puzzle",
@@ -560,6 +566,20 @@ const gameDescriptions = {
     modes: "4×4 Grid: Classic mode with standard difficulty\n5×5 Grid: Larger grid with more space and strategy",
     scoring: "Highest score wins! Points are earned by merging tiles. Higher value tiles give more points. Best score is saved per grid size!",
     controls: "Use arrow keys (↑ ↓ ← →) to slide all tiles in that direction. On mobile, swipe in the direction you want to move. Tiles slide until they hit another tile or the edge!"
+  },
+  "Sequence Builder": {
+    title: "Sequence Builder",
+    description: "Test your memory and speed! Numbers appear briefly on tiles in random positions. Remember their locations and click them in ascending order (1, 2, 3...). Each turn, the display time gets shorter!",
+    modes: "Easy: 5 tiles (numbers 1-5)\nMedium: 8 tiles (numbers 1-8)\nHard: 12 tiles (numbers 1-12)",
+    scoring: "Complete as many turns as possible! Display time starts at 5 seconds and decreases each turn, reaching 1 second at turn 12 and beyond. Most turns completed wins!",
+    controls: "Watch the tiles flip to reveal numbers, remember their positions, then click them in order from 1 onwards. One mistake ends the game!"
+  },
+  "Bomberman": {
+    title: "Bomberman",
+    description: "Classic grid-based action game! Place bombs to destroy soft blocks and defeat enemies. Navigate through 4 levels with increasing difficulty. Collect power-ups to enhance your abilities!",
+    modes: "Level 1 (13×11): 1 enemy, 40% soft blocks\nLevel 2 (15×13): 2 enemies, 50% soft blocks\nLevel 3 (17×15): 3 enemies, 60% soft blocks\nLevel 4 (19×17): 5 enemies, 65% soft blocks",
+    scoring: "Points for destroying blocks (+10) and completing levels (+100×level). Lives and final level reached are tracked. Highest score wins!",
+    controls: "Arrow keys to move • Spacebar to place bomb. Bombs explode after 2 seconds in 4 directions. Collect power-ups: Bomb+ (more bombs), Fire+ (bigger explosions), Speed+ (faster movement). Enemy bombs (red) only hurt you. Your bombs (black) defeat enemies!"
   },
   "TCG Game": {
     title: "Elemental Awakening TCG",
@@ -623,8 +643,8 @@ const gameDescriptionsPT = {
   "Simon Says": {
     title: "Simon Diz",
     description: "Jogo de memória onde repete sequências cada vez mais longas de cores. Observe o padrão e depois repita-o!",
-    modes: "Modo único com níveis progressivamente mais difíceis",
-    scoring: "Sem classificação - veja quantas rondas consegue completar!",
+    modes: "Modo único com níveis progressivamente mais difíceis (até 20 passos)",
+    scoring: "Maior ronda atingida ganha! Complete mais rondas para uma melhor pontuação.",
     controls: "Clique nos botões coloridos na mesma ordem mostrada. Cada ronda adiciona mais uma cor para memorizar."
   },
   "Snakes and Ladders": {
@@ -649,11 +669,11 @@ const gameDescriptionsPT = {
     controls: "Clique esquerdo para revelar uma célula. Clique direito para colocar uma bandeira em bombas suspeitas. Limpe todas as células sem bomba para ganhar!"
   },
   "Arkanoid": {
-    title: "Arkanoid",
-    description: "Rebata uma bola com a sua raquete para partir todos os tijolos. Não deixe a bola cair no fundo!",
-    modes: "Modo único com vários níveis",
-    scoring: "Sem classificação - parta todos os tijolos para avançar para o próximo nível!",
-    controls: "Mova o rato esquerda/direita para controlar a raquete. A bola ressalta automaticamente. Limpe todos os tijolos para ganhar o nível."
+    title: "Arkanoid (Breakout)",
+    description: "Rebata uma bola com a sua raquete para partir todos os tijolos. Não deixe a bola cair! Apresenta power-ups e vários níveis de dificuldade.",
+    modes: "Fácil: Partir tijolos padrão com velocidade moderada\nDifícil: Jogo mais rápido com aumentos de velocidade mais frequentes",
+    scoring: "Pontos por partir tijolos: Azul (10), Verde (15), Vermelho (20). Maior pontuação ganha!",
+    controls: "Mova o rato esquerda/direita para controlar a raquete. A bola ressalta automaticamente. Use botões de seta ou teclas de seta no telemóvel/teclado. Limpe todos os tijolos para ganhar o nível."
   },
   "Word Search": {
     title: "Sopa de Letras",
@@ -679,9 +699,9 @@ const gameDescriptionsPT = {
   "PacMan": {
     title: "Pac-Man",
     description: "Guie o Pac-Man por um labirinto, comendo pontos enquanto evita fantasmas. Coma pílulas de poder para virar a mesa e perseguir fantasmas!",
-    modes: "Modo único com jogabilidade clássica",
-    scoring: "Sem classificação - coma todos os pontos para completar o nível!",
-    controls: "Setas para mover. Coma todos os pontos pequenos e pílulas de poder enquanto evita fantasmas (a menos que tenha comido uma pílula de poder)."
+    modes: "Fácil: Fantasmas movem-se aleatoriamente a velocidade moderada\nMédio: Fantasmas movem-se aleatoriamente a velocidade mais rápida\nDifícil: Fantasmas perseguem-no ativamente a alta velocidade",
+    scoring: "Pontos: 1 ponto | Pílulas de poder: 5 pontos | Comer fantasma: 50 pontos | Nível completo: 100 pontos bónus. Atingido por fantasma: -25 pontos. Maior pontuação ganha!",
+    controls: "Setas para mover. Use botões de seta no telemóvel. Coma todos os pontos e pílulas de poder enquanto evita fantasmas (a menos que tenha comido uma pílula de poder)."
   },
   "Puzzle": {
     title: "Puzzle de Imagem",
@@ -717,6 +737,20 @@ const gameDescriptionsPT = {
     modes: "Grelha 4×4: Modo clássico com dificuldade padrão\nGrelha 5×5: Grelha maior com mais espaço e estratégia",
     scoring: "Maior pontuação ganha! Pontos são ganhos ao fundir blocos. Blocos de maior valor dão mais pontos. Melhor pontuação é guardada por tamanho de grelha!",
     controls: "Use as setas (↑ ↓ ← →) para deslizar todos os blocos nessa direção. No telemóvel, deslize na direção que quer mover. Os blocos deslizam até bater noutro bloco ou na borda!"
+  },
+  "Sequence Builder": {
+    title: "Construtor de Sequência",
+    description: "Teste a sua memória e velocidade! Números aparecem brevemente em blocos em posições aleatórias. Memorize as suas localizações e clique-os por ordem ascendente (1, 2, 3...). A cada jogada, o tempo de exibição diminui!",
+    modes: "Fácil: 5 blocos (números 1-5)\nMédio: 8 blocos (números 1-8)\nDifícil: 12 blocos (números 1-12)",
+    scoring: "Complete o máximo de jogadas possível! O tempo de exibição começa em 5 segundos e diminui a cada jogada, atingindo 1 segundo na jogada 12 e além. Mais jogadas completadas ganha!",
+    controls: "Observe os blocos a virar para revelar números, memorize as suas posições e depois clique-os por ordem a partir do 1. Um erro termina o jogo!"
+  },
+  "Bomberman": {
+    title: "Bomberman",
+    description: "Jogo de ação clássico baseado em grelha! Coloque bombas para destruir blocos suaves e derrotar inimigos. Navegue por 4 níveis com dificuldade crescente. Colete power-ups para melhorar as suas habilidades!",
+    modes: "Nível 1 (13×11): 1 inimigo, 40% blocos suaves\nNível 2 (15×13): 2 inimigos, 50% blocos suaves\nNível 3 (17×15): 3 inimigos, 60% blocos suaves\nNível 4 (19×17): 5 inimigos, 65% blocos suaves",
+    scoring: "Pontos por destruir blocos (+10) e completar níveis (+100×nível). Vidas e nível final alcançado são registados. Pontuação mais alta ganha!",
+    controls: "Setas para mover • Barra de espaço para colocar bomba. Bombas explodem após 2 segundos em 4 direções. Colete power-ups: Bomba+ (mais bombas), Fogo+ (explosões maiores), Velocidade+ (movimento mais rápido). Bombas inimigas (vermelhas) só magoam você. As suas bombas (pretas) derrotam inimigos!"
   },
   "TCG Game": {
     title: "Elemental Awakening TCG",
@@ -994,9 +1028,21 @@ function showGameLeaderboard(gameName) {
     return;
   }
   
+  // Special handling for Arkanoid (score - higher is better, single mode)
+  if (gameName === "Arkanoid") {
+    showArkanoidLeaderboard(db, content, gameName);
+    return;
+  }
+  
   // Special handling for Maze (bestTime - lower is better, with difficulty modes)
   if (gameName === "Maze") {
     showTimeBasedDifficultyLeaderboard(db, content, gameName);
+    return;
+  }
+  
+  // Special handling for PacMan (score - higher is better, with difficulty and level tracking)
+  if (gameName === "PacMan") {
+    showPacManLeaderboard(db, content, gameName);
     return;
   }
   
@@ -1009,6 +1055,24 @@ function showGameLeaderboard(gameName) {
   // Special handling for 2048 (score - higher is better, with grid size modes)
   if (gameName === "2048") {
     show2048Leaderboard(db, content, gameName);
+    return;
+  }
+  
+  // Special handling for Sequence Builder (turns - higher is better, with difficulty modes)
+  if (gameName === "Sequence Builder") {
+    showSequenceBuilderLeaderboard(db, content, gameName);
+    return;
+  }
+  
+  // Special handling for Bomberman (score - higher is better, with level tracking)
+  if (gameName === "Bomberman") {
+    showBombermanLeaderboard(db, content, gameName);
+    return;
+  }
+  
+  // Special handling for Simon Says (rounds - higher is better)
+  if (gameName === "Simon Says") {
+    showSimonSaysLeaderboard(db, content, gameName);
     return;
   }
   
@@ -1101,6 +1165,8 @@ function getTableHeader(type) {
     return `<thead><tr><th>${rank}</th><th>${player}</th><th>${t("turns")}</th><th>${date}</th></tr></thead>`;
   } else if (type === "time") {
     return `<thead><tr><th>${rank}</th><th>${player}</th><th>${t("time")}</th><th>${date}</th></tr></thead>`;
+  } else if (type === "rounds") {
+    return `<thead><tr><th>${rank}</th><th>${player}</th><th>${t("rounds")}</th><th>${date}</th></tr></thead>`;
   }
   return `<thead><tr><th>${rank}</th><th>${player}</th><th>${date}</th></tr></thead>`;
 }
@@ -1834,6 +1900,329 @@ function show2048Leaderboard(db, content, gameName) {
     });
 }
 
+function showSequenceBuilderLeaderboard(db, content, gameName) {
+  db.collection("games")
+    .limit(300)
+    .get()
+    .then(snapshot => {
+      const allDocs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+      // Filter for game and separate by difficulty
+      // For Sequence Builder, higher turns is better
+      const easyDocs = allDocs
+        .filter(doc => doc.gameName === gameName && doc.difficulty === "easy")
+        .sort((a, b) => b.turns - a.turns)
+        .slice(0, 10);
+      
+      const mediumDocs = allDocs
+        .filter(doc => doc.gameName === gameName && doc.difficulty === "medium")
+        .sort((a, b) => b.turns - a.turns)
+        .slice(0, 10);
+      
+      const hardDocs = allDocs
+        .filter(doc => doc.gameName === gameName && doc.difficulty === "hard")
+        .sort((a, b) => b.turns - a.turns)
+        .slice(0, 10);
+      
+      let html = '<div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">';
+      
+      // Easy mode table
+      html += `<div style="flex: 1; min-width: 280px;"><h3>${t("easyMode")} (5 tiles)</h3>`;
+      if (easyDocs.length === 0) {
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Turns</th><th>Date</th></tr></thead><tbody>';
+        easyDocs.forEach((doc, i) => {
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${doc.turns}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div>';
+      
+      // Medium mode table
+      html += `<div style="flex: 1; min-width: 280px;"><h3>${t("mediumMode")} (8 tiles)</h3>`;
+      if (mediumDocs.length === 0) {
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Turns</th><th>Date</th></tr></thead><tbody>';
+        mediumDocs.forEach((doc, i) => {
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${doc.turns}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div>';
+      
+      // Hard mode table
+      html += `<div style="flex: 1; min-width: 280px;"><h3>${t("hardMode")} (12 tiles)</h3>`;
+      if (hardDocs.length === 0) {
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Turns</th><th>Date</th></tr></thead><tbody>';
+        hardDocs.forEach((doc, i) => {
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${doc.turns}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div></div>';
+      
+      content.innerHTML = html;
+    })
+    .catch(err => {
+      content.textContent = t("errorLoading") + " " + err.message;
+      console.error("Leaderboard error:", err);
+    });
+}
+
+function showBombermanLeaderboard(db, content, gameName) {
+  db.collection("games")
+    .limit(200)
+    .get()
+    .then(snapshot => {
+      const allDocs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+      // Helper function to get best score per player
+      const getBestScoresPerPlayer = (docs) => {
+        const playerBest = {};
+        docs.forEach(doc => {
+          if (!playerBest[doc.playerName] || doc.score > playerBest[doc.playerName].score) {
+            playerBest[doc.playerName] = doc;
+          }
+        });
+        return Object.values(playerBest).sort((a, b) => b.score - a.score).slice(0, 10);
+      };
+      
+      // Filter for Bomberman and get best scores per player
+      const docs = getBestScoresPerPlayer(
+        allDocs.filter(doc => doc.gameName === gameName)
+      );
+      
+      if (docs.length === 0) {
+        content.innerHTML = `<p style="color: #666;">${t("noScores")}</p>`;
+        return;
+      }
+      
+      let html = '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Score</th><th>Level</th><th>Date</th></tr></thead><tbody>';
+      
+      docs.forEach((doc, i) => {
+        const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+        html += `<tr>
+          <td>${i + 1}</td>
+          <td>${doc.playerName}</td>
+          <td>${doc.score}</td>
+          <td>${doc.level || 1}</td>
+          <td>${date}</td>
+        </tr>`;
+      });
+      
+      html += '</tbody></table>';
+      content.innerHTML = html;
+    })
+    .catch(err => {
+      content.textContent = t("errorLoading") + " " + err.message;
+      console.error("Leaderboard error:", err);
+    });
+}
+
+function showSimonSaysLeaderboard(db, content, gameName) {
+  db.collection("games")
+    .limit(100)
+    .get()
+    .then(snapshot => {
+      // Filter for Simon Says and sort by rounds (higher is better)
+      const docs = snapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .filter(doc => doc.gameName === gameName)
+        .sort((a, b) => b.rounds - a.rounds)
+        .slice(0, 10);
+      
+      if (docs.length === 0) {
+        content.innerHTML = `<p style="color: #666;">${t("noScores")}</p>`;
+        return;
+      }
+      
+      let html = '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Rounds</th><th>Date</th></tr></thead><tbody>';
+      
+      let rank = 1;
+      docs.forEach(doc => {
+        const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+        
+        html += `<tr>
+          <td>${rank++}</td>
+          <td>${doc.playerName}</td>
+          <td>${doc.rounds}</td>
+          <td>${date}</td>
+        </tr>`;
+      });
+      
+      html += "</tbody></table>";
+      content.innerHTML = html;
+    })
+    .catch(err => {
+      content.textContent = t("errorLoading") + " " + err.message;
+      console.error("Leaderboard error:", err);
+    });
+}
+
+function showArkanoidLeaderboard(db, content, gameName) {
+  db.collection("games")
+    .limit(100)
+    .get()
+    .then(snapshot => {
+      // Filter for Arkanoid and sort by score (higher is better)
+      const docs = snapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .filter(doc => doc.gameName === gameName)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 10);
+      
+      if (docs.length === 0) {
+        content.innerHTML = `<p style="color: #666;">${t("noScores")}</p>`;
+        return;
+      }
+      
+      let html = '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Score</th><th>Date</th></tr></thead><tbody>';
+      
+      let rank = 1;
+      docs.forEach(doc => {
+        const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+        
+        html += `<tr>
+          <td>${rank++}</td>
+          <td>${doc.playerName}</td>
+          <td>${doc.score}</td>
+          <td>${date}</td>
+        </tr>`;
+      });
+      
+      html += "</tbody></table>";
+      content.innerHTML = html;
+    })
+    .catch(err => {
+      content.textContent = t("errorLoading") + " " + err.message;
+      console.error("Leaderboard error:", err);
+    });
+}
+
+function showPacManLeaderboard(db, content, gameName) {
+  db.collection("games")
+    .limit(300)
+    .get()
+    .then(snapshot => {
+      const allDocs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+      // Helper function to get best score per player for a difficulty
+      const getBestScoresPerPlayer = (docs) => {
+        const playerBest = {};
+        docs.forEach(doc => {
+          if (!playerBest[doc.playerName] || doc.score > playerBest[doc.playerName].score) {
+            playerBest[doc.playerName] = doc;
+          }
+        });
+        return Object.values(playerBest).sort((a, b) => b.score - a.score).slice(0, 10);
+      };
+      
+      // Filter for game and separate by difficulty, keeping only best score per player
+      // For PacMan, higher score is better
+      const easyDocs = getBestScoresPerPlayer(
+        allDocs.filter(doc => doc.gameName === gameName && doc.difficulty === "easy")
+      );
+      
+      const mediumDocs = getBestScoresPerPlayer(
+        allDocs.filter(doc => doc.gameName === gameName && doc.difficulty === "medium")
+      );
+      
+      const hardDocs = getBestScoresPerPlayer(
+        allDocs.filter(doc => doc.gameName === gameName && doc.difficulty === "hard")
+      );
+      
+      let html = '<div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">';
+      
+      // Easy mode table
+      html += `<div style="flex: 1; min-width: 280px;"><h3>${t("easyMode")}</h3>`;
+      if (easyDocs.length === 0) {
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Score</th><th>Level</th><th>Date</th></tr></thead><tbody>';
+        easyDocs.forEach((doc, i) => {
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${doc.score}</td>
+            <td>${doc.level || 1}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div>';
+      
+      // Medium mode table
+      html += `<div style="flex: 1; min-width: 280px;"><h3>${t("mediumMode")}</h3>`;
+      if (mediumDocs.length === 0) {
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Score</th><th>Level</th><th>Date</th></tr></thead><tbody>';
+        mediumDocs.forEach((doc, i) => {
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${doc.score}</td>
+            <td>${doc.level || 1}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div>';
+      
+      // Hard mode table
+      html += `<div style="flex: 1; min-width: 280px;"><h3>${t("hardMode")}</h3>`;
+      if (hardDocs.length === 0) {
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Score</th><th>Level</th><th>Date</th></tr></thead><tbody>';
+        hardDocs.forEach((doc, i) => {
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${doc.score}</td>
+            <td>${doc.level || 1}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div></div>';
+      
+      content.innerHTML = html;
+    })
+    .catch(err => {
+      content.textContent = t("errorLoading") + " " + err.message;
+      console.error("Leaderboard error:", err);
+    });
+}
+
 function showTCGLeaderboard(db, content, gameName) {
   db.collection("games")
     .limit(200)
@@ -2223,6 +2612,7 @@ window.saveGameScore = function(gameName, scoreData) {
     const isTimeLeftBased = scoreData.hasOwnProperty("timeLeft");
     const isLengthBased = scoreData.hasOwnProperty("length");
     const isTurnsBased = scoreData.hasOwnProperty("turns");
+    const isRoundsBased = scoreData.hasOwnProperty("rounds");
     const isTCGGame = scoreData.hasOwnProperty("result"); // TCG Game uses result field
     const isWinLossGame = (gameName === "Tic Tac Toe" || gameName === "Snakes and Ladders") && scoreData.hasOwnProperty("result");
     const isWordleGame = gameName === "Wordle" && scoreData.hasOwnProperty("wordsGuessed");
@@ -2253,14 +2643,18 @@ window.saveGameScore = function(gameName, scoreData) {
           
           let shouldUpdate = false;
           
-          if (isTimeBased || isTurnsBased) {
-            // For time-based and turns-based games, lower is better
+          // Special case: Sequence Builder uses turns where higher is better (unlike Memory)
+          if (gameName === "Sequence Builder" && isTurnsBased) {
+            console.log(`Existing turns:`, existingData.turns, `New turns:`, scoreData.turns);
+            shouldUpdate = scoreData.turns > existingData.turns;
+          } else if (isTimeBased || isTurnsBased) {
+            // For time-based and turns-based games (like Memory), lower is better
             const field = isTimeBased ? "bestTime" : "turns";
             console.log(`Existing ${field}:`, existingData[field], `New ${field}:`, scoreData[field]);
             shouldUpdate = scoreData[field] < existingData[field];
-          } else if (isScoreBased || isTimeLeftBased || isLengthBased) {
-            // For score-based, timeLeft, and length games, higher is better
-            const field = isScoreBased ? "score" : isTimeLeftBased ? "timeLeft" : "length";
+          } else if (isScoreBased || isTimeLeftBased || isLengthBased || isRoundsBased) {
+            // For score-based, timeLeft, length, and rounds games, higher is better
+            const field = isScoreBased ? "score" : isTimeLeftBased ? "timeLeft" : isLengthBased ? "length" : "rounds";
             console.log(`Existing ${field}:`, existingData[field], `New ${field}:`, scoreData[field]);
             shouldUpdate = scoreData[field] > existingData[field];
           }
