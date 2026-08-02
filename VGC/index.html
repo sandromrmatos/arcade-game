@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VGC - 2v2 Creature Battle System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="screen">
+        <div class="loading-content">
+            <h1>VGC Battle System</h1>
+            <p>Loading game data...</p>
+            <div class="loading-spinner"></div>
+        </div>
+    </div>
+
+    <!-- Main Menu -->
+    <div id="main-menu" class="screen" style="display: none;">
+        <div class="menu-container">
+            <h1>VGC Battle System</h1>
+            <p class="subtitle">2v2 Creature Battles</p>
+            <div class="menu-buttons">
+                <button id="start-game-btn" class="btn-large btn-primary">Start Game</button>
+                <button id="rules-btn" class="btn-large btn-secondary">View Rules</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rules Modal -->
+    <div id="rules-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Game Rules</h2>
+            <div class="rules-content">
+                <section>
+                    <h3>Team Building</h3>
+                    <ul>
+                        <li>Build a team of 6 unique creatures</li>
+                        <li>For each creature:
+                            <ul>
+                                <li>Allocate 30 stat points (max 20 per stat)</li>
+                                <li>Choose 4 moves from 12 available</li>
+                                <li>Select 1 ability from 2 options</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Pre-Battle Selection</h3>
+                    <ul>
+                        <li>Both players see each other's full teams</li>
+                        <li>Select 4 creatures to bring into battle</li>
+                        <li>First 2 selected start as active</li>
+                        <li>Remaining 2 start on the bench</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Battle Structure</h3>
+                    <ul>
+                        <li>Each player has 2 active creatures and 2 bench creatures</li>
+                        <li>Each turn, choose an action for each active creature:</li>
+                        <ul>
+                            <li><strong>Fight:</strong> Use one of the creature's 4 moves</li>
+                            <li><strong>Switch:</strong> Swap with a bench creature</li>
+                        </ul>
+                        <li>Switching happens before moves</li>
+                        <li>Switched-in creatures cannot act that turn</li>
+                        <li>Battle ends when all 4 creatures of one side faint</li>
+                        <li>Maximum 30 turns</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Move Priority & Speed</h3>
+                    <ul>
+                        <li>Moves execute in order of:
+                            <ol>
+                                <li>Priority (higher priority goes first)</li>
+                                <li>Speed (higher speed goes first)</li>
+                                <li>Random tiebreaker</li>
+                            </ol>
+                        </li>
+                        <li>Most moves have priority 1</li>
+                        <li>Some special moves have priority 2 or 3</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Damage Calculation</h3>
+                    <ul>
+                        <li><strong>Physical moves:</strong> Damage = Power × (Attack / Defense)</li>
+                        <li><strong>Special moves:</strong> Damage = Power × (Special Attack / Special Defense)</li>
+                        <li><strong>STAB:</strong> +20% damage when move type matches creature type</li>
+                        <li><strong>Super Effective:</strong> +25% damage
+                            <ul>
+                                <li>Mystic → Wind</li>
+                                <li>Wind → Celestial</li>
+                                <li>Celestial → Mystic</li>
+                                <li>Mechanic → Neutral</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Stat Changes</h3>
+                    <ul>
+                        <li>Some moves increase or decrease stats</li>
+                        <li>Stat changes persist until creature faints or switches out</li>
+                        <li>Maximum +80% increase (1.8x)</li>
+                        <li>Maximum -80% decrease (0.2x)</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Targeting Types</h3>
+                    <ul>
+                        <li><strong>Single:</strong> Hit one opponent creature</li>
+                        <li><strong>Double:</strong> Hit both opponent creatures</li>
+                        <li><strong>Self:</strong> Affect only the user</li>
+                        <li><strong>Self and Partner:</strong> Affect both allied creatures</li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Builder Screen -->
+    <div id="team-builder" class="screen" style="display: none;">
+        <!-- Team builder content dynamically generated -->
+    </div>
+
+    <!-- Pre-Battle Selection Screen -->
+    <div id="pre-battle" class="screen" style="display: none;">
+        <!-- Pre-battle selection content dynamically generated -->
+    </div>
+
+    <!-- Battle Screen -->
+    <div id="battle-screen" class="screen" style="display: none;">
+        <div class="battle-container">
+            <!-- Opponent Side -->
+            <div id="opponent-side" class="battle-side">
+                <!-- Opponent creatures rendered here -->
+            </div>
+
+            <!-- Turn Info & Field Effects -->
+            <div id="turn-info" class="turn-info-panel">
+                <!-- Turn counter and field effects -->
+            </div>
+
+            <!-- Player Side -->
+            <div id="player-side" class="battle-side">
+                <!-- Player creatures rendered here -->
+            </div>
+
+            <!-- Battle Log -->
+            <div id="battle-log" class="battle-log">
+                <!-- Battle messages -->
+            </div>
+
+            <!-- Action Panel -->
+            <div id="action-panel" class="action-panel">
+                <!-- Action selection UI rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="gameData.js"></script>
+    <script src="gameEngine.js"></script>
+    <script src="teamBuilder.js"></script>
+    <script src="battleUI.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

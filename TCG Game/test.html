@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TCG Game - Syntax Test</title>
+</head>
+<body>
+    <h1>Testing JavaScript Syntax</h1>
+    <div id="status">Loading script...</div>
+    
+    <script>
+        // Test if script loads without errors
+        window.addEventListener('error', function(e) {
+            document.getElementById('status').innerHTML = '<span style="color: red;">ERROR: ' + e.message + ' at line ' + e.lineno + '</span>';
+        });
+        
+        window.addEventListener('load', function() {
+            document.getElementById('status').innerHTML = '<span style="color: green;">✓ Script loaded successfully!</span>';
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

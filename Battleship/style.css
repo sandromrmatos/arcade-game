@@ -1,0 +1,380 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  color: #fff;
+}
+
+.game-container {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 1200px;
+  width: 100%;
+  color: #333;
+}
+
+h1 {
+  text-align: center;
+  color: #1e3c72;
+  margin-bottom: 20px;
+  font-size: 2.5em;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  color: #2a5298;
+  margin-bottom: 15px;
+}
+
+h3 {
+  text-align: center;
+  color: #1e3c72;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Difficulty Selection */
+.difficulty-section {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.difficulty-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.difficulty-btn {
+  padding: 30px 40px;
+  font-size: 1.3em;
+  font-weight: bold;
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  color: white;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.difficulty-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.difficulty-btn small {
+  font-size: 0.6em;
+  font-weight: normal;
+}
+
+/* Placement Phase */
+.placement-info {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.ship-indicator {
+  margin-top: 10px;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #1e3c72;
+  min-height: 30px;
+}
+
+.placement-controls {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.orientation-btn, .action-btn {
+  padding: 12px 24px;
+  font-size: 1em;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.orientation-btn {
+  background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+  color: white;
+}
+
+.orientation-btn:hover {
+  background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
+}
+
+.orientation-btn.active {
+  background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+  box-shadow: 0 0 15px rgba(255, 152, 0, 0.5);
+}
+
+.action-btn {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  color: white;
+}
+
+.action-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+}
+
+.action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Grids */
+.single-grid-container {
+  display: flex;
+  justify-content: center;
+}
+
+.grids-container {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.grid-wrapper {
+  text-align: center;
+}
+
+.grid {
+  display: inline-grid;
+  gap: 2px;
+  background: #555;
+  padding: 2px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.cell {
+  width: 35px;
+  height: 35px;
+  background: #87CEEB;
+  border: 1px solid #4682B4;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  position: relative;
+}
+
+.cell:hover {
+  background: #B0E0E6;
+  transform: scale(1.05);
+}
+
+.cell.ship {
+  background: #708090;
+  border-color: #2F4F4F;
+}
+
+.cell.hit {
+  background: #ff4444;
+  border-color: #cc0000;
+  animation: hitAnimation 0.5s ease;
+}
+
+.cell.miss {
+  background: #ddd;
+  border-color: #bbb;
+  animation: missAnimation 0.5s ease;
+}
+
+.cell.sunk {
+  background: #8B0000;
+  border-color: #660000;
+}
+
+.cell.disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.cell.hover-preview {
+  background: rgba(255, 255, 0, 0.3);
+  border-color: #FFD700;
+}
+
+.cell.invalid-preview {
+  background: rgba(255, 0, 0, 0.3);
+  border-color: #FF0000;
+}
+
+/* Animations */
+@keyframes hitAnimation {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(255, 68, 68, 0);
+  }
+  50% {
+    transform: scale(1.2);
+    box-shadow: 0 0 20px rgba(255, 68, 68, 0.8);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(255, 68, 68, 0);
+  }
+}
+
+@keyframes missAnimation {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Game Info */
+.game-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: rgba(30, 60, 114, 0.1);
+  border-radius: 10px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.turn-indicator {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+.turn-text {
+  color: #4CAF50;
+  padding: 5px 15px;
+  background: rgba(76, 175, 80, 0.1);
+  border-radius: 5px;
+}
+
+.message-area {
+  flex: 1;
+  text-align: center;
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #1e3c72;
+}
+
+/* Ships Status */
+.ships-status {
+  margin-top: 15px;
+  text-align: left;
+  font-size: 0.9em;
+}
+
+.ship-status-item {
+  padding: 5px 10px;
+  margin: 3px 0;
+  background: rgba(76, 175, 80, 0.1);
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.ship-status-item.sunk {
+  background: rgba(255, 68, 68, 0.2);
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  max-width: 500px;
+  width: 90%;
+}
+
+.modal-content h2 {
+  font-size: 2.5em;
+  margin-bottom: 15px;
+}
+
+.modal-content p {
+  font-size: 1.2em;
+  margin: 10px 0;
+  color: #555;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .game-container {
+    padding: 15px;
+  }
+  
+  h1 {
+    font-size: 1.8em;
+  }
+  
+  .grids-container {
+    gap: 20px;
+  }
+  
+  .cell {
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
+  }
+  
+  .difficulty-buttons {
+    flex-direction: column;
+  }
+  
+  .difficulty-btn {
+    padding: 20px 30px;
+    font-size: 1.1em;
+  }
+}

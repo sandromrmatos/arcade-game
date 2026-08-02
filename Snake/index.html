@@ -29,6 +29,43 @@
         margin: 0 auto;
         border: 3px solid #555;
     }
+    .mobile-controls {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 15px;
+        flex-wrap: wrap;
+    }
+    .arrow-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+        background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+        color: white;
+        border: 2px solid #45a049;
+        border-radius: 8px;
+        cursor: pointer;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        transition: all 0.1s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .arrow-btn:active {
+        transform: scale(0.95);
+        background: linear-gradient(135deg, #45a049 0%, #4CAF50 100%);
+    }
+    .arrow-btn:hover {
+        background: linear-gradient(135deg, #45a049 0%, #3a8f3e 100%);
+        box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+    }
+    .controls-row {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
     #menuOverlay {
         position: fixed;
         top: 0;
@@ -68,6 +105,21 @@
     .hidden {
         display: none !important;
     }
+    @media (max-width: 480px) {
+        #gameContainer {
+            width: 100% !important;
+            max-width: 360px;
+        }
+        canvas {
+            max-width: 100%;
+            height: auto;
+        }
+        .arrow-btn {
+            width: 70px;
+            height: 70px;
+            font-size: 28px;
+        }
+    }
 </style>
 </head>
 <body>
@@ -87,6 +139,18 @@
     <div id="lengthCounter">Length: 1</div>
     <canvas id="gameCanvas" width="300" height="300"></canvas>
     <div id="gameMessage"></div>
+    
+    <!-- Mobile Controls -->
+    <div class="mobile-controls">
+        <div class="controls-row">
+            <button id="btnUp" class="arrow-btn">▲</button>
+        </div>
+        <div class="controls-row">
+            <button id="btnLeft" class="arrow-btn">◀</button>
+            <button id="btnDown" class="arrow-btn">▼</button>
+            <button id="btnRight" class="arrow-btn">▶</button>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -169,6 +233,44 @@ setTimeout(updateLanguage, 100);
 updateLanguage();
 
 document.addEventListener("keydown", keyPress);
+
+// Mobile arrow button controls
+document.getElementById("btnUp").addEventListener("click", () => {
+    if (velocity.y !== 1) nextVelocity = { x: 0, y: -1 };
+});
+
+document.getElementById("btnDown").addEventListener("click", () => {
+    if (velocity.y !== -1) nextVelocity = { x: 0, y: 1 };
+});
+
+document.getElementById("btnLeft").addEventListener("click", () => {
+    if (velocity.x !== 1) nextVelocity = { x: -1, y: 0 };
+});
+
+document.getElementById("btnRight").addEventListener("click", () => {
+    if (velocity.x !== -1) nextVelocity = { x: 1, y: 0 };
+});
+
+// Touch events for mobile (prevent default to avoid scrolling)
+document.getElementById("btnUp").addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    if (velocity.y !== 1) nextVelocity = { x: 0, y: -1 };
+});
+
+document.getElementById("btnDown").addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    if (velocity.y !== -1) nextVelocity = { x: 0, y: 1 };
+});
+
+document.getElementById("btnLeft").addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    if (velocity.x !== 1) nextVelocity = { x: -1, y: 0 };
+});
+
+document.getElementById("btnRight").addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    if (velocity.x !== -1) nextVelocity = { x: 1, y: 0 };
+});
 
 // Menu buttons
 document.getElementById("btnSmall").addEventListener("click", () => {

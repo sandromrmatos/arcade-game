@@ -77,7 +77,10 @@ const translations = {
     "Connect Four": "Connect Four",
     "2048": "2048",
     "Sequence Builder": "Sequence Builder",
-    "Bomberman": "Bomberman"
+    "Bomberman": "Bomberman",
+    "Battleship": "Battleship",
+    "TCG Game": "TCG Game",
+    "VGC": "VGC"
   },
   pt: {
     title: "Jogos Arcade por Sandro",
@@ -142,7 +145,10 @@ const translations = {
     "Connect Four": "Quatro em Linha",
     "2048": "2048",
     "Sequence Builder": "Construtor de Sequência",
-    "Bomberman": "Bomberman"
+    "Bomberman": "Bomberman",
+    "Battleship": "Batalha Naval",
+    "TCG Game": "Jogo TCG",
+    "VGC": "VGC"
   }
 };
 
@@ -581,12 +587,26 @@ const gameDescriptions = {
     scoring: "Points for destroying blocks (+10) and completing levels (+100×level). Lives and final level reached are tracked. Highest score wins!",
     controls: "Arrow keys to move • Spacebar to place bomb. Bombs explode after 2 seconds in 4 directions. Collect power-ups: Bomb+ (more bombs), Fire+ (bigger explosions), Speed+ (faster movement). Enemy bombs (red) only hurt you. Your bombs (black) defeat enemies!"
   },
+  "Battleship": {
+    title: "Battleship vs AI",
+    description: "Classic naval warfare strategy game! Place your fleet on the grid and take turns firing at the enemy. Use logic and deduction to locate and sink all enemy ships before they destroy yours!",
+    modes: "Intermediate (10×10 grid): AI uses random targeting and hunts adjacent cells after a hit\nHard (11×11 grid): AI uses probability-based targeting, considering remaining ship sizes and patterns",
+    scoring: "Total number of clicks to win. Lower is better! Efficient targeting and smart deduction lead to better scores. Only winning games are saved to the leaderboard.",
+    controls: "Place ships: Click a cell, choose horizontal or vertical orientation, then confirm. Attack: Click enemy grid cells to fire. Red = hit, White = miss. Sink all enemy ships to win!"
+  },
   "TCG Game": {
     title: "Elemental Awakening TCG",
     description: "Battle against an intelligent AI in this strategic trading card game! Build custom decks, play creatures with 5 elemental types, evolve them through stages, inflict special conditions, and use powerful items to knock out your opponent's creatures. Features 84 unique cards with special move effects!",
     modes: "Choose from 4 starter decks OR create your own custom deck:\n• Mystic Deck: Psychic creatures with hallucination moves\n• Wind Deck: Flying creatures with dice/coin flip moves\n• Celestial Deck: Nature creatures with healing abilities\n• Mechanic Deck: Metal creatures with energy manipulation\n• Custom Decks: Build your own 40-card deck mixing types!\n\nDeck Building Rules:\n• Exactly 40 cards required\n• Mix 1 primary type with Neutral cards\n• Item cards can mix with any type\n• Evolved creatures need their base form\n\nAI randomly selects a deck and plays strategically!",
     scoring: "Win/Loss record tracked! First to 3 points wins (1 point per knocked out creature - including bench!). Moves like Mystic Blaze can KO multiple creatures for multiple points. Leaderboard ranks by win rate: wins/(wins+losses). Higher win rate = better rank!",
     controls: "Setup Phase (Turn 0):\n• Place 1 Stage 1 creature in active spot\n• Optionally place creatures on bench\n• Click Done when ready\n\nEach Turn:\n• Draw 1 card at start\n• Attach 1 energy to any creature (once/turn)\n• Play Stage 1 creatures to empty bench slots\n• Evolve creatures (Turn 3+):\n  - Can't evolve newly played cards\n  - Can't evolve twice in one turn\n  - Stage 1→Stage 2→Stage 3\n• Use 1 item card per turn:\n  - Potion: Heal 20 HP\n  - Card Draw: Draw 2 cards\n  - Booster: +20 damage next attack\n  - Power-Up: +10 damage for 3 turns\n• Attack with active creature (ends turn):\n  - Requires energy = move cost\n  - Special moves: dice rolls, coin flips, AoE damage, healing, stat changes\n  - Watch for type advantages (2x damage) & resistances (-20 damage)\n• Retreat to bench (costs energy, cures status)\n\nSpecial Conditions:\n• Hallucination 😵: Flip coin when attacking - Heads: +10 dmg, Tails: +40 self-dmg. Cured by retreating.\n\nWin: 3 points, no creatures left, or most points after 30 turns"
+  },
+  "VGC": {
+    title: "VGC (2v2 Creature Battle System)",
+    description: "Build your team of 4 creatures and battle in tactical 2v2 turn-based matches! Allocate stats, choose moves and abilities, and use strategy to defeat your opponent. Features 25 unique creatures across 5 types with authentic battle mechanics!",
+    modes: "Single mode - Battle against AI with 25 creatures across 5 types:\n• Mystic: Psychic-type creatures with spiritual moves\n• Wind: Flying-type creatures with aerial attacks\n• Celestial: Nature-type creatures with cosmic powers\n• Mechanic: Metal/tech-type creatures with mechanical abilities\n• Neutral: Balanced creatures effective against all types",
+    scoring: "Win/Loss record, Win Rate, and Last Played date tracked! Leaderboard ranks players by win rate: wins/(wins+losses). Higher win rate = better rank!",
+    controls: "Team Building:\n• Select 4 creatures from 25 available\n• Allocate 30 stat points (max 20 per stat): HP, Attack, Defense, Sp. Attack, Sp. Defense, Speed\n• Choose 4 moves from 12 available per creature\n• Choose 1 ability from 2 available\n• Save your team for future battles\n• Load previously saved teams\n\nBattle Phase:\n• Select 4 creatures for battle (first 2 start active)\n• Each turn, choose actions for both active creatures:\n  - Fight: Select move and target\n  - Switch: Swap with bench creature (can't attack same turn)\n• Moves execute by priority, then speed\n• Type advantages deal +25% damage\n• STAB (Same Type Attack Bonus): +20% damage\n• Replace fainted creatures from your bench\n• Win by defeating all opponent creatures!\n\nDebug Mode:\n• Select saved teams for both sides to test strategies"
   }
 };
 
@@ -751,6 +771,13 @@ const gameDescriptionsPT = {
     modes: "Nível 1 (13×11): 1 inimigo, 40% blocos suaves\nNível 2 (15×13): 2 inimigos, 50% blocos suaves\nNível 3 (17×15): 3 inimigos, 60% blocos suaves\nNível 4 (19×17): 5 inimigos, 65% blocos suaves",
     scoring: "Pontos por destruir blocos (+10) e completar níveis (+100×nível). Vidas e nível final alcançado são registados. Pontuação mais alta ganha!",
     controls: "Setas para mover • Barra de espaço para colocar bomba. Bombas explodem após 2 segundos em 4 direções. Colete power-ups: Bomba+ (mais bombas), Fogo+ (explosões maiores), Velocidade+ (movimento mais rápido). Bombas inimigas (vermelhas) só magoam você. As suas bombas (pretas) derrotam inimigos!"
+  },
+  "Battleship": {
+    title: "Batalha Naval vs IA",
+    description: "Jogo clássico de estratégia de guerra naval! Posicione a sua frota na grelha e dispare alternadamente contra o inimigo. Use lógica e dedução para localizar e afundar todos os navios inimigos antes que destruam os seus!",
+    modes: "Intermédio (grelha 10×10): IA usa alvos aleatórios e caça células adjacentes após um acerto\nDifícil (grelha 11×11): IA usa alvos baseados em probabilidade, considerando tamanhos de navios restantes e padrões",
+    scoring: "Número total de cliques para ganhar. Menor é melhor! Alvos eficientes e dedução inteligente levam a melhores pontuações. Apenas jogos vencidos são guardados no placar.",
+    controls: "Posicionar navios: Clique numa célula, escolha orientação horizontal ou vertical, depois confirme. Atacar: Clique nas células da grelha inimiga para disparar. Vermelho = acerto, Branco = falhou. Afunde todos os navios inimigos para ganhar!"
   },
   "TCG Game": {
     title: "Elemental Awakening TCG",
@@ -1067,6 +1094,12 @@ function showGameLeaderboard(gameName) {
   // Special handling for Bomberman (score - higher is better, with level tracking)
   if (gameName === "Bomberman") {
     showBombermanLeaderboard(db, content, gameName);
+    return;
+  }
+  
+  // Special handling for Battleship (clicks - lower is better, with difficulty modes)
+  if (gameName === "Battleship") {
+    showBattleshipLeaderboard(db, content, gameName);
     return;
   }
   
@@ -2041,6 +2074,105 @@ function showBombermanLeaderboard(db, content, gameName) {
     });
 }
 
+function showBattleshipLeaderboard(db, content, gameName) {
+  db.collection("games")
+    .limit(200)
+    .get()
+    .then(snapshot => {
+      const allDocs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+      // Helper function to get best scores per player per difficulty
+      const getBestScoresPerPlayer = (docs) => {
+        const playerBest = {};
+        docs.forEach(doc => {
+          const key = `${doc.playerName}_${doc.difficulty}`;
+          if (!playerBest[key] || doc.clicks < playerBest[key].clicks) {
+            playerBest[key] = doc;
+          }
+        });
+        return Object.values(playerBest);
+      };
+      
+      // Filter for Battleship and get best scores per player
+      const allBattleshipDocs = getBestScoresPerPlayer(
+        allDocs.filter(doc => doc.gameName === gameName)
+      );
+      
+      if (allBattleshipDocs.length === 0) {
+        content.innerHTML = `<p style="color: #666;">${t("noScores")}</p>`;
+        return;
+      }
+      
+      // Separate by difficulty
+      const intermediateDocs = allBattleshipDocs
+        .filter(doc => doc.difficulty === 'intermediate')
+        .sort((a, b) => a.clicks - b.clicks)
+        .slice(0, 10);
+      
+      const hardDocs = allBattleshipDocs
+        .filter(doc => doc.difficulty === 'hard')
+        .sort((a, b) => a.clicks - b.clicks)
+        .slice(0, 10);
+      
+      const intermediateLabel = currentLanguage === 'pt' ? 'Intermédio' : 'Intermediate';
+      const hardLabel = currentLanguage === 'pt' ? 'Difícil' : 'Hard';
+      const rankLabel = currentLanguage === 'pt' ? 'Posição' : 'Rank';
+      const playerLabel = currentLanguage === 'pt' ? 'Jogador' : 'Player';
+      const clicksLabel = currentLanguage === 'pt' ? 'Cliques' : 'Clicks';
+      const dateLabel = currentLanguage === 'pt' ? 'Data' : 'Date';
+      
+      let html = '<div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">';
+      
+      // Intermediate difficulty table
+      html += `<div style="flex: 1; min-width: 300px;">
+        <h3 style="color: #4CAF50; text-align: center;">${intermediateLabel}</h3>`;
+      
+      if (intermediateDocs.length === 0) {
+        html += `<p style="color: #666; text-align: center;">${t("noScores")}</p>`;
+      } else {
+        html += `<table class="leaderboard-table"><thead><tr><th>${rankLabel}</th><th>${playerLabel}</th><th>${clicksLabel}</th><th>${dateLabel}</th></tr></thead><tbody>`;
+        intermediateDocs.forEach((doc, i) => {
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${doc.clicks}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div>';
+      
+      // Hard difficulty table
+      html += `<div style="flex: 1; min-width: 300px;">
+        <h3 style="color: #FF6B6B; text-align: center;">${hardLabel}</h3>`;
+      
+      if (hardDocs.length === 0) {
+        html += `<p style="color: #666; text-align: center;">${t("noScores")}</p>`;
+      } else {
+        html += `<table class="leaderboard-table"><thead><tr><th>${rankLabel}</th><th>${playerLabel}</th><th>${clicksLabel}</th><th>${dateLabel}</th></tr></thead><tbody>`;
+        hardDocs.forEach((doc, i) => {
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${doc.clicks}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div></div>';
+      
+      content.innerHTML = html;
+    })
+    .catch(err => {
+      content.textContent = t("errorLoading") + " " + err.message;
+      console.error("Leaderboard error:", err);
+    });
+}
+
 function showSimonSaysLeaderboard(db, content, gameName) {
   db.collection("games")
     .limit(100)
@@ -2510,7 +2642,9 @@ const audioFiles = [
   { name: "Voltage Collapse", file: "audio/Voltage_Collapse.mp3" },
   { name: "Haunted Corridor", file: "audio/Haunted_Corridor.mp3" },
   { name: "Hidden Glade", file: "audio/Hidden_Glade.mp3" },
-  { name: "Pocket Kingdom", file: "audio/Pocket_Kingdom.mp3" }
+  { name: "Pocket Kingdom", file: "audio/Pocket_Kingdom.mp3" },
+  { name: "Petals Stream", file: "audio/Petals_Stream.mp3" },
+  { name: "Saturday Morning", file: "audio/Saturday Morning.mp3" }
 ];
 
 let currentTrack = 0;
@@ -2613,6 +2747,7 @@ window.saveGameScore = function(gameName, scoreData) {
     const isLengthBased = scoreData.hasOwnProperty("length");
     const isTurnsBased = scoreData.hasOwnProperty("turns");
     const isRoundsBased = scoreData.hasOwnProperty("rounds");
+    const isClicksBased = scoreData.hasOwnProperty("clicks"); // For Battleship - lower is better
     const isTCGGame = scoreData.hasOwnProperty("result"); // TCG Game uses result field
     const isWinLossGame = (gameName === "Tic Tac Toe" || gameName === "Snakes and Ladders") && scoreData.hasOwnProperty("result");
     const isWordleGame = gameName === "Wordle" && scoreData.hasOwnProperty("wordsGuessed");
@@ -2647,9 +2782,9 @@ window.saveGameScore = function(gameName, scoreData) {
           if (gameName === "Sequence Builder" && isTurnsBased) {
             console.log(`Existing turns:`, existingData.turns, `New turns:`, scoreData.turns);
             shouldUpdate = scoreData.turns > existingData.turns;
-          } else if (isTimeBased || isTurnsBased) {
-            // For time-based and turns-based games (like Memory), lower is better
-            const field = isTimeBased ? "bestTime" : "turns";
+          } else if (isTimeBased || isTurnsBased || isClicksBased) {
+            // For time-based, turns-based (like Memory), and clicks-based (like Battleship), lower is better
+            const field = isTimeBased ? "bestTime" : isClicksBased ? "clicks" : "turns";
             console.log(`Existing ${field}:`, existingData[field], `New ${field}:`, scoreData[field]);
             shouldUpdate = scoreData[field] < existingData[field];
           } else if (isScoreBased || isTimeLeftBased || isLengthBased || isRoundsBased) {

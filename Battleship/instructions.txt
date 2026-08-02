@@ -1,0 +1,221 @@
+BATTLESHIP VS AI — GAME SPEC (TXT FORMAT FOR LLM INSTRUCTIONS)
+
+Goal:
+Create a fully playable Battleship game (HTML, CSS, JS) where the human plays against an AI opponent. The game runs locally in a browser and integrates with an existing leaderboard and Info section.
+
+--------------------------------------------------
+1. BOARD SETUP
+--------------------------------------------------
+- The game uses two grids:
+  - Intermediate difficulty: 10×10
+  - Hard difficulty: 11×11
+- One grid is the Player grid (shows player ships + hits/misses).
+- One grid is the AI grid (ships hidden until game ends).
+- Coordinates can be labeled (e.g., rows A–J / A–K, columns 1–10 / 1–11) depending on board size.
+
+--------------------------------------------------
+2. SHIPS
+--------------------------------------------------
+Use standard Battleship ships:
+- Carrier (size 5)
+- Battleship (size 4)
+- Cruiser (size 3)
+- Submarine (size 3)
+- Destroyer (size 2)
+
+Ship rules:
+- Ships can be placed horizontally or vertically.
+- Ships cannot overlap.
+- Ships must fit entirely inside the grid.
+
+--------------------------------------------------
+3. PLAYER SHIP PLACEMENT
+--------------------------------------------------
+- Placement method: click a starting cell + choose orientation (horizontal or vertical).
+- The game must validate placement (no overlap, inside grid) before confirming.
+- After a valid placement, the ship appears on the Player grid.
+- Include:
+  - “Reset Placement” button to clear all ships and start placement again.
+  - “Start Game” button that becomes enabled only after all ships are placed.
+
+--------------------------------------------------
+4. AI SHIP PLACEMENT
+--------------------------------------------------
+- AI places ships randomly on its grid.
+- AI must follow the same placement rules as the player:
+  - No overlaps.
+  - Ships fully inside the grid.
+- AI ships remain hidden from the player until the game ends.
+
+--------------------------------------------------
+5. GAMEPLAY LOOP
+--------------------------------------------------
+- At the start of the game, randomly decide who goes first:
+  - Either the Player or the AI.
+- On the Player’s turn:
+  - Player clicks a cell on the AI grid to fire.
+- On the AI’s turn:
+  - AI automatically chooses a cell on the Player grid and fires.
+- Turns alternate between Player and AI.
+- The game continues until all ships of one side are sunk.
+
+--------------------------------------------------
+6. HIT / MISS / SINK LOGIC
+--------------------------------------------------
+- When a shot hits a ship:
+  - Mark the cell as “hit”.
+  - Track damage for the specific ship.
+- When a shot misses:
+  - Mark the cell as “miss”.
+- When all cells of a ship are hit:
+  - That ship is “sunk”.
+  - Display a message:
+    - “You sank the AI’s [ship name]” when the player sinks an AI ship.
+    - “AI sank your [ship name]” when the AI sinks a player ship.
+
+--------------------------------------------------
+7. AI DIFFICULTY MODES
+--------------------------------------------------
+The game must include two difficulty modes: Intermediate and Hard.
+
+INTERMEDIATE:
+- AI fires randomly at untried cells.
+- When AI hits a ship:
+  - Store the hit location.
+  - Prioritize firing at adjacent cells (up, down, left, right).
+  - If multiple hits align in a straight line, continue firing along that line.
+- If no valid adjacent cells remain:
+  - AI returns to random firing on remaining untried cells.
+
+HARD:
+- Uses the same hunt logic as Intermediate (adjacent targeting and line continuation).
+- Additionally:
+  - Uses probability-based targeting to choose cells that are more likely to contain ships.
+  - Considers remaining ship sizes to adjust targeting.
+  - Avoids cells that are low probability based on previous hits and misses.
+
+AI constraints:
+- AI must never fire at the same cell twice.
+- AI must not cheat by directly reading player ship positions from internal data structures in a way that bypasses its targeting logic.
+
+--------------------------------------------------
+8. UI REQUIREMENTS
+--------------------------------------------------
+- Overall visual style: colourful and clear.
+- Display two grids side-by-side:
+  - Left or right: Player grid.
+  - Opposite side: AI grid.
+- Player grid:
+  - Shows ships.
+  - Shows hits (e.g., red cells).
+  - Shows misses (e.g., white or light-coloured cells).
+- AI grid:
+  - Shows hits (e.g., red cells).
+  - Shows misses (e.g., white or light-coloured cells).
+  - Does not show ships until the game ends.
+- Hover behaviour:
+  - When the player hovers over a cell on the AI grid, highlight that cell to indicate it can be targeted.
+- Status display:
+  - Show whose turn it is (Player or AI).
+  - Show messages for hit, miss, and sunk events.
+  - Show remaining ships for each side (e.g., a list with sunk/active status).
+
+--------------------------------------------------
+9. ANIMATIONS
+--------------------------------------------------
+- Implement simple splash/explosion-style animations for hits and/or misses using CSS only.
+- Do not rely on external image or sound assets.
+- Animations can be done via CSS transitions or keyframe animations (e.g., brief colour changes, scaling, or glow effects).
+
+--------------------------------------------------
+10. ENDGAME
+--------------------------------------------------
+- When all ships of one side are sunk:
+  - The game ends.
+  - Show a modal or overlay with:
+    - “Victory!” if the player wins.
+    - “Defeat!” if the player loses.
+  - Include a “Play Again” button that:
+    - Resets the game state.
+    - Allows the player to choose difficulty again.
+    - Returns to ship placement and a new random first-turn decision.
+
+--------------------------------------------------
+11. FILE STRUCTURE
+--------------------------------------------------
+The game must be implemented using three main files:
+- index.html
+- style.css
+- game.js
+
+index.html:
+- Contains the HTML structure for:
+  - Grids.
+  - Buttons (Reset Placement, Start Game, Play Again).
+  - Difficulty selection (Intermediate / Hard).
+  - Status and Info areas.
+  - Leaderboard display area (if needed).
+
+style.css:
+- Contains all styling for:
+  - Layout (using CSS grid or flexbox).
+  - Colours and visual theme.
+  - Grid cell styles (ships, hits, misses).
+  - Animations for hits/misses.
+  - Modal/overlay for endgame.
+
+game.js:
+- Contains all game logic:
+  - Board creation and initialization.
+  - Ship placement logic (player and AI).
+  - Turn management and random first-turn selection.
+  - Hit/miss/sink detection.
+  - AI targeting logic for Intermediate and Hard.
+  - Leaderboard integration functions.
+  - Info section integration.
+
+--------------------------------------------------
+12. CODE REQUIREMENTS
+--------------------------------------------------
+- Use pure JavaScript (no external libraries or frameworks).
+- Use event listeners instead of inline JavaScript in HTML.
+- Use CSS grid or flexbox for layout of the boards and UI.
+- Store game state in JavaScript objects, for example:
+  - boardPlayer
+  - boardAI
+  - shipsPlayer
+  - shipsAI
+  - turnState (whose turn it is, game phase, etc.)
+  - difficultyMode (Intermediate or Hard)
+  - clickCount (number of cells the player has clicked)
+- AI logic must be modular and readable:
+  - Separate functions for random targeting, hunt mode, and probability-based targeting (for Hard).
+
+--------------------------------------------------
+13. LEADERBOARD INTEGRATION
+--------------------------------------------------
+Scoring system:
+- When the player wins:
+  - The score is the total number of cells the player clicked during the game.
+  - This includes all shots fired at the AI grid.
+  - Lower score is better (fewer clicks = higher ranking).
+- When the player loses:
+  - No score is submitted to the leaderboard.
+- Display pop message like other games when the player beats their existing record.
+
+--------------------------------------------------
+14. INFO SECTION INTEGRATION
+--------------------------------------------------
+The game must add information about Battleship vs AI to the existing “Info” section in both English and Portuguese.
+
+Info section requirements:
+- Display both language versions clearly.
+- Use the same formatting style as other entries in the existing Info section.
+- Ensure the Info entry mentions:
+  - The two difficulty modes and their board sizes.
+  - The scoring rule (number of clicks, lower is better).
+  - That the player competes against an AI.
+
+--------------------------------------------------
+END OF SPEC
+--------------------------------------------------

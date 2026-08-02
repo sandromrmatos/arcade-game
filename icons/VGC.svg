@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="50" cy="50" r="48" fill="url(#bg)" stroke="#fff" stroke-width="2"/>
+  
+  <!-- Two creatures battling -->
+  <g>
+    <!-- Left creature (player) -->
+    <circle cx="30" cy="45" r="12" fill="#ff6b6b" opacity="0.9"/>
+    <circle cx="27" cy="42" r="3" fill="#fff"/>
+    <circle cx="33" cy="42" r="3" fill="#fff"/>
+    <path d="M 25 50 Q 30 53 35 50" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+    
+    <!-- Right creature (opponent) -->
+    <circle cx="70" cy="45" r="12" fill="#4ecdc4" opacity="0.9"/>
+    <circle cx="67" cy="42" r="3" fill="#fff"/>
+    <circle cx="73" cy="42" r="3" fill="#fff"/>
+    <path d="M 65 50 Q 70 53 75 50" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+    
+    <!-- Battle spark -->
+    <circle cx="50" cy="43" r="4" fill="#ffe66d" opacity="0.8"/>
+    <path d="M 46 40 L 50 43 L 47 46" stroke="#ffe66d" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M 54 40 L 50 43 L 53 46" stroke="#ffe66d" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </g>
+  
+  <!-- VGC Text -->
+  <text x="50" y="75" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#fff" text-anchor="middle">VGC</text>
+  
+  <!-- Small "2v2" indicator -->
+  <text x="50" y="88" font-family="Arial, sans-serif" font-size="10" fill="#ffe66d" text-anchor="middle">2v2</text>
+</svg>

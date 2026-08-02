@@ -1,0 +1,358 @@
+GAME_SPEC_VERSION: 1.0
+GAME_TITLE: "2v2 Creature Battle System"
+
+========================================
+1. TEAM BUILDING RULES
+========================================
+
+[TEAM_COMPOSITION]
+- Each player builds a team of 6 unique creatures.
+- For each creature:
+  - Choose 4 moves out of the 12 it can learn.
+  - Choose 1 ability out of the 2 it can have.
+  - Distribute 30 stat points across the 6 stats:
+    - Stats: HP, Attack, Defense, Special Attack, Special Defense, Speed.
+    - No more than 20 points may be assigned to any single stat.
+    - Points are integers.
+    - Points add directly to the creature's base stats.
+
+[PRE_BATTLE_SELECTION]
+- Both players see each other's full team of 6 creatures.
+- Each player selects 4 creatures to bring to battle.
+- The first 2 selected start as active creatures.
+- The remaining 2 start on the bench.
+- Player has 1 minute to choose; AI picks 4 randomly if time expires.
+
+========================================
+2. BATTLE STRUCTURE
+========================================
+
+[ACTIVE_AND_BENCH]
+- Each player has:
+  - 2 active creatures (on the field).
+  - 2 bench creatures (available to switch in).
+- Bench creatures can be switched in during a turn.
+- A switched-in creature cannot act on the turn it enters.
+
+[SWITCHING_RULES]
+- Switching counts as the creature's action for the turn.
+- Both active creatures may switch on the same turn.
+- Switching happens before any moves resolve.
+- Damage for that turn is applied to the newly switched-in creatures.
+
+[TURN_FLOW]
+1. Player chooses actions for both active creatures:
+   - Each active creature chooses either:
+     - A move (from its 4 selected moves), or
+     - A switch (to a bench creature).
+2. AI chooses actions for its active creatures (same options).
+3. All four creatures act in the same turn.
+4. Move order is determined by:
+   - Move priority (higher priority acts first).
+   - Speed (higher Speed acts first among same priority).
+   - Random tie-breaker if speeds match.
+5. After all moves resolve, the next turn begins.
+6. Turn counter increments; maximum 30 turns (game can end in draw or custom rule if needed).
+
+[KNOCKOUTS]
+- A creature reaching 0 HP faints (is KO'd).
+- If a creature is KO'd before its move, its move is cancelled.
+- When all 4 creatures of a player faint, that player loses.
+- If both players lose simultaneously, the result is a draw.
+
+========================================
+3. MOVE MECHANICS
+========================================
+
+[MOVE_DATA]
+Each move has:
+- Name
+- Type: one of {Mystic, Wind, Celestial, Mechanic, Neutral}
+- Power (numeric)
+- Accuracy (percentage, e.g., 75 means 75% chance to hit)
+- Category:
+  - Physical (uses Attack vs Defense)
+  - Special (uses Special Attack vs Special Defense)
+- Priority: integer in [0, 3]
+- Targeting type (see TARGETING_TYPES)
+- Secondary effects (see STAT_CHANGES & FIELD_EFFECTS sections)
+
+[ACCURACY]
+- A move with X% accuracy has (100 - X)% chance to fail.
+- If a move fails:
+  - No damage is dealt.
+  - No secondary effects occur.
+
+[TARGETING_TYPES]
+Supported targeting types:
+- Single target:
+  - Player chooses one opponent active slot (left or right).
+- Double target:
+  - Hits both opponent active creatures (left and right).
+- Self:
+  - Affects only the user.
+- Self and partner:
+  - Affects the user and its allied active partner.
+- Other three:
+  - Affects partner + both opponents (3 total, unless slots are empty).
+
+[EMPTY_SLOT_REDIRECTION]
+- If a single-target move is aimed at an empty opponent slot:
+  - It automatically redirects to the opponent's other active creature (if present).
+
+[DOUBLE_TARGET_RESOLUTION]
+- For double-target moves:
+  - Hit left slot first, then right slot.
+  - If the left slot creature is KO'd by the first hit, the second hit still applies to the right slot.
+  - If only one opponent creature is alive, only that creature is hit.
+
+========================================
+4. DAMAGE CALCULATION
+========================================
+
+[BASE_DAMAGE_FORMULA]
+
+Let:
+- P = Move Power
+- A = Attacker's relevant offensive stat
+- D = Defender's relevant defensive stat
+
+For Physical moves:
+- Offensive stat: Attack
+- Defensive stat: Defense
+- Formula:
+  - Damage_raw = P * (A / D)
+
+For Special moves:
+- Offensive stat: Special Attack
+- Defensive stat: Special Defense
+- Formula:
+  - Damage_raw = P * (A / D)
+
+[ROUNDING_AND_HP]
+- Damage_raw is rounded to an integer (e.g., standard rounding or floor; choose and be consistent).
+- Defender's HP is reduced by Damage (post-modifiers).
+- HP cannot go below 0.
+
+[SAME_TYPE_ATTACK_BONUS (STAB)]
+- If the type of the move matches the type of the creature using it:
+  - The move's Power is increased by 20% before applying the damage formula.
+  - New_Power = floor_or_round(Power * 1.2) (implementation choice, but consistent).
+- STAB is applied before type effectiveness and before rounding final damage.
+
+[TYPE_EFFECTIVENESS]
+- Super effective hits deal +25% damage (after base damage and STAB, then rounded).
+- Super Effective Chart:
+  - Mystic -> Wind (Mystic-type moves are super effective against Wind-type creatures)
+  - Wind -> Celestial
+  - Celestial -> Mystic
+  - Mechanic -> Neutral
+  - Neutral -> none (no super effective targets)
+- Effectiveness is based only on the move's type, not the creature's type.
+- Implementation:
+  - If move is super effective vs defender type:
+    - Damage_effective = round(Damage_base * 1.25)
+  - Otherwise:
+    - Damage_effective = Damage_base
+
+========================================
+5. STAT CHANGES & SECONDARY EFFECTS
+========================================
+
+[SECONDARY_EFFECTS]
+Secondary effects of moves can:
+- Increase own stats.
+- Decrease own stats.
+- Increase opponent's stats.
+- Decrease opponent's stats.
+- Cause self-damage (e.g., recoil).
+
+[STAT_CHANGE_RULES]
+- Stat changes apply as percentage modifiers to the current stats (implementation detail: store as multipliers).
+- Stat changes reset when switching out.
+- Stat changes persist until:
+  - The creature switches out, or
+  - The creature faints.
+- Stat changes may stack but are capped:
+  - Maximum +80% total increase (i.e., up to 1.8x of base stat).
+  - Maximum -80% total decrease (i.e., down to 0.2x of base stat).
+- Example:
+  - If a creature gets +50% Attack and then +40% Attack:
+    - Total = +90%, but cap at +80%.
+  - If a creature gets -50% Defense and then -40% Defense:
+    - Total = -90%, but cap at -80%.
+
+========================================
+6. FIELD EFFECTS
+========================================
+
+[FIELD_EFFECT_CREATION]
+- Certain moves or abilities may create field effects.
+
+[FIELD_EFFECT_BEHAVIOR]
+- Field effects apply to all active creatures on the affected player's side.
+- They persist for a fixed number of turns (duration specified by effect).
+- They are not tied to a specific creature:
+  - They remain even if the creator faints or switches out.
+- Any creature switched in is immediately affected by active field effects.
+
+[FIELD_EFFECT_EXAMPLES]
+- Example 1:
+  - "Player's creatures' Speed increased by 50% for 5 turns."
+- Example 2:
+  - "Computer's creatures' Attack increased by 5% for 3 turns."
+
+========================================
+7. ABILITIES
+========================================
+
+[ABILITY_TYPES]
+Abilities fall into two categories:
+
+1. Switch-in abilities:
+   - Trigger when the creature enters an active slot.
+   - Includes:
+     - When the battle starts (initial active creatures).
+     - When switching in from the bench.
+
+2. Passive abilities:
+   - Always active while the creature is in an active slot.
+   - Examples:
+     - Immunity to certain move types.
+     - Stat modifiers (e.g., +10% Speed).
+     - Accuracy modifiers (e.g., +5% accuracy to all moves).
+
+[ABILITY_EFFECTS]
+- Abilities may modify:
+  - Stats (flat or percentage).
+  - Accuracy (global or specific move types).
+  - Damage (e.g., boost certain types).
+  - Field effects (create, extend, or alter).
+  - Other battle mechanics (e.g., priority changes, immunity, etc.).
+
+========================================
+8. REQUIRED DATA FILES
+========================================
+
+[CREATURES_CSV]
+File: Creatures.csv
+Each row represents one creature and contains:
+- Name (string)
+- Type (one of {Mystic, Wind, Celestial, Mechanic, Neutral})
+- PNG asset path or identifier (string)
+- Base stats:
+  - HP
+  - Attack
+  - Defense
+  - Special Attack
+  - Special Defense
+  - Speed
+- List of 12 learnable moves (move names, comma-separated or structured list)
+- List of 2 abilities (ability names)
+
+[MOVES_CSV]
+File: Moves.csv
+Each row represents one move and contains:
+- Name (string)
+- Type (Mystic, Wind, Celestial, Mechanic, Neutral)
+- Power (integer)
+- Accuracy (integer percentage)
+- Secondary effects (text description or structured effect data)
+- Targeting type (Single, Double, Self, SelfAndPartner, OtherThree)
+- Category (Physical / Special)
+- Priority (integer 0–3)
+
+[ABILITIES_CSV]
+File: Abilities.csv
+Each row represents one ability and contains:
+- Name (string)
+- Description of effect (text or structured rules)
+
+========================================
+9. VISUAL / UI REQUIREMENTS
+========================================
+
+[UI_ELEMENTS]
+The UI must show at all times:
+- Player's 2 active creatures:
+  - Name
+  - Type
+  - Current HP / Total HP
+  - Status indicators (optional, if implemented).
+- Player's 2 bench creatures:
+  - Name
+  - Type
+  - Current HP / Total HP (if visible).
+- Opponent's 2 active creatures:
+  - Name
+  - Type
+  - Current HP / Total HP (or at least visible HP bar).
+- Turn counter:
+  - Display current turn number.
+  - Maximum 30 turns.
+- Field effects:
+  - Show active field effects on each side.
+  - Show remaining duration (turns left).
+- Info button:
+  - When clicked, shows a summary of all rules in this spec:
+    - Team building rules.
+    - Battle structure.
+    - Move mechanics.
+    - Damage calculation.
+    - Stat changes.
+    - Field effects.
+    - Abilities.
+    - Data file structure.
+
+[PLAYER_INPUT]
+- Player can:
+  - Select moves for each active creature.
+  - Select switch actions to bench creatures.
+  - Confirm actions for the turn.
+- AI:
+  - Chooses actions for its active creatures (can be random or strategic).
+
+========================================
+10. IMPLEMENTATION NOTES (FOR LLM)
+========================================
+
+[CORE OBJECTS]
+- Creature:
+  - name, type, base_stats, allocated_stats, current_stats, current_hp, moves, ability, stat_modifiers, status.
+- Move:
+  - name, type, power, accuracy, category, priority, targeting_type, secondary_effects.
+- Ability:
+  - name, description, type (switch-in or passive), effect logic.
+- FieldEffect:
+  - owner_side (player or AI), effect_type, magnitude, duration_remaining, affected_stats_or_mechanics.
+
+[TURN_RESOLUTION ORDER]
+1. Apply any start-of-turn effects (if implemented).
+2. Determine actions (player + AI).
+3. Resolve switches:
+   - Apply switch-in abilities for newly active creatures.
+4. Determine move order:
+   - Sort actions by:
+     - Priority (descending).
+     - Speed (descending).
+     - Random tie-breaker.
+5. For each action in order:
+   - Check if user is still alive (HP > 0); if not, skip.
+   - Check accuracy for moves.
+   - Apply damage and secondary effects.
+   - Check for KO and handle fainting.
+6. End-of-turn:
+   - Decrement field effect durations.
+   - Remove expired field effects.
+   - Increment turn counter.
+   - Check win/loss/draw conditions.
+
+[WIN_CONDITION]
+- If all 4 creatures of one side are KO'd:
+  - Opponent wins.
+- If both sides lose all 4 creatures on the same resolution step:
+  - Result is a draw.
+- Optional: if turn counter reaches 30:
+  - Decide outcome (e.g., compare remaining HP, or declare draw).
+
+END_OF_SPEC

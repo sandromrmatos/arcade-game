@@ -83,7 +83,94 @@ const cardDatabase = [
     {id: "Elemental Awakening_81.png", name: "Orbitmelon", stage: "Stage 3", hp: 110, retreat: 2, move1Cost: "C", move1Name: "Planet Burst", move1Damage: 50, move1Effect: "planetBurst", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Lunamelon", type: "Celestial"},
     {id: "Elemental Awakening_82.png", name: "Ghoulpole", stage: "Stage 1", hp: 70, retreat: 2, move1Cost: "KK", move1Name: "Soul Snare", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Mechanic"},
     {id: "Elemental Awakening_83.png", name: "Apparitron", stage: "Stage 2", hp: 90, retreat: 2, move1Cost: "KK", move1Name: "Eerie Attraction", move1Damage: 40, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Ghoulpole", type: "Mechanic"},
-    {id: "Elemental Awakening_84.png", name: "Poltergnet", stage: "Stage 3", hp: 130, retreat: 3, move1Cost: "KKK", move1Name: "Spectral Burst", move1Damage: 60, move1Effect: "spectralBurst", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Apparitron", type: "Mechanic"}
+    {id: "Elemental Awakening_84.png", name: "Poltergnet", stage: "Stage 3", hp: 130, retreat: 3, move1Cost: "KKK", move1Name: "Spectral Burst", move1Damage: 60, move1Effect: "spectralBurst", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Apparitron", type: "Mechanic"},
+    // Galactic Adventures Expansion
+    {id: "Galactic Adventures_01.png", name: "Gadgetrix", stage: "Stage 1", hp: 70, retreat: 2, move1Cost: "KK", move1Name: "Rusty Scratch", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Mechanic"},
+    {id: "Galactic Adventures_02.png", name: "Teklash", stage: "Stage 2", hp: 120, retreat: 2, move1Cost: "KK", move1Name: "Metallic Clink", move1Damage: 30, move1Effect: null, move2Cost: "NNN", move2Name: "Triple Threat Flip", move2Damage: 0, move2Effect: "tripleThreatFlip", prevStage: "Gadgetrix", type: "Mechanic"},
+    {id: "Galactic Adventures_03.png", name: "Psybella", stage: "Stage 1", hp: 50, retreat: 1, move1Cost: "M", move1Name: "Mind Pulse", move1Damage: 20, move1Effect: "mindPulse", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Mystic"},
+    {id: "Galactic Adventures_04.png", name: "Fuschioria", stage: "Stage 2", hp: 90, retreat: 1, move1Cost: "M", move1Name: "Dream Booster", move1Damage: 30, move1Effect: "dreamBooster", move2Cost: "MM", move2Name: "Shadow Wrap", move2Damage: 40, move2Effect: "shadowWrap", prevStage: "Psybella", type: "Mystic"},
+    {id: "Galactic Adventures_05.png", name: "Zenethra", stage: "Stage 1", hp: 50, retreat: 2, move1Cost: "MM", move1Name: "Invincible Gambit", move1Damage: 0, move1Effect: "invincibleGambit", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Mystic"},
+    {id: "Galactic Adventures_06.png", name: "Anter", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "N", move1Name: "Gentle Nudge", move1Damage: 10, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Neutral"},
+    {id: "Galactic Adventures_07.png", name: "Antoro", stage: "Stage 2", hp: 80, retreat: 1, move1Cost: "NN", move1Name: "Back Whip", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Anter", type: "Neutral"},
+    {id: "Galactic Adventures_08.png", name: "Antaray", stage: "Stage 3", hp: 110, retreat: 3, move1Cost: "NNN", move1Name: "Quick jab", move1Damage: 60, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Antoro", type: "Neutral", abilityName: "Extra Charge", abilityEffect: "extraCharge", abilityLocation: "any"},
+    {id: "Galactic Adventures_09.png", name: "Meerkool", stage: "Stage 1", hp: 50, retreat: 1, move1Cost: "N", move1Name: "Berserk", move1Damage: 10, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Neutral", abilityName: "Guardian Mode", abilityEffect: "guardianMode", abilityLocation: "any"},
+    {id: "Galactic Adventures_10.png", name: "Meerkool", stage: "Stage 1", hp: 50, retreat: 1, move1Cost: "N", move1Name: "Berserk", move1Damage: 10, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Neutral", abilityName: "Warrior Mode", abilityEffect: "warriorMode", abilityLocation: "any"},
+    {id: "Galactic Adventures_11.png", name: "Starraffe", stage: "Stage 1", hp: 90, retreat: 2, move1Cost: "C", move1Name: "Galactic Meteor", move1Damage: 0, move1Effect: "galacticMeteor", move2Cost: "NNN", move2Name: "Starfall Strike", move2Damage: 50, move2Effect: null, prevStage: null, type: "Celestial"},
+    {id: "Galactic Adventures_12.png", name: "Trunket", stage: "Stage 1", hp: 70, retreat: 2, move1Cost: "C", move1Name: "Celestial Vines", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Celestial", abilityName: "Healing Retreat", abilityEffect: "healingRetreat1", abilityLocation: "active"},
+    {id: "Galactic Adventures_13.png", name: "Elefeir", stage: "Stage 2", hp: 90, retreat: 2, move1Cost: "CN", move1Name: "Astral Tusk", move1Damage: 40, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Trunket", type: "Celestial", abilityName: "Healing Retreat", abilityEffect: "healingRetreat2", abilityLocation: "active"},
+    {id: "Galactic Adventures_14.png", name: "Planterdon", stage: "Stage 3", hp: 110, retreat: 2, move1Cost: "CN", move1Name: "Starry Stomp", move1Damage: 60, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Elefeir", type: "Celestial", abilityName: "Mirage Shield", abilityEffect: "mirageShield", abilityLocation: "active"},
+    {id: "Galactic Adventures_15.png", name: "Airsting", stage: "Stage 1", hp: 50, retreat: 1, move1Cost: "N", move1Name: "Aero Pollen", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Wind"},
+    {id: "Galactic Adventures_16.png", name: "Breezebuzz", stage: "Stage 2", hp: 80, retreat: 2, move1Cost: "WN", move1Name: "Cyclone Swarm", move1Damage: 50, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Airsting", type: "Wind", abilityName: "Thunder Rush", abilityEffect: "thunderRush", abilityLocation: "active"},
+    {id: "Galactic Adventures_17.png", name: "Skybee", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "WN", move1Name: "Zephyr Sting", move1Damage: 40, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Wind"},
+    {id: "Galactic Adventures_18.png", name: "Zephyrbuzz", stage: "Stage 2", hp: 90, retreat: 2, move1Cost: "WWN", move1Name: "Whirlwind Wasp", move1Damage: 60, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Skybee", type: "Wind", abilityName: "Thunder Rush", abilityEffect: "thunderRush", abilityLocation: "active"},
+    {id: "Galactic Adventures_19.png", name: "Astralin", stage: "Stage 1", hp: 50, retreat: 2, move1Cost: "M", move1Name: "Tidal Illusion", move1Damage: 0, move1Effect: "tidalIllusion", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Mystic"},
+    {id: "Galactic Adventures_20.png", name: "Aetherin", stage: "Stage 2", hp: 70, retreat: 2, move1Cost: "MM", move1Name: "Mind Ripple", move1Damage: 20, move1Effect: "mindRipple", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Astralin", type: "Mystic"},
+    {id: "Galactic Adventures_21.png", name: "Mystaeon", stage: "Stage 3", hp: 110, retreat: 3, move1Cost: "MM", move1Name: "Flux Wave", move1Damage: 60, move1Effect: "fluxWave", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Aetherin", type: "Mystic"},
+    {id: "Galactic Adventures_22.png", name: "Hoatzion", stage: "Stage 1", hp: 80, retreat: 1, move1Cost: "W", move1Name: "Verdant Struggle", move1Damage: 0, move1Effect: "verdantStruggle", move2Cost: "WWW", move2Name: "Fury Spin", move2Damage: 60, move2Effect: "furySpin", prevStage: null, type: "Wind"},
+    {id: "Galactic Adventures_23.png", name: "Lumifloris", stage: "Stage 1", hp: 60, retreat: 2, move1Cost: "CC", move1Name: "Regrowth", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Celestial", abilityName: "Absorb Energy", abilityEffect: "absorbEnergy", abilityLocation: "any"},
+    {id: "Galactic Adventures_24.png", name: "Photosynthra", stage: "Stage 2", hp: 80, retreat: 2, move1Cost: "CCN", move1Name: "Enraged Charge", move1Damage: 40, move1Effect: "enragedCharge", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Lumifloris", type: "Celestial", abilityName: "Absorb Energy", abilityEffect: "absorbEnergy", abilityLocation: "any"},
+    {id: "Galactic Adventures_25.png", name: "Nebuleap", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "C", move1Name: "Bog Bite", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Celestial", abilityName: "Energized Healing", abilityEffect: "energizedHealing1", abilityLocation: "any"},
+    {id: "Galactic Adventures_26.png", name: "Comiscroaker", stage: "Stage 2", hp: 90, retreat: 1, move1Cost: "C", move1Name: "Marshy Muddle", move1Damage: 30, move1Effect: null, move2Cost: "CCC", move2Name: "Toadstool Toss", move2Damage: 70, move2Effect: null, prevStage: "Nebuleap", type: "Celestial", abilityName: "Energized Healing", abilityEffect: "energizedHealing2", abilityLocation: "any"},
+    {id: "Galactic Adventures_27.png", name: "Gearpup", stage: "Stage 1", hp: 80, retreat: 2, move1Cost: "KK", move1Name: "Metallic Bark", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Mechanic"},
+    {id: "Galactic Adventures_28.png", name: "Gearstrike", stage: "Stage 2", hp: 120, retreat: 3, move1Cost: "KK", move1Name: "Scavenge Strike", move1Damage: 40, move1Effect: "scavengeStrike", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Gearpup", type: "Mechanic"},
+    {id: "Galactic Adventures_29.png", name: "Steelspirit", stage: "Stage 1", hp: 160, retreat: 2, move1Cost: "KK", move1Name: "Gear Grind", move1Damage: 30, move1Effect: "gearGrind", move2Cost: "KNN", move2Name: "Chill Recharge", move2Damage: 0, move2Effect: "chillRecharge", prevStage: null, type: "Mechanic", abilityName: "Metalic protection", abilityEffect: "metalicProtection", abilityLocation: "any"},
+    {id: "Galactic Adventures_30.png", name: "Auregear", stage: "Stage 1", hp: 90, retreat: 2, move1Cost: "KKK", move1Name: "Void Pulse", move1Damage: 40, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Mechanic"},
+    {id: "Galactic Adventures_31.png", name: "Mechalumin", stage: "Stage 2", hp: 90, retreat: 3, move1Cost: "KKK", move1Name: "Quantum Burst", move1Damage: 60, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Auregear", type: "Mechanic"},
+    {id: "Galactic Adventures_32.png", name: "Stilflare", stage: "Stage 3", hp: 130, retreat: 4, move1Cost: "KKK", move1Name: "Overdrive Smash", move1Damage: 100, move1Effect: "overdriveSmash", move2Cost: "KKKK", move2Name: "Fragile Force", move2Damage: 50, move2Effect: null, prevStage: "Mechalumin", type: "Mechanic"},
+    {id: "Galactic Adventures_33.png", name: "Electrogriff", stage: "Stage 1", hp: 90, retreat: 1, move1Cost: "WW", move1Name: "Harsh Flinch", move1Damage: 20, move1Effect: "harshFlinch", move2Cost: "WWW", move2Name: "Tempest Hold", move2Damage: 90, move2Effect: "tempestHold", prevStage: null, type: "Wind"},
+    {id: "Galactic Adventures_34.png", name: "Crocasprout", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "C", move1Name: "Leaf Bite", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Celestial"},
+    {id: "Galactic Adventures_35.png", name: "Crocablade", stage: "Stage 2", hp: 80, retreat: 1, move1Cost: "CC", move1Name: "Vine Slash", move1Damage: 50, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Crocasprout", type: "Celestial"},
+    {id: "Galactic Adventures_36.png", name: "Crocaterra", stage: "Stage 3", hp: 110, retreat: 2, move1Cost: "CC", move1Name: "Forest Fury", move1Damage: 50, move1Effect: "forestFury", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Crocablade", type: "Celestial"},
+    {id: "Galactic Adventures_37.png", name: "Pangolilly", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "N", move1Name: "Roll Tackle", move1Damage: 10, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Neutral"},
+    {id: "Galactic Adventures_38.png", name: "Pangomancer", stage: "Stage 2", hp: 80, retreat: 1, move1Cost: "NN", move1Name: "Lucky Tackle", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Pangolilly", type: "Neutral"},
+    {id: "Galactic Adventures_39.png", name: "Pangodice", stage: "Stage 3", hp: 110, retreat: 1, move1Cost: "NN", move1Name: "Chaos Dice", move1Damage: 30, move1Effect: "chaosDice", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Pangomancer", type: "Neutral"},
+    {id: "Galactic Adventures_40.png", name: "Psychea", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "M", move1Name: "Foresight Beam", move1Damage: 10, move1Effect: "foresightBeam", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Mystic"},
+    {id: "Galactic Adventures_41.png", name: "Olympis", stage: "Stage 2", hp: 80, retreat: 1, move1Cost: "MM", move1Name: "Olympic Wave", move1Damage: 30, move1Effect: "fluxWave", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Psychea", type: "Mystic"},
+    {id: "Galactic Adventures_42.png", name: "Oraclyon", stage: "Stage 3", hp: 100, retreat: 2, move1Cost: "MM", move1Name: "Ancient Wisdom", move1Damage: 50, move1Effect: "fluxWave", move2Cost: "MMN", move2Name: "Foresight Blast", move2Damage: 60, move2Effect: "dreamBooster", prevStage: "Olympis", type: "Mystic"},
+    {id: "Galactic Adventures_43.png", name: "Mummira", stage: "Stage 1", hp: 90, retreat: 1, move1Cost: "N", move1Name: "Spectral Wrap", move1Damage: 10, move1Effect: "spectralWrapGA", move2Cost: "MMN", move2Name: "Mummy's Curse", move2Damage: 60, move2Effect: "fluxWave", prevStage: null, type: "Mystic"},
+    {id: "Galactic Adventures_44.png", name: "Mousuck", stage: "Stage 1", hp: 50, retreat: 1, move1Cost: "N", move1Name: "Nibble Peck", move1Damage: 10, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Neutral"},
+    {id: "Galactic Adventures_45.png", name: "Mousuckler", stage: "Stage 2", hp: 80, retreat: 1, move1Cost: "NN", move1Name: "Hairy Echo", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Mousuck", type: "Neutral"},
+    {id: "Galactic Adventures_46.png", name: "Mousucklord", stage: "Stage 3", hp: 110, retreat: 2, move1Cost: "NN", move1Name: "Piercing Bite", move1Damage: 60, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Mousuckler", type: "Neutral", abilityName: "Gnawing Precision", abilityEffect: "gnawingPrecision", abilityLocation: "any"},
+    {id: "Galactic Adventures_47.png", name: "Cockeriel", stage: "Stage 1", hp: 30, retreat: 1, move1Cost: "N", move1Name: "Beak Bash", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Wind"},
+    {id: "Galactic Adventures_48.png", name: "Cockatrike", stage: "Stage 2", hp: 70, retreat: 1, move1Cost: "N", move1Name: "Sonic Chirp", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Cockeriel", type: "Wind"},
+    {id: "Galactic Adventures_49.png", name: "Cockarion", stage: "Stage 3", hp: 90, retreat: 1, move1Cost: "NN", move1Name: "Feather Barrage", move1Damage: 40, move1Effect: "featherBarrage", move2Cost: "WNN", move2Name: "Blow Blitz", move2Damage: 100, move2Effect: "recoil40", prevStage: "Cockatrike", type: "Wind"},
+    {id: "Galactic Adventures_50.png", name: "Beanling", stage: "Stage 1", hp: 40, retreat: 1, move1Cost: "C", move1Name: "Sprout Boost", move1Damage: 0, move1Effect: "sproutBoost", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Celestial"},
+    {id: "Galactic Adventures_51.png", name: "Beanleaf", stage: "Stage 2", hp: 70, retreat: 1, move1Cost: "CC", move1Name: "Coffee Heal", move1Damage: 30, move1Effect: "coffeeHeal", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Beanling", type: "Celestial"},
+    {id: "Galactic Adventures_52.png", name: "Beanknight", stage: "Stage 3", hp: 90, retreat: 2, move1Cost: "CC", move1Name: "Bean Blast", move1Damage: 40, move1Effect: "beanBlast", move2Cost: "CNN", move2Name: "Caffeine Addiction", move2Damage: 50, move2Effect: "caffeineAddiction", prevStage: "Beanleaf", type: "Celestial"},
+    {id: "Galactic Adventures_53.png", name: "Tielzor", stage: "Stage 1", hp: 80, retreat: 2, move1Cost: "W", move1Name: "Sky Draw", move1Damage: 0, move1Effect: "skyDraw", move2Cost: "WWWW", move2Name: "Hurricane Wing", move2Damage: 100, move2Effect: "hurricaneWing", prevStage: null, type: "Wind"},
+    {id: "Galactic Adventures_54.png", name: "Steellamb", stage: "Stage 1", hp: 80, retreat: 2, move1Cost: "KK", move1Name: "Iron Rush", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Mechanic"},
+    {id: "Galactic Adventures_55.png", name: "Pigmoat", stage: "Stage 2", hp: 120, retreat: 2, move1Cost: "KNN", move1Name: "Horn Bash", move1Damage: 50, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Steellamb", type: "Mechanic", abilityName: "Caprine Guard", abilityEffect: "caprineGuard", abilityLocation: "any"},
+    {id: "Galactic Adventures_56.png", name: "Astrollus", stage: "Stage 1", hp: 90, retreat: 2, move1Cost: "C", move1Name: "Galactic Pulse", move1Damage: 20, move1Effect: null, move2Cost: "NNN", move2Name: "Starlight Kick", move2Damage: 60, move2Effect: "forestFury", prevStage: null, type: "Celestial"},
+    {id: "Galactic Adventures_57.png", name: "Eclipso", stage: "Stage 1", hp: 40, retreat: 1, move1Cost: "W", move1Name: "Eclipse Tackle", move1Damage: 20, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Wind"},
+    {id: "Galactic Adventures_58.png", name: "Astraea", stage: "Stage 2", hp: 80, retreat: 1, move1Cost: "W", move1Name: "Nebula Blow", move1Damage: 30, move1Effect: null, move2Cost: "WW", move2Name: "Starry Stomp", move2Damage: 50, move2Effect: null, prevStage: "Eclipso", type: "Wind", abilityName: "Elemental Fortitude", abilityEffect: "elementalFortitude", abilityLocation: "any"},
+    {id: "Galactic Adventures_59.png", name: "Platypog", stage: "Stage 1", hp: 50, retreat: 1, move1Cost: "N", move1Name: "Tail Dance", move1Damage: 20, move1Effect: "tailDance", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Neutral"},
+    {id: "Galactic Adventures_60.png", name: "Fluffbill", stage: "Stage 2", hp: 80, retreat: 1, move1Cost: "N", move1Name: "Bill Bash", move1Damage: 50, move1Effect: "tailDance", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Platypog", type: "Neutral", abilityName: "Hydration", abilityEffect: "hydration", abilityLocation: "active"},
+    {id: "Galactic Adventures_61.png", name: "Lithogarde", stage: "Stage 1", hp: 70, retreat: 2, move1Cost: "K", move1Name: "Tidal Strike", move1Damage: 10, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Mechanic"},
+    {id: "Galactic Adventures_62.png", name: "Gallicore", stage: "Stage 2", hp: 100, retreat: 2, move1Cost: "KK", move1Name: "Iron Ascent", move1Damage: 40, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Lithogarde", type: "Mechanic"},
+    {id: "Galactic Adventures_63.png", name: "Notreclast", stage: "Stage 3", hp: 100, retreat: 2, move1Cost: "KK", move1Name: "Iron Ascent", move1Damage: 40, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Gallicore", type: "Mechanic", abilityName: "Retaliation Stone", abilityEffect: "retaliationStone", abilityLocation: "any"},
+    {id: "Galactic Adventures_64.png", name: "Mangost", stage: "Stage 1", hp: 50, retreat: 1, move1Cost: "MM", move1Name: "Spectral Slice", move1Damage: 30, move1Effect: "mindPulse", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Mystic"},
+    {id: "Galactic Adventures_65.png", name: "Ectomango", stage: "Stage 2", hp: 70, retreat: 1, move1Cost: "MM", move1Name: "Juicy Aroma", move1Damage: 40, move1Effect: "fluxWave", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Mangost", type: "Mystic", abilityName: "Aqua Mirror", abilityEffect: "aquaMirror", abilityLocation: "active"},
+    {id: "Galactic Adventures_66.png", name: "Energy Antenna", stage: "Item", hp: 0, retreat: 0, move1Cost: null, move1Name: null, move1Damage: null, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Item"},
+    {id: "Galactic Adventures_67.png", name: "Revive Crystal", stage: "Item", hp: 0, retreat: 0, move1Cost: null, move1Name: null, move1Damage: null, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Item"},
+    {id: "Galactic Adventures_68.png", name: "Shield Barrier", stage: "Item", hp: 0, retreat: 0, move1Cost: null, move1Name: null, move1Damage: null, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Item"},
+    {id: "Galactic Adventures_69.png", name: "Aura Crystal", stage: "Item", hp: 0, retreat: 0, move1Cost: null, move1Name: null, move1Damage: null, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Item"},
+    {id: "Galactic Adventures_70.png", name: "Healing Crystal", stage: "Item", hp: 0, retreat: 0, move1Cost: null, move1Name: null, move1Damage: null, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Item"},
+    {id: "Galactic Adventures_71.png", name: "Disruptor", stage: "Item", hp: 0, retreat: 0, move1Cost: null, move1Name: null, move1Damage: null, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Item"},
+    {id: "Galactic Adventures_72.png", name: "Amulet", stage: "Item", hp: 0, retreat: 0, move1Cost: null, move1Name: null, move1Damage: null, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Item"},
+    {id: "Galactic Adventures_73.png", name: "Gale Shield", stage: "Item", hp: 0, retreat: 0, move1Cost: null, move1Name: null, move1Damage: null, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Item"},
+    {id: "Galactic Adventures_74.png", name: "Mystic Scroll", stage: "Item", hp: 0, retreat: 0, move1Cost: null, move1Name: null, move1Damage: null, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Item"},
+    {id: "Galactic Adventures_75.png", name: "Goggly", stage: "Stage 1", hp: 50, retreat: 0, move1Cost: "NN", move1Name: "Gulp Swap", move1Damage: 0, move1Effect: "gulpSwap", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Neutral"},
+    {id: "Galactic Adventures_76.png", name: "Cloudlet", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "N", move1Name: "Cotton Guard", move1Damage: 0, move1Effect: "cottonGuard", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Neutral"},
+    {id: "Galactic Adventures_77.png", name: "Cloudboss", stage: "Stage 2", hp: 100, retreat: 1, move1Cost: "N", move1Name: "Cotton Guard", move1Damage: 0, move1Effect: "cottonGuard", move2Cost: "NN", move2Name: "Cloud Bounce", move2Damage: 30, move2Effect: "cloudBounce", prevStage: "Cloudlet", type: "Neutral"},
+    {id: "Galactic Adventures_78.png", name: "Sadotter", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "N", move1Name: "Melancholy Splash", move1Damage: 10, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Neutral"},
+    {id: "Galactic Adventures_79.png", name: "Weeweep", stage: "Stage 2", hp: 90, retreat: 1, move1Cost: "N", move1Name: "Sorrow Swipe", move1Damage: 30, move1Effect: null, move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Sadotter", type: "Neutral"},
+    {id: "Galactic Adventures_80.png", name: "Melanchote", stage: "Stage 3", hp: 130, retreat: 3, move1Cost: "NN", move1Name: "Desolate Dive", move1Damage: 50, move1Effect: null, move2Cost: "NNN", move2Name: "Alphabet Assault", move2Damage: 0, move2Effect: "alphabetAssault", prevStage: "Weeweep", type: "Neutral"},
+    {id: "Galactic Adventures_81.png", name: "Metalmagma", stage: "Stage 1", hp: 100, retreat: 2, move1Cost: "KK", move1Name: "Molten Coil", move1Damage: 30, move1Effect: null, move2Cost: "KKK", move2Name: "Inferno Constrict", move2Damage: 0, move2Effect: "infernoConstrict", prevStage: null, type: "Mechanic"},
+    {id: "Galactic Adventures_82.png", name: "Laugherry", stage: "Stage 1", hp: 40, retreat: 1, move1Cost: "C", move1Name: "Berry Burst", move1Damage: 10, move1Effect: "berryBurst", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Celestial"},
+    {id: "Galactic Adventures_83.png", name: "Gigglewood", stage: "Stage 2", hp: 70, retreat: 1, move1Cost: "CC", move1Name: "Laughing Leaves", move1Damage: 20, move1Effect: "laughingLeaves", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: "Laugherry", type: "Celestial"},
+    {id: "Galactic Adventures_84.png", name: "Quirkquack", stage: "Stage 1", hp: 60, retreat: 1, move1Cost: "W", move1Name: "Aerial Peck", move1Damage: 20, move1Effect: null, move2Cost: "WW", move2Name: "Windy Specs", move2Damage: 50, move2Effect: null, prevStage: null, type: "Wind"},
+    {id: "Galactic Adventures_85.png", name: "Pantheraura", stage: "Stage 1", hp: 70, retreat: 1, move1Cost: "MM", move1Name: "Mind Mirage", move1Damage: 30, move1Effect: "dreamBooster", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Mystic"},
+    {id: "Galactic Adventures_86.png", name: "Frostant", stage: "Stage 1", hp: 70, retreat: 1, move1Cost: "MM", move1Name: "Psychic Prowl", move1Damage: 30, move1Effect: "psychicProwl", move2Cost: null, move2Name: null, move2Damage: null, move2Effect: null, prevStage: null, type: "Mystic"}
 ];
 
 // Deck definitions
@@ -321,43 +408,11 @@ function editCustomDeck(deckName) {
     availableCards.innerHTML = '';
     customDeckCardsDiv.innerHTML = '';
     
-    // Sort card database by output_id (the number in the filename)
-    const sortedCards = [...cardDatabase].sort((a, b) => {
-        const aNum = parseInt(a.id.match(/(\d+)/)?.[0] || '0');
-        const bNum = parseInt(b.id.match(/(\d+)/)?.[0] || '0');
-        return aNum - bNum;
-    });
+    // Reset to Elemental Awakening when opening
+    currentCardSet = 'Elemental Awakening';
     
-    // Populate available cards
-    sortedCards.forEach(cardData => {
-        const cardDiv = document.createElement('div');
-        cardDiv.className = 'builder-card';
-        cardDiv.dataset.cardId = cardData.id;
-        
-        const img = document.createElement('img');
-        img.src = `cards/${cardData.id}`;
-        img.alt = cardData.name;
-        
-        const cardType = getCardType(cardData);
-        const typeLabel = document.createElement('div');
-        typeLabel.className = 'card-type-label';
-        typeLabel.textContent = cardType;
-        typeLabel.style.fontSize = '10px';
-        typeLabel.style.padding = '2px 5px';
-        typeLabel.style.background = getTypeColor(cardType);
-        typeLabel.style.borderRadius = '3px';
-        typeLabel.style.marginTop = '5px';
-        
-        cardDiv.appendChild(img);
-        cardDiv.appendChild(typeLabel);
-        
-        cardDiv.addEventListener('mouseenter', () => showCardZoom(cardData.id));
-        cardDiv.addEventListener('mouseleave', hideCardZoom);
-        cardDiv.addEventListener('click', () => addCardToDeck(cardData.id));
-        
-        availableCards.appendChild(cardDiv);
-    });
-    
+    // Update available cards display with set selection
+    updateAvailableCards();
     updateDeckBuilder();
 }
 
@@ -753,6 +808,7 @@ window.closeDeckPreview = closeDeckPreview;
 
 // Deck Builder Functions
 let customDeckCards = [];
+let currentCardSet = 'Elemental Awakening'; // Track which set is currently shown
 
 function showDeckBuilder() {
     customDeckCards = [];
@@ -784,8 +840,71 @@ function showDeckBuilder() {
     availableCards.innerHTML = '';
     customDeckCardsDiv.innerHTML = '';
     
+    // Reset to Elemental Awakening when opening
+    currentCardSet = 'Elemental Awakening';
+    
+    // Update available cards display
+    updateAvailableCards();
+    updateDeckBuilder();
+}
+
+function updateAvailableCards() {
+    const availableCards = document.getElementById('available-cards');
+    if (!availableCards) return;
+    
+    availableCards.innerHTML = '';
+    
+    // Update the h3 header to include set navigation
+    const cardPoolDiv = availableCards.parentElement;
+    let headerDiv = cardPoolDiv.querySelector('.set-navigation-header');
+    
+    if (!headerDiv) {
+        // Create header container if it doesn't exist
+        headerDiv = document.createElement('div');
+        headerDiv.className = 'set-navigation-header';
+        headerDiv.style.cssText = 'display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 15px;';
+        
+        const h3 = cardPoolDiv.querySelector('h3');
+        if (h3) {
+            h3.parentNode.insertBefore(headerDiv, h3);
+            h3.remove();
+        }
+    }
+    
+    // Clear and rebuild header
+    headerDiv.innerHTML = '';
+    
+    const prevArrow = document.createElement('button');
+    prevArrow.textContent = '◀';
+    prevArrow.style.cssText = 'font-size: 20px; padding: 5px 15px; background: #3498db; border: none; border-radius: 5px; color: white; cursor: pointer;';
+    prevArrow.onclick = () => {
+        currentCardSet = currentCardSet === 'Elemental Awakening' ? 'Galactic Adventures' : 'Elemental Awakening';
+        updateAvailableCards();
+    };
+    
+    const setLabel = document.createElement('h3');
+    setLabel.textContent = currentCardSet;
+    setLabel.style.cssText = 'margin: 0; color: #ecf0f1;';
+    
+    const nextArrow = document.createElement('button');
+    nextArrow.textContent = '▶';
+    nextArrow.style.cssText = 'font-size: 20px; padding: 5px 15px; background: #3498db; border: none; border-radius: 5px; color: white; cursor: pointer;';
+    nextArrow.onclick = () => {
+        currentCardSet = currentCardSet === 'Elemental Awakening' ? 'Galactic Adventures' : 'Elemental Awakening';
+        updateAvailableCards();
+    };
+    
+    headerDiv.appendChild(prevArrow);
+    headerDiv.appendChild(setLabel);
+    headerDiv.appendChild(nextArrow);
+    
+    // Filter cards by current set
+    const filteredCards = cardDatabase.filter(cardData => {
+        return cardData.id.startsWith(currentCardSet);
+    });
+    
     // Sort card database by output_id (the number in the filename)
-    const sortedCards = [...cardDatabase].sort((a, b) => {
+    const sortedCards = [...filteredCards].sort((a, b) => {
         const aNum = parseInt(a.id.match(/(\d+)/)?.[0] || '0');
         const bNum = parseInt(b.id.match(/(\d+)/)?.[0] || '0');
         return aNum - bNum;
@@ -1148,6 +1267,24 @@ function createCardElement(card, player, location, index = null) {
         hallucinationDiv.title = 'Hallucinating';
         cardDiv.appendChild(hallucinationDiv);
     }
+    
+    // Add flux indicator
+    if (card.hasFlux && card.data.stage !== "Item") {
+        const fluxDiv = document.createElement('div');
+        fluxDiv.className = 'flux-indicator';
+        fluxDiv.textContent = '⚡';
+        fluxDiv.title = 'Flux - Energy attachment requires coin flip';
+        cardDiv.appendChild(fluxDiv);
+    }
+    
+    // Add lock indicator
+    if (card.hasLock && card.data.stage !== "Item") {
+        const lockDiv = document.createElement('div');
+        lockDiv.className = 'lock-indicator';
+        lockDiv.textContent = '🔒';
+        lockDiv.title = 'Lock - Item usage requires coin flip';
+        cardDiv.appendChild(hallucinationDiv);
+    }
 
     // Add HP display
     if (card.data.stage !== "Item") {
@@ -1493,6 +1630,21 @@ function evolveCard(player, location, index) {
 
 // Item cards
 function useItemCard(card, handIndex) {
+    // Check if active creature has Lock condition
+    if (gameState.player.active && gameState.player.active.hasLock) {
+        alert("Your active creature is affected by Lock! Flipping a coin to determine if you can use the item...");
+        const flip = flipCoin();
+        alert(`Coin flip: ${flip}`);
+        
+        if (flip === 'tails') {
+            alert("Coin was tails! You cannot use this item card. It returns to your hand.");
+            gameState.player.itemUsedThisTurn = true; // Mark as used so can't try again this turn
+            return;
+        } else {
+            alert("Coin was heads! You can use the item normally.");
+        }
+    }
+    
     // Track that player used an item this turn for Energy Siphon ability
     gameState.player.usedItemThisTurn = true;
     
@@ -1506,6 +1658,24 @@ function useItemCard(card, handIndex) {
         usePowerUpCard(handIndex);
     } else if (card.data.name === "Remedy") {
         useRemedyCard(handIndex);
+    } else if (card.data.name === "Energy Antenna") {
+        useEnergyAntennaCard(handIndex);
+    } else if (card.data.name === "Revive Crystal") {
+        useReviveCrystalCard(handIndex);
+    } else if (card.data.name === "Shield Barrier") {
+        useShieldBarrierCard(handIndex);
+    } else if (card.data.name === "Aura Crystal") {
+        useAuraCrystalCard(handIndex);
+    } else if (card.data.name === "Healing Crystal") {
+        useHealingCrystalCard(handIndex);
+    } else if (card.data.name === "Disruptor") {
+        useDisruptorCard(handIndex);
+    } else if (card.data.name === "Amulet") {
+        useAmuletCard(handIndex);
+    } else if (card.data.name === "Gale Shield") {
+        useGaleShieldCard(handIndex);
+    } else if (card.data.name === "Mystic Scroll") {
+        useMysticScrollCard(handIndex);
     }
 }
 
@@ -1614,7 +1784,7 @@ function useRemedyCard(handIndex) {
     }
     
     const activeCreature = gameState.player.active;
-    const hasSpecialCondition = activeCreature.hallucinating;
+    const hasSpecialCondition = activeCreature.hallucinating || activeCreature.hasFlux || activeCreature.hasLock;
     
     if (!hasSpecialCondition) {
         alert("Your active creature has no special conditions to cure!");
@@ -1630,6 +1800,12 @@ function useRemedyCard(handIndex) {
         activeCreature.hallucinating = false;
         activeCreature.hallucinationFlip = null;
     }
+    if (activeCreature.hasFlux) {
+        activeCreature.hasFlux = false;
+    }
+    if (activeCreature.hasLock) {
+        activeCreature.hasLock = false;
+    }
     
     // Remove card from hand
     gameState.player.hand.splice(handIndex, 1);
@@ -1639,6 +1815,284 @@ function useRemedyCard(handIndex) {
     
     renderGame();
     alert("Remedy used! Your active creature has been cured of all special conditions.");
+}
+
+// Galactic Adventures Item Cards
+function useEnergyAntennaCard(handIndex) {
+    // Energy Antenna - attach 1 energy to a Mechanic creature
+    const mechanicCreatures = [];
+    if (gameState.player.active && getCardType(gameState.player.active.data) === 'Mechanic') {
+        mechanicCreatures.push({card: gameState.player.active, location: 'active'});
+    }
+    gameState.player.bench.forEach((card, idx) => {
+        if (card && getCardType(card.data) === 'Mechanic') {
+            mechanicCreatures.push({card: card, location: 'bench', index: idx});
+        }
+    });
+    
+    if (mechanicCreatures.length === 0) {
+        alert("You have no Mechanic creatures to attach energy to!");
+        return;
+    }
+    
+    // Store the item card index for later use
+    gameState.selectedCard = {handIndex, type: 'energyAntenna'};
+    
+    // Highlight Mechanic creatures for selection
+    if (gameState.player.active && getCardType(gameState.player.active.data) === 'Mechanic') {
+        const activeSlot = document.querySelector('.active-slot[data-player="player"]');
+        activeSlot.classList.add('can-select');
+        activeSlot.addEventListener('click', () => attachEnergyAntennaEnergy('player', 'active', null), {once: true});
+    }
+    
+    gameState.player.bench.forEach((card, index) => {
+        if (card && getCardType(card.data) === 'Mechanic') {
+            const benchSlot = document.querySelector(`.bench-slot[data-player="player"][data-slot="${index}"]`);
+            benchSlot.classList.add('can-select');
+            benchSlot.addEventListener('click', () => attachEnergyAntennaEnergy('player', 'bench', index), {once: true});
+        }
+    });
+}
+
+function attachEnergyAntennaEnergy(player, location, index) {
+    // Remove all selection highlights
+    document.querySelectorAll('.can-select').forEach(s => s.classList.remove('can-select'));
+    
+    let card;
+    if (location === 'active') {
+        card = gameState[player].active;
+    } else {
+        card = gameState[player].bench[index];
+    }
+    
+    // Attach energy
+    card.energy++;
+    
+    // Add to discard pile
+    const usedCard = gameState.player.hand[gameState.selectedCard.handIndex];
+    gameState.player.discardPile.push(usedCard);
+    
+    // Remove Energy Antenna from hand
+    gameState.player.hand.splice(gameState.selectedCard.handIndex, 1);
+    
+    // Mark item as used
+    gameState.player.itemUsedThisTurn = true;
+    
+    renderGame();
+    alert(`Energy Antenna used! Attached 1 energy to ${card.data.name}!`);
+}
+
+function useReviveCrystalCard(handIndex) {
+    // Revive Crystal - choose creature from discard pile and add to hand
+    const creatureCards = gameState.player.discardPile.filter(c => c.data.stage !== 'Item');
+    
+    if (creatureCards.length === 0) {
+        alert("No creature cards in your discard pile!");
+        return;
+    }
+    
+    // For simplicity, take first creature card
+    const revivedCard = creatureCards[0];
+    const index = gameState.player.discardPile.indexOf(revivedCard);
+    gameState.player.discardPile.splice(index, 1);
+    
+    // Reset the creature completely (full HP, no status conditions, no energy, etc.)
+    revivedCard.damage = 0;
+    revivedCard.energy = 0;
+    revivedCard.hallucinating = false;
+    revivedCard.hallucinationFlip = null;
+    revivedCard.hasFlux = false;
+    revivedCard.hasLock = false;
+    revivedCard.cantRetreat = false;
+    revivedCard.cantAttackNextTurn = false;
+    revivedCard.cantAttackUntilTurn = null;
+    revivedCard.abilityUsedThisTurn = false;
+    revivedCard.cantUseOverdrive = 0;
+    revivedCard.mindRippleShield = false;
+    revivedCard.cottonGuardShield = false;
+    revivedCard.chillRechargeBonus = null;
+    
+    // Add to hand
+    gameState.player.hand.push(revivedCard);
+    
+    // Add Revive Crystal to discard pile
+    const usedCard = gameState.player.hand[handIndex];
+    gameState.player.discardPile.push(usedCard);
+    gameState.player.hand.splice(handIndex, 1);
+    gameState.player.itemUsedThisTurn = true;
+    
+    renderGame();
+    alert(`Revive Crystal used! ${revivedCard.data.name} was fully restored and added to your hand!`);
+}
+
+function useShieldBarrierCard(handIndex) {
+    // Shield Barrier - reduce damage to active by 20 next turn
+    if (!gameState.player.active) {
+        alert("You have no active creature!");
+        return;
+    }
+    
+    gameState.player.shieldBarrierActive = 20;
+    
+    // Add to discard pile
+    const usedCard = gameState.player.hand[handIndex];
+    gameState.player.discardPile.push(usedCard);
+    gameState.player.hand.splice(handIndex, 1);
+    gameState.player.itemUsedThisTurn = true;
+    
+    renderGame();
+    alert("Shield Barrier used! Your active creature takes 20 less damage next turn!");
+}
+
+function useAuraCrystalCard(handIndex) {
+    // Aura Crystal - heal all creatures with damage by 10 HP
+    let healedCount = 0;
+    
+    if (gameState.player.active && gameState.player.active.damage > 0) {
+        gameState.player.active.damage = Math.max(0, gameState.player.active.damage - 10);
+        healedCount++;
+    }
+    
+    gameState.player.bench.forEach(card => {
+        if (card && card.damage > 0) {
+            card.damage = Math.max(0, card.damage - 10);
+            healedCount++;
+        }
+    });
+    
+    // Add to discard pile
+    const usedCard = gameState.player.hand[handIndex];
+    gameState.player.discardPile.push(usedCard);
+    gameState.player.hand.splice(handIndex, 1);
+    gameState.player.itemUsedThisTurn = true;
+    
+    renderGame();
+    alert(`Aura Crystal used! Healed ${healedCount} creature(s) for 10 HP each!`);
+}
+
+function useHealingCrystalCard(handIndex) {
+    // Healing Crystal - heal a Celestial creature by 40 HP
+    const celestialCreatures = [];
+    if (gameState.player.active && getCardType(gameState.player.active.data) === 'Celestial' && gameState.player.active.damage > 0) {
+        celestialCreatures.push({card: gameState.player.active, location: 'active'});
+    }
+    gameState.player.bench.forEach((card, idx) => {
+        if (card && getCardType(card.data) === 'Celestial' && card.damage > 0) {
+            celestialCreatures.push({card: card, location: 'bench', index: idx});
+        }
+    });
+    
+    if (celestialCreatures.length === 0) {
+        alert("You have no damaged Celestial creatures to heal!");
+        return;
+    }
+    
+    // For simplicity, heal first Celestial creature
+    celestialCreatures[0].card.damage = Math.max(0, celestialCreatures[0].card.damage - 40);
+    
+    // Add to discard pile
+    const usedCard = gameState.player.hand[handIndex];
+    gameState.player.discardPile.push(usedCard);
+    gameState.player.hand.splice(handIndex, 1);
+    gameState.player.itemUsedThisTurn = true;
+    
+    renderGame();
+    alert(`Healing Crystal used! Healed ${celestialCreatures[0].card.data.name} for 40 HP!`);
+}
+
+function useDisruptorCard(handIndex) {
+    // Disruptor - opponent shuffles hand into deck and draws same number minus one
+    const opponentHandSize = gameState.opponent.hand.length;
+    
+    if (opponentHandSize === 0) {
+        alert("Opponent has no cards in hand!");
+        return;
+    }
+    
+    // Shuffle opponent's hand back into deck
+    gameState.opponent.deck.push(...gameState.opponent.hand);
+    gameState.opponent.hand = [];
+    shuffleDeck(gameState.opponent.deck);
+    
+    // Draw cards (original count minus 1)
+    const drawCount = Math.max(0, opponentHandSize - 1);
+    for (let i = 0; i < drawCount && gameState.opponent.deck.length > 0; i++) {
+        gameState.opponent.hand.push(gameState.opponent.deck.pop());
+    }
+    
+    // Add to discard pile
+    const usedCard = gameState.player.hand[handIndex];
+    gameState.player.discardPile.push(usedCard);
+    gameState.player.hand.splice(handIndex, 1);
+    gameState.player.itemUsedThisTurn = true;
+    
+    renderGame();
+    alert(`Disruptor used! Opponent shuffled ${opponentHandSize} cards into deck and drew ${drawCount} cards!`);
+}
+
+function useAmuletCard(handIndex) {
+    // Amulet - for next 2 turns, all Neutral creatures' attack damage boosted by 20
+    gameState.player.amuletTurnsRemaining = 2;
+    
+    // Add to discard pile
+    const usedCard = gameState.player.hand[handIndex];
+    gameState.player.discardPile.push(usedCard);
+    gameState.player.hand.splice(handIndex, 1);
+    gameState.player.itemUsedThisTurn = true;
+    
+    renderGame();
+    alert("Amulet used! For the next 2 turns, all your Neutral creatures deal +20 damage!");
+}
+
+function useGaleShieldCard(handIndex) {
+    // Gale Shield - next turn, Wind creatures take 30 less damage
+    gameState.player.galeShieldActive = 30;
+    
+    // Add to discard pile
+    const usedCard = gameState.player.hand[handIndex];
+    gameState.player.discardPile.push(usedCard);
+    gameState.player.hand.splice(handIndex, 1);
+    gameState.player.itemUsedThisTurn = true;
+    
+    renderGame();
+    alert("Gale Shield used! Next turn, your Wind creatures take 30 less damage!");
+}
+
+function useMysticScrollCard(handIndex) {
+    // Mystic Scroll - draw a Mystic Stage 1 creature from deck, turn ends
+    const mysticStage1Cards = gameState.player.deck.filter(c => 
+        c.data.stage === 'Stage 1' && getCardType(c.data) === 'Mystic'
+    );
+    
+    if (mysticStage1Cards.length === 0) {
+        alert("No Mystic Stage 1 creatures in your deck!");
+        // Still use the card
+        const usedCard = gameState.player.hand[handIndex];
+        gameState.player.discardPile.push(usedCard);
+        gameState.player.hand.splice(handIndex, 1);
+        gameState.player.itemUsedThisTurn = true;
+        gameState.player.hasAttacked = true; // Force turn end
+        renderGame();
+        setTimeout(endTurn, 1000);
+        return;
+    }
+    
+    // Take first Mystic Stage 1
+    const drawnCard = mysticStage1Cards[0];
+    const deckIndex = gameState.player.deck.indexOf(drawnCard);
+    gameState.player.deck.splice(deckIndex, 1);
+    gameState.player.hand.push(drawnCard);
+    
+    // Add to discard pile
+    const usedCard = gameState.player.hand[handIndex];
+    gameState.player.discardPile.push(usedCard);
+    gameState.player.hand.splice(handIndex, 1);
+    gameState.player.itemUsedThisTurn = true;
+    gameState.player.hasAttacked = true; // Force turn end
+    
+    renderGame();
+    alert(`Mystic Scroll used! Drew ${drawnCard.data.name} from your deck! Your turn ends.`);
+    setTimeout(endTurn, 1000);
 }
 
 // Handle board card clicks (for energy attachment)
@@ -1659,6 +2113,22 @@ function handleEnergyButton() {
     if (gameState.phase === 'setup') {
         alert("You cannot attach energy during setup!");
         return;
+    }
+    
+    // Check if active creature has Flux condition
+    if (gameState.player.active && gameState.player.active.hasFlux) {
+        alert("Your active creature is affected by Flux! Flipping 2 coins to determine if you can attach energy...");
+        const flip1 = flipCoin();
+        const flip2 = flipCoin();
+        alert(`Coin 1: ${flip1}, Coin 2: ${flip2}`);
+        
+        if (flip1 === 'tails' && flip2 === 'tails') {
+            alert("Both coins were tails! You cannot attach energy this turn due to Flux.");
+            gameState.player.energyAttachedThisTurn = true; // Mark as used so can't try again
+            return;
+        } else {
+            alert("At least one coin was heads! You can attach energy normally.");
+        }
     }
     
     gameState.waitingForSelection = 'energy';
@@ -1733,8 +2203,14 @@ function handleAttack(moveNumber) {
         return;
     }
     
-    let damage = moveNumber === 1 ? attacker.data.move1Damage : attacker.data.move2Damage;
+    // Check if this move is Overdrive Smash and is on cooldown
     const effect = moveNumber === 1 ? attacker.data.move1Effect : attacker.data.move2Effect;
+    if (effect === 'overdriveSmash' && attacker.cantUseOverdrive && attacker.cantUseOverdrive > 0) {
+        alert(`${attacker.data.name} can't use Overdrive Smash yet! ${attacker.cantUseOverdrive} turn${attacker.cantUseOverdrive > 1 ? 's' : ''} remaining.`);
+        return;
+    }
+    
+    let damage = moveNumber === 1 ? attacker.data.move1Damage : attacker.data.move2Damage;
     
     const moveName = moveNumber === 1 ? attacker.data.move1Name : attacker.data.move2Name;
     console.log("Player using move", moveNumber + ":", moveName, "with effect:", effect);
@@ -1881,6 +2357,120 @@ function handleAttack(moveNumber) {
         alert(`Pink Gust: Flipped 2 coins - ${results.join(', ')}!\nGot ${headsCount} heads! Deals ${damage} damage!`);
     }
     
+    // Galactic Adventures damage calculation effects
+    if (effect === 'shadowWrap') {
+        // Shadow Wrap - +30 damage if opponent has special condition
+        if (defender.hallucinating || defender.hasFlux || defender.hasLock) {
+            damage += 30;
+            alert(`Shadow Wrap: ${defender.data.name} has a special condition! +30 damage! Total: ${damage}`);
+        }
+    } else if (effect === 'galacticMeteor') {
+        // Galactic Meteor - 10 damage per energy on opponent's active
+        damage = defender.energy * 10;
+        alert(`Galactic Meteor: ${defender.data.name} has ${defender.energy} energy! Deals ${damage} damage!`);
+    } else if (effect === 'verdantStruggle') {
+        // Verdant Struggle - Flip 2 coins, if both heads deal 50, otherwise 0
+        const flip1 = flipCoin();
+        const flip2 = flipCoin();
+        alert(`Verdant Struggle: Flipped ${flip1} and ${flip2}`);
+        if (flip1 === 'heads' && flip2 === 'heads') {
+            damage = 50;
+            alert("Both heads! Deals 50 damage!");
+        } else {
+            damage = 0;
+            alert("At least one tails! Deals no damage!");
+        }
+    } else if (effect === 'furySpin') {
+        // Fury Spin - +50 damage if HP is 30 or less
+        const attackerRemaining = attacker.data.hp - attacker.damage;
+        if (attackerRemaining <= 30) {
+            damage += 50;
+            alert(`Fury Spin: ${attacker.data.name} has ${attackerRemaining} HP (30 or less)! +50 damage! Total: ${damage}`);
+        }
+    } else if (effect === 'enragedCharge') {
+        // Enraged Charge - +30 damage per energy after 3
+        if (attacker.energy > 3) {
+            const extraEnergy = attacker.energy - 3;
+            damage += extraEnergy * 30;
+            alert(`Enraged Charge: ${attacker.data.name} has ${extraEnergy} extra energy! +${extraEnergy * 30} damage! Total: ${damage}`);
+        }
+    } else if (effect === 'gearGrind') {
+        // Gear Grind - Flip coin, if heads +20 damage
+        const flip = flipCoin();
+        alert(`Gear Grind: Coin flip: ${flip}`);
+        if (flip === 'heads') {
+            damage += 20;
+            alert(`Coin was heads! +20 damage! Total: ${damage}`);
+        }
+    } else if (effect === 'harshFlinch') {
+        // Harsh Flinch - Flip coins until tails, +20 per heads
+        let headsCount = 0;
+        let results = [];
+        let keepFlipping = true;
+        while (keepFlipping) {
+            const flip = flipCoin();
+            results.push(flip);
+            if (flip === 'heads') {
+                headsCount++;
+            } else {
+                keepFlipping = false;
+            }
+        }
+        const bonusDamage = headsCount * 20;
+        damage += bonusDamage;
+        alert(`Harsh Flinch: Flipped ${results.join(', ')}! Got ${headsCount} heads before tails! +${bonusDamage} damage! Total: ${damage}`);
+    } else if (effect === 'foresightBeam') {
+        // Foresight Beam - Flip coin, if heads +10 damage
+        const flip = flipCoin();
+        alert(`Foresight Beam: Coin flip: ${flip}`);
+        if (flip === 'heads') {
+            damage += 10;
+            alert(`Coin was heads! +10 damage! Total: ${damage}`);
+        }
+    } else if (effect === 'spectralWrapGA') {
+        // Spectral Wrap (Galactic Adventures) - +10 damage per energy on opponent's active
+        const bonusDamage = defender.energy * 10;
+        damage += bonusDamage;
+        alert(`Spectral Wrap: ${defender.data.name} has ${defender.energy} energy! +${bonusDamage} damage! Total: ${damage}`);
+    } else if (effect === 'featherBarrage') {
+        // Feather Barrage - Flip coin, if heads +20 damage
+        const flip = flipCoin();
+        alert(`Feather Barrage: Coin flip: ${flip}`);
+        if (flip === 'heads') {
+            damage += 20;
+            alert(`Coin was heads! +20 damage! Total: ${damage}`);
+        }
+    } else if (effect === 'hurricaneWing') {
+        // Hurricane Wing - Flip coin, if tails no damage
+        const flip = flipCoin();
+        alert(`Hurricane Wing: Coin flip: ${flip}`);
+        if (flip === 'tails') {
+            damage = 0;
+            alert("Coin was tails! Hurricane Wing deals no damage!");
+        }
+    } else if (effect === 'tailDance') {
+        // Tail Dance - Flip coin, if tails no damage
+        const flip = flipCoin();
+        alert(`Tail Dance: Coin flip: ${flip}`);
+        if (flip === 'tails') {
+            damage = 0;
+            alert("Coin was tails! Tail Dance deals no damage!");
+        }
+    } else if (effect === 'alphabetAssault') {
+        // Alphabet Assault - 10 damage per letter in opponent's active creature name
+        const letterCount = defender.data.name.length;
+        damage = letterCount * 10;
+        alert(`Alphabet Assault: ${defender.data.name} has ${letterCount} letters! Deals ${damage} damage!`);
+    } else if (effect === 'infernoConstrict') {
+        // Inferno Constrict - 30 damage per Mechanic creature on bench
+        let mechanicCount = 0;
+        gameState.player.bench.forEach(card => {
+            if (card && getCardType(card.data) === 'Mechanic') mechanicCount++;
+        });
+        damage = mechanicCount * 30;
+        alert(`Inferno Constrict: ${mechanicCount} Mechanic creatures on your bench! Deals ${damage} damage!`);
+    }
+    
     // Apply booster
     if (gameState.player.boosterActive) {
         damage += 20;
@@ -1920,6 +2510,40 @@ function handleAttack(moveNumber) {
         gameState.player.sturdyPresenceBonus = 0; // Consumed after this attack
     }
     
+    // Apply Warrior Mode bonus (Galactic Adventures)
+    if (gameState.player.warriorModeBonus) {
+        damage += gameState.player.warriorModeBonus;
+        alert(`Warrior Mode bonus: +${gameState.player.warriorModeBonus} damage! Total: ${damage}`);
+        gameState.player.warriorModeBonus = 0; // Consumed after this attack
+    }
+    
+    // Apply Amulet bonus (Galactic Adventures - only for Neutral creatures)
+    if (gameState.player.amuletTurnsRemaining > 0 && attackerType === 'Neutral') {
+        damage += 20;
+        alert(`Amulet bonus: +20 damage for Neutral creature! Total: ${damage}`);
+    }
+    
+    // Apply Thunder Rush (doubles damage if active)
+    if (gameState.player.thunderRushActive) {
+        damage *= 2;
+        alert(`Thunder Rush activated! Damage doubled to ${damage}!`);
+        gameState.player.thunderRushActive = false; // Consumed after this attack
+    }
+    
+    // Apply Chill Recharge bonus (from previous turn)
+    if (attacker.chillRechargeBonus) {
+        damage += 20;
+        alert(`Chill Recharge bonus: +20 damage! Total: ${damage}`);
+        attacker.chillRechargeBonus = false; // Consumed after this attack
+    }
+    
+    // Apply Sprout Boost bonus (from 2 turns ago)
+    if (attacker.sproutBoostActive) {
+        damage += 30;
+        alert(`Sprout Boost activated! +30 damage! Total: ${damage}`);
+        attacker.sproutBoostActive = false; // Consumed after this attack
+    }
+    
     // Apply Monk's Fury shield (opponent's shield reduces damage to them)
     if (gameState.opponent.monksFuryShield) {
         damage = Math.max(0, damage - 20);
@@ -1949,6 +2573,65 @@ function handleAttack(moveNumber) {
         damage = Math.max(0, damage - shieldAmount);
         alert(`Defense Aura shield reduces damage by ${shieldAmount}! ${attacker.data.name} deals ${damage} damage!`);
         gameState.opponent.defenseAuraShield = 0; // Shield is consumed
+    }
+    
+    // Apply Shield Barrier (Galactic Adventures item)
+    if (gameState.opponent.shieldBarrierActive) {
+        const shieldAmount = gameState.opponent.shieldBarrierActive;
+        damage = Math.max(0, damage - shieldAmount);
+        alert(`Shield Barrier reduces damage by ${shieldAmount}! ${attacker.data.name} deals ${damage} damage!`);
+        gameState.opponent.shieldBarrierActive = 0; // Shield is consumed
+    }
+    
+    // Apply Gale Shield (Galactic Adventures item - only for Wind creatures)
+    if (gameState.opponent.galeShieldActive && defenderType === 'Wind') {
+        const shieldAmount = gameState.opponent.galeShieldActive;
+        damage = Math.max(0, damage - shieldAmount);
+        alert(`Gale Shield reduces damage by ${shieldAmount}! ${attacker.data.name} deals ${damage} damage!`);
+        gameState.opponent.galeShieldActive = 0; // Shield is consumed
+    }
+    
+    // Apply Mind Ripple shield (Galactic Adventures)
+    if (defender.mindRippleShield) {
+        damage = Math.max(0, damage - 20);
+        alert(`Mind Ripple shield reduces damage by 20! ${attacker.data.name} deals ${damage} damage!`);
+        defender.mindRippleShield = false; // Shield is consumed
+    }
+    
+    // Apply Cotton Guard shield (Galactic Adventures)
+    if (defender.cottonGuardShield) {
+        damage = Math.max(0, damage - 20);
+        alert(`Cotton Guard shield reduces damage by 20! ${attacker.data.name} deals ${damage} damage!`);
+        defender.cottonGuardShield = false; // Shield is consumed
+    }
+    
+    // Apply Guardian Mode shield (Galactic Adventures - all creatures)
+    if (gameState.opponent.guardianModeActive) {
+        damage = Math.max(0, damage - 10);
+        alert(`Guardian Mode reduces damage by 10! ${attacker.data.name} deals ${damage} damage!`);
+    }
+    
+    // Apply Caprine Guard shield (Galactic Adventures - only from Celestial/Mystic)
+    if (gameState.opponent.caprineGuardShield && (attackerType === 'Celestial' || attackerType === 'Mystic')) {
+        const shieldAmount = gameState.opponent.caprineGuardShield;
+        damage = Math.max(0, damage - shieldAmount);
+        alert(`Caprine Guard reduces damage by ${shieldAmount}! ${attacker.data.name} deals ${damage} damage!`);
+        gameState.opponent.caprineGuardShield = 0; // Shield is consumed
+    }
+    
+    // Apply Elemental Fortitude shield (Galactic Adventures - only from Wind/Mechanic)
+    if (gameState.opponent.elementalFortitudeShield && (attackerType === 'Wind' || attackerType === 'Mechanic')) {
+        const shieldAmount = gameState.opponent.elementalFortitudeShield;
+        damage = Math.max(0, damage - shieldAmount);
+        alert(`Elemental Fortitude reduces damage by ${shieldAmount}! ${attacker.data.name} deals ${damage} damage!`);
+        gameState.opponent.elementalFortitudeShield = 0; // Shield is consumed
+    }
+    
+    // Apply Metalic Protection (Galactic Adventures - no damage from Mechanic)
+    if (defender.metalicProtectionActive && attackerType === 'Mechanic') {
+        damage = 0;
+        alert(`${defender.data.name}'s Metalic Protection blocks all Mechanic damage! ${attacker.data.name} deals no damage!`);
+        // Don't consume the shield here - it lasts the entire turn
     }
     
     console.log("Total damage:", damage, "Defender HP:", defender.data.hp, "Current damage:", defender.damage);
@@ -1988,6 +2671,21 @@ function handleAttack(moveNumber) {
     
     // Apply base damage to defender
     defender.damage += damage;
+    
+    // Check for Retaliation Stone (Galactic Adventures) - counter-attack when damaged
+    if (defender.retaliationStoneActive && damage > 0) {
+        attacker.damage += 20;
+        defender.retaliationStoneActive = false; // Consumed after use
+        alert(`${defender.data.name}'s Retaliation Stone activated! ${attacker.data.name} takes 20 damage!`);
+        renderGame();
+        
+        // Check if attacker was knocked out by retaliation
+        if (attacker.damage >= attacker.data.hp) {
+            alert(`${attacker.data.name} was knocked out by Retaliation Stone!`);
+            knockoutCreature('player');
+            return; // Exit the function as attacker is knocked out
+        }
+    }
     
     // Apply Rainbow Strike - deal 30 damage to random opponent bench creature
     if (gameState.player.rainbowStrikeActive) {
@@ -2197,10 +2895,18 @@ function handleAttack(moveNumber) {
                         const firstBenchIndex = gameState.opponent.bench.findIndex(c => c !== null);
                         const temp = gameState.opponent.active;
                         
-                        // Cure hallucination when moving to bench
+                        // Cure special conditions when moving to bench
                         if (temp.hallucinating) {
                             temp.hallucinating = false;
                             alert(`${temp.data.name} is no longer hallucinating!`);
+                        }
+                        if (temp.hasFlux) {
+                            temp.hasFlux = false;
+                            alert(`${temp.data.name} is no longer affected by Flux!`);
+                        }
+                        if (temp.hasLock) {
+                            temp.hasLock = false;
+                            alert(`${temp.data.name} is no longer affected by Lock!`);
                         }
                         
                         gameState.opponent.active = gameState.opponent.bench[firstBenchIndex];
@@ -2384,10 +3090,18 @@ function handleAttack(moveNumber) {
                         const firstBenchIndex = gameState.opponent.bench.findIndex(c => c !== null);
                         const temp = gameState.opponent.active;
                         
-                        // Cure hallucination when moving to bench
+                        // Cure special conditions when moving to bench
                         if (temp.hallucinating) {
                             temp.hallucinating = false;
                             alert(`${temp.data.name} is no longer hallucinating!`);
+                        }
+                        if (temp.hasFlux) {
+                            temp.hasFlux = false;
+                            alert(`${temp.data.name} is no longer affected by Flux!`);
+                        }
+                        if (temp.hasLock) {
+                            temp.hasLock = false;
+                            alert(`${temp.data.name} is no longer affected by Lock!`);
                         }
                         
                         gameState.opponent.active = gameState.opponent.bench[firstBenchIndex];
@@ -2717,6 +3431,60 @@ function handleMoveEffectBeforeKnockout(effect, attacker, attackingPlayer, callb
             }, 500);
             break;
             
+        case 'scavengeStrike':
+            // Scavenge Strike - Flip coin, if heads move item from discard to hand
+            setTimeout(() => {
+                const flip = flipCoin();
+                alert(`Scavenge Strike: Coin flip: ${flip}`);
+                if (flip === 'heads') {
+                    const items = gameState[attackingPlayer].discardPile.filter(c => c.data.stage === 'Item');
+                    if (items.length > 0) {
+                        if (attackingPlayer === 'player') {
+                            // Let player choose (for simplicity, take first item)
+                            const item = items[0];
+                            gameState[attackingPlayer].hand.push(item);
+                            const index = gameState[attackingPlayer].discardPile.indexOf(item);
+                            gameState[attackingPlayer].discardPile.splice(index, 1);
+                            alert(`You retrieved ${item.data.name} from your discard pile!`);
+                        } else {
+                            // AI chooses randomly
+                            const item = items[Math.floor(Math.random() * items.length)];
+                            gameState[attackingPlayer].hand.push(item);
+                            const index = gameState[attackingPlayer].discardPile.indexOf(item);
+                            gameState[attackingPlayer].discardPile.splice(index, 1);
+                            alert(`AI retrieved ${item.data.name} from discard pile!`);
+                        }
+                        renderGame();
+                    } else {
+                        alert("No item cards in discard pile!");
+                    }
+                } else {
+                    alert("Coin was tails! No item retrieved.");
+                }
+                callback();
+            }, 500);
+            break;
+            
+        case 'overdriveSmash':
+            // Overdrive Smash - Can't use this move on your next turn
+            attacker.cantUseOverdrive = 3;
+            setTimeout(() => {
+                alert(`${attacker.data.name} can't use Overdrive Smash for the next 2 turns!`);
+                callback();
+            }, 500);
+            break;
+            
+        case 'chillRecharge':
+            // Chill Recharge - Heal 10 HP and increase next attack by 20
+            attacker.damage = Math.max(0, attacker.damage - 10);
+            attacker.chillRechargeBonus = true;
+            setTimeout(() => {
+                alert(`${attacker.data.name} healed 10 HP! Next attack will deal +20 damage!`);
+                renderGame();
+                callback();
+            }, 500);
+            break;
+            
         default:
             callback();
     }
@@ -2897,6 +3665,476 @@ function handleMoveEffect(effect, attacker, defender, attackingPlayer) {
             }, 500);
             break;
             
+        // Galactic Adventures Move Effects
+        case 'tripleThreatFlip':
+            // Triple Threat Flip - flip 2 coins, if both heads KO opponent
+            setTimeout(() => {
+                const flip1 = flipCoin();
+                const flip2 = flipCoin();
+                alert(`Triple Threat Flip: Coin 1: ${flip1}, Coin 2: ${flip2}`);
+                if (flip1 === 'heads' && flip2 === 'heads') {
+                    alert(`Both coins were heads! ${defender.data.name} is knocked out regardless of HP!`);
+                    defender.damage = defender.data.hp; // Force knockout
+                } else {
+                    alert("At least one coin was tails. This move has no effect.");
+                }
+                checkKnockoutsAndContinue(attackingPlayer);
+            }, 500);
+            break;
+            
+        case 'mindPulse':
+            // Mind Pulse - Flip coin, if heads cause Hallucination
+            setTimeout(() => {
+                const flip = flipCoin();
+                alert(`Mind Pulse: Coin flip: ${flip}`);
+                if (flip === 'heads') {
+                    defender.hallucinating = true;
+                    alert(`${defender.data.name} is now hallucinating!`);
+                } else {
+                    alert("Coin was tails! No hallucination.");
+                }
+                renderGame();
+                checkKnockoutsAndContinue(attackingPlayer);
+            }, 500);
+            break;
+            
+        case 'shadowWrap':
+            // Shadow Wrap - +30 damage if opponent has special condition
+            // This is handled in attack damage calculation, not here
+            checkKnockoutsAndContinue(attackingPlayer);
+            break;
+            
+        case 'invincibleGambit':
+            // Invincible Gambit - Flip 3 coins, opponent can't damage for each heads, then faint
+            setTimeout(() => {
+                let headsCount = 0;
+                for (let i = 0; i < 3; i++) {
+                    if (flipCoin() === 'heads') headsCount++;
+                }
+                alert(`Invincible Gambit: Got ${headsCount} heads! Opponent can't deal damage for ${headsCount} turn(s).`);
+                if (headsCount > 0) {
+                    if (!gameState[opponent].invincibleTurnsLeft) {
+                        gameState[opponent].invincibleTurnsLeft = 0;
+                    }
+                    gameState[opponent].invincibleTurnsLeft += headsCount;
+                }
+                // Attacker faints
+                attacker.damage = attacker.data.hp;
+                alert(`${attacker.data.name} faints after using Invincible Gambit!`);
+                renderGame();
+                knockoutCreature(attackingPlayer);
+            }, 500);
+            break;
+            
+        case 'galacticMeteor':
+            // Galactic Meteor - 10 damage per energy attached to opponent
+            // This is handled in attack damage calculation
+            checkKnockoutsAndContinue(attackingPlayer);
+            break;
+            
+        case 'tidalIllusion':
+            // Tidal Illusion - Flip coin, if heads opponent deals no damage next turn
+            setTimeout(() => {
+                const flip = flipCoin();
+                alert(`Tidal Illusion: Coin flip: ${flip}`);
+                if (flip === 'heads') {
+                    gameState[opponent].cantDealDamageNextTurn = true;
+                    alert(`${opponent === 'player' ? 'You' : 'Opponent'} can't deal damage next turn!`);
+                } else {
+                    alert("Coin was tails! No effect.");
+                }
+                checkKnockoutsAndContinue(attackingPlayer);
+            }, 500);
+            break;
+            
+        case 'mindRipple':
+            // Mind Ripple - Next turn, this creature takes 20 less damage
+            attacker.mindRippleShield = true;
+            setTimeout(() => {
+                alert(`${attacker.data.name} will take 20 less damage next turn!`);
+                checkKnockoutsAndContinue(attackingPlayer);
+            }, 500);
+            break;
+            
+        case 'fluxWave':
+            // Flux Wave - Opponent's creature is affected by Flux
+            defender.hasFlux = true;
+            setTimeout(() => {
+                alert(`${defender.data.name} is now affected by Flux!`);
+                renderGame();
+                checkKnockoutsAndContinue(attackingPlayer);
+            }, 500);
+            break;
+            
+        case 'verdantStruggle':
+            // Verdant Struggle - Flip 2 coins, if 2 heads deal 50, otherwise 0
+            // This is handled in attack damage calculation
+            checkKnockoutsAndContinue(attackingPlayer);
+            break;
+            
+        case 'furySpin':
+            // Fury Spin - +50 damage if HP is 30 or less
+            // This is handled in attack damage calculation
+            checkKnockoutsAndContinue(attackingPlayer);
+            break;
+            
+        case 'enragedCharge':
+            // Enraged Charge - +30 damage per energy after 3
+            // This is handled in attack damage calculation
+            checkKnockoutsAndContinue(attackingPlayer);
+            break;
+            
+        case 'scavengeStrike':
+            // Scavenge Strike - Flip coin, if heads move item from discard to hand
+            setTimeout(() => {
+                const flip = flipCoin();
+                alert(`Scavenge Strike: Coin flip: ${flip}`);
+                if (flip === 'heads') {
+                    const items = gameState[attackingPlayer].discardPile.filter(c => c.data.stage === 'Item');
+                    if (items.length > 0) {
+                        if (attackingPlayer === 'player') {
+                            // Let player choose
+                            alert("Choose an item card from your discard pile:");
+                            // For simplicity, take first item
+                            const item = items[0];
+                            gameState[attackingPlayer].hand.push(item);
+                            const index = gameState[attackingPlayer].discardPile.indexOf(item);
+                            gameState[attackingPlayer].discardPile.splice(index, 1);
+                            alert(`You retrieved ${item.data.name} from your discard pile!`);
+                        } else {
+                            // AI chooses randomly
+                            const item = items[Math.floor(Math.random() * items.length)];
+                            gameState[attackingPlayer].hand.push(item);
+                            const index = gameState[attackingPlayer].discardPile.indexOf(item);
+                            gameState[attackingPlayer].discardPile.splice(index, 1);
+                            alert(`AI retrieved ${item.data.name} from discard pile!`);
+                        }
+                        renderGame();
+                    } else {
+                        alert("No item cards in discard pile!");
+                    }
+                } else {
+                    alert("Coin was tails! No item retrieved.");
+                }
+                checkKnockoutsAndContinue(attackingPlayer);
+            }, 500);
+            break;
+            
+        case 'gearGrind':
+            // Gear Grind - Flip coin, if heads +20 damage
+            // This is handled in attack damage calculation
+            checkKnockoutsAndContinue(attackingPlayer);
+            break;
+            
+        case 'chillRecharge':
+            // Chill Recharge - Heal 10 HP and increase next attack by 20
+            attacker.damage = Math.max(0, attacker.damage - 10);
+            attacker.chillRechargeBonus = true;
+            setTimeout(() => {
+                alert(`${attacker.data.name} healed 10 HP! Next attack will deal +20 damage!`);
+                renderGame();
+                checkKnockoutsAndContinue(attackingPlayer);
+            }, 500);
+            break;
+            
+        case 'overdriveSmash':
+            // Overdrive Smash - Can't use this move on your next turn (skip 2 player turns)
+            attacker.cantUseOverdrive = 3; // Will decrement: end of turn 5->2, end of turn 6->1, end of turn 7->0
+            setTimeout(() => {
+                alert(`${attacker.data.name} can't use Overdrive Smash for the next 2 turns!`);
+                checkKnockoutsAndContinue(attackingPlayer);
+            }, 500);
+            break;
+            
+        case 'harshFlinch':
+            // Harsh Flinch - Flip coins until tails, +20 per heads
+            // This is handled in attack damage calculation
+            checkKnockoutsAndContinue(attackingPlayer);
+            break;
+            
+        case 'tempestHold':
+            // Tempest Hold - This creature can't retreat for 2 turns
+            attacker.cantRetreatTurns = 2;
+            setTimeout(() => {
+                alert(`${attacker.data.name} can't retreat for the next 2 turns!`);
+                checkKnockoutsAndContinue(attackingPlayer);
+            }, 500);
+            break;
+            
+        case 'forestFury':
+            // Forest Fury - Causes Lock
+            defender.hasLock = true;
+            setTimeout(() => {
+                alert(`${defender.data.name} is now affected by Lock!`);
+                renderGame();
+                checkKnockoutsAndContinue(attackingPlayer);
+            }, 500);
+            break;
+            
+        case 'chaosDice':
+            // Chaos Dice - Roll dice, apply Hallucination (1-2), Flux (3-4), or Lock (5-6)
+            setTimeout(() => {
+                const roll = rollDice();
+                alert(`Chaos Dice: Rolled a ${roll}!`);
+                if (roll <= 2) {
+                    defender.hallucinating = true;
+                    alert(`${defender.data.name} is now hallucinating!`);
+                } else if (roll <= 4) {
+                    defender.hasFlux = true;
+                    alert(`${defender.data.name} is now affected by Flux!`);
+                } else {
+                    defender.hasLock = true;
+                    alert(`${defender.data.name} is now affected by Lock!`);
+                }
+                renderGame();
+                checkKnockoutsAndContinue(attackingPlayer);
+            }, 500);
+            break;
+            
+        case 'foresightBeam':
+            // Foresight Beam - Flip coin, if heads +10 damage
+            // This is handled in attack damage calculation
+            checkKnockoutsAndContinue(attackingPlayer);
+            break;
+            
+        case 'spectralWrapGA':
+            // Spectral Wrap (Galactic Adventures) - +10 damage per energy on opponent's active
+            // This is handled in attack damage calculation
+            checkKnockoutsAndContinue(attackingPlayer);
+            break;
+            
+        case 'featherBarrage':
+            // Feather Barrage - Flip coin, if heads +20 damage
+            // This is handled in attack damage calculation
+            checkKnockoutsAndContinue(attackingPlayer);
+            break;
+            
+        case 'recoil40':
+            // Blow Blitz - 40 damage to self
+            attacker.damage += 40;
+            setTimeout(() => {
+                alert(`${attacker.data.name} took 40 recoil damage!`);
+                renderGame();
+                if (attacker.damage >= attacker.data.hp) {
+                    knockoutCreature(attackingPlayer);
+                } else {
+                    checkKnockoutsAndContinue(attackingPlayer);
+                }
+            }, 500);
+            break;
+            
+        case 'sproutBoost':
+            // Sprout Boost - Next attack in 2 turns deals +30 damage
+            attacker.sproutBoostTurns = 2;
+            setTimeout(() => {
+                alert(`In 2 turns, ${attacker.data.name}'s next attack will deal +30 damage!`);
+                checkKnockoutsAndContinue(attackingPlayer);
+            }, 500);
+            break;
+            
+        case 'coffeeHeal':
+            // Coffee Heal - Heal bench creature 10 HP
+            setTimeout(() => {
+                const benchWithDamage = gameState[attackingPlayer].bench.filter(c => c && c.damage > 0);
+                if (benchWithDamage.length > 0) {
+                    if (attackingPlayer === 'player') {
+                        alert("Select a benched creature to heal 10 HP:");
+                        // For simplicity, heal first damaged bench creature
+                        benchWithDamage[0].damage = Math.max(0, benchWithDamage[0].damage - 10);
+                        alert(`Healed ${benchWithDamage[0].data.name} for 10 HP!`);
+                    } else {
+                        const target = benchWithDamage[Math.floor(Math.random() * benchWithDamage.length)];
+                        target.damage = Math.max(0, target.damage - 10);
+                        alert(`AI healed ${target.data.name} for 10 HP!`);
+                    }
+                    renderGame();
+                } else {
+                    alert("No damaged bench creatures to heal!");
+                }
+                checkKnockoutsAndContinue(attackingPlayer);
+            }, 500);
+            break;
+            
+        case 'beanBlast':
+            // Bean Blast - Heal bench creature 20 HP
+            setTimeout(() => {
+                const benchWithDamage = gameState[attackingPlayer].bench.filter(c => c && c.damage > 0);
+                if (benchWithDamage.length > 0) {
+                    if (attackingPlayer === 'player') {
+                        benchWithDamage[0].damage = Math.max(0, benchWithDamage[0].damage - 20);
+                        alert(`Healed ${benchWithDamage[0].data.name} for 20 HP!`);
+                    } else {
+                        const target = benchWithDamage[Math.floor(Math.random() * benchWithDamage.length)];
+                        target.damage = Math.max(0, target.damage - 20);
+                        alert(`AI healed ${target.data.name} for 20 HP!`);
+                    }
+                    renderGame();
+                }
+                checkKnockoutsAndContinue(attackingPlayer);
+            }, 500);
+            break;
+            
+        case 'caffeineAddiction':
+            // Caffeine Addiction - Flip coin, heads heal 20, tails Lock
+            setTimeout(() => {
+                const flip = flipCoin();
+                alert(`Caffeine Addiction: Coin flip: ${flip}`);
+                if (flip === 'heads') {
+                    attacker.damage = Math.max(0, attacker.damage - 20);
+                    alert(`${attacker.data.name} healed 20 HP!`);
+                } else {
+                    defender.hasLock = true;
+                    alert(`${defender.data.name} is now affected by Lock!`);
+                }
+                renderGame();
+                checkKnockoutsAndContinue(attackingPlayer);
+            }, 500);
+            break;
+            
+        case 'skyDraw':
+            // Sky Draw - Draw a card after attacking
+            if (gameState[attackingPlayer].deck.length > 0) {
+                const drawnCard = gameState[attackingPlayer].deck.pop();
+                gameState[attackingPlayer].hand.push(drawnCard);
+                setTimeout(() => {
+                    alert(`${attackingPlayer === 'player' ? 'You' : 'AI'} drew a card!`);
+                    renderGame();
+                    checkKnockoutsAndContinue(attackingPlayer);
+                }, 500);
+            } else {
+                checkKnockoutsAndContinue(attackingPlayer);
+            }
+            break;
+            
+        case 'hurricaneWing':
+            // Hurricane Wing - Flip coin, if tails no damage
+            // This is handled in attack damage calculation
+            checkKnockoutsAndContinue(attackingPlayer);
+            break;
+            
+        case 'tailDance':
+            // Tail Dance - Flip coin, if tails no damage
+            // This is handled in attack damage calculation
+            checkKnockoutsAndContinue(attackingPlayer);
+            break;
+            
+        case 'gulpSwap':
+            // Gulp Swap - Swap remaining HP with opponent's active (capped at max HP)
+            setTimeout(() => {
+                const attackerRemaining = attacker.data.hp - attacker.damage;
+                const defenderRemaining = defender.data.hp - defender.damage;
+                
+                // Calculate new damage values (remaining HP becomes the other's remaining HP)
+                let attackerNewDamage = attacker.data.hp - defenderRemaining;
+                let defenderNewDamage = defender.data.hp - attackerRemaining;
+                
+                // Cap at max HP (damage can't be negative)
+                attackerNewDamage = Math.max(0, attackerNewDamage);
+                defenderNewDamage = Math.max(0, defenderNewDamage);
+                
+                // Apply the swapped damage
+                attacker.damage = attackerNewDamage;
+                defender.damage = defenderNewDamage;
+                
+                // Calculate actual remaining HP after capping
+                const attackerFinalHP = attacker.data.hp - attacker.damage;
+                const defenderFinalHP = defender.data.hp - defender.damage;
+                
+                alert(`HP swapped! ${attacker.data.name}: ${attackerFinalHP} HP, ${defender.data.name}: ${defenderFinalHP} HP`);
+                renderGame();
+                checkKnockoutsAndContinue(attackingPlayer);
+            }, 500);
+            break;
+            
+        case 'cottonGuard':
+            // Cotton Guard - Take 20 less damage next turn
+            attacker.cottonGuardShield = true;
+            setTimeout(() => {
+                alert(`${attacker.data.name} will take 20 less damage next turn!`);
+                checkKnockoutsAndContinue(attackingPlayer);
+            }, 500);
+            break;
+            
+        case 'cloudBounce':
+            // Cloud Bounce - Transfer energy between bench creatures
+            setTimeout(() => {
+                if (attackingPlayer === 'player') {
+                    alert("Cloud Bounce: You may transfer an energy between bench creatures (or skip).");
+                    // For simplicity, skip this feature for now
+                }
+                checkKnockoutsAndContinue(attackingPlayer);
+            }, 500);
+            break;
+            
+        case 'alphabetAssault':
+            // Alphabet Assault - 10 damage per letter in opponent's active creature name
+            // This is handled in attack damage calculation
+            checkKnockoutsAndContinue(attackingPlayer);
+            break;
+            
+        case 'infernoConstrict':
+            // Inferno Constrict - 30 damage per Mechanic creature on bench
+            // This is handled in attack damage calculation
+            checkKnockoutsAndContinue(attackingPlayer);
+            break;
+            
+        case 'berryBurst':
+            // Berry Burst - Heal 10 HP from each creature with damage
+            setTimeout(() => {
+                let healed = 0;
+                if (gameState[attackingPlayer].active && gameState[attackingPlayer].active.damage > 0) {
+                    gameState[attackingPlayer].active.damage = Math.max(0, gameState[attackingPlayer].active.damage - 10);
+                    healed++;
+                }
+                gameState[attackingPlayer].bench.forEach(c => {
+                    if (c && c.damage > 0) {
+                        c.damage = Math.max(0, c.damage - 10);
+                        healed++;
+                    }
+                });
+                alert(`Berry Burst healed ${healed} creature(s) for 10 HP each!`);
+                renderGame();
+                checkKnockoutsAndContinue(attackingPlayer);
+            }, 500);
+            break;
+            
+        case 'laughingLeaves':
+            // Laughing Leaves - Heal 20 HP from each creature with damage
+            setTimeout(() => {
+                let healed = 0;
+                if (gameState[attackingPlayer].active && gameState[attackingPlayer].active.damage > 0) {
+                    gameState[attackingPlayer].active.damage = Math.max(0, gameState[attackingPlayer].active.damage - 20);
+                    healed++;
+                }
+                gameState[attackingPlayer].bench.forEach(c => {
+                    if (c && c.damage > 0) {
+                        c.damage = Math.max(0, c.damage - 20);
+                        healed++;
+                    }
+                });
+                alert(`Laughing Leaves healed ${healed} creature(s) for 20 HP each!`);
+                renderGame();
+                checkKnockoutsAndContinue(attackingPlayer);
+            }, 500);
+            break;
+            
+        case 'psychicProwl':
+            // Psychic Prowl - Flip coin, heads Flux, tails Lock
+            setTimeout(() => {
+                const flip = flipCoin();
+                alert(`Psychic Prowl: Coin flip: ${flip}`);
+                if (flip === 'heads') {
+                    defender.hasFlux = true;
+                    alert(`${defender.data.name} is now affected by Flux!`);
+                } else {
+                    defender.hasLock = true;
+                    alert(`${defender.data.name} is now affected by Lock!`);
+                }
+                renderGame();
+                checkKnockoutsAndContinue(attackingPlayer);
+            }, 500);
+            break;
+            
         default:
             setTimeout(endTurn, 1000);
     }
@@ -3021,10 +4259,18 @@ function performHeavenlyRetreat(player, benchIndex) {
     const activeCard = gameState[player].active;
     const benchCard = gameState[player].bench[benchIndex];
     
-    // Cure hallucination when moving to bench
+    // Cure special conditions when moving to bench
     if (activeCard.hallucinating) {
         activeCard.hallucinating = false;
         alert(`${activeCard.data.name} is no longer hallucinating!`);
+    }
+    if (activeCard.hasFlux) {
+        activeCard.hasFlux = false;
+        alert(`${activeCard.data.name} is no longer affected by Flux!`);
+    }
+    if (activeCard.hasLock) {
+        activeCard.hasLock = false;
+        alert(`${activeCard.data.name} is no longer affected by Lock!`);
     }
     
     // Swap without discarding energy (free retreat)
@@ -3047,10 +4293,18 @@ function performRetreat(player, benchIndex) {
     // Discard retreat cost energy
     activeCard.energy -= activeCard.data.retreat;
     
-    // Cure hallucination when moving to bench
+    // Cure special conditions when moving to bench
     if (activeCard.hallucinating) {
         activeCard.hallucinating = false;
         alert(`${activeCard.data.name} is no longer hallucinating!`);
+    }
+    if (activeCard.hasFlux) {
+        activeCard.hasFlux = false;
+        alert(`${activeCard.data.name} is no longer affected by Flux!`);
+    }
+    if (activeCard.hasLock) {
+        activeCard.hasLock = false;
+        alert(`${activeCard.data.name} is no longer affected by Lock!`);
     }
     
     // Swap
@@ -3400,6 +4654,200 @@ function useAbility(card, player, location, index) {
             renderGame();
             break;
             
+        // Galactic Adventures Abilities
+        case 'extraCharge':
+            // Extra Charge - attach energy to neutral creature
+            const neutralCreatures = [];
+            if (gameState.player.active && getCardType(gameState.player.active.data) === 'Neutral') {
+                neutralCreatures.push({card: gameState.player.active, name: gameState.player.active.data.name, location: 'active'});
+            }
+            gameState.player.bench.forEach((benchCard, idx) => {
+                if (benchCard && getCardType(benchCard.data) === 'Neutral') {
+                    neutralCreatures.push({card: benchCard, name: benchCard.data.name, location: 'bench', index: idx});
+                }
+            });
+            if (neutralCreatures.length === 0) {
+                alert(`${card.data.name}'s Extra Charge requires a Neutral creature in play!`);
+                return;
+            }
+            // For player, let them choose (simplified to first one)
+            neutralCreatures[0].card.energy++;
+            card.abilityUsedThisTurn = true;
+            alert(`${card.data.name} used Extra Charge! Attached 1 energy to ${neutralCreatures[0].name}!`);
+            renderGame();
+            break;
+            
+        case 'guardianMode':
+            // Guardian Mode - reduces all damage taken by any creature by 10
+            gameState.player.guardianModeActive = true;
+            card.abilityUsedThisTurn = true;
+            alert(`${card.data.name} used Guardian Mode! All your creatures take 10 less damage this turn!`);
+            renderGame();
+            break;
+            
+        case 'warriorMode':
+            // Warrior Mode - increases all damage from active creature by 10
+            gameState.player.warriorModeBonus = 10;
+            card.abilityUsedThisTurn = true;
+            alert(`${card.data.name} used Warrior Mode! Your active creature's attacks deal +10 damage this turn!`);
+            renderGame();
+            break;
+            
+        case 'healingRetreat1':
+            // Healing Retreat (Trunket) - heals 20 HP when retreating
+            if (location !== 'active') {
+                alert(`${card.data.name}'s Healing Retreat can only be used from the active spot!`);
+                return;
+            }
+            card.healingRetreatAmount = 20;
+            card.abilityUsedThisTurn = true;
+            alert(`${card.data.name} used Healing Retreat! It will heal 20 HP when it retreats to the bench!`);
+            renderGame();
+            break;
+            
+        case 'healingRetreat2':
+            // Healing Retreat (Elefeir) - heals 40 HP when retreating
+            if (location !== 'active') {
+                alert(`${card.data.name}'s Healing Retreat can only be used from the active spot!`);
+                return;
+            }
+            card.healingRetreatAmount = 40;
+            card.abilityUsedThisTurn = true;
+            alert(`${card.data.name} used Healing Retreat! It will heal 40 HP when it retreats to the bench!`);
+            renderGame();
+            break;
+            
+        case 'mirageShield':
+            // Mirage Shield - opponent can't use items next turn
+            if (location !== 'active') {
+                alert(`${card.data.name}'s Mirage Shield can only be used from the active spot!`);
+                return;
+            }
+            gameState.opponent.cantUseItemsNextTurn = true;
+            card.abilityUsedThisTurn = true;
+            alert(`${card.data.name} used Mirage Shield! Opponent can't use items next turn!`);
+            renderGame();
+            break;
+            
+        case 'thunderRush':
+            // Thunder Rush - doubles attack damage if opponent evolved last turn
+            if (location !== 'active') {
+                alert(`${card.data.name}'s Thunder Rush can only be used from the active spot!`);
+                return;
+            }
+            if (!gameState.opponent.evolvedLastTurn) {
+                alert(`${card.data.name}'s Thunder Rush requires the opponent to have evolved a creature last turn!`);
+                return;
+            }
+            gameState.player.thunderRushActive = true;
+            card.abilityUsedThisTurn = true;
+            alert(`${card.data.name} used Thunder Rush! Your attack damage will be doubled this turn!`);
+            renderGame();
+            break;
+            
+        case 'absorbEnergy':
+            // Absorb Energy - if healed this turn, gain additional energy
+            card.absorbEnergyActive = true;
+            card.abilityUsedThisTurn = true;
+            alert(`${card.data.name} used Absorb Energy! If it's healed this turn, it will also gain 1 energy!`);
+            renderGame();
+            break;
+            
+        case 'energizedHealing1':
+            // Energized Healing (Nebuleap) - if energy attached, heal 10 HP
+            card.energizedHealingAmount = 10;
+            card.abilityUsedThisTurn = true;
+            alert(`${card.data.name} used Energized Healing! If you attach energy to it this turn and it has damage, it will heal 10 HP!`);
+            renderGame();
+            break;
+            
+        case 'energizedHealing2':
+            // Energized Healing (Comiscroaker) - if energy attached, heal 20 HP
+            card.energizedHealingAmount = 20;
+            card.abilityUsedThisTurn = true;
+            alert(`${card.data.name} used Energized Healing! If you attach energy to it this turn and it has damage, it will heal 20 HP!`);
+            renderGame();
+            break;
+            
+        case 'metalicProtection':
+            // Metalic Protection - can't be damaged by Mechanic attacks next turn, but loses 20 HP
+            card.damage += 20;
+            card.metalicProtectionActive = true; // Store on the creature, not the player
+            card.abilityUsedThisTurn = true;
+            alert(`${card.data.name} used Metalic Protection! It takes 20 HP damage but can't be damaged by Mechanic attacks next turn!`);
+            renderGame();
+            // Check if knocked out
+            if (card.damage >= card.data.hp) {
+                if (location === 'active') {
+                    knockoutCreature('player');
+                }
+            }
+            break;
+            
+        case 'caprineGuard':
+            // Caprine Guard - next turn takes 40 less damage from Celestial or Mystic
+            gameState.player.caprineGuardShield = 40;
+            card.abilityUsedThisTurn = true;
+            alert(`${card.data.name} used Caprine Guard! Next turn, it takes 40 less damage from Celestial/Mystic attacks!`);
+            renderGame();
+            break;
+            
+        case 'elementalFortitude':
+            // Elemental Fortitude - next turn takes 20 less damage from Wind and Mechanic
+            gameState.player.elementalFortitudeShield = 20;
+            card.abilityUsedThisTurn = true;
+            alert(`${card.data.name} used Elemental Fortitude! Next turn, it takes 20 less damage from Wind/Mechanic attacks!`);
+            renderGame();
+            break;
+            
+        case 'hydration':
+            // Hydration - not affected by status conditions when attacked next turn
+            if (location !== 'active') {
+                alert(`${card.data.name}'s Hydration can only be used from the active spot!`);
+                return;
+            }
+            card.hydrationActive = true;
+            card.abilityUsedThisTurn = true;
+            alert(`${card.data.name} used Hydration! It won't be affected by status conditions from opponent's attacks next turn!`);
+            renderGame();
+            break;
+            
+        case 'retaliationStone':
+            // Retaliation Stone - if damaged by attack next turn, deals 20 damage back
+            card.retaliationStoneActive = true;
+            card.abilityUsedThisTurn = true;
+            alert(`${card.data.name} used Retaliation Stone! If damaged by an attack next turn, it deals 20 damage back!`);
+            renderGame();
+            break;
+            
+        case 'aquaMirror':
+            // Aqua Mirror - if given special condition, opponent also gets it
+            if (location !== 'active') {
+                alert(`${card.data.name}'s Aqua Mirror can only be used from the active spot!`);
+                return;
+            }
+            card.aquaMirrorActive = true;
+            card.abilityUsedThisTurn = true;
+            alert(`${card.data.name} used Aqua Mirror! If it gets a special condition next turn, the attacker also gets it!`);
+            renderGame();
+            break;
+            
+        case 'gnawingPrecision':
+            // Gnawing Precision - select opponent creature to deal 20 damage to
+            alert(`${card.data.name} used Gnawing Precision! Select an opponent's creature to deal 20 damage:`);
+            // For simplicity, damage opponent's active
+            if (gameState.opponent.active) {
+                gameState.opponent.active.damage += 20;
+                alert(`${card.data.name} dealt 20 damage to ${gameState.opponent.active.data.name}!`);
+                card.abilityUsedThisTurn = true;
+                renderGame();
+                // Check if knocked out
+                if (gameState.opponent.active.damage >= gameState.opponent.active.data.hp) {
+                    knockoutCreature('opponent');
+                }
+            }
+            break;
+            
         default:
             console.log("Unknown ability effect:", abilityEffect);
     }
@@ -3565,6 +5013,62 @@ function aiUseAbilities() {
                 alert(`AI's ${card.data.name} used Phase Shift! After attacking, AI will switch it with a bench creature!`);
                 renderGame();
             }
+            // Galactic Adventures abilities
+            else if (abilityEffect === 'extraCharge') {
+                // Extra Charge - attach energy to any Neutral creature
+                const neutralCreatures = [];
+                if (gameState.opponent.active && getCardType(gameState.opponent.active.data) === 'Neutral') {
+                    neutralCreatures.push(gameState.opponent.active);
+                }
+                gameState.opponent.bench.forEach(benchCard => {
+                    if (benchCard && getCardType(benchCard.data) === 'Neutral') {
+                        neutralCreatures.push(benchCard);
+                    }
+                });
+                
+                if (neutralCreatures.length > 0) {
+                    const target = neutralCreatures[Math.floor(Math.random() * neutralCreatures.length)];
+                    target.energy++;
+                    card.abilityUsedThisTurn = true;
+                    alert(`AI's ${card.data.name} used Extra Charge! Attached 1 energy to ${target.data.name}!`);
+                    renderGame();
+                }
+            } else if (abilityEffect === 'guardianMode') {
+                // Guardian Mode - all AI creatures take 10 less damage
+                gameState.opponent.guardianModeActive = true;
+                card.abilityUsedThisTurn = true;
+                alert(`AI's ${card.data.name} used Guardian Mode! All AI creatures take 10 less damage this turn!`);
+                renderGame();
+            } else if (abilityEffect === 'warriorMode') {
+                // Warrior Mode - AI's attacks deal +20 damage this turn
+                gameState.opponent.warriorModeBonus = 20;
+                card.abilityUsedThisTurn = true;
+                alert(`AI's ${card.data.name} used Warrior Mode! AI's attacks this turn deal +20 damage!`);
+                renderGame();
+            } else if (abilityEffect === 'thunderRush') {
+                // Thunder Rush - AI's next attack deals double damage
+                gameState.opponent.thunderRushActive = true;
+                card.abilityUsedThisTurn = true;
+                alert(`AI's ${card.data.name} used Thunder Rush! AI's next attack deals double damage!`);
+                renderGame();
+            } else if (abilityEffect === 'metalicProtection') {
+                // Metalic Protection - can't be damaged by Mechanic attacks next turn, but loses 20 HP
+                card.damage += 20;
+                card.metalicProtectionActive = true;
+                card.abilityUsedThisTurn = true;
+                alert(`AI's ${card.data.name} used Metalic Protection! It takes 20 HP damage but can't be damaged by Mechanic attacks next turn!`);
+                renderGame();
+                // Check if knocked out
+                if (card.damage >= card.data.hp) {
+                    knockoutCreature('opponent');
+                }
+            } else if (abilityEffect === 'retaliationStone') {
+                // Retaliation Stone - if damaged by attack next turn, deals 20 damage back
+                card.retaliationStoneActive = true;
+                card.abilityUsedThisTurn = true;
+                alert(`AI's ${card.data.name} used Retaliation Stone! If damaged by an attack next turn, it deals 20 damage back!`);
+                renderGame();
+            }
         }
     }
     
@@ -3718,6 +5222,33 @@ function aiUseAbilities() {
                 alert(`AI's ${card.data.name} used Camouflage! AI's bench creatures are protected from damage this turn!`);
                 renderGame();
             }
+            // Galactic Adventures "any" location abilities
+            else if (abilityEffect === 'extraCharge') {
+                // Extra Charge - attach energy to any Neutral creature
+                const neutralCreatures = [];
+                if (gameState.opponent.active && getCardType(gameState.opponent.active.data) === 'Neutral') {
+                    neutralCreatures.push(gameState.opponent.active);
+                }
+                gameState.opponent.bench.forEach(benchCard => {
+                    if (benchCard && getCardType(benchCard.data) === 'Neutral') {
+                        neutralCreatures.push(benchCard);
+                    }
+                });
+                
+                if (neutralCreatures.length > 0) {
+                    const target = neutralCreatures[Math.floor(Math.random() * neutralCreatures.length)];
+                    target.energy++;
+                    card.abilityUsedThisTurn = true;
+                    alert(`AI's ${card.data.name} used Extra Charge! Attached 1 energy to ${target.data.name}!`);
+                    renderGame();
+                }
+            } else if (abilityEffect === 'retaliationStone') {
+                // Retaliation Stone - if damaged by attack next turn, deals 20 damage back
+                card.retaliationStoneActive = true;
+                card.abilityUsedThisTurn = true;
+                alert(`AI's ${card.data.name} used Retaliation Stone! If damaged by an attack next turn, it deals 20 damage back!`);
+                renderGame();
+            }
         }
     });
 }
@@ -3744,6 +5275,16 @@ function endTurn() {
             alert(`Power-Up: ${currentPlayer.powerUpTurnsRemaining} turn${currentPlayer.powerUpTurnsRemaining > 1 ? 's' : ''} remaining!`);
         } else {
             alert("Power-Up effect has ended!");
+        }
+    }
+    
+    // Decrement Amulet counter for the player whose turn just ended (Galactic Adventures)
+    if (currentPlayer.amuletTurnsRemaining > 0) {
+        currentPlayer.amuletTurnsRemaining--;
+        if (currentPlayer.amuletTurnsRemaining > 0) {
+            alert(`Amulet: ${currentPlayer.amuletTurnsRemaining} turn${currentPlayer.amuletTurnsRemaining > 1 ? 's' : ''} remaining! (+20 damage for Neutral creatures)`);
+        } else {
+            alert("Amulet effect has ended!");
         }
     }
     
@@ -3824,6 +5365,17 @@ function endTurn() {
     gameState[playerStartingTurn].clarityAuraActive = false;
     gameState[playerStartingTurn].camouflageActive = false;
     
+    // Clear Metalic Protection from the player whose turn is STARTING (Galactic Adventures)
+    // Same logic: Turn 5 use ability → Turn 6 opponent attacks (protected) → Turn 7 starts (cleared)
+    if (gameState[playerStartingTurn].active && gameState[playerStartingTurn].active.metalicProtectionActive) {
+        gameState[playerStartingTurn].active.metalicProtectionActive = false;
+    }
+    gameState[playerStartingTurn].bench.forEach(card => {
+        if (card && card.metalicProtectionActive) {
+            card.metalicProtectionActive = false;
+        }
+    });
+    
     // Reset ability used flags for all creatures
     if (gameState.player.active) gameState.player.active.abilityUsedThisTurn = false;
     gameState.player.bench.forEach(card => {
@@ -3832,6 +5384,30 @@ function endTurn() {
     if (gameState.opponent.active) gameState.opponent.active.abilityUsedThisTurn = false;
     gameState.opponent.bench.forEach(card => {
         if (card) card.abilityUsedThisTurn = false;
+    });
+    
+    // Decrement Overdrive Smash cooldown for all creatures (Galactic Adventures)
+    if (gameState.player.active && gameState.player.active.cantUseOverdrive > 0) {
+        gameState.player.active.cantUseOverdrive--;
+        if (gameState.player.active.cantUseOverdrive === 0) {
+            alert(`${gameState.player.active.data.name} can use Overdrive Smash again!`);
+        }
+    }
+    gameState.player.bench.forEach(card => {
+        if (card && card.cantUseOverdrive > 0) {
+            card.cantUseOverdrive--;
+        }
+    });
+    if (gameState.opponent.active && gameState.opponent.active.cantUseOverdrive > 0) {
+        gameState.opponent.active.cantUseOverdrive--;
+        if (gameState.opponent.active.cantUseOverdrive === 0) {
+            alert(`AI's ${gameState.opponent.active.data.name} can use Overdrive Smash again!`);
+        }
+    }
+    gameState.opponent.bench.forEach(card => {
+        if (card && card.cantUseOverdrive > 0) {
+            card.cantUseOverdrive--;
+        }
     });
     
     // Clear turn tracker
@@ -4057,10 +5633,18 @@ function aiConsiderRetreat() {
         // Remove retreat cost energy
         active.energy -= active.data.retreat;
         
-        // Cure hallucination when moving to bench
+        // Cure special conditions when moving to bench
         if (active.hallucinating) {
             active.hallucinating = false;
             alert(`AI's ${active.data.name} is no longer hallucinating!`);
+        }
+        if (active.hasFlux) {
+            active.hasFlux = false;
+            alert(`AI's ${active.data.name} is no longer affected by Flux!`);
+        }
+        if (active.hasLock) {
+            active.hasLock = false;
+            alert(`AI's ${active.data.name} is no longer affected by Lock!`);
         }
         
         // Swap active with bench
@@ -4239,6 +5823,165 @@ function aiUseItems(callback) {
         return;
     }
     
+    // Galactic Adventures Items
+    
+    // Use Energy Antenna if AI has Mechanic creatures
+    const energyAntennaIndex = gameState.opponent.hand.findIndex(card => card.data.name === "Energy Antenna");
+    if (energyAntennaIndex !== -1) {
+        const mechanicCreatures = [];
+        if (gameState.opponent.active && getCardType(gameState.opponent.active.data) === 'Mechanic') {
+            mechanicCreatures.push(gameState.opponent.active);
+        }
+        gameState.opponent.bench.forEach(card => {
+            if (card && getCardType(card.data) === 'Mechanic') {
+                mechanicCreatures.push(card);
+            }
+        });
+        
+        if (mechanicCreatures.length > 0) {
+            const energyAntenna = gameState.opponent.hand[energyAntennaIndex];
+            flashItemCard(energyAntenna.id, () => {
+                if (gameState.phase === 'gameOver') return;
+                // Attach to first Mechanic creature
+                mechanicCreatures[0].energy++;
+                gameState.opponent.discardPile.push(energyAntenna);
+                gameState.opponent.hand.splice(energyAntennaIndex, 1);
+                gameState.opponent.itemUsedThisTurn = true;
+                gameState.opponent.usedItemThisTurn = true;
+                renderGame();
+                callback();
+            });
+            return;
+        }
+    }
+    
+    // Use Revive Crystal if AI has creatures in discard pile
+    const reviveCrystalIndex = gameState.opponent.hand.findIndex(card => card.data.name === "Revive Crystal");
+    if (reviveCrystalIndex !== -1) {
+        const creatureCards = gameState.opponent.discardPile.filter(c => c.data.stage !== 'Item');
+        if (creatureCards.length > 0) {
+            const reviveCrystal = gameState.opponent.hand[reviveCrystalIndex];
+            flashItemCard(reviveCrystal.id, () => {
+                if (gameState.phase === 'gameOver') return;
+                // Take first creature card
+                const revivedCard = creatureCards[0];
+                const index = gameState.opponent.discardPile.indexOf(revivedCard);
+                gameState.opponent.discardPile.splice(index, 1);
+                
+                // Reset the creature completely
+                revivedCard.damage = 0;
+                revivedCard.energy = 0;
+                revivedCard.hallucinating = false;
+                revivedCard.hallucinationFlip = null;
+                revivedCard.hasFlux = false;
+                revivedCard.hasLock = false;
+                revivedCard.cantRetreat = false;
+                revivedCard.cantAttackNextTurn = false;
+                revivedCard.cantAttackUntilTurn = null;
+                revivedCard.abilityUsedThisTurn = false;
+                revivedCard.cantUseOverdrive = 0;
+                revivedCard.mindRippleShield = false;
+                revivedCard.cottonGuardShield = false;
+                revivedCard.chillRechargeBonus = null;
+                revivedCard.metalicProtectionActive = false;
+                
+                gameState.opponent.hand.push(revivedCard);
+                gameState.opponent.discardPile.push(reviveCrystal);
+                gameState.opponent.hand.splice(reviveCrystalIndex, 1);
+                gameState.opponent.itemUsedThisTurn = true;
+                gameState.opponent.usedItemThisTurn = true;
+                renderGame();
+                callback();
+            });
+            return;
+        }
+    }
+    
+    // Use Healing Crystal if AI has damaged Celestial creatures
+    const healingCrystalIndex = gameState.opponent.hand.findIndex(card => card.data.name === "Healing Crystal");
+    if (healingCrystalIndex !== -1) {
+        const celestialCreatures = [];
+        if (gameState.opponent.active && getCardType(gameState.opponent.active.data) === 'Celestial' && gameState.opponent.active.damage > 0) {
+            celestialCreatures.push(gameState.opponent.active);
+        }
+        gameState.opponent.bench.forEach(card => {
+            if (card && getCardType(card.data) === 'Celestial' && card.damage > 0) {
+                celestialCreatures.push(card);
+            }
+        });
+        
+        if (celestialCreatures.length > 0) {
+            const healingCrystal = gameState.opponent.hand[healingCrystalIndex];
+            flashItemCard(healingCrystal.id, () => {
+                if (gameState.phase === 'gameOver') return;
+                // Heal first damaged Celestial
+                celestialCreatures[0].damage = Math.max(0, celestialCreatures[0].damage - 40);
+                gameState.opponent.discardPile.push(healingCrystal);
+                gameState.opponent.hand.splice(healingCrystalIndex, 1);
+                gameState.opponent.itemUsedThisTurn = true;
+                gameState.opponent.usedItemThisTurn = true;
+                renderGame();
+                callback();
+            });
+            return;
+        }
+    }
+    
+    // Use Aura Crystal if AI has any damaged creatures
+    const auraCrystalIndex = gameState.opponent.hand.findIndex(card => card.data.name === "Aura Crystal");
+    if (auraCrystalIndex !== -1) {
+        let hasDamagedCreature = false;
+        if (gameState.opponent.active && gameState.opponent.active.damage > 0) hasDamagedCreature = true;
+        gameState.opponent.bench.forEach(card => {
+            if (card && card.damage > 0) hasDamagedCreature = true;
+        });
+        
+        if (hasDamagedCreature) {
+            const auraCrystal = gameState.opponent.hand[auraCrystalIndex];
+            flashItemCard(auraCrystal.id, () => {
+                if (gameState.phase === 'gameOver') return;
+                // Heal all damaged creatures by 10
+                if (gameState.opponent.active && gameState.opponent.active.damage > 0) {
+                    gameState.opponent.active.damage = Math.max(0, gameState.opponent.active.damage - 10);
+                }
+                gameState.opponent.bench.forEach(card => {
+                    if (card && card.damage > 0) {
+                        card.damage = Math.max(0, card.damage - 10);
+                    }
+                });
+                gameState.opponent.discardPile.push(auraCrystal);
+                gameState.opponent.hand.splice(auraCrystalIndex, 1);
+                gameState.opponent.itemUsedThisTurn = true;
+                gameState.opponent.usedItemThisTurn = true;
+                renderGame();
+                callback();
+            });
+            return;
+        }
+    }
+    
+    // Use Amulet if AI has Neutral creatures and can attack
+    const amuletIndex = gameState.opponent.hand.findIndex(card => card.data.name === "Amulet");
+    if (amuletIndex !== -1 && aiCanAttack() && gameState.opponent.amuletTurnsRemaining === 0) {
+        const hasNeutral = (gameState.opponent.active && getCardType(gameState.opponent.active.data) === 'Neutral') ||
+            gameState.opponent.bench.some(card => card && getCardType(card.data) === 'Neutral');
+        
+        if (hasNeutral) {
+            const amulet = gameState.opponent.hand[amuletIndex];
+            flashItemCard(amulet.id, () => {
+                if (gameState.phase === 'gameOver') return;
+                gameState.opponent.amuletTurnsRemaining = 2;
+                gameState.opponent.discardPile.push(amulet);
+                gameState.opponent.hand.splice(amuletIndex, 1);
+                gameState.opponent.itemUsedThisTurn = true;
+                gameState.opponent.usedItemThisTurn = true;
+                renderGame();
+                callback();
+            });
+            return;
+        }
+    }
+    
     callback();
 }
 
@@ -4327,18 +6070,35 @@ function aiAttack() {
         attacker.hallucinationFlip = flip;
     }
     
-    // Choose move: AI always prefers Move 2 if it has enough energy
+    // Choose move: AI always prefers Move 2 if it has enough energy, unless Move 2 deals 0 damage
     let damage = 0;
     let effect = null;
     let moveNumber = 1;
     let canUseMove2 = attacker.data.move2Cost && attacker.energy >= attacker.data.move2Cost.length;
     
     if (canUseMove2) {
-        // Always use Move 2 when available and affordable
-        damage = attacker.data.move2Damage;
-        effect = attacker.data.move2Effect;
-        moveNumber = 2;
-        console.log("AI using move 2:", attacker.data.move2Name, "with effect:", effect);
+        // Check if Move 2 deals 0 damage
+        if (attacker.data.move2Damage === 0) {
+            // Randomly choose between Move 1 and Move 2 when Move 2 deals 0 damage
+            const useMove2 = Math.random() < 0.5;
+            if (useMove2) {
+                damage = attacker.data.move2Damage;
+                effect = attacker.data.move2Effect;
+                moveNumber = 2;
+                console.log("AI randomly chose move 2 (0 damage):", attacker.data.move2Name, "with effect:", effect);
+            } else {
+                damage = attacker.data.move1Damage;
+                effect = attacker.data.move1Effect;
+                moveNumber = 1;
+                console.log("AI randomly chose move 1 instead of 0 damage move 2:", attacker.data.move1Name, "with effect:", effect);
+            }
+        } else {
+            // Always use Move 2 when available, affordable, and deals damage
+            damage = attacker.data.move2Damage;
+            effect = attacker.data.move2Effect;
+            moveNumber = 2;
+            console.log("AI using move 2:", attacker.data.move2Name, "with effect:", effect);
+        }
     } else {
         // Fall back to Move 1
         damage = attacker.data.move1Damage;
@@ -4487,6 +6247,14 @@ function aiAttack() {
         }
         damage = headsCount * 30;
         alert(`AI's Pink Gust: Flipped 2 coins - ${results.join(', ')}!\nGot ${headsCount} heads! Deals ${damage} damage!`);
+    } else if (effect === 'gearGrind') {
+        // Gear Grind - Flip coin, if heads +20 damage
+        const flip = flipCoin();
+        alert(`AI's Gear Grind: Coin flip: ${flip}`);
+        if (flip === 'heads') {
+            damage += 20;
+            alert(`Coin was heads! +20 damage! Total: ${damage}`);
+        }
     }
     
     // Apply opponent's booster if active
@@ -4559,6 +6327,58 @@ function aiAttack() {
         gameState.player.defenseAuraShield = 0; // Shield is consumed
     }
     
+    // Apply Shield Barrier (Galactic Adventures item)
+    if (gameState.player.shieldBarrierActive) {
+        const shieldAmount = gameState.player.shieldBarrierActive;
+        damage = Math.max(0, damage - shieldAmount);
+        alert(`Shield Barrier reduces AI's damage by ${shieldAmount}! AI deals ${damage} damage!`);
+        gameState.player.shieldBarrierActive = 0; // Shield is consumed
+    }
+    
+    // Apply Gale Shield (Galactic Adventures item - only for Wind creatures)
+    if (gameState.player.galeShieldActive && defenderType === 'Wind') {
+        const shieldAmount = gameState.player.galeShieldActive;
+        damage = Math.max(0, damage - shieldAmount);
+        alert(`Gale Shield reduces AI's damage by ${shieldAmount}! AI deals ${damage} damage!`);
+        gameState.player.galeShieldActive = 0; // Shield is consumed
+    }
+    
+    // Apply Mind Ripple shield (Galactic Adventures)
+    if (defender.mindRippleShield) {
+        damage = Math.max(0, damage - 20);
+        alert(`Mind Ripple shield reduces AI's damage by 20! AI deals ${damage} damage!`);
+        defender.mindRippleShield = false; // Shield is consumed
+    }
+    
+    // Apply Guardian Mode shield (Galactic Adventures - all creatures)
+    if (gameState.player.guardianModeActive) {
+        damage = Math.max(0, damage - 10);
+        alert(`Guardian Mode reduces AI's damage by 10! AI deals ${damage} damage!`);
+    }
+    
+    // Apply Caprine Guard shield (Galactic Adventures - only from Celestial/Mystic)
+    if (gameState.player.caprineGuardShield && (attackerType === 'Celestial' || attackerType === 'Mystic')) {
+        const shieldAmount = gameState.player.caprineGuardShield;
+        damage = Math.max(0, damage - shieldAmount);
+        alert(`Caprine Guard reduces AI's damage by ${shieldAmount}! AI deals ${damage} damage!`);
+        gameState.player.caprineGuardShield = 0; // Shield is consumed
+    }
+    
+    // Apply Elemental Fortitude shield (Galactic Adventures - only from Wind/Mechanic)
+    if (gameState.player.elementalFortitudeShield && (attackerType === 'Wind' || attackerType === 'Mechanic')) {
+        const shieldAmount = gameState.player.elementalFortitudeShield;
+        damage = Math.max(0, damage - shieldAmount);
+        alert(`Elemental Fortitude reduces AI's damage by ${shieldAmount}! AI deals ${damage} damage!`);
+        gameState.player.elementalFortitudeShield = 0; // Shield is consumed
+    }
+    
+    // Apply Metalic Protection (Galactic Adventures - no damage from Mechanic)
+    if (defender.metalicProtectionActive && attackerType === 'Mechanic') {
+        damage = 0;
+        alert(`${defender.data.name}'s Metalic Protection blocks all Mechanic damage! AI's ${attacker.data.name} deals no damage!`);
+        // Don't consume the shield here - it lasts the entire turn
+    }
+    
     console.log("Total damage:", damage, "Defender HP:", defender.data.hp, "Current damage:", defender.damage);
     
     // Check for Guardian ability - redirect damage to bench creature
@@ -4592,6 +6412,21 @@ function aiAttack() {
     
     // Apply damage to defender
     defender.damage += damage;
+    
+    // Check for Retaliation Stone (Galactic Adventures) - counter-attack when damaged
+    if (defender.retaliationStoneActive && damage > 0) {
+        attacker.damage += 20;
+        defender.retaliationStoneActive = false; // Consumed after use
+        alert(`${defender.data.name}'s Retaliation Stone activated! AI's ${attacker.data.name} takes 20 damage!`);
+        renderGame();
+        
+        // Check if AI attacker was knocked out by retaliation
+        if (attacker.damage >= attacker.data.hp) {
+            alert(`AI's ${attacker.data.name} was knocked out by Retaliation Stone!`);
+            knockoutCreature('opponent');
+            return; // Exit the function as attacker is knocked out
+        }
+    }
     
     // Apply Rainbow Strike - deal 30 damage to random player bench creature
     if (gameState.opponent.rainbowStrikeActive) {

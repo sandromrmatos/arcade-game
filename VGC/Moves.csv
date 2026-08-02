@@ -1,0 +1,30 @@
+Name,Type,Power,Accuracy,Secondary Effects,Targeting Type,Category,Priority
+Arcane Pulse,Mystic,50,100%,50% chance to increase the user’s Special Attack by 10%.,Single,Special,1
+Spirit Rend,Mystic,75,100%,,Single,Special,1
+Ether Bloom,Mystic,0,100%,Raises user’s Defense and Special Defense by 10%.,Self,Special,1
+Silent Echo,Mystic,80,95%,,Single,Physical,1
+Mindful Scream,Mystic,0,75%,Decrease your opponent's attack stat by 10%,Single,Special,2
+Gale Strike,Wind,90,100%,It takes 20 HP from the user.,Single,Physical,1
+Cyclone Sweep,Wind,100,70%,,Single,Physical,1
+Tail Current,Wind,40,100%,,Double,Special,1
+Freezing Breeze,Wind,70,90%,,Single,Special,1
+Windy Lash,Wind,0,100%,Raises user’s Speed by 10%.,Self,Special,1
+Starfall Burst,Celestial,55,100%,25% chance to lower opponent’s Special Defense by 20%.,Single,Special,1
+Cosmic Divide,Celestial,65,95%,It heals its HP by half of the damage it dealt to the opponent,Single,Special,1
+Radiant Slash,Celestial,70,100%,,Single,Physical,1
+Stun Blessing,Celestial,0,100%,It heals 20 HP to itself and its partner.,Self and Partner,Special,1
+Nebula Veil,Celestial,0,100%,"Creates a field effect: At the end of each turn, your creatures heal 10 HP. This effect lasts for 4 turns.",Self and Partner,Special,1
+Gear Grind,Mechanic,80,80%,,Single,Physical,1
+Rust Breaker,Mechanic,60,90%,,Single,Physical,1
+Overclock Beam,Mechanic,55,100%,,Single,Physical,1
+System Shock,Mechanic,40,100%,Raises user’s Defense by 10% and lowers their Speed by 10%.,Single,Special,1
+Iron Barrier,Mechanic,0,100%,Creates a field effect: Your creatures take 10% less damage for 4 turns.,Self and Partner,Special,1
+Shield,Neutral,0,100%,This creature can't be damaged next turn. This move can't be used next turn.,Self,Special,3
+Quick Bite,Neutral,10,100%,,Single,Physical,2
+Scary Taunt,Neutral,0,100%,Decrease your opponent's speed stat by 10%,Single,Special,2
+Rally Cry,Neutral,20,100%,25% chance to lower opponent’s Special Defense by 10% and Defense by 10%.,Double,Special,1
+Focus Jab,Neutral,75,100%,,Single,Physical,1
+Pastry Crunch,Neutral,70,100%,,Single,Special,1
+Double Guard,Neutral,0,100%,Protects the 2 creatures in the active slot from any damage this turn. This move can't be used again in the battle.,Self and Partner,Special,3
+Tackle Gamble,Neutral,50,100%,50% chance to deal 50% more damage this turn.,Single,Physical,1
+Huge Recovery,Neutral,0,100%,Recover 50 HP. This creature can't attack next turn.,Self,Special,1

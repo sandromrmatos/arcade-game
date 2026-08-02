@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Battleship vs AI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="game-container">
+    <h1 id="game-title">Battleship vs AI</h1>
+    
+    <!-- Difficulty Selection -->
+    <div id="difficulty-select" class="difficulty-section">
+      <h2 id="select-difficulty-text">Select Difficulty</h2>
+      <div class="difficulty-buttons">
+        <button id="btn-intermediate" class="difficulty-btn">
+          <span id="intermediate-text">Intermediate</span><br>
+          <small>(10×10 grid)</small>
+        </button>
+        <button id="btn-hard" class="difficulty-btn">
+          <span id="hard-text">Hard</span><br>
+          <small>(11×11 grid)</small>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Ship Placement Phase -->
+    <div id="placement-phase" class="hidden">
+      <h2 id="placement-title">Place Your Ships</h2>
+      <div class="placement-info">
+        <p id="placement-instruction">Click a cell on your grid, then choose orientation</p>
+        <div id="ship-to-place" class="ship-indicator"></div>
+      </div>
+      
+      <div class="placement-controls">
+        <button id="btn-horizontal" class="orientation-btn">
+          <span id="horizontal-text">Horizontal</span>
+        </button>
+        <button id="btn-vertical" class="orientation-btn">
+          <span id="vertical-text">Vertical</span>
+        </button>
+        <button id="btn-reset-placement" class="action-btn">
+          <span id="reset-text">Reset Placement</span>
+        </button>
+        <button id="btn-start-game" class="action-btn" disabled>
+          <span id="start-text">Start Game</span>
+        </button>
+      </div>
+      
+      <div class="single-grid-container">
+        <div class="grid-wrapper">
+          <h3 id="your-fleet-text">Your Fleet</h3>
+          <div id="player-grid-placement" class="grid"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Game Phase -->
+    <div id="game-phase" class="hidden">
+      <div class="game-info">
+        <div class="turn-indicator">
+          <span id="turn-label">Turn:</span>
+          <span id="current-turn" class="turn-text">Player</span>
+        </div>
+        <div class="message-area">
+          <p id="game-message"></p>
+        </div>
+      </div>
+      
+      <div class="grids-container">
+        <div class="grid-wrapper">
+          <h3 id="your-grid-text">Your Grid</h3>
+          <div id="player-grid" class="grid"></div>
+          <div id="player-ships-status" class="ships-status"></div>
+        </div>
+        
+        <div class="grid-wrapper">
+          <h3 id="enemy-grid-text">Enemy Grid</h3>
+          <div id="ai-grid" class="grid"></div>
+          <div id="ai-ships-status" class="ships-status"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Game Over Modal -->
+    <div id="game-over-modal" class="modal hidden">
+      <div class="modal-content">
+        <h2 id="game-over-title"></h2>
+        <p id="game-over-message"></p>
+        <p id="game-over-score"></p>
+        <button id="btn-play-again" class="action-btn">
+          <span id="play-again-text">Play Again</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <script src="game.js"></script>
+</body>
+</html>
