@@ -182,6 +182,19 @@ Successfully implemented the complete Galactic Adventures expansion for the TCG 
 
 ## Technical Implementation
 
+### Core Systems
+
+#### Healing System
+- **Function**: `healCreature(card, healAmount)`
+- **Purpose**: Centralized healing function that handles all healing effects
+- **Returns**: `true` if Absorb Energy was triggered, `false` otherwise
+- **Features**:
+  - Reduces creature damage by specified amount
+  - Automatically triggers Absorb Energy ability if active
+  - Future-proof for additional healing-related effects
+- **Usage**: All healing items, abilities, and moves should use this function
+- **Example**: `healCreature(targetCard, 20)` - heals 20 HP and checks for Absorb Energy
+
 ### Files Modified
 1. **script.js**
    - Added 2 status condition systems (Flux, Lock)
@@ -281,6 +294,53 @@ All Galactic Adventures cards follow the format:
 - **Forward Compatible**: Structure supports additional expansions
 - **Mix-and-Match**: Players can create decks with cards from both sets
 
+## Recent Bug Fixes (2026-08-01)
+
+### Evolution System Fix
+✅ **Fixed double evolution bug** - Cards can no longer evolve twice in one turn
+- Added unique `evolutionId` to each card when drawn
+- `evolutionId` persists through evolution and retreat
+- Tracks evolved cards by ID instead of position or object reference
+- Works correctly even when cards are retreated between evolutions
+
+### Evolution Chain Discard Fix
+✅ **Fixed incomplete discard on knockout** - All evolution stages now go to discard pile
+- Added `evolutionChain` array to track all previous evolution forms
+- When Stage 2 knocked out: Stage 1 + Stage 2 go to discard
+- When Stage 3 knocked out: Stage 1 + Stage 2 + Stage 3 go to discard
+- Fixed in all knockout scenarios (active, bench, guardian, retaliation, hallucination)
+
+### Guardian Mode & Mirage Shield Fix
+✅ **Fixed ability duration timing** - Now last through opponent's full turn
+- Guardian Mode: Properly reduces damage during opponent's turn, clears at correct time
+- Mirage Shield: Blocks items for full opponent turn, clears after their turn ends
+- Fixed turn switch logic to preserve effects until appropriate moment
+
+### Secondary Effects Fix
+✅ **Fixed effects not triggering on knockout** - All move effects now work even if attack KOs defender
+- Added `caffeineAddiction` to `handleMoveEffectBeforeKnockout()`
+- Added `skyDraw` to pre-knockout effects
+- Added `coffeeHeal` and `beanBlast` to pre-knockout effects
+- Effects that heal, draw cards, or modify attacker now trigger regardless of defender KO
+
+### Sprout Boost Fix
+✅ **Fixed countdown not working** - Sprout Boost now activates after 2 turns as intended
+- Added countdown decrement logic in `endTurn()`
+- Sets `sproutBoostActive` flag when counter reaches 0
+- Works for both player and AI creatures
+
+### Lock Indicator Fix  
+✅ **Fixed crash when Lock applied** - Lock status now displays correctly
+- Fixed typo where `hallucinationDiv` was used instead of `lockDiv`
+- Lock emoji (🔒) now appears without errors
+
+### Bench Healing Selection Fix
+✅ **Fixed automatic selection** - Players can now choose which bench creature to heal
+- `coffeeHeal` and `beanBlast` show selection modal when multiple damaged bench creatures exist
+- If only 1 damaged bench creature, heals automatically (no modal needed)
+- AI randomly selects from damaged bench creatures
+- Both moves use universal `healCreature()` function
+
 ## Success Criteria Met
 
 ✅ 2 new status conditions (Flux, Lock) with emojis
@@ -293,6 +353,11 @@ All Galactic Adventures cards follow the format:
 ✅ Type validation maintained
 ✅ Visual indicators for status conditions
 ✅ Cure mechanics integrated
+✅ Evolution system robust against all edge cases
+✅ Evolution chain tracking for proper discard
+✅ Secondary effects trigger even on knockout
+✅ Ability duration timing fixed
+✅ Player selection for healing targets
 
 ## Conclusion
 

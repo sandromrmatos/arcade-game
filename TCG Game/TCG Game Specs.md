@@ -624,6 +624,11 @@ TCG Game/
 - `getTypeColor(type)` - Return color for type
 - `knockoutCreature(player)` - Handle KO
 - `drawCards(player, count)` - Draw from deck
+- `healCreature(card, healAmount)` - Universal healing function
+  - Reduces creature damage by specified amount
+  - Automatically triggers Absorb Energy ability if active
+  - Returns `true` if Absorb Energy was triggered
+  - **Usage**: All healing effects should use this function for consistency
 
 ---
 

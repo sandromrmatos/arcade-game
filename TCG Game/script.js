@@ -557,7 +557,8 @@ const gameState = {
 // Track which cards were played/evolved this turn
 const turnTracker = {
     playedThisTurn: new Set(),
-    evolvedThisTurn: new Set()
+    evolvedThisTurn: new Set(), // Still track card objects for backward compatibility
+    evolvedIds: new Set() // Track evolutionId of cards that evolved this turn
 };
 
 // Initialize the game
@@ -1283,7 +1284,7 @@ function createCardElement(card, player, location, index = null) {
         lockDiv.className = 'lock-indicator';
         lockDiv.textContent = '🔒';
         lockDiv.title = 'Lock - Item usage requires coin flip';
-        cardDiv.appendChild(hallucinationDiv);
+        cardDiv.appendChild(lockDiv);
     }
 
     // Add HP display
@@ -1493,6 +1494,7 @@ function startGame() {
     // Clear turn tracker
     turnTracker.playedThisTurn.clear();
     turnTracker.evolvedThisTurn.clear();
+    turnTracker.evolvedIds.clear();
     
     // Increment turn counter for first turn
     gameState.turnNumber++;
@@ -1509,8 +1511,18 @@ function handlePlayCardClick(card, handIndex) {
     // Cancel any previous selections when clicking a new card
     if (gameState.selectedCard) {
         // Clear highlights from previous selection
-        document.querySelectorAll('.can-select').forEach(s => s.classList.remove('can-select'));
-        document.querySelectorAll('.can-place').forEach(s => s.classList.remove('can-place'));
+        document.querySelectorAll('.can-select').forEach(s => {
+            s.classList.remove('can-select');
+            // Clone and replace to remove all event listeners
+            const clone = s.cloneNode(true);
+            s.parentNode.replaceChild(clone, s);
+        });
+        document.querySelectorAll('.can-place').forEach(s => {
+            s.classList.remove('can-place');
+            // Clone and replace to remove all event listeners
+            const clone = s.cloneNode(true);
+            s.parentNode.replaceChild(clone, s);
+        });
         gameState.selectedCard = null;
     }
     
@@ -1565,7 +1577,7 @@ function placeBenchCard(e) {
 
 function highlightEvolvableCards(player) {
     // Check active card
-    if (gameState[player].active && canEvolve(gameState[player].active, gameState.selectedCard.card)) {
+    if (gameState[player].active && canEvolve(gameState[player].active, gameState.selectedCard.card, 'active', null)) {
         const activeSlot = document.querySelector(`.active-slot[data-player="${player}"]`);
         activeSlot.classList.add('can-select');
         activeSlot.addEventListener('click', () => evolveCard(player, 'active', null), {once: true});
@@ -1573,7 +1585,7 @@ function highlightEvolvableCards(player) {
     
     // Check bench
     gameState[player].bench.forEach((card, index) => {
-        if (card && canEvolve(card, gameState.selectedCard.card)) {
+        if (card && canEvolve(card, gameState.selectedCard.card, 'bench', index)) {
             const benchSlot = document.querySelector(`.bench-slot[data-player="${player}"][data-slot="${index}"]`);
             benchSlot.classList.add('can-select');
             benchSlot.addEventListener('click', () => evolveCard(player, 'bench', index), {once: true});
@@ -1581,12 +1593,15 @@ function highlightEvolvableCards(player) {
     });
 }
 
-function canEvolve(targetCard, evolutionCard) {
+function canEvolve(targetCard, evolutionCard, location, index) {
     // Check if evolution card's prevStage matches target card's name
     if (evolutionCard.data.prevStage !== targetCard.data.name) return false;
     
     // Can't evolve if target was played or evolved this turn
-    if (turnTracker.playedThisTurn.has(targetCard) || turnTracker.evolvedThisTurn.has(targetCard)) {
+    // Check both card object (for backward compatibility) and evolutionId
+    if (turnTracker.playedThisTurn.has(targetCard) || 
+        turnTracker.evolvedThisTurn.has(targetCard) ||
+        (targetCard.evolutionId && turnTracker.evolvedIds.has(targetCard.evolutionId))) {
         return false;
     }
     
@@ -1611,6 +1626,22 @@ function evolveCard(player, location, index) {
     card.damage = targetCard.damage;
     card.energy = targetCard.energy;
     
+    // Transfer evolutionId from target card (or create one if missing)
+    card.evolutionId = targetCard.evolutionId || Math.random().toString(36).substr(2, 9);
+    
+    // Build evolution chain - add target card to the chain, then transfer the entire chain
+    card.evolutionChain = targetCard.evolutionChain || [];
+    card.evolutionChain.push({
+        id: targetCard.id,
+        data: targetCard.data
+    });
+    
+    // Initialize ability flags (don't inherit from previous evolution)
+    card.abilityUsedThisTurn = false;
+    card.absorbEnergyActive = false;
+    card.energizedHealingAmount = 0;
+    card.healingRetreatAmount = 0;
+    
     // Replace the card
     if (location === 'active') {
         gameState[player].active = card;
@@ -1621,8 +1652,11 @@ function evolveCard(player, location, index) {
     // Remove from hand
     gameState[player].hand.splice(handIndex, 1);
     
-    // Mark as evolved this turn
+    // Mark as evolved this turn (track both card object and evolutionId)
     turnTracker.evolvedThisTurn.add(card);
+    if (card.evolutionId) {
+        turnTracker.evolvedIds.add(card.evolutionId);
+    }
     
     gameState.selectedCard = null;
     renderGame();
@@ -1630,6 +1664,12 @@ function evolveCard(player, location, index) {
 
 // Item cards
 function useItemCard(card, handIndex) {
+    // Check if Mirage Shield is active (opponent used it last turn)
+    if (gameState.player.cantUseItemsNextTurn) {
+        alert("Your opponent used Mirage Shield! You cannot use items this turn!");
+        return;
+    }
+    
     // Check if active creature has Lock condition
     if (gameState.player.active && gameState.player.active.hasLock) {
         alert("Your active creature is affected by Lock! Flipping a coin to determine if you can use the item...");
@@ -1708,7 +1748,8 @@ function healCard(player, location, index) {
         card = gameState[player].bench[index];
     }
     
-    card.damage = Math.max(0, card.damage - 20);
+    // Heal the creature (automatically handles Absorb Energy)
+    healCreature(card, 20);
     
     // Add to discard pile
     const usedCard = gameState.player.hand[gameState.selectedCard.handIndex];
@@ -1878,6 +1919,9 @@ function attachEnergyAntennaEnergy(player, location, index) {
     // Mark item as used
     gameState.player.itemUsedThisTurn = true;
     
+    // Clear selected card state
+    gameState.selectedCard = null;
+    
     renderGame();
     alert(`Energy Antenna used! Attached 1 energy to ${card.data.name}!`);
 }
@@ -1949,13 +1993,13 @@ function useAuraCrystalCard(handIndex) {
     let healedCount = 0;
     
     if (gameState.player.active && gameState.player.active.damage > 0) {
-        gameState.player.active.damage = Math.max(0, gameState.player.active.damage - 10);
+        healCreature(gameState.player.active, 10);
         healedCount++;
     }
     
     gameState.player.bench.forEach(card => {
         if (card && card.damage > 0) {
-            card.damage = Math.max(0, card.damage - 10);
+            healCreature(card, 10);
             healedCount++;
         }
     });
@@ -2017,8 +2061,8 @@ function healCelestialCreature(player, location, index) {
         card = gameState[player].bench[index];
     }
     
-    // Heal creature
-    card.damage = Math.max(0, card.damage - 40);
+    // Heal creature (automatically handles Absorb Energy)
+    const absorbEnergyTriggered = healCreature(card, 40);
     
     // Add to discard pile
     const usedCard = gameState.player.hand[gameState.selectedCard.handIndex];
@@ -2030,8 +2074,11 @@ function healCelestialCreature(player, location, index) {
     // Mark item as used
     gameState.player.itemUsedThisTurn = true;
     
+    // Clear selected card state
+    gameState.selectedCard = null;
+    
     renderGame();
-    alert(`Healing Crystal used! Healed ${card.data.name} for 40 HP!`);
+    alert(`Healing Crystal used! Healed ${card.data.name} for 40 HP!${absorbEnergyTriggered ? ' Absorb Energy triggered - gained 1 energy!' : ''}`);
 }
 
 function useDisruptorCard(handIndex) {
@@ -2044,7 +2091,10 @@ function useDisruptorCard(handIndex) {
     }
     
     // Extract card IDs from opponent's hand (hand contains objects, deck contains IDs)
-    const cardIds = gameState.opponent.hand.map(card => card.id);
+    // Filter out any cards without valid IDs
+    const cardIds = gameState.opponent.hand
+        .filter(card => card && card.id)
+        .map(card => card.id);
     
     // Shuffle opponent's hand back into deck
     gameState.opponent.deck.push(...cardIds);
@@ -2056,7 +2106,11 @@ function useDisruptorCard(handIndex) {
     for (let i = 0; i < drawCount && gameState.opponent.deck.length > 0; i++) {
         const cardId = gameState.opponent.deck.pop();
         const cardData = getCardData(cardId);
-        gameState.opponent.hand.push({id: cardId, data: cardData, energy: 0, damage: 0, abilityUsedThisTurn: false});
+        if (cardData) {
+            gameState.opponent.hand.push({id: cardId, data: cardData, energy: 0, damage: 0, abilityUsedThisTurn: false});
+        } else {
+            console.error('Card data not found for ID:', cardId);
+        }
     }
     
     // Add to discard pile
@@ -2203,7 +2257,7 @@ function attachEnergy(player, location, index) {
     // Check for Energized Healing (Galactic Adventures)
     if (card.energizedHealingAmount && card.damage > 0) {
         const healAmount = card.energizedHealingAmount;
-        card.damage = Math.max(0, card.damage - healAmount);
+        healCreature(card, healAmount);
         alert(`${card.data.name}'s Energized Healing activated! Healed ${healAmount} HP!`);
         card.energizedHealingAmount = 0; // Clear the flag after use
     }
@@ -2696,6 +2750,15 @@ function handleAttack(moveNumber) {
             // Check if guardian is knocked out
             if (guardianCard.damage >= guardianCard.data.hp) {
                 alert(`${guardianCard.data.name} was knocked out protecting ${defender.data.name}!`);
+                
+                // Add all cards in evolution chain to discard pile
+                if (guardianCard.evolutionChain && guardianCard.evolutionChain.length > 0) {
+                    guardianCard.evolutionChain.forEach(prevCard => {
+                        gameState.opponent.discardPile.push(prevCard);
+                    });
+                }
+                gameState.opponent.discardPile.push(guardianCard);
+                
                 gameState.opponent.bench[guardianIndex] = null;
                 gameState.opponent.points++;
                 updatePoints();
@@ -2757,6 +2820,15 @@ function handleAttack(moveNumber) {
             // Check if bench creature was knocked out
             if (benchTarget.damage >= benchTarget.data.hp) {
                 alert(`${benchTarget.data.name} was knocked out!`);
+                
+                // Add all cards in evolution chain to discard pile
+                if (benchTarget.evolutionChain && benchTarget.evolutionChain.length > 0) {
+                    benchTarget.evolutionChain.forEach(prevCard => {
+                        gameState.opponent.discardPile.push(prevCard);
+                    });
+                }
+                gameState.opponent.discardPile.push(benchTarget);
+                
                 gameState.opponent.bench[actualIndex] = null;
                 gameState.player.points++;
                 updatePoints();
@@ -3532,6 +3604,96 @@ function handleMoveEffectBeforeKnockout(effect, attacker, attackingPlayer, callb
             }, 500);
             break;
             
+        case 'caffeineAddiction':
+            // Caffeine Addiction - Flip coin, heads heal 20, tails Lock (but defender is KO'd so skip lock)
+            setTimeout(() => {
+                const flip = flipCoin();
+                alert(`Caffeine Addiction: Coin flip: ${flip}`);
+                if (flip === 'heads') {
+                    attacker.damage = Math.max(0, attacker.damage - 20);
+                    alert(`${attacker.data.name} healed 20 HP!`);
+                } else {
+                    alert(`Coin was tails, but defender was knocked out so Lock has no effect.`);
+                }
+                renderGame();
+                callback();
+            }, 500);
+            break;
+            
+        case 'skyDraw':
+            // Sky Draw - Draw a card after attacking
+            if (gameState[attackingPlayer].deck.length > 0) {
+                const drawnCard = gameState[attackingPlayer].deck.pop();
+                gameState[attackingPlayer].hand.push(drawnCard);
+                setTimeout(() => {
+                    alert(`${attackingPlayer === 'player' ? 'You' : 'AI'} drew a card!`);
+                    renderGame();
+                    callback();
+                }, 500);
+            } else {
+                callback();
+            }
+            break;
+            
+        case 'coffeeHeal':
+            // Coffee Heal - Heal bench creature 10 HP
+            setTimeout(() => {
+                const benchWithDamage = gameState[attackingPlayer].bench.filter(c => c && c.damage > 0);
+                if (benchWithDamage.length > 0) {
+                    if (attackingPlayer === 'player') {
+                        if (benchWithDamage.length === 1) {
+                            const target = benchWithDamage[0];
+                            healCreature(target, 10);
+                            alert(`Healed ${target.data.name} for 10 HP!`);
+                            renderGame();
+                            callback();
+                        } else {
+                            showBenchHealModal('player', 10, attackingPlayer);
+                            // Note: callback will be called from modal
+                        }
+                    } else {
+                        const target = benchWithDamage[Math.floor(Math.random() * benchWithDamage.length)];
+                        healCreature(target, 10);
+                        alert(`AI healed ${target.data.name} for 10 HP!`);
+                        renderGame();
+                        callback();
+                    }
+                } else {
+                    alert("No damaged bench creatures to heal!");
+                    callback();
+                }
+            }, 500);
+            break;
+            
+        case 'beanBlast':
+            // Bean Blast - Heal bench creature 20 HP
+            setTimeout(() => {
+                const benchWithDamage = gameState[attackingPlayer].bench.filter(c => c && c.damage > 0);
+                if (benchWithDamage.length > 0) {
+                    if (attackingPlayer === 'player') {
+                        if (benchWithDamage.length === 1) {
+                            const target = benchWithDamage[0];
+                            healCreature(target, 20);
+                            alert(`Healed ${target.data.name} for 20 HP!`);
+                            renderGame();
+                            callback();
+                        } else {
+                            showBenchHealModal('player', 20, attackingPlayer);
+                            // Note: callback will be called from modal
+                        }
+                    } else {
+                        const target = benchWithDamage[Math.floor(Math.random() * benchWithDamage.length)];
+                        healCreature(target, 20);
+                        alert(`AI healed ${target.data.name} for 20 HP!`);
+                        renderGame();
+                        callback();
+                    }
+                } else {
+                    callback();
+                }
+            }, 500);
+            break;
+            
         default:
             callback();
     }
@@ -3985,20 +4147,31 @@ function handleMoveEffect(effect, attacker, defender, attackingPlayer) {
                 const benchWithDamage = gameState[attackingPlayer].bench.filter(c => c && c.damage > 0);
                 if (benchWithDamage.length > 0) {
                     if (attackingPlayer === 'player') {
-                        alert("Select a benched creature to heal 10 HP:");
-                        // For simplicity, heal first damaged bench creature
-                        benchWithDamage[0].damage = Math.max(0, benchWithDamage[0].damage - 10);
-                        alert(`Healed ${benchWithDamage[0].data.name} for 10 HP!`);
+                        // Player chooses which bench creature to heal
+                        if (benchWithDamage.length === 1) {
+                            // Only one damaged bench creature, heal it automatically
+                            const target = benchWithDamage[0];
+                            healCreature(target, 10);
+                            alert(`Healed ${target.data.name} for 10 HP!`);
+                            renderGame();
+                            checkKnockoutsAndContinue(attackingPlayer);
+                        } else {
+                            // Multiple damaged bench creatures, let player choose
+                            showBenchHealModal('player', 10, attackingPlayer);
+                        }
                     } else {
+                        // AI chooses randomly from damaged bench creatures
                         const target = benchWithDamage[Math.floor(Math.random() * benchWithDamage.length)];
-                        target.damage = Math.max(0, target.damage - 10);
+                        healCreature(target, 10);
                         alert(`AI healed ${target.data.name} for 10 HP!`);
+                        renderGame();
+                        checkKnockoutsAndContinue(attackingPlayer);
                     }
-                    renderGame();
                 } else {
+                    // No damaged bench creatures to heal
                     alert("No damaged bench creatures to heal!");
+                    checkKnockoutsAndContinue(attackingPlayer);
                 }
-                checkKnockoutsAndContinue(attackingPlayer);
             }, 500);
             break;
             
@@ -4008,16 +4181,30 @@ function handleMoveEffect(effect, attacker, defender, attackingPlayer) {
                 const benchWithDamage = gameState[attackingPlayer].bench.filter(c => c && c.damage > 0);
                 if (benchWithDamage.length > 0) {
                     if (attackingPlayer === 'player') {
-                        benchWithDamage[0].damage = Math.max(0, benchWithDamage[0].damage - 20);
-                        alert(`Healed ${benchWithDamage[0].data.name} for 20 HP!`);
+                        // Player chooses which bench creature to heal
+                        if (benchWithDamage.length === 1) {
+                            // Only one damaged bench creature, heal it automatically
+                            const target = benchWithDamage[0];
+                            healCreature(target, 20);
+                            alert(`Healed ${target.data.name} for 20 HP!`);
+                            renderGame();
+                            checkKnockoutsAndContinue(attackingPlayer);
+                        } else {
+                            // Multiple damaged bench creatures, let player choose
+                            showBenchHealModal('player', 20, attackingPlayer);
+                        }
                     } else {
+                        // AI chooses randomly from damaged bench creatures
                         const target = benchWithDamage[Math.floor(Math.random() * benchWithDamage.length)];
-                        target.damage = Math.max(0, target.damage - 20);
+                        healCreature(target, 20);
                         alert(`AI healed ${target.data.name} for 20 HP!`);
+                        renderGame();
+                        checkKnockoutsAndContinue(attackingPlayer);
                     }
-                    renderGame();
+                } else {
+                    // No damaged bench creatures to heal
+                    checkKnockoutsAndContinue(attackingPlayer);
                 }
-                checkKnockoutsAndContinue(attackingPlayer);
             }, 500);
             break;
             
@@ -4212,6 +4399,13 @@ function checkBenchKnockouts(player) {
             // Creature is knocked out
             alert(`${benchCard.data.name} on ${player === 'player' ? 'your' : "opponent's"} bench was knocked out!`);
             
+            // Add all cards in evolution chain to discard pile
+            if (benchCard.evolutionChain && benchCard.evolutionChain.length > 0) {
+                benchCard.evolutionChain.forEach(prevCard => {
+                    gameState[player].discardPile.push(prevCard);
+                });
+            }
+            
             // Move to discard pile
             gameState[player].discardPile.push(benchCard);
             gameState[player].bench[i] = null;
@@ -4354,6 +4548,14 @@ function performRetreat(player, benchIndex) {
         alert(`${activeCard.data.name} is no longer affected by Lock!`);
     }
     
+    // Check for Healing Retreat ability
+    if (activeCard.healingRetreatAmount) {
+        const healAmount = activeCard.healingRetreatAmount;
+        healCreature(activeCard, healAmount);
+        alert(`${activeCard.data.name}'s Healing Retreat activated! Healed ${healAmount} HP!`);
+        activeCard.healingRetreatAmount = 0; // Clear the flag after use
+    }
+    
     // Swap
     gameState[player].active = benchCard;
     gameState[player].bench[benchIndex] = activeCard;
@@ -4361,12 +4563,71 @@ function performRetreat(player, benchIndex) {
     renderGame();
 }
 
+// Show modal for selecting bench creature to heal
+function showBenchHealModal(player, healAmount, attackingPlayer, callback) {
+    const modal = document.getElementById('select-modal');
+    const title = document.getElementById('modal-title');
+    const options = document.getElementById('modal-options');
+    
+    title.textContent = `Select a bench creature to heal ${healAmount} HP`;
+    options.innerHTML = '';
+    
+    gameState[player].bench.forEach((card, index) => {
+        // Only show creatures with damage
+        if (card && card.damage > 0) {
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'modal-card';
+            
+            const img = document.createElement('img');
+            img.src = `cards/${card.id}`;
+            img.alt = card.data.name;
+            cardDiv.appendChild(img);
+            
+            // Show HP info
+            const hpInfo = document.createElement('div');
+            hpInfo.textContent = `HP: ${card.data.hp - card.damage}/${card.data.hp}`;
+            hpInfo.style.textAlign = 'center';
+            hpInfo.style.fontSize = '12px';
+            hpInfo.style.marginTop = '5px';
+            cardDiv.appendChild(hpInfo);
+            
+            cardDiv.addEventListener('click', () => {
+                // Heal the selected creature
+                healCreature(card, healAmount);
+                alert(`Healed ${card.data.name} for ${healAmount} HP!`);
+                renderGame();
+                modal.style.display = 'none';
+                // Call callback if provided, otherwise use checkKnockoutsAndContinue
+                if (callback) {
+                    callback();
+                } else {
+                    checkKnockoutsAndContinue(attackingPlayer);
+                }
+            });
+            
+            options.appendChild(cardDiv);
+        }
+    });
+    
+    modal.style.display = 'flex';
+}
+
 // Knockout system
 function knockoutCreature(player) {
     const opponent = player === 'player' ? 'opponent' : 'player';
     
-    // Add knocked out creature to discard pile
-    gameState[player].discardPile.push(gameState[player].active);
+    const knockedOutCard = gameState[player].active;
+    
+    // Add all cards in the evolution chain to discard pile
+    // First add all previous evolutions from the chain
+    if (knockedOutCard.evolutionChain && knockedOutCard.evolutionChain.length > 0) {
+        knockedOutCard.evolutionChain.forEach(prevCard => {
+            gameState[player].discardPile.push(prevCard);
+        });
+    }
+    
+    // Then add the final evolved card itself
+    gameState[player].discardPile.push(knockedOutCard);
     
     // Opponent gets a point
     gameState[opponent].points++;
@@ -4437,9 +4698,37 @@ function drawCards(player, count) {
         if (gameState[player].deck.length > 0) {
             const cardId = gameState[player].deck.pop();
             const cardData = getCardData(cardId);
-            gameState[player].hand.push({id: cardId, data: cardData, energy: 0, damage: 0, abilityUsedThisTurn: false});
+            gameState[player].hand.push({
+                id: cardId, 
+                data: cardData, 
+                energy: 0, 
+                damage: 0, 
+                abilityUsedThisTurn: false,
+                absorbEnergyActive: false,
+                energizedHealingAmount: 0,
+                healingRetreatAmount: 0,
+                evolutionId: Math.random().toString(36).substr(2, 9), // Unique ID that persists across evolutions
+                evolutionChain: [] // Track all cards in the evolution chain (for discard pile)
+            });
         }
     }
+}
+
+// Universal healing function - handles absorbEnergy and other healing-related effects
+function healCreature(card, healAmount) {
+    if (!card || healAmount <= 0) return;
+    
+    // Apply healing
+    card.damage = Math.max(0, card.damage - healAmount);
+    
+    // Check for Absorb Energy ability - if active, attach energy when healed
+    if (card.absorbEnergyActive) {
+        card.energy++;
+        card.absorbEnergyActive = false;
+        return true; // Return true to indicate Absorb Energy was triggered
+    }
+    
+    return false;
 }
 
 // Ability system
@@ -5115,6 +5404,12 @@ function aiUseAbilities() {
                 card.abilityUsedThisTurn = true;
                 alert(`AI's ${card.data.name} used Retaliation Stone! If damaged by an attack next turn, it deals 20 damage back!`);
                 renderGame();
+            } else if (abilityEffect === 'mirageShield') {
+                // Mirage Shield - player can't use items next turn
+                gameState.player.cantUseItemsNextTurn = true;
+                card.abilityUsedThisTurn = true;
+                alert(`AI's ${card.data.name} used Mirage Shield! You can't use items next turn!`);
+                renderGame();
             }
         }
     }
@@ -5295,6 +5590,18 @@ function aiUseAbilities() {
                 card.abilityUsedThisTurn = true;
                 alert(`AI's ${card.data.name} used Retaliation Stone! If damaged by an attack next turn, it deals 20 damage back!`);
                 renderGame();
+            } else if (abilityEffect === 'guardianMode') {
+                // Guardian Mode - all AI creatures take 10 less damage
+                gameState.opponent.guardianModeActive = true;
+                card.abilityUsedThisTurn = true;
+                alert(`AI's ${card.data.name} used Guardian Mode! All AI creatures take 10 less damage this turn!`);
+                renderGame();
+            } else if (abilityEffect === 'warriorMode') {
+                // Warrior Mode - AI's attacks deal +20 damage this turn
+                gameState.opponent.warriorModeBonus = 20;
+                card.abilityUsedThisTurn = true;
+                alert(`AI's ${card.data.name} used Warrior Mode! AI's attacks this turn deal +20 damage!`);
+                renderGame();
             }
         }
     });
@@ -5340,8 +5647,19 @@ function endTurn() {
         gameState[gameState.currentTurn].active.cantRetreat = false;
     }
     
+    // Remember who is ending their turn (for clearing effects AFTER the switch)
+    const playerEndingTurn = gameState.currentTurn;
+    const playerStartingNextTurn = gameState.currentTurn === 'player' ? 'opponent' : 'player';
+    
     // Switch turns
-    gameState.currentTurn = gameState.currentTurn === 'player' ? 'opponent' : 'player';
+    gameState.currentTurn = playerStartingNextTurn;
+    
+    // Clear Guardian Mode for the player whose turn just ENDED (they were protected during opponent's last turn)
+    // Turn 5 player uses Guardian Mode (player.guardianModeActive = true)
+    // Turn 6 opponent turn (player is protected from AI attacks)
+    // Turn 6 ENDS → clear player.guardianModeActive
+    // Turn 7 player turn (no longer protected)
+    gameState[playerStartingNextTurn].guardianModeActive = false;
     
     // Increment turn counter at the start of each new turn
     gameState.turnNumber++;
@@ -5412,6 +5730,13 @@ function endTurn() {
     gameState[playerStartingTurn].clarityAuraActive = false;
     gameState[playerStartingTurn].camouflageActive = false;
     
+    // Note: Guardian Mode is cleared right after turn switch above
+    
+    // Clear Warrior Mode for the player whose turn just ENDED (Galactic Adventures)
+    // Logic: Turn 5 use Warrior Mode → attack same turn (boosted) → Turn 6 starts (cleared)
+    // Use playerEndingTurn which was declared earlier
+    gameState[playerEndingTurn].warriorModeBonus = 0;
+    
     // Clear Metalic Protection from the player whose turn is STARTING (Galactic Adventures)
     // Same logic: Turn 5 use ability → Turn 6 opponent attacks (protected) → Turn 7 starts (cleared)
     if (gameState[playerStartingTurn].active && gameState[playerStartingTurn].active.metalicProtectionActive) {
@@ -5422,6 +5747,13 @@ function endTurn() {
             card.metalicProtectionActive = false;
         }
     });
+    
+    // Clear Mirage Shield (cantUseItemsNextTurn) from the player whose turn just ENDED (Galactic Adventures)
+    // Turn 5 player uses Mirage Shield (opponent.cantUseItemsNextTurn = true)
+    // Turn 6 opponent can't use items (blocked)
+    // Turn 6 ENDS → clear opponent.cantUseItemsNextTurn
+    // Turn 7+ opponent can use items again
+    gameState[playerEndingTurn].cantUseItemsNextTurn = false;
     
     // Reset ability used flags for all creatures
     if (gameState.player.active) gameState.player.active.abilityUsedThisTurn = false;
@@ -5457,9 +5789,42 @@ function endTurn() {
         }
     });
     
+    // Decrement Sprout Boost countdown for all creatures (Galactic Adventures)
+    if (gameState.player.active && gameState.player.active.sproutBoostTurns > 0) {
+        gameState.player.active.sproutBoostTurns--;
+        if (gameState.player.active.sproutBoostTurns === 0) {
+            gameState.player.active.sproutBoostActive = true;
+            alert(`${gameState.player.active.data.name}'s Sprout Boost is ready! Next attack deals +30 damage!`);
+        }
+    }
+    gameState.player.bench.forEach(card => {
+        if (card && card.sproutBoostTurns > 0) {
+            card.sproutBoostTurns--;
+            if (card.sproutBoostTurns === 0) {
+                card.sproutBoostActive = true;
+            }
+        }
+    });
+    if (gameState.opponent.active && gameState.opponent.active.sproutBoostTurns > 0) {
+        gameState.opponent.active.sproutBoostTurns--;
+        if (gameState.opponent.active.sproutBoostTurns === 0) {
+            gameState.opponent.active.sproutBoostActive = true;
+            alert(`AI's ${gameState.opponent.active.data.name}'s Sprout Boost is ready! Next attack deals +30 damage!`);
+        }
+    }
+    gameState.opponent.bench.forEach(card => {
+        if (card && card.sproutBoostTurns > 0) {
+            card.sproutBoostTurns--;
+            if (card.sproutBoostTurns === 0) {
+                card.sproutBoostActive = true;
+            }
+        }
+    });
+    
     // Clear turn tracker
     turnTracker.playedThisTurn.clear();
     turnTracker.evolvedThisTurn.clear();
+    turnTracker.evolvedIds.clear();
     
     // Draw card at start of turn
     drawCards(gameState.currentTurn, 1);
@@ -5677,6 +6042,16 @@ function aiConsiderRetreat() {
     if (bestBenchIndex !== -1) {
         console.log(`AI retreating ${active.data.name} (${hpRemaining}/${active.data.hp} HP) for ${gameState.opponent.bench[bestBenchIndex].data.name}`);
         
+        // Check if active has Healing Retreat ability and use it before retreating
+        if (active.data.abilityEffect && 
+            (active.data.abilityEffect === 'healingRetreat1' || active.data.abilityEffect === 'healingRetreat2') &&
+            !active.abilityUsedThisTurn) {
+            const healAmount = active.data.abilityEffect === 'healingRetreat1' ? 20 : 40;
+            active.healingRetreatAmount = healAmount;
+            active.abilityUsedThisTurn = true;
+            alert(`AI's ${active.data.name} used Healing Retreat before retreating!`);
+        }
+        
         // Remove retreat cost energy
         active.energy -= active.data.retreat;
         
@@ -5692,6 +6067,14 @@ function aiConsiderRetreat() {
         if (active.hasLock) {
             active.hasLock = false;
             alert(`AI's ${active.data.name} is no longer affected by Lock!`);
+        }
+        
+        // Check for Healing Retreat ability
+        if (active.healingRetreatAmount) {
+            const healAmount = active.healingRetreatAmount;
+            healCreature(active, healAmount);
+            alert(`AI's ${active.data.name}'s Healing Retreat activated! Healed ${healAmount} HP!`);
+            active.healingRetreatAmount = 0; // Clear the flag after use
         }
         
         // Swap active with bench
@@ -5744,13 +6127,25 @@ function aiTryEvolveOnce() {
         if (card.data.stage === "Item") continue;
         
         // Try to evolve active
-        if (gameState.opponent.active && canEvolve(gameState.opponent.active, card)) {
+        if (gameState.opponent.active && canEvolve(gameState.opponent.active, card, 'active', null)) {
             const targetCard = gameState.opponent.active;
             card.damage = targetCard.damage;
             card.energy = targetCard.energy;
+            card.evolutionId = targetCard.evolutionId || Math.random().toString(36).substr(2, 9);
+            
+            // Build evolution chain
+            card.evolutionChain = targetCard.evolutionChain || [];
+            card.evolutionChain.push({
+                id: targetCard.id,
+                data: targetCard.data
+            });
+            
             gameState.opponent.active = card;
             gameState.opponent.hand.splice(i, 1);
             turnTracker.evolvedThisTurn.add(card);
+            if (card.evolutionId) {
+                turnTracker.evolvedIds.add(card.evolutionId);
+            }
             renderGame();
             return true;
         }
@@ -5758,12 +6153,24 @@ function aiTryEvolveOnce() {
         // Try to evolve bench
         for (let j = 0; j < gameState.opponent.bench.length; j++) {
             const benchCard = gameState.opponent.bench[j];
-            if (benchCard && canEvolve(benchCard, card)) {
+            if (benchCard && canEvolve(benchCard, card, 'bench', j)) {
                 card.damage = benchCard.damage;
                 card.energy = benchCard.energy;
+                card.evolutionId = benchCard.evolutionId || Math.random().toString(36).substr(2, 9);
+                
+                // Build evolution chain
+                card.evolutionChain = benchCard.evolutionChain || [];
+                card.evolutionChain.push({
+                    id: benchCard.id,
+                    data: benchCard.data
+                });
+                
                 gameState.opponent.bench[j] = card;
                 gameState.opponent.hand.splice(i, 1);
                 turnTracker.evolvedThisTurn.add(card);
+                if (card.evolutionId) {
+                    turnTracker.evolvedIds.add(card.evolutionId);
+                }
                 renderGame();
                 return true;
             }
@@ -5776,6 +6183,12 @@ function aiTryEvolveOnce() {
 function aiUseItems(callback) {
     // Check if AI has any item cards and hasn't used one this turn
     if (gameState.opponent.itemUsedThisTurn || gameState.phase === 'gameOver') {
+        callback();
+        return;
+    }
+    
+    // Check if Mirage Shield is active (player used it last turn)
+    if (gameState.opponent.cantUseItemsNextTurn) {
         callback();
         return;
     }
@@ -5807,7 +6220,7 @@ function aiUseItems(callback) {
             const potion = gameState.opponent.hand[potionIndex];
             flashItemCard(potion.id, () => {
                 if (gameState.phase === 'gameOver') return;
-                gameState.opponent.active.damage = Math.max(0, gameState.opponent.active.damage - 20);
+                healCreature(gameState.opponent.active, 20);
                 gameState.opponent.discardPile.push(potion);
                 gameState.opponent.hand.splice(potionIndex, 1);
                 gameState.opponent.itemUsedThisTurn = true;
@@ -5962,7 +6375,7 @@ function aiUseItems(callback) {
             flashItemCard(healingCrystal.id, () => {
                 if (gameState.phase === 'gameOver') return;
                 // Heal first damaged Celestial
-                celestialCreatures[0].damage = Math.max(0, celestialCreatures[0].damage - 40);
+                healCreature(celestialCreatures[0], 40);
                 gameState.opponent.discardPile.push(healingCrystal);
                 gameState.opponent.hand.splice(healingCrystalIndex, 1);
                 gameState.opponent.itemUsedThisTurn = true;
@@ -5989,11 +6402,11 @@ function aiUseItems(callback) {
                 if (gameState.phase === 'gameOver') return;
                 // Heal all damaged creatures by 10
                 if (gameState.opponent.active && gameState.opponent.active.damage > 0) {
-                    gameState.opponent.active.damage = Math.max(0, gameState.opponent.active.damage - 10);
+                    healCreature(gameState.opponent.active, 10);
                 }
                 gameState.opponent.bench.forEach(card => {
                     if (card && card.damage > 0) {
-                        card.damage = Math.max(0, card.damage - 10);
+                        healCreature(card, 10);
                     }
                 });
                 gameState.opponent.discardPile.push(auraCrystal);
@@ -6076,15 +6489,27 @@ function aiUseItems(callback) {
             if (gameState.phase === 'gameOver') return;
             const playerHandSize = gameState.player.hand.length;
             
+            // Extract card IDs from player's hand (hand contains objects, deck contains IDs)
+            // Filter out any cards without valid IDs
+            const cardIds = gameState.player.hand
+                .filter(card => card && card.id)
+                .map(card => card.id);
+            
             // Shuffle player's hand back into deck
-            gameState.player.deck.push(...gameState.player.hand);
+            gameState.player.deck.push(...cardIds);
             gameState.player.hand = [];
             shuffleDeck(gameState.player.deck);
             
             // Draw cards (original count minus 1)
             const drawCount = Math.max(0, playerHandSize - 1);
             for (let i = 0; i < drawCount && gameState.player.deck.length > 0; i++) {
-                gameState.player.hand.push(gameState.player.deck.pop());
+                const cardId = gameState.player.deck.pop();
+                const cardData = getCardData(cardId);
+                if (cardData) {
+                    gameState.player.hand.push({id: cardId, data: cardData, energy: 0, damage: 0, abilityUsedThisTurn: false});
+                } else {
+                    console.error('Card data not found for ID:', cardId);
+                }
             }
             
             gameState.opponent.discardPile.push(disruptor);
@@ -6452,6 +6877,19 @@ function aiAttack() {
         gameState.opponent.sturdyPresenceBonus = 0; // Consumed after this attack
     }
     
+    // Apply Warrior Mode bonus (Galactic Adventures)
+    if (gameState.opponent.warriorModeBonus) {
+        damage += gameState.opponent.warriorModeBonus;
+        alert(`AI's Warrior Mode bonus: +${gameState.opponent.warriorModeBonus} damage! Total: ${damage}`);
+        gameState.opponent.warriorModeBonus = 0; // Consumed after this attack
+    }
+    
+    // Apply Guardian Mode shield (Galactic Adventures - all creatures)
+    if (gameState.player.guardianModeActive) {
+        damage = Math.max(0, damage - 10);
+        alert(`Guardian Mode reduces AI's damage by 10! AI deals ${damage} damage!`);
+    }
+    
     // Apply Monk's Fury shield (player's shield reduces damage to them)
     if (gameState.player.monksFuryShield) {
         damage = Math.max(0, damage - 20);
@@ -6506,12 +6944,6 @@ function aiAttack() {
         defender.mindRippleShield = false; // Shield is consumed
     }
     
-    // Apply Guardian Mode shield (Galactic Adventures - all creatures)
-    if (gameState.player.guardianModeActive) {
-        damage = Math.max(0, damage - 10);
-        alert(`Guardian Mode reduces AI's damage by 10! AI deals ${damage} damage!`);
-    }
-    
     // Apply Caprine Guard shield (Galactic Adventures - only from Celestial/Mystic)
     if (gameState.player.caprineGuardShield && (attackerType === 'Celestial' || attackerType === 'Mystic')) {
         const shieldAmount = gameState.player.caprineGuardShield;
@@ -6550,6 +6982,15 @@ function aiAttack() {
             // Check if guardian is knocked out
             if (guardianCard.damage >= guardianCard.data.hp) {
                 alert(`${guardianCard.data.name} was knocked out protecting ${defender.data.name}!`);
+                
+                // Add all cards in evolution chain to discard pile
+                if (guardianCard.evolutionChain && guardianCard.evolutionChain.length > 0) {
+                    guardianCard.evolutionChain.forEach(prevCard => {
+                        gameState.player.discardPile.push(prevCard);
+                    });
+                }
+                gameState.player.discardPile.push(guardianCard);
+                
                 gameState.player.bench[guardianIndex] = null;
                 gameState.opponent.points++;
                 updatePoints();
@@ -6607,6 +7048,15 @@ function aiAttack() {
             // Check if bench creature was knocked out
             if (benchTarget.damage >= benchTarget.data.hp) {
                 alert(`${benchTarget.data.name} was knocked out!`);
+                
+                // Add all cards in evolution chain to discard pile
+                if (benchTarget.evolutionChain && benchTarget.evolutionChain.length > 0) {
+                    benchTarget.evolutionChain.forEach(prevCard => {
+                        gameState.player.discardPile.push(prevCard);
+                    });
+                }
+                gameState.player.discardPile.push(benchTarget);
+                
                 gameState.player.bench[actualIndex] = null;
                 gameState.opponent.points++;
                 updatePoints();

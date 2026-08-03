@@ -137,6 +137,9 @@ class BattleUI {
         
         const hpPercent = (creature.currentHP / creature.maxStats.hp) * 100;
         
+        // Get stat modifiers display
+        const statModsHTML = this.getStatModifiersHTML(creature);
+        
         card.innerHTML = `
             <div class="creature-sprite">
                 <img src="images/${creature.sprite}" alt="${creature.name}">
@@ -150,6 +153,7 @@ class BattleUI {
                     <div class="hp-bar" style="width: ${hpPercent}%"></div>
                 </div>
                 <div class="hp-text">${creature.currentHP} / ${creature.maxStats.hp} HP</div>
+                ${statModsHTML}
             </div>
         `;
         
@@ -160,6 +164,36 @@ class BattleUI {
         }
         
         return card;
+    }
+    
+    // Get stat modifiers HTML
+    getStatModifiersHTML(creature) {
+        const modifiers = [];
+        
+        // Check each stat for modifications
+        const statNames = {
+            attack: 'Attack',
+            defense: 'Defense',
+            specialAttack: 'Sp. Attack',
+            specialDefense: 'Sp. Defense',
+            speed: 'Speed'
+        };
+        
+        for (const [stat, name] of Object.entries(statNames)) {
+            const modifier = creature.statModifiers[stat];
+            if (modifier !== 1.0) {
+                const percentChange = Math.round((modifier - 1.0) * 100);
+                const sign = percentChange > 0 ? '+' : '';
+                const className = percentChange > 0 ? 'stat-buff' : 'stat-debuff';
+                modifiers.push(`<span class="${className}">${sign}${percentChange}% ${name}</span>`);
+            }
+        }
+        
+        if (modifiers.length === 0) {
+            return '';
+        }
+        
+        return `<div class="stat-modifiers">${modifiers.join('')}</div>`;
     }
 
     // Create bench card (smaller)
@@ -455,7 +489,7 @@ class BattleUI {
             if (c) {
                 c.switchedInThisTurn = false;
                 c.isProtected = false; // Protection only lasts one turn
-                c.usedMoves.clear(); // Clear last turn's used moves (Shield can be used again)
+                c.usedMovesLastTurn.clear(); // Clear last turn's moves (Shield can be used again after skipping a turn)
             }
         });
         

@@ -62,7 +62,7 @@ class BattleCreature {
         // Secondary effect tracking
         this.isProtected = false; // Shield/Double Guard protection
         this.cantAttackNextTurn = false; // Move restrictions (Huge Recovery)
-        this.usedMoves = new Set(); // Track which moves were used this turn (for Shield)
+        this.usedMovesLastTurn = new Set(); // Track which moves were used last turn (for Shield)
         this.usedMovesInBattle = new Set(); // Track which moves can't be used again (for Double Guard)
     }
 
@@ -100,8 +100,8 @@ class BattleCreature {
         this.abilityActivated = false;
         this.isProtected = false;
         this.cantAttackNextTurn = false;
-        this.usedMoves.clear(); // Clear this turn's used moves
-        // Note: usedMovesInBattle persists for moves like Double Guard that can't be used again
+        this.usedMovesLastTurn.clear();
+        // Note: usedMovesInBattle should NOT be cleared - it persists for the entire battle
     }
 
     // Take damage
@@ -325,7 +325,7 @@ class Battle {
             if (c) {
                 c.switchedInThisTurn = false;
                 c.isProtected = false; // Protection only lasts one turn
-                c.usedMoves.clear(); // Clear last turn's used moves (Shield can be used again)
+                c.usedMovesLastTurn.clear(); // Clear last turn's moves (Shield can be used again after skipping a turn)
             }
         });
         
@@ -490,9 +490,9 @@ class Battle {
             return;
         }
         
-        // Check if move was used this turn (Shield can't be used consecutively)
-        if (attacker.usedMoves.has(move.name)) {
-            this.log(`${this.getCreatureLabel(attacker, attackerSide)} can't use ${move.name} again this turn!`);
+        // Check if move was used last turn (Shield can't be used in consecutive turns)
+        if (attacker.usedMovesLastTurn.has(move.name)) {
+            this.log(`${this.getCreatureLabel(attacker, attackerSide)} can't use ${move.name} in consecutive turns!`);
             return;
         }
         
@@ -806,16 +806,19 @@ class Battle {
         // Protection effects
         if (moveName === 'Shield') {
             attacker.isProtected = true;
-            attacker.usedMoves.add('Shield'); // Can't use Shield again this turn (next turn it resets)
+            attacker.usedMovesLastTurn.add('Shield'); // Can't use Shield next turn
             this.log(`${this.getCreatureLabel(attacker, attackerSide)} is protected!`);
         }
         
         if (moveName === 'Double Guard') {
+            // Mark that this creature used Double Guard (can't use it again in battle)
+            attacker.usedMovesInBattle.add('Double Guard');
+            
+            // Protect all allies
             const allies = attackerSide === 'player' ? this.playerActive : this.opponentActive;
             allies.forEach(ally => {
                 if (ally && ally.isAlive()) {
                     ally.isProtected = true;
-                    ally.usedMovesInBattle.add('Double Guard'); // Can never use Double Guard again in this battle
                     this.log(`${this.getCreatureLabel(ally, attackerSide)} is protected!`);
                 }
             });

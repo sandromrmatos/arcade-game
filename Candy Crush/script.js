@@ -16,7 +16,7 @@ const messageElement = document.getElementById("message");
 const restartBtn = document.getElementById("restart-btn");
 const menuBtn = document.getElementById("menu-btn");
 const levelMenu = document.getElementById("levelMenu");
-const gameContainer = document.getElementById("gameContainer");
+const gameContainer = document.getElementById("singlePlayerContainer");
 const levelDisplay = document.getElementById("levelDisplay");
 
 let draggedId = null;
@@ -596,7 +596,8 @@ function startLevel(level) {
   width = levelConfig.width;
   height = levelConfig.height;
   
-  // Hide menu, show game
+  // Hide menus, show game
+  document.getElementById('modeMenu').style.display = 'none';
   levelMenu.style.display = 'none';
   gameContainer.style.display = 'block';
   
@@ -621,5 +622,5 @@ document.querySelectorAll('.level-btn').forEach(btn => {
   });
 });
 
-// Start with menu visible
-showMenu();
+// Don't start automatically - wait for mode selection
+// showMenu();

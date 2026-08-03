@@ -4,59 +4,208 @@
   <meta charset="UTF-8">
   <title>Candy Crush</title>
   <link rel="stylesheet" href="style.css">
+  
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 </head>
 <body>
-  <!-- Level Selection Menu -->
-  <div id="levelMenu" class="level-menu">
-    <div class="menu-content">
-      <h1>Candy Crush</h1>
-      <p class="menu-subtitle">Select Level:</p>
-      <div class="level-buttons">
-        <button class="level-btn" data-level="1">
-          <div class="level-number">Level 1</div>
-          <div class="level-desc">6×6 Grid</div>
-          <div class="level-detail">Classic Match-3</div>
-        </button>
-        <button class="level-btn" data-level="2">
-          <div class="level-number">Level 2</div>
-          <div class="level-desc">8×8 Grid</div>
-          <div class="level-detail">With Broken Gems (10%)</div>
-        </button>
-        <button class="level-btn" data-level="3">
-          <div class="level-number">Level 3</div>
-          <div class="level-desc">8×8 Grid</div>
-          <div class="level-detail">Blocked Corners + Center (15% Broken)</div>
-        </button>
-      </div>
-    </div>
+
+  <!-- Left Side Banner -->
+  <div class="left-banner">
+    <script>
+      atOptions = {
+        'key' : '7ba91ff59f9a86aa46a4d8f12ad4f332',
+        'format' : 'iframe',
+        'height' : 600,
+        'width' : 160,
+        'params' : {}
+      };
+    </script>
+    <script src="https://www.highperformanceformat.com/7ba91ff59f9a86aa46a4d8f12ad4f332/invoke.js"></script>
   </div>
 
-  <!-- Game Screen -->
-  <div class="game-container" id="gameContainer" style="display: none;">
-    <h1>Candy Crush</h1>
+  <!-- Right Side Banner -->
+  <div class="right-banner">
+    <script>
+      atOptions = {
+        'key' : 'a1302af715e120d80d966a3d28a8a88e',
+        'format' : 'iframe',
+        'height' : 300,
+        'width' : 160,
+        'params' : {}
+      };
+    </script>
+    <script src="https://www.highperformanceformat.com/a1302af715e120d80d966a3d28a8a88e/invoke.js"></script>
+  </div>
 
-    <div class="hud">
-      <div class="hud-item">
-        <span class="label">Level:</span>
-        <span id="levelDisplay">1</span>
+  <div class="main-container">
+    <!-- Mode Selection Menu -->
+    <div id="modeMenu" class="mode-menu">
+      <div class="menu-content">
+        <h1>Candy Crush</h1>
+        <p class="menu-subtitle">Choose Game Mode:</p>
+        <div class="mode-buttons">
+          <button class="mode-btn single-player" onclick="showSinglePlayerMenu()">
+            <div class="mode-icon">👤</div>
+            <div class="mode-name">Single Player</div>
+            <div class="mode-desc">Play solo with timer</div>
+          </button>
+          <button class="mode-btn multiplayer" onclick="showMultiplayerMenu()">
+            <div class="mode-icon">👥</div>
+            <div class="mode-name">Multiplayer</div>
+            <div class="mode-desc">Compete in real-time</div>
+          </button>
+        </div>
+        
+        <!-- Bottom Banner Ad -->
+        <div style="margin: 40px auto 20px; text-align: center; display: block; clear: both;">
+          <script>
+            atOptions = {
+              'key' : '08eabecb95d5f48211d73ad53108132b',
+              'format' : 'iframe',
+              'height' : 90,
+              'width' : 728,
+              'params' : {}
+            };
+          </script>
+          <script src="https://www.highperformanceformat.com/08eabecb95d5f48211d73ad53108132b/invoke.js"></script>
+        </div>
+        
+        <!-- Native Banner Ad -->
+        <div style="margin: 30px auto; text-align: center; display: block; clear: both;">
+          <script>
+            atOptions = {
+              'key' : '351110f0be13f404c65ab8b04d78fb77',
+              'format' : 'iframe',
+              'height' : 250,
+              'width' : 300,
+              'params' : {}
+            };
+          </script>
+          <script src="https://www.highperformanceformat.com/351110f0be13f404c65ab8b04d78fb77/invoke.js"></script>
+        </div>
       </div>
-      <div class="hud-item">
-        <span class="label">Score:</span>
-        <span id="score">0</span>
-      </div>
-      <div class="hud-item">
-        <span class="label">Time:</span>
-        <span id="timer">03:00</span>
-      </div>
-      <button id="restart-btn">Restart</button>
-      <button id="menu-btn">Menu</button>
     </div>
 
-    <div id="board" class="board"></div>
+    <!-- Single Player Level Selection Menu -->
+    <div id="levelMenu" class="level-menu" style="display: none;">
+      <div class="menu-content">
+        <h1>Candy Crush - Single Player</h1>
+        <p class="menu-subtitle">Select Level:</p>
+        <div class="level-buttons">
+          <button class="level-btn" data-level="1">
+            <div class="level-number">Level 1</div>
+            <div class="level-desc">6×6 Grid</div>
+            <div class="level-detail">Classic Match-3</div>
+          </button>
+          <button class="level-btn" data-level="2">
+            <div class="level-number">Level 2</div>
+            <div class="level-desc">8×8 Grid</div>
+            <div class="level-detail">With Broken Gems (10%)</div>
+          </button>
+          <button class="level-btn" data-level="3">
+            <div class="level-number">Level 3</div>
+            <div class="level-desc">8×8 Grid</div>
+            <div class="level-detail">Blocked Corners + Center (15% Broken)</div>
+          </button>
+        </div>
+        <button class="back-btn" onclick="showModeMenu()">← Back to Mode Selection</button>
+      </div>
+    </div>
 
-    <div id="message" class="message"></div>
+    <!-- Multiplayer Lobby -->
+    <div id="multiplayerLobby" class="multiplayer-lobby" style="display: none;">
+      <div class="lobby-content">
+        <h1>Candy Crush - Multiplayer</h1>
+        <h3>Choose Level & Join Room</h3>
+        
+        <div class="level-selector">
+          <label>Select Level:</label>
+          <select id="mp-level-select" class="mp-level-select">
+            <option value="1">Level 1 (6×6)</option>
+            <option value="2">Level 2 (8×8 + Broken Gems)</option>
+            <option value="3">Level 3 (8×8 + Blocked + Broken)</option>
+          </select>
+        </div>
+        
+        <div class="room-controls">
+          <input type="text" id="room-input" placeholder="Enter room code" maxlength="10">
+          <br>
+          <button class="lobby-btn" onclick="createMultiplayerRoom()">Create Room</button>
+          <button class="lobby-btn" onclick="joinMultiplayerRoom()">Join Room</button>
+          <button class="lobby-btn back" onclick="showModeMenu()">Back</button>
+        </div>
+        
+        <div id="lobby-status"></div>
+        <button id="mp-ready-btn" class="lobby-btn ready hidden" onclick="toggleMultiplayerReady()">Ready</button>
+      </div>
+    </div>
+
+    <!-- Single Player Game Screen -->
+    <div class="game-container single-player-container" id="singlePlayerContainer" style="display: none;">
+      <h1>Candy Crush</h1>
+
+      <div class="hud">
+        <div class="hud-item">
+          <span class="label">Level:</span>
+          <span id="levelDisplay">1</span>
+        </div>
+        <div class="hud-item">
+          <span class="label">Score:</span>
+          <span id="score">0</span>
+        </div>
+        <div class="hud-item">
+          <span class="label">Time:</span>
+          <span id="timer">03:00</span>
+        </div>
+        <button id="restart-btn">Restart</button>
+        <button id="menu-btn">Menu</button>
+      </div>
+
+      <div id="board" class="board"></div>
+
+      <div id="message" class="message"></div>
+    </div>
+
+    <!-- Multiplayer Game Screen -->
+    <div class="game-container multiplayer-container" id="multiplayerContainer" style="display: none;">
+      <h1>Candy Crush - Multiplayer</h1>
+
+      <div class="hud multiplayer-hud">
+        <div class="hud-item">
+          <span class="label">Level:</span>
+          <span id="mp-levelDisplay">1</span>
+        </div>
+        <div class="hud-item">
+          <span class="label">Time:</span>
+          <span id="mp-timer">03:00</span>
+        </div>
+        <button id="mp-menu-btn" onclick="leaveMultiplayerGame()">Leave Game</button>
+      </div>
+
+      <div class="dual-board-container">
+        <!-- Your Board -->
+        <div class="player-section your-board" style="max-width: 600px; margin: 0 auto;">
+          <div class="player-header">
+            <h2 id="your-name">You</h2>
+            <div class="player-score">Score: <span id="your-score">0</span></div>
+          </div>
+          <div id="mp-your-board" class="board"></div>
+        </div>
+
+        <!-- Opponent Score Only (No Board) -->
+        <div class="opponent-scoreboard" style="position: fixed; top: 100px; right: 20px; background: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 50;">
+          <h3 id="opponent-name" style="margin: 0 0 10px 0; color: #4a3b7a;">Opponent</h3>
+          <div style="font-size: 24px; font-weight: bold; color: #ff6b6b;">Score: <span id="opponent-score">0</span></div>
+        </div>
+      </div>
+
+      <div id="mp-message" class="message"></div>
+    </div>
   </div>
 
   <script src="script.js"></script>
+  <script src="multiplayer.js"></script>
 </body>
 </html>
