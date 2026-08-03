@@ -58,6 +58,12 @@ class BattleCreature {
         this.isActive = false;
         this.switchedInThisTurn = false;
         this.abilityActivated = false; // For switch-in abilities
+        
+        // Secondary effect tracking
+        this.isProtected = false; // Shield/Double Guard protection
+        this.cantAttackNextTurn = false; // Move restrictions (Huge Recovery)
+        this.usedMoves = new Set(); // Track which moves were used this turn (for Shield)
+        this.usedMovesInBattle = new Set(); // Track which moves can't be used again (for Double Guard)
     }
 
     // Get current stat with modifiers applied
@@ -92,6 +98,10 @@ class BattleCreature {
             speed: 1.0
         };
         this.abilityActivated = false;
+        this.isProtected = false;
+        this.cantAttackNextTurn = false;
+        this.usedMoves.clear(); // Clear this turn's used moves
+        // Note: usedMovesInBattle persists for moves like Double Guard that can't be used again
     }
 
     // Take damage
@@ -310,9 +320,13 @@ class Battle {
         this.turnNumber++;
         this.log(`\n=== Turn ${this.turnNumber} ===`);
         
-        // Reset switch flags
+        // Reset turn flags
         [...this.playerActive, ...this.opponentActive].forEach(c => {
-            if (c) c.switchedInThisTurn = false;
+            if (c) {
+                c.switchedInThisTurn = false;
+                c.isProtected = false; // Protection only lasts one turn
+                c.usedMoves.clear(); // Clear last turn's used moves (Shield can be used again)
+            }
         });
         
         // Process switches first
@@ -364,11 +378,41 @@ class Battle {
         // Handle fainting
         this.handleFainting();
         
+        // Apply field effect healing (Nebula Veil)
+        this.applyEndOfTurnFieldEffects();
+        
         // Update field effects
         this.updateFieldEffects();
         
         // Check battle end
         this.checkBattleEnd();
+    }
+    
+    // Apply field effects at end of turn
+    applyEndOfTurnFieldEffects() {
+        // Player field effects
+        this.playerFieldEffects.forEach(effect => {
+            if (effect.name === 'Nebula Veil' && effect.effectData.healPerTurn) {
+                this.playerActive.forEach(creature => {
+                    if (creature && creature.isAlive()) {
+                        creature.heal(effect.effectData.healPerTurn);
+                        this.log(`${this.getCreatureLabel(creature, 'player')} healed ${effect.effectData.healPerTurn} HP from Nebula Veil!`);
+                    }
+                });
+            }
+        });
+        
+        // Opponent field effects
+        this.opponentFieldEffects.forEach(effect => {
+            if (effect.name === 'Nebula Veil' && effect.effectData.healPerTurn) {
+                this.opponentActive.forEach(creature => {
+                    if (creature && creature.isAlive()) {
+                        creature.heal(effect.effectData.healPerTurn);
+                        this.log(`${this.getCreatureLabel(creature, 'opponent')} healed ${effect.effectData.healPerTurn} HP from Nebula Veil!`);
+                    }
+                });
+            }
+        });
     }
 
     // Process switch actions
@@ -434,8 +478,27 @@ class Battle {
             return;
         }
         
+        // Can't attack if restricted by previous move (Huge Recovery)
+        if (attacker.cantAttackNextTurn) {
+            this.log(`${this.getCreatureLabel(attacker, attackerSide)} can't move this turn!`);
+            attacker.cantAttackNextTurn = false; // Reset for next turn
+            return;
+        }
+        
         // Check if attacker is still alive
         if (!attacker.isAlive()) {
+            return;
+        }
+        
+        // Check if move was used this turn (Shield can't be used consecutively)
+        if (attacker.usedMoves.has(move.name)) {
+            this.log(`${this.getCreatureLabel(attacker, attackerSide)} can't use ${move.name} again this turn!`);
+            return;
+        }
+        
+        // Check if move is permanently restricted (Double Guard can only be used once per battle)
+        if (attacker.usedMovesInBattle.has(move.name)) {
+            this.log(`${this.getCreatureLabel(attacker, attackerSide)} can't use ${move.name} again!`);
             return;
         }
         
@@ -561,10 +624,25 @@ class Battle {
             damage = Math.round(damage * 1.25);
         }
         
+        // Apply field effect damage reduction (Iron Barrier)
+        const defenderFieldEffects = this.getFieldEffectsForCreature(defender);
+        defenderFieldEffects.forEach(effect => {
+            if (effect.name === 'Iron Barrier' && effect.effectData.damageReduction) {
+                damage = Math.round(damage * (1 - effect.effectData.damageReduction));
+            }
+        });
+        
         // Round final damage
         damage = Math.round(damage);
         
         return Math.max(1, damage); // Minimum 1 damage
+    }
+    
+    // Get field effects that apply to a creature
+    getFieldEffectsForCreature(creature) {
+        // Check which side the creature is on
+        const isPlayer = this.playerActive.includes(creature) || this.playerBench.includes(creature);
+        return isPlayer ? this.playerFieldEffects : this.opponentFieldEffects;
     }
 
     // Get type effectiveness
@@ -581,8 +659,20 @@ class Battle {
 
     // Apply move effect to target
     applyMoveEffect(attacker, defender, move, attackerSide) {
-        // Calculate and apply damage
-        const damage = this.calculateDamage(attacker, defender, move);
+        // Check if attacker is protected
+        if (defender.isProtected && move.power > 0) {
+            this.log(`${this.getCreatureLabel(defender, this.getDefenderSide(attackerSide))} is protected!`);
+            return;
+        }
+        
+        // Calculate and apply damage (with potential modifiers from secondary effects)
+        let damage = this.calculateDamage(attacker, defender, move);
+        
+        // Apply damage modifiers from secondary effects
+        if (move.name === 'Tackle Gamble' && Math.random() < 0.5) {
+            damage = Math.round(damage * 1.5);
+            this.log(`Tackle Gamble dealt bonus damage!`);
+        }
         
         if (damage > 0) {
             const defenderSide = this.getDefenderSide(attackerSide);
@@ -613,8 +703,123 @@ class Battle {
             this.log(`${this.getCreatureLabel(attacker, attackerSide)} used ${move.name} on ${this.getCreatureLabel(defender, defenderSide)}!`);
         }
         
-        // Note: Secondary effects are NOT implemented in this phase
-        // This is intentional per user requirements
+        // Apply secondary effects
+        this.applySecondaryEffects(attacker, defender, move, damage, attackerSide);
+    }
+    
+    // Apply secondary effects of moves
+    applySecondaryEffects(attacker, defender, move, damageDealt, attackerSide) {
+        const moveName = move.name;
+        const defenderSide = this.getDefenderSide(attackerSide);
+        
+        // Stat changes - Self buffs
+        if (moveName === 'Arcane Pulse' && Math.random() < 0.5) {
+            attacker.applyStatChange('specialAttack', 10);
+            this.log(`${this.getCreatureLabel(attacker, attackerSide)}'s Special Attack increased!`);
+        }
+        
+        if (moveName === 'Ether Bloom') {
+            attacker.applyStatChange('defense', 10);
+            attacker.applyStatChange('specialDefense', 10);
+            this.log(`${this.getCreatureLabel(attacker, attackerSide)}'s Defense and Special Defense increased!`);
+        }
+        
+        if (moveName === 'Windy Lash') {
+            attacker.applyStatChange('speed', 10);
+            this.log(`${this.getCreatureLabel(attacker, attackerSide)}'s Speed increased!`);
+        }
+        
+        if (moveName === 'System Shock') {
+            attacker.applyStatChange('defense', 10);
+            attacker.applyStatChange('speed', -10);
+            this.log(`${this.getCreatureLabel(attacker, attackerSide)}'s Defense increased and Speed decreased!`);
+        }
+        
+        // Stat changes - Opponent debuffs
+        if (moveName === 'Mindful Scream') {
+            defender.applyStatChange('attack', -10);
+            this.log(`${this.getCreatureLabel(defender, defenderSide)}'s Attack decreased!`);
+        }
+        
+        if (moveName === 'Starfall Burst' && Math.random() < 0.25) {
+            defender.applyStatChange('specialDefense', -20);
+            this.log(`${this.getCreatureLabel(defender, defenderSide)}'s Special Defense fell sharply!`);
+        }
+        
+        if (moveName === 'Scary Taunt') {
+            defender.applyStatChange('speed', -10);
+            this.log(`${this.getCreatureLabel(defender, defenderSide)}'s Speed decreased!`);
+        }
+        
+        if (moveName === 'Rally Cry' && Math.random() < 0.25) {
+            defender.applyStatChange('defense', -10);
+            defender.applyStatChange('specialDefense', -10);
+            this.log(`${this.getCreatureLabel(defender, defenderSide)}'s Defense and Special Defense decreased!`);
+        }
+        
+        // Healing effects
+        if (moveName === 'Cosmic Divide' && damageDealt > 0) {
+            const healAmount = Math.floor(damageDealt / 2);
+            attacker.heal(healAmount);
+            this.log(`${this.getCreatureLabel(attacker, attackerSide)} healed ${healAmount} HP!`);
+        }
+        
+        if (moveName === 'Stun Blessing') {
+            // Heal self and partner
+            const allies = attackerSide === 'player' ? this.playerActive : this.opponentActive;
+            allies.forEach(ally => {
+                if (ally && ally.isAlive()) {
+                    ally.heal(20);
+                    this.log(`${this.getCreatureLabel(ally, attackerSide)} healed 20 HP!`);
+                }
+            });
+        }
+        
+        if (moveName === 'Huge Recovery') {
+            attacker.heal(50);
+            attacker.cantAttackNextTurn = true;
+            this.log(`${this.getCreatureLabel(attacker, attackerSide)} healed 50 HP but can't attack next turn!`);
+        }
+        
+        // Recoil damage
+        if (moveName === 'Gale Strike') {
+            attacker.takeDamage(20);
+            this.log(`${this.getCreatureLabel(attacker, attackerSide)} took 20 HP recoil damage!`);
+            if (!attacker.isAlive()) {
+                this.log(`${this.getCreatureLabel(attacker, attackerSide)} fainted from recoil!`);
+            }
+        }
+        
+        // Field effects
+        if (moveName === 'Nebula Veil') {
+            const fieldEffects = attackerSide === 'player' ? this.playerFieldEffects : this.opponentFieldEffects;
+            fieldEffects.push(new FieldEffect('Nebula Veil', attackerSide, 4, { healPerTurn: 10 }));
+            this.log(`Nebula Veil surrounds ${attackerSide === 'player' ? 'your' : 'the opponent\'s'} team!`);
+        }
+        
+        if (moveName === 'Iron Barrier') {
+            const fieldEffects = attackerSide === 'player' ? this.playerFieldEffects : this.opponentFieldEffects;
+            fieldEffects.push(new FieldEffect('Iron Barrier', attackerSide, 4, { damageReduction: 0.1 }));
+            this.log(`Iron Barrier protects ${attackerSide === 'player' ? 'your' : 'the opponent\'s'} team!`);
+        }
+        
+        // Protection effects
+        if (moveName === 'Shield') {
+            attacker.isProtected = true;
+            attacker.usedMoves.add('Shield'); // Can't use Shield again this turn (next turn it resets)
+            this.log(`${this.getCreatureLabel(attacker, attackerSide)} is protected!`);
+        }
+        
+        if (moveName === 'Double Guard') {
+            const allies = attackerSide === 'player' ? this.playerActive : this.opponentActive;
+            allies.forEach(ally => {
+                if (ally && ally.isAlive()) {
+                    ally.isProtected = true;
+                    ally.usedMovesInBattle.add('Double Guard'); // Can never use Double Guard again in this battle
+                    this.log(`${this.getCreatureLabel(ally, attackerSide)} is protected!`);
+                }
+            });
+        }
     }
 
     // Update field effects (decrement duration)

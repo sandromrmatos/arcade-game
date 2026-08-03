@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triple Merge</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="menuOverlay">
+        <div class="menu-content">
+            <h1>Triple Merge</h1>
+            <p id="menuText">Select Grid Size:</p>
+            <button id="btn6x6" class="mode-btn">6x6 Grid</button>
+            <button id="btn8x8" class="mode-btn">8x8 Grid</button>
+        </div>
+    </div>
+
+    <div id="gameContainer" class="hidden">
+        <div class="header">
+            <h2>Triple Merge</h2>
+            <div class="info-row">
+                <div class="info-item">
+                    <span id="modeDisplay">Mode: 6x6</span>
+                </div>
+                <div class="info-item">
+                    <span id="scoreDisplay">Score: 0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="next-tile-preview">
+            <div class="preview-label" id="nextTileLabel">Next Tile:</div>
+            <div id="nextTile" class="tile-preview"></div>
+        </div>
+
+        <div id="grid" class="grid"></div>
+
+        <div class="controls">
+            <button id="restartBtn" class="control-btn">Restart</button>
+            <button id="changeModeBtn" class="control-btn">Change Mode</button>
+        </div>
+
+        <div id="gameOverOverlay" class="hidden">
+            <div class="game-over-content">
+                <h2 id="gameOverTitle">Game Over!</h2>
+                <p id="finalScoreText">Final Score: <span id="finalScore">0</span></p>
+                <button id="playAgainBtn" class="control-btn">Play Again</button>
+                <button id="changeModeBtnGameOver" class="control-btn">Change Mode</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

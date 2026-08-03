@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Background -->
+  <rect width="100" height="100" fill="#764ba2" rx="10"/>
+  
+  <!-- Grid -->
+  <rect x="10" y="10" width="80" height="80" fill="#e0e0e0" rx="5"/>
+  
+  <!-- Grid cells -->
+  <rect x="15" y="15" width="12" height="12" fill="#fff" rx="2"/>
+  <rect x="29" y="15" width="12" height="12" fill="#fff" rx="2"/>
+  <rect x="43" y="15" width="12" height="12" fill="#fff" rx="2"/>
+  <rect x="57" y="15" width="12" height="12" fill="#fff" rx="2"/>
+  
+  <rect x="15" y="29" width="12" height="12" fill="#fff" rx="2"/>
+  <rect x="29" y="29" width="12" height="12" fill="#fff" rx="2"/>
+  <rect x="43" y="29" width="12" height="12" fill="#fff" rx="2"/>
+  <rect x="57" y="29" width="12" height="12" fill="#fff" rx="2"/>
+  
+  <!-- Wood tiles (3 connected) -->
+  <rect x="15" y="43" width="12" height="12" fill="#8b5a3c" rx="2"/>
+  <rect x="29" y="43" width="12" height="12" fill="#8b5a3c" rx="2"/>
+  <rect x="43" y="43" width="12" height="12" fill="#8b5a3c" rx="2"/>
+  <rect x="57" y="43" width="12" height="12" fill="#fff" rx="2"/>
+  
+  <!-- Stone tiles -->
+  <rect x="15" y="57" width="12" height="12" fill="#708090" rx="2"/>
+  <rect x="29" y="57" width="12" height="12" fill="#fff" rx="2"/>
+  
+  <!-- Crystal tiles -->
+  <rect x="43" y="57" width="12" height="12" fill="#9333ea" rx="2"/>
+  <rect x="57" y="57" width="12" height="12" fill="#9333ea" rx="2"/>
+  
+  <!-- Gold tile -->
+  <rect x="15" y="71" width="12" height="12" fill="#fbbf24" rx="2"/>
+  
+  <!-- Leaf tiles -->
+  <rect x="29" y="71" width="12" height="12" fill="#22c55e" rx="2"/>
+  <rect x="43" y="71" width="12" height="12" fill="#22c55e" rx="2"/>
+  <rect x="57" y="71" width="12" height="12" fill="#22c55e" rx="2"/>
+  
+  <!-- Merge arrow/indicator on wood tiles -->
+  <text x="35" y="52" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle">3</text>
+  
+  <!-- Border highlight on connected tiles -->
+  <path d="M 15 43 L 15 55 L 55 55 L 55 43 Z" fill="none" stroke="#fff" stroke-width="1.5" stroke-dasharray="2,2"/>
+</svg>

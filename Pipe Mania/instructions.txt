@@ -1,0 +1,187 @@
+PIPE ROTATION PUZZLE GAME — SPEC FILE  
+(Instructions for an LLM to generate HTML, CSS, and JS)
+
+========================================================
+1. GAME SUMMARY
+========================================================
+Create a grid‑based pipe‑rotation puzzle game.  
+The player rotates tiles to form a continuous pipe path from a Start tile to an End tile.  
+When the player presses “Start Flow”, water travels through the pipes.  
+If the path is complete, the player wins; otherwise they lose.
+
+The game must include:
+- A timer that starts when the puzzle loads.
+- A win message that displays the time it took to win.
+- Leaderboard integration (same format as other games): lower time = better record.
+
+========================================================
+2. FILES TO GENERATE
+========================================================
+- index.html — layout, UI, grid container
+- style.css — visuals, pipe styling, animations
+- script.js — game logic, rotation, connectivity, flow simulation, timer, leaderboard hooks
+
+========================================================
+3. DIFFICULTY LEVELS
+========================================================
+The game must have three selectable difficulties:
+
+- EASY → 8 × 8 grid  
+- MEDIUM → 10 × 10 grid  
+- HARD → 12 × 12 grid  
+
+Difficulty selection happens before the puzzle is generated.
+
+========================================================
+4. GRID REQUIREMENTS
+========================================================
+- Grid size depends on difficulty.
+- Each cell contains one pipe tile.
+- Tiles rotate 90° clockwise when clicked.
+- No “rotate all randomly” button.
+- No “show solution” button.
+
+========================================================
+5. PIPE TYPES
+========================================================
+Each tile must be one of:
+
+- Straight (horizontal/vertical)
+- Corner (4 orientations)
+- T‑junction (4 orientations)
+- Cross (+)
+- Start tile (fixed orientation)
+- End tile (fixed orientation)
+
+Tile representation:
+
+{
+  type: "straight" | "corner" | "t" | "cross" | "start" | "end",
+  rotation: 0 | 90 | 180 | 270
+}
+
+========================================================
+6. CONNECTIVITY RULES
+========================================================
+Each pipe has openings in directions depending on type + rotation.
+
+Directions:
+- up
+- right
+- down
+- left
+
+The LLM must implement:
+
+getConnections(tile)
+
+which returns an array of open directions.
+
+========================================================
+7. FLOW SIMULATION
+========================================================
+When “Start Flow” is pressed:
+
+1. Begin at Start tile.
+2. Move in the direction of its opening.
+3. Check next tile for matching opening.
+4. Continue until:
+   - reaching End tile → WIN
+   - hitting tile with no matching opening → LOSE
+   - leaving grid → LOSE
+
+Flow must visually highlight tiles as water passes.
+
+========================================================
+8. RANDOM GENERATION RULES
+========================================================
+Puzzle generator must:
+
+- Create a valid Start → End solution path.
+- Randomly rotate all tiles.
+- Add extra pipes NOT part of the solution path (mandatory).
+- Ensure puzzle remains solvable.
+
+========================================================
+9. TIMER REQUIREMENTS
+========================================================
+- Timer starts immediately when puzzle loads.
+- Timer stops when player wins.
+- Win message must say:  
+  “You won in mm:ss!”
+
+========================================================
+10. UI REQUIREMENTS
+========================================================
+Buttons:
+- New Puzzle
+- Start Flow
+
+Indicators:
+- Timer display
+- Win/Lose overlay
+
+No rotate‑all button.  
+No solution button.
+
+========================================================
+11. LEADERBOARD INTEGRATION
+========================================================
+Add this game to the existing leaderboard system used in the other games.
+
+Leaderboard rule:
+- Lower time = better record.
+
+Store:
+- Difficulty
+- Completion time (mm:ss)
+
+========================================================
+12. VISUAL STYLE
+========================================================
+Pipes:
+- Clear openings
+- Rounded edges
+- Smooth rotation animation (0.2s)
+- Distinct Start/End tiles
+
+Grid:
+- Centered
+- Square tiles
+- Hover effect
+- Touch support for mobile
+
+========================================================
+13. JAVASCRIPT STRUCTURE
+========================================================
+Required functions:
+
+initGrid(size)
+generatePuzzle()
+rotateTile(x, y)
+getConnections(tile)
+simulateFlow()
+resetFlow()
+startTimer()
+stopTimer()
+showMessage(type, time)
+updateLeaderboard(time, difficulty)
+
+========================================================
+14. OPTIONAL FEATURES
+========================================================
+Only include:
+- The three difficulty modes (8×8, 10×10, 12×12)
+
+No other optional features.
+
+========================================================
+15. DELIVERY FORMAT
+========================================================
+LLM must output:
+
+1. index.html  
+2. style.css  
+3. script.js  
+
+Each file in its own code block.

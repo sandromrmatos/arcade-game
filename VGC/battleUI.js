@@ -441,15 +441,22 @@ class BattleUI {
         // Clear message queue
         this.messageQueue = [];
         
+        // Increment turn counter
+        this.battle.turnNumber++;
+        
         // Add turn separator to log
-        this.battle.log(`Turn ${this.battle.turnNumber + 1}`);
+        this.battle.log(`=== Turn ${this.battle.turnNumber} ===`);
         
         // Process turn header
         await this.processMessageQueue();
         
-        // Reset switch flags for all creatures
+        // Reset turn flags for all creatures
         [...this.battle.playerActive, ...this.battle.opponentActive].forEach(c => {
-            if (c) c.switchedInThisTurn = false;
+            if (c) {
+                c.switchedInThisTurn = false;
+                c.isProtected = false; // Protection only lasts one turn
+                c.usedMoves.clear(); // Clear last turn's used moves (Shield can be used again)
+            }
         });
         
         // Process switches first
@@ -507,32 +514,35 @@ class BattleUI {
         await this.processMessageQueue();
         this.renderBattle();
         
-        // Check if player needs to replace fainted creatures
-        const needsReplacement = await this.handlePlayerReplacements();
-        if (needsReplacement) {
-            return; // Wait for player to choose replacements
-        }
+        // Apply field effect healing (Nebula Veil)
+        this.battle.applyEndOfTurnFieldEffects();
+        await this.processMessageQueue();
+        this.renderBattle();
         
         // Update field effects
         this.battle.updateFieldEffects();
         await this.processMessageQueue();
         
-        // Increment turn
-        this.battle.turnNumber++;
-        
-        // Check battle end
-        this.battle.checkBattleEnd();
-        await this.processMessageQueue();
-        this.renderBattle();
-        
-        // Check if battle is over
-        if (this.battle.battleOver) {
+        // Check for battle end
+        if (this.battle.checkBattleEnd()) {
+            await this.processMessageQueue();
             this.showBattleEnd();
+            return;
+        }
+        
+        // Check if player needs to replace fainted creatures
+        const needsReplacement = this.battle.playerActive.some((c, idx) => !c || !c.isAlive());
+        if (needsReplacement) {
+            await this.handlePlayerReplacements();
         } else {
             // Start next turn
-            await this.delay(500);
-            this.startPlayerTurn();
+            this.startNewTurn();
         }
+    }
+    
+    // Start a new turn
+    startNewTurn() {
+        setTimeout(() => this.startPlayerTurn(), 500);
     }
 
     // Handle player replacements for fainted creatures
@@ -551,17 +561,16 @@ class BattleUI {
         
         if (emptySlots.length > 0 && aliveBench.length > 0) {
             // Need to prompt player for replacements
-            this.showReplacementPanel(emptySlots);
-            return true;
+            this.showReplacementPanel(emptySlots[0]);
+        } else {
+            // No replacements needed
+            this.startNewTurn();
         }
-        
-        return false;
     }
 
     // Show replacement selection panel
-    showReplacementPanel(emptySlots) {
+    showReplacementPanel(slotIndex) {
         const panel = document.getElementById('action-panel');
-        const slotIndex = emptySlots[0]; // Handle one at a time
         
         panel.innerHTML = `
             <h3>Choose a replacement for Slot ${slotIndex + 1}</h3>
@@ -594,27 +603,23 @@ class BattleUI {
     // Select replacement creature
     async selectReplacement(slotIndex, benchIndex) {
         this.battle.manualSwitchFainted(slotIndex, benchIndex);
+        await this.processMessageQueue();
         this.renderBattle();
         
         document.getElementById('action-panel').style.display = 'none';
         
-        await this.delay(1000);
+        await this.delay(500);
         
-        // Check if there are more empty slots
-        const needsReplacement = await this.handlePlayerReplacements();
-        if (!needsReplacement) {
-            // All replacements done, continue with turn
-            this.battle.updateFieldEffects();
-            this.battle.turnNumber++;
-            this.battle.checkBattleEnd();
-            this.renderBattle();
-            
-            if (this.battle.battleOver) {
-                this.showBattleEnd();
-            } else {
-                await this.delay(1000);
-                this.startPlayerTurn();
-            }
+        // Check if there are more empty slots needing replacement
+        const stillNeedsReplacement = this.battle.playerActive.some((c, idx) => !c || !c.isAlive());
+        const aliveBench = this.battle.playerBench.filter(c => c && c.isAlive());
+        
+        if (stillNeedsReplacement && aliveBench.length > 0) {
+            // Handle next replacement
+            await this.handlePlayerReplacements();
+        } else {
+            // All replacements done or no more bench creatures, continue
+            this.startNewTurn();
         }
     }
 

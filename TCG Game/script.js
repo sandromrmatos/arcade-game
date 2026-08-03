@@ -1971,7 +1971,7 @@ function useAuraCrystalCard(handIndex) {
 }
 
 function useHealingCrystalCard(handIndex) {
-    // Healing Crystal - heal a Celestial creature by 40 HP
+    // Healing Crystal - heal a Celestial creature by 40 HP (player selects which one)
     const celestialCreatures = [];
     if (gameState.player.active && getCardType(gameState.player.active.data) === 'Celestial' && gameState.player.active.damage > 0) {
         celestialCreatures.push({card: gameState.player.active, location: 'active'});
@@ -1987,17 +1987,51 @@ function useHealingCrystalCard(handIndex) {
         return;
     }
     
-    // For simplicity, heal first Celestial creature
-    celestialCreatures[0].card.damage = Math.max(0, celestialCreatures[0].card.damage - 40);
+    // Store the item card index for later use
+    gameState.selectedCard = {handIndex, type: 'healingCrystal'};
+    
+    // Highlight Celestial creatures for selection
+    if (gameState.player.active && getCardType(gameState.player.active.data) === 'Celestial' && gameState.player.active.damage > 0) {
+        const activeSlot = document.querySelector('.active-slot[data-player="player"]');
+        activeSlot.classList.add('can-select');
+        activeSlot.addEventListener('click', () => healCelestialCreature('player', 'active', null), {once: true});
+    }
+    
+    gameState.player.bench.forEach((card, index) => {
+        if (card && getCardType(card.data) === 'Celestial' && card.damage > 0) {
+            const benchSlot = document.querySelector(`.bench-slot[data-player="player"][data-slot="${index}"]`);
+            benchSlot.classList.add('can-select');
+            benchSlot.addEventListener('click', () => healCelestialCreature('player', 'bench', index), {once: true});
+        }
+    });
+}
+
+function healCelestialCreature(player, location, index) {
+    // Remove all selection highlights
+    document.querySelectorAll('.can-select').forEach(s => s.classList.remove('can-select'));
+    
+    let card;
+    if (location === 'active') {
+        card = gameState[player].active;
+    } else {
+        card = gameState[player].bench[index];
+    }
+    
+    // Heal creature
+    card.damage = Math.max(0, card.damage - 40);
     
     // Add to discard pile
-    const usedCard = gameState.player.hand[handIndex];
+    const usedCard = gameState.player.hand[gameState.selectedCard.handIndex];
     gameState.player.discardPile.push(usedCard);
-    gameState.player.hand.splice(handIndex, 1);
+    
+    // Remove Healing Crystal from hand
+    gameState.player.hand.splice(gameState.selectedCard.handIndex, 1);
+    
+    // Mark item as used
     gameState.player.itemUsedThisTurn = true;
     
     renderGame();
-    alert(`Healing Crystal used! Healed ${celestialCreatures[0].card.data.name} for 40 HP!`);
+    alert(`Healing Crystal used! Healed ${card.data.name} for 40 HP!`);
 }
 
 function useDisruptorCard(handIndex) {
@@ -2009,15 +2043,20 @@ function useDisruptorCard(handIndex) {
         return;
     }
     
+    // Extract card IDs from opponent's hand (hand contains objects, deck contains IDs)
+    const cardIds = gameState.opponent.hand.map(card => card.id);
+    
     // Shuffle opponent's hand back into deck
-    gameState.opponent.deck.push(...gameState.opponent.hand);
+    gameState.opponent.deck.push(...cardIds);
     gameState.opponent.hand = [];
     shuffleDeck(gameState.opponent.deck);
     
     // Draw cards (original count minus 1)
     const drawCount = Math.max(0, opponentHandSize - 1);
     for (let i = 0; i < drawCount && gameState.opponent.deck.length > 0; i++) {
-        gameState.opponent.hand.push(gameState.opponent.deck.pop());
+        const cardId = gameState.opponent.deck.pop();
+        const cardData = getCardData(cardId);
+        gameState.opponent.hand.push({id: cardId, data: cardData, energy: 0, damage: 0, abilityUsedThisTurn: false});
     }
     
     // Add to discard pile
@@ -2160,6 +2199,14 @@ function attachEnergy(player, location, index) {
     card.energy++;
     gameState[player].energyAttachedThisTurn = true;
     gameState.waitingForSelection = null;
+    
+    // Check for Energized Healing (Galactic Adventures)
+    if (card.energizedHealingAmount && card.damage > 0) {
+        const healAmount = card.energizedHealingAmount;
+        card.damage = Math.max(0, card.damage - healAmount);
+        alert(`${card.data.name}'s Energized Healing activated! Healed ${healAmount} HP!`);
+        card.energizedHealingAmount = 0; // Clear the flag after use
+    }
     
     renderGame();
 }
@@ -5982,6 +6029,111 @@ function aiUseItems(callback) {
         }
     }
     
+    // Use Shield Barrier if AI can be attacked soon
+    const shieldBarrierIndex = gameState.opponent.hand.findIndex(card => card && card.data && card.data.name === "Shield Barrier");
+    if (shieldBarrierIndex !== -1 && gameState.opponent.active) {
+        const shieldBarrier = gameState.opponent.hand[shieldBarrierIndex];
+        flashItemCard(shieldBarrier.id, () => {
+            if (gameState.phase === 'gameOver') return;
+            gameState.opponent.shieldBarrierActive = 20;
+            gameState.opponent.discardPile.push(shieldBarrier);
+            gameState.opponent.hand.splice(shieldBarrierIndex, 1);
+            gameState.opponent.itemUsedThisTurn = true;
+            gameState.opponent.usedItemThisTurn = true;
+            renderGame();
+            callback();
+        });
+        return;
+    }
+    
+    // Use Gale Shield if AI has Wind creatures
+    const galeShieldIndex = gameState.opponent.hand.findIndex(card => card && card.data && card.data.name === "Gale Shield");
+    if (galeShieldIndex !== -1) {
+        const hasWind = (gameState.opponent.active && getCardType(gameState.opponent.active.data) === 'Wind') ||
+            gameState.opponent.bench.some(card => card && getCardType(card.data) === 'Wind');
+        
+        if (hasWind) {
+            const galeShield = gameState.opponent.hand[galeShieldIndex];
+            flashItemCard(galeShield.id, () => {
+                if (gameState.phase === 'gameOver') return;
+                gameState.opponent.galeShieldActive = 30;
+                gameState.opponent.discardPile.push(galeShield);
+                gameState.opponent.hand.splice(galeShieldIndex, 1);
+                gameState.opponent.itemUsedThisTurn = true;
+                gameState.opponent.usedItemThisTurn = true;
+                renderGame();
+                callback();
+            });
+            return;
+        }
+    }
+    
+    // Use Disruptor if player has cards in hand
+    const disruptorIndex = gameState.opponent.hand.findIndex(card => card && card.data && card.data.name === "Disruptor");
+    if (disruptorIndex !== -1 && gameState.player.hand.length > 0) {
+        const disruptor = gameState.opponent.hand[disruptorIndex];
+        flashItemCard(disruptor.id, () => {
+            if (gameState.phase === 'gameOver') return;
+            const playerHandSize = gameState.player.hand.length;
+            
+            // Shuffle player's hand back into deck
+            gameState.player.deck.push(...gameState.player.hand);
+            gameState.player.hand = [];
+            shuffleDeck(gameState.player.deck);
+            
+            // Draw cards (original count minus 1)
+            const drawCount = Math.max(0, playerHandSize - 1);
+            for (let i = 0; i < drawCount && gameState.player.deck.length > 0; i++) {
+                gameState.player.hand.push(gameState.player.deck.pop());
+            }
+            
+            gameState.opponent.discardPile.push(disruptor);
+            gameState.opponent.hand.splice(disruptorIndex, 1);
+            gameState.opponent.itemUsedThisTurn = true;
+            gameState.opponent.usedItemThisTurn = true;
+            renderGame();
+            callback();
+        });
+        return;
+    }
+    
+    // Use Mystic Scroll if AI needs a Mystic Stage 1 creature
+    const mysticScrollIndex = gameState.opponent.hand.findIndex(card => card && card.data && card.data.name === "Mystic Scroll");
+    if (mysticScrollIndex !== -1) {
+        const mysticStage1InDeck = gameState.opponent.deck.some(cardId => {
+            const cardData = getCardData(cardId);
+            return cardData && cardData.stage === 'Stage 1' && getCardType(cardData) === 'Mystic';
+        });
+        
+        if (mysticStage1InDeck) {
+            const mysticScroll = gameState.opponent.hand[mysticScrollIndex];
+            flashItemCard(mysticScroll.id, () => {
+                if (gameState.phase === 'gameOver') return;
+                
+                // Find first Mystic Stage 1 in deck
+                const mysticIndex = gameState.opponent.deck.findIndex(cardId => {
+                    const cardData = getCardData(cardId);
+                    return cardData && cardData.stage === 'Stage 1' && getCardType(cardData) === 'Mystic';
+                });
+                
+                if (mysticIndex !== -1) {
+                    const cardId = gameState.opponent.deck[mysticIndex];
+                    const cardData = getCardData(cardId);
+                    gameState.opponent.hand.push({id: cardId, data: cardData, energy: 0, damage: 0, abilityUsedThisTurn: false});
+                    gameState.opponent.deck.splice(mysticIndex, 1);
+                }
+                
+                gameState.opponent.discardPile.push(mysticScroll);
+                gameState.opponent.hand.splice(mysticScrollIndex, 1);
+                gameState.opponent.itemUsedThisTurn = true;
+                gameState.opponent.usedItemThisTurn = true;
+                renderGame();
+                callback();
+            });
+            return;
+        }
+    }
+    
     callback();
 }
 
@@ -6255,6 +6407,10 @@ function aiAttack() {
             damage += 20;
             alert(`Coin was heads! +20 damage! Total: ${damage}`);
         }
+    } else if (effect === 'galacticMeteor') {
+        // Galactic Meteor - 10 damage per energy on player's active
+        damage = defender.energy * 10;
+        alert(`AI's Galactic Meteor: ${defender.data.name} has ${defender.energy} energy! Deals ${damage} damage!`);
     }
     
     // Apply opponent's booster if active

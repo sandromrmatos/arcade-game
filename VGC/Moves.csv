@@ -19,7 +19,7 @@ Rust Breaker,Mechanic,60,90%,,Single,Physical,1
 Overclock Beam,Mechanic,55,100%,,Single,Physical,1
 System Shock,Mechanic,40,100%,Raises user’s Defense by 10% and lowers their Speed by 10%.,Single,Special,1
 Iron Barrier,Mechanic,0,100%,Creates a field effect: Your creatures take 10% less damage for 4 turns.,Self and Partner,Special,1
-Shield,Neutral,0,100%,This creature can't be damaged next turn. This move can't be used next turn.,Self,Special,3
+Shield,Neutral,0,100%,This creature can't be damaged next turn. This move can't be used in consecutive turns.,Self,Special,3
 Quick Bite,Neutral,10,100%,,Single,Physical,2
 Scary Taunt,Neutral,0,100%,Decrease your opponent's speed stat by 10%,Single,Special,2
 Rally Cry,Neutral,20,100%,25% chance to lower opponent’s Special Defense by 10% and Defense by 10%.,Double,Special,1

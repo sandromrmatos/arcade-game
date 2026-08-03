@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pipe Mania</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="menuOverlay">
+        <div class="menu-content">
+            <h1>Pipe Mania</h1>
+            <p id="menuText">Select Difficulty:</p>
+            <button id="btnEasy" class="difficulty-btn">Easy (8×8)</button>
+            <button id="btnMedium" class="difficulty-btn">Medium (10×10)</button>
+            <button id="btnHard" class="difficulty-btn">Hard (12×12)</button>
+        </div>
+    </div>
+
+    <div id="gameContainer" class="hidden">
+        <div class="header">
+            <h2>Pipe Mania</h2>
+            <div class="info-row">
+                <div class="info-item">
+                    <span id="difficultyDisplay">Difficulty: Easy</span>
+                </div>
+                <div class="info-item">
+                    <span id="timerDisplay">Time: 00:00</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="grid" class="grid"></div>
+
+        <div class="controls">
+            <button id="startFlowBtn" class="control-btn primary">Start Flow</button>
+            <button id="newPuzzleBtn" class="control-btn">New Puzzle</button>
+            <button id="changeDifficultyBtn" class="control-btn">Change Difficulty</button>
+        </div>
+
+        <div id="messageOverlay" class="hidden">
+            <div class="message-content">
+                <h2 id="messageTitle">You Won!</h2>
+                <p id="messageText">Congratulations!</p>
+                <button id="playAgainBtn" class="control-btn primary">Play Again</button>
+                <button id="changeDifficultyBtn2" class="control-btn">Change Difficulty</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

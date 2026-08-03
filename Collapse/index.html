@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collapse</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="menuOverlay">
+        <div class="menu-content">
+            <h1>Collapse</h1>
+            <p id="menuText">Select Difficulty:</p>
+            <button id="btnEasy" class="difficulty-btn">Easy (5×8)</button>
+            <button id="btnMedium" class="difficulty-btn">Medium (7×12)</button>
+            <button id="btnHard" class="difficulty-btn">Hard (10×16)</button>
+        </div>
+    </div>
+
+    <div id="gameContainer" class="hidden">
+        <div class="header">
+            <h2>Collapse</h2>
+            <div class="info-row">
+                <div class="info-item">
+                    <span id="difficultyDisplay">Difficulty: Easy</span>
+                </div>
+                <div class="info-item">
+                    <span id="scoreDisplay">Score: 0</span>
+                </div>
+                <div class="info-item">
+                    <span id="movesDisplay">Moves: 0</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="grid" class="grid"></div>
+
+        <div class="controls">
+            <button id="newGameBtn" class="control-btn">New Game</button>
+            <button id="changeDifficultyBtn" class="control-btn">Change Difficulty</button>
+        </div>
+
+        <div id="gameOverOverlay" class="hidden">
+            <div class="game-over-content">
+                <h2 id="gameOverTitle">Game Over!</h2>
+                <p id="finalScoreText">Final Score: <span id="finalScore">0</span></p>
+                <p id="movesText">Moves: <span id="finalMoves">0</span></p>
+                <button id="playAgainBtn" class="control-btn">Play Again</button>
+                <button id="changeDifficultyBtn2" class="control-btn">Change Difficulty</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

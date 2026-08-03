@@ -1,0 +1,106 @@
+TRIPLE MERGE – IMPLEMENTATION SPEC (HTML + CSS + JS)
+
+1. GAME OVERVIEW
+A merge-3 puzzle game where the player places randomly generated tiles onto a grid. When 3 or more orthogonally adjacent tiles of the same type connect, they merge into a single tile at the placed position. Chain reactions are allowed. Score is based on the level of tiles removed. No levels or progression system beyond tile types; the game is endless until the board is full.
+
+2. MODES AND GRID
+- There are two modes:
+  - Mode A: 6x6 grid
+  - Mode B: 8x8 grid
+- The player can choose the mode before starting the game.
+- Each cell in the grid can be:
+  - Empty
+  - Occupied by a tile with a specific type
+
+3. TILE TYPES
+Tile types depend on the selected mode:
+
+- 6x6 mode tile types:
+  - wood
+  - stone
+  - crystal
+
+- 8x8 mode tile types:
+  - wood
+  - stone
+  - crystal
+  - gold
+  - leaf
+
+Tile type also represents tile level for scoring purposes.
+
+4. ADJACENCY RULES
+- Only orthogonal adjacency is considered:
+  - Up, down, left, right
+- Diagonal adjacency is NOT allowed for merging.
+- When checking for merges, use flood-fill or BFS/DFS to find connected groups of tiles of the same type using orthogonal neighbors only.
+
+5. MERGE LOGIC
+- After the player places a tile on an empty cell:
+  1. Find all connected tiles (including the placed tile) of the same type using orthogonal adjacency.
+  2. If the size of this connected group is 3 or more:
+     - Remove all tiles in this group from the board.
+     - Create a single tile of the same type at the placed tile’s position.
+  3. Chain reactions:
+     - After each merge, re-check the board for new groups involving the newly created tile.
+     - If another group of 3 or more same-type tiles exists, perform another merge.
+     - Continue until no more merges are possible.
+
+6. TILE SPAWNING AND PLACEMENT
+- Each turn, the game generates one random tile type from the allowed types for the current mode.
+- The player chooses any empty cell to place this tile.
+- If there are no empty cells available when a new tile needs to be placed, the game ends (Game Over).
+
+7. SCORING SYSTEM
+- Score is the sum of the level of tiles removed.
+- Define tile levels as:
+  - wood = 1
+  - stone = 2
+  - crystal = 3
+  - gold = 4
+  - leaf = 5
+- When a merge removes N tiles, the score increases by the sum of the levels of each removed tile.
+  Example:
+    - Removing 3 wood tiles: score += 1 + 1 + 1 = 3
+    - Removing 4 gold tiles: score += 4 + 4 + 4 + 4 = 16
+- Chain reactions should also contribute to the score in the same way for each merge.
+
+8. LEADERBOARD INTEGRATION
+- The game should integrate with the existing leaderboard system used by other games on the site.
+- On Game Over, submit the final score to the leaderboard in the same way as other games.
+- Use appropriate game IDs, for example:
+  - "triple-merge-6x6"
+  - "triple-merge-8x8"
+- The exact leaderboard API and function names should follow the pattern already used in other games (the LLM should assume “like other games” and reuse the same approach).
+
+9. VISUAL STYLE AND UI
+- Visual style is up to the implementation (LLM can decide).
+- Requirements:
+  - Render the grid as clickable cells.
+  - Each tile type should have a distinct visual representation (color, icon, texture, etc.).
+  - Display:
+    - Current mode (6x6 or 8x8)
+    - Current score
+    - Next tile preview (recommended)
+  - Provide buttons:
+    - Mode select (6x6 / 8x8)
+    - Restart game
+- The UI should be responsive enough to work in a browser on desktop and reasonably on mobile.
+
+10. TECH STACK
+- Implementation must use:
+  - HTML
+  - CSS
+  - JavaScript
+- No backend or server-side code; must run as a static site (e.g., GitHub Pages).
+- The LLM may choose the file structure (single HTML file with embedded CSS/JS or separate files).
+
+11. GAME OVER CONDITIONS
+- Game Over occurs when:
+  - There are no empty cells remaining on the grid, and the player cannot place the next tile.
+- On Game Over:
+  - Display the final score.
+  - Submit the score to the leaderboard using the same mechanism as other games.
+  - Offer a restart option.
+
+This spec is complete and should be sufficient for an LLM to implement the Triple Merge game with both 6x6 and 8x8 modes, proper merging, chain reactions, scoring, and leaderboard integration.

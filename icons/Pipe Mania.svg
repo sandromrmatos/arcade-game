@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Background -->
+  <rect width="100" height="100" fill="#2c5364" rx="10"/>
+  
+  <!-- Grid background -->
+  <rect x="10" y="10" width="80" height="80" fill="#1a1a1a" rx="5"/>
+  
+  <!-- Start tile (faucet) -->
+  <circle cx="20" cy="50" r="6" fill="#4a9eff"/>
+  <text x="20" y="53" font-family="Arial, sans-serif" font-size="8" fill="#fff" text-anchor="middle">S</text>
+  
+  <!-- Pipes with flowing water effect -->
+  <!-- Horizontal pipe from start -->
+  <rect x="26" y="46" width="14" height="8" fill="#4a9eff" rx="2"/>
+  
+  <!-- Corner pipe (right-down) -->
+  <path d="M 40 50 L 50 50 L 50 60" fill="none" stroke="#4a9eff" stroke-width="8" stroke-linecap="round"/>
+  
+  <!-- Vertical pipe -->
+  <rect x="46" y="60" width="8" height="14" fill="#4a9eff" rx="2"/>
+  
+  <!-- Corner pipe (down-right) -->
+  <path d="M 50 74 L 50 84 L 60 84" fill="none" stroke="#4a9eff" stroke-width="8" stroke-linecap="round"/>
+  
+  <!-- Horizontal pipe to end -->
+  <rect x="60" y="80" width="14" height="8" fill="#4a9eff" rx="2"/>
+  
+  <!-- End tile (target) -->
+  <circle cx="80" cy="84" r="6" fill="#00d4ff"/>
+  <text x="80" y="87" font-family="Arial, sans-serif" font-size="8" fill="#fff" text-anchor="middle">E</text>
+  
+  <!-- Extra disconnected pipes (puzzle elements) -->
+  <!-- T-junction -->
+  <path d="M 30 20 L 30 30 M 25 25 L 35 25" fill="none" stroke="#555" stroke-width="6" stroke-linecap="round"/>
+  
+  <!-- Cross -->
+  <path d="M 60 20 L 60 30 M 55 25 L 65 25" fill="none" stroke="#555" stroke-width="6" stroke-linecap="round"/>
+  
+  <!-- Corner -->
+  <path d="M 75 15 L 75 25 L 85 25" fill="none" stroke="#555" stroke-width="6" stroke-linecap="round"/>
+  
+  <!-- Straight horizontal -->
+  <rect x="15" y="62" width="14" height="6" fill="#555" rx="1"/>
+  
+  <!-- Water droplet effect on flowing pipes -->
+  <circle cx="33" cy="50" r="2" fill="#00d4ff" opacity="0.8"/>
+  <circle cx="50" cy="67" r="2" fill="#00d4ff" opacity="0.8"/>
+  <circle cx="67" cy="84" r="2" fill="#00d4ff" opacity="0.8"/>
+</svg>

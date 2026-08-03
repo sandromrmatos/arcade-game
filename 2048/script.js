@@ -329,19 +329,27 @@ function showGameOver() {
 
 // Save to leaderboard
 function saveToLeaderboard() {
+    console.log("saveToLeaderboard called with score:", score, "gridSize:", gridSize);
+    
     if (window.parent && window.parent.saveGameScore) {
         const difficulty = gridSize === 4 ? '4x4' : '5x5';
+        console.log("Calling parent saveGameScore with difficulty:", difficulty);
+        
         window.parent.saveGameScore("2048", {
             score: score,
             difficulty: difficulty
         }).then((result) => {
-            console.log("2048 score saved successfully");
+            console.log("2048 score saved successfully, result:", result);
             if (result && result.isNewBest && window.parent.showNewBestScore) {
                 window.parent.showNewBestScore("2048", { score: score, difficulty: difficulty });
             }
         }).catch(err => {
             console.error("Error saving 2048 score:", err);
         });
+    } else {
+        console.error("saveGameScore function not found in parent window");
+        console.log("window.parent exists:", !!window.parent);
+        console.log("window.parent.saveGameScore exists:", !!(window.parent && window.parent.saveGameScore));
     }
 }
 

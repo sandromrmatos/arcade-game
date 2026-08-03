@@ -387,11 +387,24 @@ function showLeaderboard() {
       <button class="close-leaderboard-btn">${t("close")}</button>
       <h2>${t("leaderboardTitle")}</h2>
       <p>${t("leaderboardSubtitle")}</p>
+      
+      <!-- Adsterra Ad Container -->
+      <div id="leaderboard-ad-container" style="text-align: center; margin: 20px 0;">
+        <div id="container-43a12a0378cbbc2349584ef27d9a1f0d"></div>
+      </div>
+      
       <div id="leaderboard-game-list" class="leaderboard-game-list"></div>
     </div>
   `;
   
   section.classList.remove("hidden");
+  
+  // Load Adsterra script dynamically
+  const adScript = document.createElement('script');
+  adScript.async = true;
+  adScript.setAttribute('data-cfasync', 'false');
+  adScript.src = 'https://pl30654774.effectivecpmnetwork.com/43a12a0378cbbc2349584ef27d9a1f0d/invoke.js';
+  document.getElementById('leaderboard-ad-container').appendChild(adScript);
   
   // Re-attach close button listener for main leaderboard
   const closeBtn = section.querySelector(".close-leaderboard-btn");
@@ -594,6 +607,27 @@ const gameDescriptions = {
     scoring: "Total number of clicks to win. Lower is better! Efficient targeting and smart deduction lead to better scores. Only winning games are saved to the leaderboard.",
     controls: "Place ships: Click a cell, choose horizontal or vertical orientation, then confirm. Attack: Click enemy grid cells to fire. Red = hit, White = miss. Sink all enemy ships to win!"
   },
+  "Triple Merge": {
+    title: "Triple Merge",
+    description: "Strategic tile-merging puzzle game! Place tiles on the grid and merge 3 or more of the same type orthogonally (horizontally or vertically adjacent) to create higher-level tiles. Chain merges together to maximize your score and survive as long as possible!",
+    modes: "6×6 Grid: Auto-fill every 2 turns, more manageable pace\n8×8 Grid: Auto-fill every turn, faster-paced challenge with more space",
+    scoring: "Score = tiles merged × base value × tile level. For example: merging 3 level-2 tiles = 3 × 10 × 2 = 60 points. Higher-level tiles are worth exponentially more! Plan your merges to create the highest-level tiles possible. Highest score wins!",
+    controls: "Click the 'New Tile' button to generate a random tile type, then click any empty grid cell to place it. Tiles automatically merge when 3+ of the same type touch orthogonally (no diagonals). Each tile has levels (1, 2, 3...) shown as badges—merging 3 level-N tiles creates 1 level-(N+1) tile. Auto-filled tiles also trigger merges! Game ends when no empty cells remain."
+  },
+  "Pipe Mania": {
+    title: "Pipe Mania",
+    description: "Fast-paced pipe connection puzzle! Rotate randomly-placed pipe pieces to create a continuous path from the glowing green START tile (left side) to the pink END tile (right side) before time runs out. Plan your route carefully!",
+    modes: "Easy (8×8 grid): 3 minutes, larger pipes, simpler layouts\nMedium (10×10 grid): 2.5 minutes, moderate complexity\nHard (12×12 grid): 2 minutes, smaller pipes, more complex routing",
+    scoring: "Complete the connection in the fastest time! Lower time is better. Best time per difficulty is saved to the leaderboard. The timer shows elapsed time—work quickly!",
+    controls: "Click any pipe tile to rotate it 90° clockwise. Pipe types: Straight (2 connections), Corner (2 perpendicular connections), T-junction (3 connections), Cross (4 connections). The START tile (green, pulsing) can connect in any direction. The END tile (pink) also accepts connections from any direction. Use BFS pathfinding logic—the path must flow continuously from START to END!"
+  },
+  "Collapse": {
+    title: "Collapse",
+    description: "Tile-clearing chain-reaction puzzle! Click groups of 2+ adjacent same-colored blocks to remove them. The grid collapses downward to fill gaps, and empty columns shift left. Clear the entire board for a bonus, or maximize your score before running out of moves!",
+    modes: "Easy (5×8 grid): 4 colors, simpler to clear\nMedium (7×12 grid): 5 colors, moderate challenge\nHard (10×16 grid): 6 colors, complex strategy required",
+    scoring: "Group scoring uses formula n×(n-1)/2: Group of 2 = 1 pt, 3 = 3 pts, 4 = 6 pts, 5 = 10 pts, 6 = 15 pts, etc. Clear the entire board for +50 bonus points! Game always gives a score even if you don't clear the board. Highest score wins!",
+    controls: "Hover over blocks to see which will be removed (highlighted group). Click a group of 2+ adjacent same-colored blocks to remove them. Only orthogonal adjacency counts—diagonals don't work! Removed blocks collapse downward, then empty columns shift left. Game ends when no groups of 2+ remain."
+  },
   "TCG Game": {
     title: "Elemental Awakening TCG",
     description: "Battle against an intelligent AI in this strategic trading card game! Build custom decks, play creatures with 5 elemental types, evolve them through stages, inflict special conditions, and use powerful items to knock out your opponent's creatures. Features 84 unique cards with special move effects!",
@@ -779,6 +813,27 @@ const gameDescriptionsPT = {
     scoring: "Número total de cliques para ganhar. Menor é melhor! Alvos eficientes e dedução inteligente levam a melhores pontuações. Apenas jogos vencidos são guardados no placar.",
     controls: "Posicionar navios: Clique numa célula, escolha orientação horizontal ou vertical, depois confirme. Atacar: Clique nas células da grelha inimiga para disparar. Vermelho = acerto, Branco = falhou. Afunde todos os navios inimigos para ganhar!"
   },
+  "Triple Merge": {
+    title: "Fusão Tripla",
+    description: "Jogo de puzzle estratégico de fusão de blocos! Coloque blocos na grelha e funda 3 ou mais do mesmo tipo ortogonalmente (adjacentes horizontal ou verticalmente) para criar blocos de nível superior. Encadeie fusões para maximizar a sua pontuação e sobreviva o máximo possível!",
+    modes: "Grelha 6×6: Preenchimento automático a cada 2 jogadas, ritmo mais controlável\nGrelha 8×8: Preenchimento automático a cada jogada, desafio mais rápido com mais espaço",
+    scoring: "Pontuação = blocos fundidos × valor base × nível do bloco. Por exemplo: fundir 3 blocos nível-2 = 3 × 10 × 2 = 60 pontos. Blocos de nível superior valem exponencialmente mais! Planeie as suas fusões para criar os blocos de nível mais alto possível. Pontuação mais alta ganha!",
+    controls: "Clique no botão 'Novo Bloco' para gerar um tipo de bloco aleatório, depois clique em qualquer célula vazia da grelha para o colocar. Os blocos fundem-se automaticamente quando 3+ do mesmo tipo se tocam ortogonalmente (sem diagonais). Cada bloco tem níveis (1, 2, 3...) mostrados como distintivos—fundir 3 blocos nível-N cria 1 bloco nível-(N+1). Blocos preenchidos automaticamente também acionam fusões! O jogo termina quando não restam células vazias."
+  },
+  "Pipe Mania": {
+    title: "Pipe Mania",
+    description: "Puzzle de conexão de tubos de ritmo rápido! Rode peças de tubo colocadas aleatoriamente para criar um caminho contínuo desde o bloco INÍCIO verde brilhante (lado esquerdo) até ao bloco FIM rosa (lado direito) antes que o tempo acabe. Planeie a sua rota cuidadosamente!",
+    modes: "Fácil (grelha 8×8): 3 minutos, tubos maiores, layouts mais simples\nMédio (grelha 10×10): 2,5 minutos, complexidade moderada\nDifícil (grelha 12×12): 2 minutos, tubos menores, roteamento mais complexo",
+    scoring: "Complete a conexão no tempo mais rápido! Tempo mais baixo é melhor. Melhor tempo por dificuldade é guardado no placar. O cronómetro mostra o tempo decorrido—trabalhe rapidamente!",
+    controls: "Clique em qualquer bloco de tubo para rodá-lo 90° no sentido horário. Tipos de tubo: Reto (2 conexões), Curva (2 conexões perpendiculares), Junção-T (3 conexões), Cruz (4 conexões). O bloco INÍCIO (verde, pulsante) pode conectar em qualquer direção. O bloco FIM (rosa) também aceita conexões de qualquer direção. Use lógica de pathfinding BFS—o caminho deve fluir continuamente de INÍCIO a FIM!"
+  },
+  "Collapse": {
+    title: "Colapso",
+    description: "Puzzle de eliminação de blocos com reação em cadeia! Clique em grupos de 2+ blocos adjacentes da mesma cor para os remover. A grelha colapsa para baixo para preencher espaços, e colunas vazias deslocam-se para a esquerda. Limpe todo o tabuleiro para um bónus, ou maximize a sua pontuação antes de ficar sem jogadas!",
+    modes: "Fácil (grelha 5×8): 4 cores, mais simples de limpar\nMédio (grelha 7×12): 5 cores, desafio moderado\nDifícil (grelha 10×16): 6 cores, estratégia complexa necessária",
+    scoring: "Pontuação de grupos usa fórmula n×(n-1)/2: Grupo de 2 = 1 pt, 3 = 3 pts, 4 = 6 pts, 5 = 10 pts, 6 = 15 pts, etc. Limpe todo o tabuleiro para +50 pontos bónus! O jogo sempre dá uma pontuação mesmo que não limpe o tabuleiro. Pontuação mais alta ganha!",
+    controls: "Passe o rato sobre blocos para ver quais serão removidos (grupo destacado). Clique num grupo de 2+ blocos adjacentes da mesma cor para os remover. Apenas adjacência ortogonal conta—diagonais não funcionam! Blocos removidos colapsam para baixo, depois colunas vazias deslocam-se para a esquerda. O jogo termina quando não restam grupos de 2+."
+  },
   "TCG Game": {
     title: "Elemental Awakening TCG",
     description: "Batalhe contra uma IA inteligente neste jogo estratégico de cartas colecionáveis! Construa baralhos personalizados, jogue criaturas de 5 tipos elementais, evolua-as através de estágios, inflija condições especiais e use itens poderosos para derrotar as criaturas do oponente. Apresenta 84 cartas únicas com efeitos especiais!",
@@ -796,11 +851,24 @@ function showInfo() {
       <button class="close-leaderboard-btn">${t("close")}</button>
       <h2>${t("infoTitle")}</h2>
       <p>${t("infoSubtitle")}</p>
+      
+      <!-- Adsterra Ad Container -->
+      <div id="info-ad-container" style="text-align: center; margin: 20px 0;">
+        <div id="container-43a12a0378cbbc2349584ef27d9a1f0d"></div>
+      </div>
+      
       <div id="info-game-list" class="leaderboard-game-list"></div>
     </div>
   `;
   
   section.classList.remove("hidden");
+  
+  // Load Adsterra script dynamically
+  const adScript = document.createElement('script');
+  adScript.async = true;
+  adScript.setAttribute('data-cfasync', 'false');
+  adScript.src = 'https://pl30654774.effectivecpmnetwork.com/43a12a0378cbbc2349584ef27d9a1f0d/invoke.js';
+  document.getElementById('info-ad-container').appendChild(adScript);
   
   const closeBtn = section.querySelector(".close-leaderboard-btn");
   closeBtn.addEventListener("click", closeLeaderboard);
@@ -926,9 +994,24 @@ function showLeaderboard() {
       <button class="close-leaderboard-btn">${t("close")}</button>
       <h2>${t("leaderboardTitle")}</h2>
       <p>${t("leaderboardSubtitle")}</p>
+      
+      <!-- Adsterra Ad Container -->
+      <div id="leaderboard-ad-container-2" style="text-align: center; margin: 20px 0;">
+        <div id="container-43a12a0378cbbc2349584ef27d9a1f0d"></div>
+      </div>
+      
       <div id="leaderboard-game-list" class="leaderboard-game-list"></div>
     </div>
   `;
+  
+  section.classList.remove("hidden");
+  
+  // Load Adsterra script dynamically
+  const adScript = document.createElement('script');
+  adScript.async = true;
+  adScript.setAttribute('data-cfasync', 'false');
+  adScript.src = 'https://pl30654774.effectivecpmnetwork.com/43a12a0378cbbc2349584ef27d9a1f0d/invoke.js';
+  document.getElementById('leaderboard-ad-container-2').appendChild(adScript);
   
   section.classList.remove("hidden");
   
@@ -1100,6 +1183,24 @@ function showGameLeaderboard(gameName) {
   // Special handling for Battleship (clicks - lower is better, with difficulty modes)
   if (gameName === "Battleship") {
     showBattleshipLeaderboard(db, content, gameName);
+    return;
+  }
+  
+  // Special handling for Triple Merge (score - higher is better, with grid size modes)
+  if (gameName === "Triple Merge") {
+    showTripleMergeLeaderboard(db, content, gameName);
+    return;
+  }
+  
+  // Special handling for Pipe Mania (bestTime - lower is better, with difficulty modes)
+  if (gameName === "Pipe Mania") {
+    showTimeBasedDifficultyLeaderboard(db, content, gameName);
+    return;
+  }
+  
+  // Special handling for Collapse (score - higher is better, with difficulty modes)
+  if (gameName === "Collapse") {
+    showCollapseLeaderboard(db, content, gameName);
     return;
   }
   
@@ -1278,23 +1379,30 @@ function showTimeBasedDifficultyLeaderboard(db, content, gameName) {
       const allDocs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       
       // Filter for game and separate by difficulty
+      // Handle both 'bestTime' and 'time' for backward compatibility
       const easyDocs = allDocs
         .filter(doc => doc.gameName === gameName && doc.difficulty === "easy")
+        .map(doc => ({ ...doc, bestTime: doc.bestTime || doc.time }))
+        .filter(doc => doc.bestTime !== undefined && doc.bestTime !== null)
         .sort((a, b) => a.bestTime - b.bestTime)
         .slice(0, 10);
       
       const mediumDocs = allDocs
         .filter(doc => doc.gameName === gameName && doc.difficulty === "medium")
+        .map(doc => ({ ...doc, bestTime: doc.bestTime || doc.time }))
+        .filter(doc => doc.bestTime !== undefined && doc.bestTime !== null)
         .sort((a, b) => a.bestTime - b.bestTime)
         .slice(0, 10);
       
       const hardDocs = allDocs
         .filter(doc => doc.gameName === gameName && doc.difficulty === "hard")
+        .map(doc => ({ ...doc, bestTime: doc.bestTime || doc.time }))
+        .filter(doc => doc.bestTime !== undefined && doc.bestTime !== null)
         .sort((a, b) => a.bestTime - b.bestTime)
         .slice(0, 10);
       
       // Check if game has 3 difficulties (like Minefield and Maze) or 2 (like Mahjong)
-      const hasThreeDifficulties = mediumDocs.length > 0 || gameName === "Minefield" || gameName === "Maze";
+      const hasThreeDifficulties = mediumDocs.length > 0 || gameName === "Minefield" || gameName === "Maze" || gameName === "Pipe Mania";
       
       let html = '<div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">';
       
@@ -2340,6 +2448,179 @@ function showPacManLeaderboard(db, content, gameName) {
             <td>${doc.playerName}</td>
             <td>${doc.score}</td>
             <td>${doc.level || 1}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div></div>';
+      
+      content.innerHTML = html;
+    })
+    .catch(err => {
+      content.textContent = t("errorLoading") + " " + err.message;
+      console.error("Leaderboard error:", err);
+    });
+}
+
+function showTripleMergeLeaderboard(db, content, gameName) {
+  db.collection("games")
+    .limit(200)
+    .get()
+    .then(snapshot => {
+      const allDocs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+      // Helper function to get best scores per player
+      const getBestScoresPerPlayer = (docs) => {
+        const playerBest = {};
+        docs.forEach(doc => {
+          if (!playerBest[doc.playerName] || doc.score > playerBest[doc.playerName].score) {
+            playerBest[doc.playerName] = doc;
+          }
+        });
+        return Object.values(playerBest).sort((a, b) => b.score - a.score).slice(0, 10);
+      };
+      
+      // Filter for game and separate by grid size
+      const size6x6Docs = getBestScoresPerPlayer(
+        allDocs.filter(doc => doc.gameName === gameName && doc.difficulty === "6x6")
+      );
+      
+      const size8x8Docs = getBestScoresPerPlayer(
+        allDocs.filter(doc => doc.gameName === gameName && doc.difficulty === "8x8")
+      );
+      
+      let html = '<div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">';
+      
+      // 6x6 Grid table
+      html += `<div style="flex: 1; min-width: 280px;"><h3>6×6 Grid</h3>`;
+      if (size6x6Docs.length === 0) {
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Score</th><th>Date</th></tr></thead><tbody>';
+        size6x6Docs.forEach((doc, i) => {
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${doc.score}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div>';
+      
+      // 8x8 Grid table
+      html += `<div style="flex: 1; min-width: 280px;"><h3>8×8 Grid</h3>`;
+      if (size8x8Docs.length === 0) {
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Score</th><th>Date</th></tr></thead><tbody>';
+        size8x8Docs.forEach((doc, i) => {
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${doc.score}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div></div>';
+      
+      content.innerHTML = html;
+    })
+    .catch(err => {
+      content.textContent = t("errorLoading") + " " + err.message;
+      console.error("Leaderboard error:", err);
+    });
+}
+
+function showCollapseLeaderboard(db, content, gameName) {
+  db.collection("games")
+    .limit(300)
+    .get()
+    .then(snapshot => {
+      const allDocs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+      // Helper function to get best scores per player
+      const getBestScoresPerPlayer = (docs) => {
+        const playerBest = {};
+        docs.forEach(doc => {
+          if (!playerBest[doc.playerName] || doc.score > playerBest[doc.playerName].score) {
+            playerBest[doc.playerName] = doc;
+          }
+        });
+        return Object.values(playerBest).sort((a, b) => b.score - a.score).slice(0, 10);
+      };
+      
+      // Filter for game and separate by difficulty
+      const easyDocs = getBestScoresPerPlayer(
+        allDocs.filter(doc => doc.gameName === gameName && doc.difficulty === "easy")
+      );
+      
+      const mediumDocs = getBestScoresPerPlayer(
+        allDocs.filter(doc => doc.gameName === gameName && doc.difficulty === "medium")
+      );
+      
+      const hardDocs = getBestScoresPerPlayer(
+        allDocs.filter(doc => doc.gameName === gameName && doc.difficulty === "hard")
+      );
+      
+      let html = '<div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">';
+      
+      // Easy mode table
+      html += `<div style="flex: 1; min-width: 280px;"><h3>${t("easyMode")}</h3>`;
+      if (easyDocs.length === 0) {
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Score</th><th>Date</th></tr></thead><tbody>';
+        easyDocs.forEach((doc, i) => {
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${doc.score}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div>';
+      
+      // Medium mode table
+      html += `<div style="flex: 1; min-width: 280px;"><h3>${t("mediumMode")}</h3>`;
+      if (mediumDocs.length === 0) {
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Score</th><th>Date</th></tr></thead><tbody>';
+        mediumDocs.forEach((doc, i) => {
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${doc.score}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div>';
+      
+      // Hard mode table
+      html += `<div style="flex: 1; min-width: 280px;"><h3>${t("hardMode")}</h3>`;
+      if (hardDocs.length === 0) {
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Score</th><th>Date</th></tr></thead><tbody>';
+        hardDocs.forEach((doc, i) => {
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td>${doc.score}</td>
             <td>${date}</td>
           </tr>`;
         });

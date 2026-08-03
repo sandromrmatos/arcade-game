@@ -252,7 +252,25 @@ function getBestMove() {
         }
     }
     
-    // Third, prefer center columns
+    // Third, detect and block open-ended threats (2 in a row with spaces on both sides)
+    const threatMove = detectAndBlockOpenEndedThreats();
+    if (threatMove !== -1) {
+        return threatMove;
+    }
+    
+    // Fourth, look for opportunities to create AI threats (offensive play)
+    const offensiveMove = findOffensiveMove();
+    if (offensiveMove !== -1) {
+        return offensiveMove;
+    }
+    
+    // Fifth, detect and block any threat with 2 in a row
+    const twoInRowThreat = detectTwoInRowThreats();
+    if (twoInRowThreat !== -1) {
+        return twoInRowThreat;
+    }
+    
+    // Sixth, prefer center columns
     const centerCols = [3, 2, 4, 1, 5, 0, 6];
     for (let col of centerCols) {
         if (canMakeMove(col)) {
@@ -268,6 +286,276 @@ function getBestMove() {
     }
     
     return 0;
+}
+
+// Find offensive moves for AI (create threats)
+function findOffensiveMove() {
+    // Look for opportunities to create 2 in a row with open spaces
+    for (let col = 0; col < COLS; col++) {
+        if (!canMakeMove(col)) continue;
+        
+        const row = getLowestRow(col);
+        board[row][col] = AI;
+        
+        // Check if this creates a threat (2 AI pieces with potential to extend)
+        let createsGoodThreat = false;
+        
+        // Check horizontal - does this give us 2 AI pieces in a row with room to extend?
+        for (let c = Math.max(0, col - 3); c <= Math.min(COLS - 4, col); c++) {
+            let aiCount = 0;
+            let emptyCount = 0;
+            for (let i = 0; i < 4; i++) {
+                if (board[row][c + i] === AI) aiCount++;
+                if (board[row][c + i] === null) emptyCount++;
+            }
+            if (aiCount === 2 && emptyCount === 2) {
+                createsGoodThreat = true;
+                break;
+            }
+        }
+        
+        board[row][col] = null;
+        
+        if (createsGoodThreat) {
+            return col;
+        }
+    }
+    
+    return -1;
+}
+
+// Detect open-ended threats (2 in a row with empty spaces on both sides)
+function detectAndBlockOpenEndedThreats() {
+    // PRIORITY: Check for 2 adjacent pieces with 2 free spaces on EACH side
+    // Pattern we're looking for: __PP__ (where P = Player, _ = empty and playable)
+    for (let row = 0; row < ROWS; row++) {
+        for (let col = 0; col < COLS - 3; col++) {
+            // Check for exact pattern: Empty, Empty, Player, Player, Empty, Empty
+            if (col >= 0 && col + 5 < COLS) {
+                const hasPattern = 
+                    board[row][col] === null &&
+                    board[row][col + 1] === null &&
+                    board[row][col + 2] === PLAYER &&
+                    board[row][col + 3] === PLAYER &&
+                    board[row][col + 4] === null &&
+                    board[row][col + 5] === null;
+                
+                if (hasPattern) {
+                    // Check if we can play at col+1 or col+4 (next to the player pieces)
+                    // col+1 is to the left of the player pieces
+                    if (canMakeMove(col + 1) && getLowestRow(col + 1) === row) {
+                        return col + 1;
+                    }
+                    // col+4 is to the right of the player pieces
+                    if (canMakeMove(col + 4) && getLowestRow(col + 4) === row) {
+                        return col + 4;
+                    }
+                }
+            }
+            
+            // Also check for pattern: _PP___ and ___PP_
+            if (col >= 0 && col + 4 < COLS) {
+                // Pattern: _PP___
+                const leftPattern =
+                    board[row][col] === null &&
+                    board[row][col + 1] === PLAYER &&
+                    board[row][col + 2] === PLAYER &&
+                    board[row][col + 3] === null &&
+                    board[row][col + 4] === null;
+                
+                if (leftPattern) {
+                    // Block right next to player pieces
+                    if (canMakeMove(col + 3) && getLowestRow(col + 3) === row) {
+                        return col + 3;
+                    }
+                    // Or block the left side
+                    if (canMakeMove(col) && getLowestRow(col) === row) {
+                        return col;
+                    }
+                }
+                
+                // Pattern: ___PP_
+                const rightPattern =
+                    board[row][col] === null &&
+                    board[row][col + 1] === null &&
+                    board[row][col + 2] === PLAYER &&
+                    board[row][col + 3] === PLAYER &&
+                    board[row][col + 4] === null;
+                
+                if (rightPattern) {
+                    // Block left next to player pieces
+                    if (canMakeMove(col + 1) && getLowestRow(col + 1) === row) {
+                        return col + 1;
+                    }
+                    // Or block the right side
+                    if (canMakeMove(col + 4) && getLowestRow(col + 4) === row) {
+                        return col + 4;
+                    }
+                }
+            }
+        }
+    }
+    
+    // Check horizontal threats with 2 adjacent and space on both sides
+    for (let row = 0; row < ROWS; row++) {
+        for (let col = 1; col < COLS - 2; col++) {
+            // Pattern: _PP_
+            if (board[row][col] === PLAYER && 
+                board[row][col + 1] === PLAYER &&
+                board[row][col - 1] === null &&
+                board[row][col + 2] === null) {
+                
+                // Try to block left side (col - 1)
+                if (canMakeMove(col - 1) && getLowestRow(col - 1) === row) {
+                    return col - 1;
+                }
+                // Try to block right side (col + 2)
+                if (canMakeMove(col + 2) && getLowestRow(col + 2) === row) {
+                    return col + 2;
+                }
+            }
+        }
+    }
+    
+    // Check for any sequence with 2 players and 2 empty in a row of 4
+    for (let row = 0; row < ROWS; row++) {
+        for (let col = 0; col < COLS - 3; col++) {
+            const sequence = [
+                board[row][col],
+                board[row][col + 1],
+                board[row][col + 2],
+                board[row][col + 3]
+            ];
+            
+            const playerCount = sequence.filter(cell => cell === PLAYER).length;
+            const emptyCount = sequence.filter(cell => cell === null).length;
+            
+            if (playerCount === 2 && emptyCount === 2) {
+                // Check each empty position and block if playable
+                for (let i = 0; i < 4; i++) {
+                    if (sequence[i] === null && canMakeMove(col + i) && getLowestRow(col + i) === row) {
+                        // Prioritize blocking next to existing player pieces
+                        const hasPlayerLeft = i > 0 && sequence[i - 1] === PLAYER;
+                        const hasPlayerRight = i < 3 && sequence[i + 1] === PLAYER;
+                        if (hasPlayerLeft || hasPlayerRight) {
+                            return col + i;
+                        }
+                    }
+                }
+                
+                // If no adjacent block found, block any empty in the sequence
+                for (let i = 0; i < 4; i++) {
+                    if (sequence[i] === null && canMakeMove(col + i) && getLowestRow(col + i) === row) {
+                        return col + i;
+                    }
+                }
+            }
+        }
+    }
+    
+    // Check vertical threats (2 stacked with space above)
+    for (let col = 0; col < COLS; col++) {
+        for (let row = ROWS - 1; row >= 2; row--) {
+            if (board[row][col] === PLAYER && board[row - 1][col] === PLAYER && 
+                board[row - 2][col] === null && canMakeMove(col)) {
+                return col;
+            }
+        }
+    }
+    
+    // Check diagonal threats (ascending)
+    for (let row = 3; row < ROWS; row++) {
+        for (let col = 0; col < COLS - 3; col++) {
+            const sequence = [
+                board[row][col],
+                board[row - 1][col + 1],
+                board[row - 2][col + 2],
+                board[row - 3][col + 3]
+            ];
+            
+            const playerCount = sequence.filter(cell => cell === PLAYER).length;
+            const emptyCount = sequence.filter(cell => cell === null).length;
+            
+            if (playerCount === 2 && emptyCount === 2) {
+                for (let i = 0; i < 4; i++) {
+                    const checkRow = row - i;
+                    const checkCol = col + i;
+                    if (sequence[i] === null && canMakeMove(checkCol) && getLowestRow(checkCol) === checkRow) {
+                        return checkCol;
+                    }
+                }
+            }
+        }
+    }
+    
+    // Check diagonal threats (descending)
+    for (let row = 0; row < ROWS - 3; row++) {
+        for (let col = 0; col < COLS - 3; col++) {
+            const sequence = [
+                board[row][col],
+                board[row + 1][col + 1],
+                board[row + 2][col + 2],
+                board[row + 3][col + 3]
+            ];
+            
+            const playerCount = sequence.filter(cell => cell === PLAYER).length;
+            const emptyCount = sequence.filter(cell => cell === null).length;
+            
+            if (playerCount === 2 && emptyCount === 2) {
+                for (let i = 0; i < 4; i++) {
+                    const checkRow = row + i;
+                    const checkCol = col + i;
+                    if (sequence[i] === null && canMakeMove(checkCol) && getLowestRow(checkCol) === checkRow) {
+                        return checkCol;
+                    }
+                }
+            }
+        }
+    }
+    
+    return -1;
+}
+
+// Detect any 2 in a row threats (even if not open-ended)
+function detectTwoInRowThreats() {
+    // Check all positions where player has 2 in a row
+    for (let col = 0; col < COLS; col++) {
+        if (!canMakeMove(col)) continue;
+        
+        const row = getLowestRow(col);
+        
+        // Simulate placing AI piece
+        board[row][col] = AI;
+        
+        // Check if this blocks any potential threat
+        let blocksThreat = false;
+        
+        // Check horizontal
+        let playerInRow = 0;
+        for (let c = Math.max(0, col - 3); c <= Math.min(COLS - 1, col + 3); c++) {
+            if (board[row][c] === PLAYER) {
+                playerInRow++;
+            }
+        }
+        if (playerInRow >= 2) blocksThreat = true;
+        
+        // Check vertical
+        let playerInCol = 0;
+        for (let r = Math.max(0, row - 3); r <= Math.min(ROWS - 1, row + 3); r++) {
+            if (board[r][col] === PLAYER) {
+                playerInCol++;
+            }
+        }
+        if (playerInCol >= 2) blocksThreat = true;
+        
+        board[row][col] = null;
+        
+        if (blocksThreat) {
+            return col;
+        }
+    }
+    
+    return -1;
 }
 
 function canMakeMove(col) {
@@ -465,7 +753,19 @@ function hideMenu() {
 function startGame(selectedDifficulty) {
     difficulty = selectedDifficulty;
     hideMenu();
+    
+    // Randomly decide who starts (50/50 chance)
+    currentPlayer = Math.random() < 0.5 ? PLAYER : AI;
+    
     restartGame();
+    
+    // If AI starts, make the first move after a delay
+    if (currentPlayer === AI && !gameOver) {
+        disableBoard();
+        setTimeout(() => {
+            makeAIMove();
+        }, 1000);
+    }
 }
 
 // Event listeners

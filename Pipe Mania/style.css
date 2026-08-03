@@ -1,0 +1,366 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+#menuOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.menu-content {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.menu-content h1 {
+    color: #2c5364;
+    margin-bottom: 20px;
+    font-size: 2.5em;
+}
+
+.menu-content p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.difficulty-btn {
+    display: block;
+    width: 220px;
+    padding: 15px 30px;
+    margin: 15px auto;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #2c5364 0%, #0f2027 100%);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.difficulty-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(44, 83, 100, 0.5);
+}
+
+.difficulty-btn:active {
+    transform: translateY(0);
+}
+
+#gameContainer {
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    max-width: 800px;
+    width: 100%;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header h2 {
+    color: #2c5364;
+    margin-bottom: 15px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.info-item {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #333;
+    padding: 8px 16px;
+    background: #f0f0f0;
+    border-radius: 8px;
+}
+
+.grid {
+    display: grid;
+    gap: 2px;
+    margin: 0 auto 20px;
+    padding: 10px;
+    background: #2c5364;
+    border-radius: 10px;
+    width: fit-content;
+}
+
+.grid.size-8 {
+    grid-template-columns: repeat(8, 1fr);
+}
+
+.grid.size-10 {
+    grid-template-columns: repeat(10, 1fr);
+}
+
+.grid.size-12 {
+    grid-template-columns: repeat(12, 1fr);
+}
+
+.cell {
+    width: 50px;
+    height: 50px;
+    background: #1a1a1a;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, background 0.2s;
+    position: relative;
+    border-radius: 4px;
+}
+
+.cell:not(.fixed):hover {
+    background: #2a2a2a;
+    transform: scale(1.05);
+}
+
+.cell.fixed {
+    cursor: default;
+}
+
+.cell.flowing {
+    background: #1a4d5e;
+}
+
+.cell.start, .cell.end {
+    font-size: 0.8em;
+    font-weight: bold;
+    justify-content: center;
+    align-items: center;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.cell.start {
+    background: #00ff88 !important;
+    border: 4px solid #00ffcc !important;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.9) !important;
+    animation: pulseStart 1.5s ease-in-out infinite;
+}
+
+.cell.end {
+    background: #ff6b6b !important;
+    border: 4px solid #ff4444 !important;
+    box-shadow: 0 0 20px rgba(255, 107, 107, 0.7) !important;
+}
+
+@keyframes pulseStart {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(0, 255, 136, 0.9);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(0, 255, 136, 1), 0 0 40px rgba(0, 255, 136, 0.6);
+        transform: scale(1.05);
+    }
+}
+
+/* Pipe rendering */
+.pipe {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.2s ease;
+}
+
+.pipe svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* Rotation classes */
+.rotate-0 {
+    transform: rotate(0deg);
+}
+
+.rotate-90 {
+    transform: rotate(90deg);
+}
+
+.rotate-180 {
+    transform: rotate(180deg);
+}
+
+.rotate-270 {
+    transform: rotate(270deg);
+}
+
+/* Pipe SVG styles */
+.pipe-path {
+    fill: none;
+    stroke: #4a9eff;
+    stroke-width: 8;
+    stroke-linecap: round;
+}
+
+.pipe-path.flowing {
+    stroke: #00d4ff;
+    filter: drop-shadow(0 0 5px #00d4ff);
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.control-btn {
+    padding: 12px 24px;
+    font-size: 1em;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #555 0%, #333 100%);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.control-btn.primary {
+    background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+}
+
+.control-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.control-btn:active {
+    transform: translateY(0);
+}
+
+.control-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+#messageOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.message-content {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    min-width: 300px;
+}
+
+.message-content h2 {
+    margin-bottom: 20px;
+    font-size: 2em;
+}
+
+.message-content h2.win {
+    color: #00d4ff;
+}
+
+.message-content h2.lose {
+    color: #ff4444;
+}
+
+.message-content p {
+    font-size: 1.3em;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Responsive design */
+@media (max-width: 700px) {
+    .cell {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .menu-content {
+        padding: 30px 20px;
+    }
+    
+    .menu-content h1 {
+        font-size: 2em;
+    }
+    
+    .difficulty-btn {
+        width: 180px;
+        padding: 12px 20px;
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 500px) {
+    .cell {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .pipe-path {
+        stroke-width: 6;
+    }
+    
+    body {
+        padding: 10px;
+    }
+    
+    #gameContainer {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 400px) {
+    .cell {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .pipe-path {
+        stroke-width: 5;
+    }
+}
