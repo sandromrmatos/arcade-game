@@ -8,30 +8,11 @@
       font-family: system-ui, sans-serif;
       text-align: center;
       padding-top: 60px;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      gap: 20px;
       margin: 0;
     }
-    .left-banner {
-      position: fixed;
-      left: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-    .right-banner {
-      position: fixed;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
     .main-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       max-width: 800px;
+      margin: 0 auto;
     }
     button {
       padding: 14px 24px;
@@ -50,65 +31,9 @@
 </head>
 <body>
 
-  <!-- Left Side Banner -->
-  <div class="left-banner">
-    <script>
-      atOptions = {
-        'key' : '7ba91ff59f9a86aa46a4d8f12ad4f332',
-        'format' : 'iframe',
-        'height' : 600,
-        'width' : 160,
-        'params' : {}
-      };
-    </script>
-    <script src="https://www.highperformanceformat.com/7ba91ff59f9a86aa46a4d8f12ad4f332/invoke.js"></script>
-  </div>
-
-  <!-- Right Side Banner -->
-  <div class="right-banner">
-    <script>
-      atOptions = {
-        'key' : 'a1302af715e120d80d966a3d28a8a88e',
-        'format' : 'iframe',
-        'height' : 300,
-        'width' : 160,
-        'params' : {}
-      };
-    </script>
-    <script src="https://www.highperformanceformat.com/a1302af715e120d80d966a3d28a8a88e/invoke.js"></script>
-  </div>
-
   <div class="main-content">
     <h2 id="game-title">Game</h2>
     <button id="start-btn">Start Playing</button>
-
-    <!-- Adsterra Banner -->
-    <div style="margin: 200px auto 30px; text-align: center; display: block; clear: both;">
-      <script>
-        atOptions = {
-          'key' : '08eabecb95d5f48211d73ad53108132b',
-          'format' : 'iframe',
-          'height' : 90,
-          'width' : 728,
-          'params' : {}
-        };
-      </script>
-      <script src="https://www.highperformanceformat.com/08eabecb95d5f48211d73ad53108132b/invoke.js"></script>
-    </div>
-
-    <!-- Native Banner -->
-    <div style="margin: 30px auto; text-align: center; display: block; clear: both;">
-      <script>
-        atOptions = {
-          'key' : '351110f0be13f404c65ab8b04d78fb77',
-          'format' : 'iframe',
-          'height' : 250,
-          'width' : 300,
-          'params' : {}
-        };
-      </script>
-      <script src="https://www.highperformanceformat.com/351110f0be13f404c65ab8b04d78fb77/invoke.js"></script>
-    </div>
   </div>
 
   <script>

@@ -8,23 +8,6 @@ body {
   min-height: 100vh;
 }
 
-/* Ad Banners */
-.left-banner {
-  position: fixed;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 100;
-}
-
-.right-banner {
-  position: fixed;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 100;
-}
-
 .main-container {
   flex: 1;
   max-width: 1400px;

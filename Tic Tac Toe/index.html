@@ -10,32 +10,11 @@
         background: #f0f0f0;
         margin: 0;
         padding: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-    }
-    
-    /* Ad Banners */
-    .left-banner {
-        position: fixed;
-        left: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 100;
-    }
-    
-    .right-banner {
-        position: fixed;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 100;
     }
     
     .container {
         max-width: 600px;
         margin: 0 auto;
-        flex: 1;
     }
     
     /* Mode Selection */
@@ -199,34 +178,6 @@
 </head>
 <body>
 
-<!-- Left Side Banner -->
-<div class="left-banner">
-    <script>
-        atOptions = {
-            'key' : '7ba91ff59f9a86aa46a4d8f12ad4f332',
-            'format' : 'iframe',
-            'height' : 600,
-            'width' : 160,
-            'params' : {}
-        };
-    </script>
-    <script src="https://www.highperformanceformat.com/7ba91ff59f9a86aa46a4d8f12ad4f332/invoke.js"></script>
-</div>
-
-<!-- Right Side Banner -->
-<div class="right-banner">
-    <script>
-        atOptions = {
-            'key' : 'a1302af715e120d80d966a3d28a8a88e',
-            'format' : 'iframe',
-            'height' : 300,
-            'width' : 160,
-            'params' : {}
-        };
-    </script>
-    <script src="https://www.highperformanceformat.com/a1302af715e120d80d966a3d28a8a88e/invoke.js"></script>
-</div>
-
 <div class="container">
     <h2>Tic Tac Toe</h2>
 
@@ -235,34 +186,6 @@
         <h3>Choose Game Mode</h3>
         <button class="mode-btn" onclick="startSinglePlayer()">Single Player</button>
         <button class="mode-btn multiplayer" onclick="showMultiplayerLobby()">Multiplayer</button>
-        
-        <!-- Bottom Banner Ad -->
-        <div style="margin: 40px auto 20px; text-align: center; display: block; clear: both;">
-            <script>
-                atOptions = {
-                    'key' : '08eabecb95d5f48211d73ad53108132b',
-                    'format' : 'iframe',
-                    'height' : 90,
-                    'width' : 728,
-                    'params' : {}
-                };
-            </script>
-            <script src="https://www.highperformanceformat.com/08eabecb95d5f48211d73ad53108132b/invoke.js"></script>
-        </div>
-        
-        <!-- Native Banner Ad -->
-        <div style="margin: 30px auto; text-align: center; display: block; clear: both;">
-            <script>
-                atOptions = {
-                    'key' : '351110f0be13f404c65ab8b04d78fb77',
-                    'format' : 'iframe',
-                    'height' : 250,
-                    'width' : 300,
-                    'params' : {}
-                };
-            </script>
-            <script src="https://www.highperformanceformat.com/351110f0be13f404c65ab8b04d78fb77/invoke.js"></script>
-        </div>
     </div>
 
     <!-- Multiplayer Lobby -->
