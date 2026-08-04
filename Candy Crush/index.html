@@ -20,13 +20,13 @@
         <div class="mode-buttons">
           <button class="mode-btn single-player" onclick="showSinglePlayerMenu()">
             <div class="mode-icon">👤</div>
-            <div class="mode-name">Single Player</div>
-            <div class="mode-desc">Play solo with timer</div>
+            <div class="mode-name" data-translate="singlePlayer">Single Player</div>
+            <div class="mode-desc" data-translate="singlePlayerDesc">Play solo with timer</div>
           </button>
           <button class="mode-btn multiplayer" onclick="showMultiplayerMenu()">
             <div class="mode-icon">👥</div>
-            <div class="mode-name">Multiplayer</div>
-            <div class="mode-desc">Compete in real-time</div>
+            <div class="mode-name" data-translate="multiplayer">Multiplayer</div>
+            <div class="mode-desc" data-translate="multiplayerDesc">Compete in real-time</div>
           </button>
         </div>
       </div>
@@ -61,28 +61,28 @@
     <!-- Multiplayer Lobby -->
     <div id="multiplayerLobby" class="multiplayer-lobby" style="display: none;">
       <div class="lobby-content">
-        <h1>Candy Crush - Multiplayer</h1>
-        <h3>Choose Level & Join Room</h3>
+        <h1>Candy Crush - <span data-translate="multiplayer">Multiplayer</span></h1>
+        <h3 data-translate="chooseLevel">Choose Level & Join Room</h3>
         
         <div class="level-selector">
-          <label>Select Level:</label>
+          <label data-translate="levelLabel">Select Level:</label>
           <select id="mp-level-select" class="mp-level-select">
-            <option value="1">Level 1 (6×6)</option>
-            <option value="2">Level 2 (8×8 + Broken Gems)</option>
-            <option value="3">Level 3 (8×8 + Blocked + Broken)</option>
+            <option value="1" data-translate="level1">Level 1 (6×6)</option>
+            <option value="2" data-translate="level2">Level 2 (8×8 + Broken Gems)</option>
+            <option value="3" data-translate="level3">Level 3 (8×8 + Blocked + Broken)</option>
           </select>
         </div>
         
         <div class="room-controls">
-          <input type="text" id="room-input" placeholder="Enter room code" maxlength="10">
+          <input type="text" id="room-input" data-translate-placeholder="enterRoomName" placeholder="Enter room name (e.g. room1)" maxlength="20">
           <br>
-          <button class="lobby-btn" onclick="createMultiplayerRoom()">Create Room</button>
-          <button class="lobby-btn" onclick="joinMultiplayerRoom()">Join Room</button>
-          <button class="lobby-btn back" onclick="showModeMenu()">Back</button>
+          <button class="lobby-btn" onclick="createMultiplayerRoom()" data-translate="createRoom">Create Room</button>
+          <button class="lobby-btn" onclick="joinMultiplayerRoom()" data-translate="joinRoom">Join Room</button>
+          <button class="lobby-btn back" onclick="showModeMenu()" data-translate="back">Back</button>
         </div>
         
         <div id="lobby-status"></div>
-        <button id="mp-ready-btn" class="lobby-btn ready hidden" onclick="toggleMultiplayerReady()">Ready</button>
+        <button id="mp-ready-btn" class="lobby-btn ready hidden" onclick="toggleMultiplayerReady()" data-translate="ready">Ready</button>
       </div>
     </div>
 
@@ -118,30 +118,30 @@
 
       <div class="hud multiplayer-hud">
         <div class="hud-item">
-          <span class="label">Level:</span>
+          <span class="label" data-translate="level">Level</span>:
           <span id="mp-levelDisplay">1</span>
         </div>
         <div class="hud-item">
-          <span class="label">Time:</span>
+          <span class="label" data-translate="time">Time</span>:
           <span id="mp-timer">03:00</span>
         </div>
-        <button id="mp-menu-btn" onclick="leaveMultiplayerGame()">Leave Game</button>
+        <button id="mp-menu-btn" onclick="leaveMultiplayerGame()" data-translate="leaveGame">Leave Game</button>
       </div>
 
       <div class="dual-board-container">
         <!-- Your Board -->
         <div class="player-section your-board" style="max-width: 600px; margin: 0 auto;">
           <div class="player-header">
-            <h2 id="your-name">You</h2>
-            <div class="player-score">Score: <span id="your-score">0</span></div>
+            <h2 id="your-name" data-translate="you">You</h2>
+            <div class="player-score"><span data-translate="score">Score</span>: <span id="your-score">0</span></div>
           </div>
           <div id="mp-your-board" class="board"></div>
         </div>
 
         <!-- Opponent Score Only (No Board) -->
         <div class="opponent-scoreboard" style="position: fixed; top: 100px; right: 20px; background: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 50;">
-          <h3 id="opponent-name" style="margin: 0 0 10px 0; color: #4a3b7a;">Opponent</h3>
-          <div style="font-size: 24px; font-weight: bold; color: #ff6b6b;">Score: <span id="opponent-score">0</span></div>
+          <h3 id="opponent-name" style="margin: 0 0 10px 0; color: #4a3b7a;" data-translate="opponent">Opponent</h3>
+          <div style="font-size: 24px; font-weight: bold; color: #ff6b6b;"><span data-translate="score">Score</span>: <span id="opponent-score">0</span></div>
         </div>
       </div>
 

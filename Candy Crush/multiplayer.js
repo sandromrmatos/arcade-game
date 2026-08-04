@@ -10,46 +10,32 @@ const firebaseConfig = {
     appId: "1:348759287679:web:313c0f25e4227fa07a1c4a"
 };
 
-// Initialize Firebase
 let mpDatabase = null;
 try {
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
     }
     mpDatabase = firebase.database();
-    console.log("Firebase Realtime Database initialized for Candy Crush multiplayer");
 } catch (error) {
-    console.error("Firebase initialization error:", error);
+    console.error("Firebase error:", error);
 }
 
-// ============== MULTIPLAYER STATE ==============
+// ============== STATE ==============
 
-let mpGameMode = null; // 'single' or 'multi'
 let mpCurrentRoom = null;
 let mpPlayerName = null;
 let mpPlayerId = null;
-let mpPlayerSymbol = null;
 let mpIsPlayerReady = false;
 let mpRoomRef = null;
-let mpGameRef = null;
 let mpSelectedLevel = 1;
 
-// Multiplayer game state
+// Local game state
 let mpYourBoard = [];
-let mpOpponentBoard = [];
 let mpYourScore = 0;
-let mpOpponentScore = 0;
-let mpTimerSeconds = 0;
-let mpTimerInterval = null;
 let mpGameOver = false;
 let mpYourBoardElement = null;
-let mpOpponentBoardElement = null;
+let mpTimerInterval = null;
 
-// Throttle Firebase updates
-let mpLastUpdateTime = 0;
-let mpPendingUpdate = false;
-
-// Game configuration for multiplayer
 let mpWidth = 6;
 let mpHeight = 6;
 const mpNumColors = 6;
@@ -57,18 +43,154 @@ let mpDraggedId = null;
 let mpReplacedId = null;
 let mpSelectedTileId = null;
 
+// Language support
+let mpCurrentLanguage = 'en';
+
+const mpTranslations = {
+    en: {
+        singlePlayer: 'Single Player',
+        multiplayer: 'Multiplayer',
+        singlePlayerDesc: 'Play solo with timer',
+        multiplayerDesc: 'Compete in real-time',
+        selectLevel: 'Select Level:',
+        backToMode: '← Back to Mode Selection',
+        chooseLevel: 'Choose Level & Join Room',
+        levelLabel: 'Select Level:',
+        level1: 'Level 1 (6×6)',
+        level2: 'Level 2 (8×8 + Broken Gems)',
+        level3: 'Level 3 (8×8 + Blocked + Broken)',
+        enterRoomName: 'Enter room name (e.g. room1)',
+        createRoom: 'Create Room',
+        joinRoom: 'Join Room',
+        back: 'Back',
+        ready: 'Ready',
+        you: 'You',
+        opponent: 'Opponent',
+        score: 'Score',
+        level: 'Level',
+        time: 'Time',
+        leaveGame: 'Leave Game',
+        welcome: 'Welcome',
+        roomCreated: 'Room created! Room name:',
+        waitingOpponent: 'Waiting for opponent...',
+        joinedRoom: 'Joined room:',
+        clickReady: 'Click Ready when you\'re ready to play!',
+        players: 'Players',
+        youAreReady: 'You are ready! Waiting for opponent...',
+        youWon: 'You Won!',
+        opponentWon: 'Won!',
+        draw: 'Draw!',
+        yourScore: 'Your Score:',
+        opponentScore: '\'s Score:',
+        backToMenu: 'Back to Menu',
+        enterRoomCode: 'Please enter a room name to create',
+        roomExists: 'already exists! Please choose a different name or join the existing room.',
+        room: 'Room',
+        enterRoomToJoin: 'Please enter a room code',
+        roomNotFound: 'Room not found! Make sure the code is correct:',
+        roomFull: 'Room is full!'
+    },
+    pt: {
+        singlePlayer: 'Um Jogador',
+        multiplayer: 'Multijogador',
+        singlePlayerDesc: 'Jogue sozinho com temporizador',
+        multiplayerDesc: 'Compita em tempo real',
+        selectLevel: 'Selecione o Nível:',
+        backToMode: '← Voltar à Seleção de Modo',
+        chooseLevel: 'Escolha o Nível e Entre na Sala',
+        levelLabel: 'Selecione o Nível:',
+        level1: 'Nível 1 (6×6)',
+        level2: 'Nível 2 (8×8 + Gemas Quebradas)',
+        level3: 'Nível 3 (8×8 + Bloqueadas + Quebradas)',
+        enterRoomName: 'Digite o nome da sala (ex: sala1)',
+        createRoom: 'Criar Sala',
+        joinRoom: 'Entrar na Sala',
+        back: 'Voltar',
+        ready: 'Pronto',
+        you: 'Você',
+        opponent: 'Oponente',
+        score: 'Pontuação',
+        level: 'Nível',
+        time: 'Tempo',
+        leaveGame: 'Sair do Jogo',
+        welcome: 'Bem-vindo',
+        roomCreated: 'Sala criada! Nome da sala:',
+        waitingOpponent: 'Esperando oponente...',
+        joinedRoom: 'Entrou na sala:',
+        clickReady: 'Clique em Pronto quando estiver pronto!',
+        players: 'Jogadores',
+        youAreReady: 'Você está pronto! Esperando oponente...',
+        youWon: 'Você Ganhou!',
+        opponentWon: 'Ganhou!',
+        draw: 'Empate!',
+        yourScore: 'Sua Pontuação:',
+        opponentScore: 'Pontuação de ',
+        backToMenu: 'Voltar ao Menu',
+        enterRoomCode: 'Por favor, digite um nome para criar a sala',
+        roomExists: 'já existe! Por favor, escolha um nome diferente ou entre na sala existente.',
+        room: 'Sala',
+        enterRoomToJoin: 'Por favor, digite um código de sala',
+        roomNotFound: 'Sala não encontrada! Certifique-se que o código está correto:',
+        roomFull: 'Sala está cheia!'
+    }
+};
+
+function mpT(key) {
+    return mpTranslations[mpCurrentLanguage][key] || mpTranslations['en'][key] || key;
+}
+
+function getParentLanguage() {
+    try {
+        // Try to get from parent's currentLanguage variable
+        if (window.parent && window.parent.currentLanguage) {
+            console.log('Got language from parent.currentLanguage:', window.parent.currentLanguage);
+            return window.parent.currentLanguage;
+        }
+        
+        // Try to get from parent's localStorage
+        if (window.parent && window.parent.localStorage) {
+            const lang = window.parent.localStorage.getItem('arcadeLanguage');
+            if (lang) {
+                console.log('Got language from parent.localStorage:', lang);
+                return lang;
+            }
+        }
+        
+        // Fallback to own localStorage
+        const localLang = localStorage.getItem('arcadeLanguage');
+        if (localLang) {
+            console.log('Got language from own localStorage:', localLang);
+            return localLang;
+        }
+    } catch (e) {
+        console.log('Error getting parent language:', e);
+    }
+    
+    console.log('Defaulting to EN');
+    return 'en';
+}
+
+function updateMultiplayerLanguage() {
+    mpCurrentLanguage = getParentLanguage();
+    
+    // Update mode menu if visible
+    const modeMenu = document.getElementById('modeMenu');
+    if (modeMenu && modeMenu.style.display !== 'none') {
+        const modeName = modeMenu.querySelector('.mode-name');
+        if (modeName) {
+            // Re-render would be complex, so we'll update on next show
+        }
+    }
+}
+
 // ============== HELPER FUNCTIONS ==============
 
 function getPlayerName() {
-    if (window.parent && window.parent.playerName) {
-        return window.parent.playerName;
-    }
+    if (window.parent && window.parent.playerName) return window.parent.playerName;
     let name = localStorage.getItem("arcadePlayerName");
     if (!name) {
         name = prompt("Please enter your name:");
-        if (name) {
-            localStorage.setItem("arcadePlayerName", name);
-        }
+        if (name) localStorage.setItem("arcadePlayerName", name);
     }
     return name || "Player";
 }
@@ -77,13 +199,25 @@ function generateRoomCode() {
     return Math.random().toString(36).substr(2, 6).toUpperCase();
 }
 
+
 // ============== MENU NAVIGATION ==============
 
 function showModeMenu() {
-    // Clean up any active multiplayer connection
+    // Clean up any active game
+    if (mpTimerInterval) {
+        clearInterval(mpTimerInterval);
+        mpTimerInterval = null;
+    }
+    
     if (mpCurrentRoom && mpRoomRef) {
         cleanupMultiplayerRoom();
     }
+    
+    // Reset all game state
+    mpGameOver = false;
+    mpYourScore = 0;
+    mpYourBoard = [];
+    mpIsPlayerReady = false;
     
     document.getElementById('modeMenu').style.display = 'flex';
     document.getElementById('levelMenu').style.display = 'none';
@@ -93,659 +227,617 @@ function showModeMenu() {
 }
 
 function showSinglePlayerMenu() {
-    mpGameMode = 'single';
     document.getElementById('modeMenu').style.display = 'none';
     document.getElementById('levelMenu').style.display = 'flex';
 }
 
 function showMultiplayerMenu() {
-    mpGameMode = 'multi';
     mpPlayerName = getPlayerName();
     mpPlayerId = 'player_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-    
     document.getElementById('modeMenu').style.display = 'none';
     document.getElementById('multiplayerLobby').style.display = 'flex';
-    document.getElementById('lobby-status').innerHTML = `<p>Welcome, ${mpPlayerName}!</p>`;
+    document.getElementById('lobby-status').innerHTML = `<p>${mpT('welcome')}, ${mpPlayerName}!</p>`;
 }
 
 // ============== ROOM MANAGEMENT ==============
 
 function createMultiplayerRoom() {
-    const roomCode = generateRoomCode();
-    document.getElementById('room-input').value = roomCode;
-    joinMultiplayerRoom();
-}
-
-async function joinMultiplayerRoom() {
-    const roomCode = document.getElementById('room-input').value.trim().toUpperCase();
-    
+    const roomCode = document.getElementById('room-input').value.toUpperCase().trim();
     if (!roomCode) {
-        alert('Please enter a room code');
-        return;
-    }
-    
-    if (!mpDatabase) {
-        alert('Firebase Realtime Database is not configured. Please check the console.');
+        alert(mpT('enterRoomCode'));
         return;
     }
     
     mpSelectedLevel = parseInt(document.getElementById('mp-level-select').value);
+    
+    // First, clean up old rooms (older than 1 hour)
+    cleanupOldRooms();
+    
+    // Check if room already exists
     mpCurrentRoom = roomCode;
-    mpRoomRef = mpDatabase.ref('candyCrush/rooms/' + roomCode);
+    mpRoomRef = mpDatabase.ref('candyCrushRooms/' + mpCurrentRoom);
     
-    // Check if room exists and validate
-    const snapshot = await mpRoomRef.once('value');
-    const roomData = snapshot.val();
-    
-    if (roomData && roomData.players) {
-        const playerCount = Object.keys(roomData.players).length;
-        
-        if (playerCount >= 2) {
-            alert('Room is full!');
-            mpCurrentRoom = null;
-            return;
+    mpRoomRef.once('value').then(snapshot => {
+        if (snapshot.exists()) {
+            const room = snapshot.val();
+            const roomAge = Date.now() - room.createdAt;
+            const oneHour = 60 * 60 * 1000;
+            
+            // If room is older than 1 hour, delete it and recreate
+            if (roomAge > oneHour) {
+                console.log('Room', roomCode, 'is old, deleting and recreating');
+                mpRoomRef.remove().then(() => {
+                    createRoom(roomCode);
+                });
+            } else {
+                alert(`${mpT('room')} "${roomCode}" ${mpT('roomExists')}`);
+            }
+        } else {
+            // Room doesn't exist, create it
+            createRoom(roomCode);
         }
-        
-        // Check if game is already in progress
-        if (roomData.gameState && roomData.gameState.status === 'playing') {
-            alert('Game already in progress in this room!');
-            mpCurrentRoom = null;
-            return;
-        }
-        
-        // Check if level matches
-        if (roomData.level && roomData.level !== mpSelectedLevel) {
-            alert(`Room is set for Level ${roomData.level}. Please select the same level.`);
-            mpCurrentRoom = null;
-            return;
-        }
-    }
-    
-    // Join the room
-    await mpRoomRef.child('level').set(mpSelectedLevel);
-    await mpRoomRef.child('players').child(mpPlayerId).set({
-        name: mpPlayerName,
-        ready: false,
-        joinedAt: firebase.database.ServerValue.TIMESTAMP
     });
-    
-    setupRoomListeners();
-    document.getElementById('mp-ready-btn').classList.remove('hidden');
-    updateLobbyStatus();
 }
 
-function setupRoomListeners() {
-    mpRoomRef.child('players').on('value', (snapshot) => {
-        updateLobbyStatus();
-        checkIfBothReady();
-    });
+// Clean up rooms older than 1 hour
+function cleanupOldRooms() {
+    const roomsRef = mpDatabase.ref('candyCrushRooms');
+    const oneHour = 60 * 60 * 1000;
+    const now = Date.now();
     
-    mpRoomRef.child('gameState').on('value', (snapshot) => {
-        const gameState = snapshot.val();
-        if (gameState && gameState.status === 'playing') {
-            startMultiplayerGame(gameState);
-        }
-    });
-    
-    mpRoomRef.child('players').child(mpPlayerId).onDisconnect().remove();
-}
-
-function updateLobbyStatus() {
-    mpRoomRef.child('players').once('value', (snapshot) => {
-        const players = snapshot.val();
-        if (!players) return;
+    roomsRef.once('value').then(snapshot => {
+        const rooms = snapshot.val();
+        if (!rooms) return;
         
-        const playerList = Object.entries(players);
-        let statusHTML = `<h4>Room: ${mpCurrentRoom}</h4>`;
-        statusHTML += `<h4>Level: ${mpSelectedLevel}</h4>`;
-        
-        playerList.forEach(([id, player]) => {
-            const readyClass = player.ready ? 'ready' : '';
-            const readyText = player.ready ? '✓ Ready' : 'Not Ready';
-            statusHTML += `
-                <div class="player-info ${readyClass}">
-                    ${player.name} - ${readyText}
-                </div>
-            `;
+        Object.keys(rooms).forEach(roomCode => {
+            const room = rooms[roomCode];
+            const roomAge = now - room.createdAt;
+            
+            if (roomAge > oneHour) {
+                console.log('Deleting old room:', roomCode, '(age:', Math.round(roomAge / 60000), 'minutes)');
+                mpDatabase.ref('candyCrushRooms/' + roomCode).remove();
+            }
         });
-        
-        if (playerList.length < 2) {
-            statusHTML += '<p>Waiting for another player to join...</p>';
-        }
-        
-        document.getElementById('lobby-status').innerHTML = statusHTML;
     });
+}
+
+function joinMultiplayerRoom() {
+    mpSelectedLevel = parseInt(document.getElementById('mp-level-select').value);
+    joinRoom();
 }
 
 function toggleMultiplayerReady() {
-    mpIsPlayerReady = !mpIsPlayerReady;
-    mpRoomRef.child('players').child(mpPlayerId).update({
-        ready: mpIsPlayerReady
-    });
-    
-    const btn = document.getElementById('mp-ready-btn');
-    btn.textContent = mpIsPlayerReady ? 'Not Ready' : 'Ready';
+    document.getElementById('mp-ready-btn').classList.add('hidden');
+    setReady();
 }
 
-async function checkIfBothReady() {
-    const snapshot = await mpRoomRef.child('players').once('value');
-    const players = snapshot.val();
-    
-    if (!players) return;
-    
-    const playerList = Object.entries(players);
-    
-    if (playerList.length === 2) {
-        const allReady = playerList.every(([id, player]) => player.ready);
-        
-        if (allReady) {
-            const player1Id = playerList[0][0];
-            const player2Id = playerList[1][0];
-            
-            // Use LEVELS configuration from script.js
-            const levelConfig = LEVELS[mpSelectedLevel];
-            
-            const gameState = {
-                status: 'playing',
-                level: mpSelectedLevel,
-                timerStarted: firebase.database.ServerValue.TIMESTAMP,
-                players: {
-                    [player1Id]: {
-                        name: playerList[0][1].name,
-                        board: [],
-                        score: 0
-                    },
-                    [player2Id]: {
-                        name: playerList[1][1].name,
-                        board: [],
-                        score: 0
-                    }
-                },
-                timeLimit: levelConfig.time,
-                gameOver: false,
-                winner: null
-            };
-            
-            await mpRoomRef.child('gameState').set(gameState);
-        }
+function leaveMultiplayerGame() {
+    if (mpTimerInterval) {
+        clearInterval(mpTimerInterval);
+        mpTimerInterval = null;
     }
+    cleanupMultiplayerRoom();
+    showModeMenu();
+}
+
+function createRoom(roomCode) {
+    mpCurrentRoom = roomCode;
+    
+    mpRoomRef = mpDatabase.ref('candyCrushRooms/' + mpCurrentRoom);
+    
+    console.log('Creating room:', mpCurrentRoom);
+    
+    mpRoomRef.set({
+        roomCode: mpCurrentRoom,
+        createdAt: Date.now(),
+        level: mpSelectedLevel,
+        gameStarted: false,
+        players: {
+            [mpPlayerId]: {
+                name: mpPlayerName,
+                ready: false,
+                score: null
+            }
+        }
+    }).then(() => {
+        console.log('Room created successfully in Firebase:', mpCurrentRoom);
+        document.getElementById('lobby-status').innerHTML = `
+            <p>${mpT('roomCreated')} <strong>${mpCurrentRoom}</strong></p>
+            <p>${mpT('waitingOpponent')}</p>
+        `;
+        
+        document.getElementById('mp-ready-btn').classList.remove('hidden');
+        mpRoomRef.on('value', handleRoomUpdate);
+    }).catch(error => {
+        console.error('Error creating room:', error);
+        alert('Error creating room: ' + error.message);
+    });
+}
+
+function joinRoom() {
+    const roomCode = document.getElementById('room-input').value.toUpperCase().trim();
+    if (!roomCode) {
+        alert(mpT('enterRoomToJoin'));
+        return;
+    }
+
+    console.log('Attempting to join room:', roomCode);
+    
+    mpCurrentRoom = roomCode;
+    mpRoomRef = mpDatabase.ref('candyCrushRooms/' + mpCurrentRoom);
+
+    mpRoomRef.once('value').then(snapshot => {
+        console.log('Room lookup result:', snapshot.exists() ? 'Found' : 'Not found');
+        
+        if (!snapshot.exists()) {
+            alert(`${mpT('roomNotFound')} ${roomCode}`);
+            console.error('Room does not exist:', roomCode);
+            return;
+        }
+
+        const room = snapshot.val();
+        console.log('Room data:', room);
+        
+        const playerCount = Object.keys(room.players || {}).length;
+
+        if (playerCount >= 2) {
+            alert(mpT('roomFull'));
+            return;
+        }
+
+        mpRoomRef.child('players').child(mpPlayerId).set({
+            name: mpPlayerName,
+            ready: false,
+            score: null
+        }).then(() => {
+            console.log('Successfully joined room');
+            
+            document.getElementById('lobby-status').innerHTML = `
+                <p>${mpT('joinedRoom')} <strong>${mpCurrentRoom}</strong></p>
+                <p>${mpT('clickReady')}</p>
+            `;
+            
+            document.getElementById('mp-ready-btn').classList.remove('hidden');
+
+            mpRoomRef.on('value', handleRoomUpdate);
+        });
+    }).catch(error => {
+        console.error('Error joining room:', error);
+        alert('Error joining room: ' + error.message);
+    });
+}
+
+function handleRoomUpdate(snapshot) {
+    if (!snapshot.exists()) return;
+
+    const room = snapshot.val();
+    const players = room.players || {};
+    const playerCount = Object.keys(players).length;
+
+    if (room.gameStarted) {
+        return;
+    }
+
+    let readyCount = 0;
+    Object.values(players).forEach(p => {
+        if (p.ready) readyCount++;
+    });
+
+    if (playerCount === 2 && readyCount === 2) {
+        startMultiplayerGame(room.level);
+    } else {
+        document.getElementById('lobby-status').innerHTML = `
+            <p>${mpT('players')}: ${playerCount}/2</p>
+            <p>${mpT('ready')}: ${readyCount}/2</p>
+            ${!mpIsPlayerReady ? `<p>${mpT('clickReady')}</p>` : `<p>${mpT('waitingOpponent')}</p>`}
+        `;
+    }
+}
+
+function setReady() {
+    if (!mpRoomRef) return;
+    
+    mpIsPlayerReady = true;
+    mpRoomRef.child('players').child(mpPlayerId).update({
+        ready: true
+    });
+
+    document.getElementById('lobby-status').innerHTML = `<p>${mpT('youAreReady')}</p>`;
 }
 
 function cleanupMultiplayerRoom() {
-    if (mpRoomRef && mpPlayerId) {
-        mpRoomRef.child('players').child(mpPlayerId).remove();
+    if (mpRoomRef) {
         mpRoomRef.off();
-        
-        mpRoomRef.once('value', (snapshot) => {
-            const data = snapshot.val();
-            if (!data || !data.players || Object.keys(data.players).length === 0) {
-                mpRoomRef.remove();
-            }
-        });
+        if (mpPlayerId && mpCurrentRoom) {
+            // Remove this player from the room
+            mpRoomRef.child('players').child(mpPlayerId).remove();
+            
+            // Check if room is now empty and delete it
+            mpRoomRef.child('players').once('value').then(snapshot => {
+                const players = snapshot.val();
+                const playerCount = players ? Object.keys(players).length : 0;
+                
+                if (playerCount === 0) {
+                    // No players left, delete the entire room
+                    mpRoomRef.remove();
+                    console.log('Room', mpCurrentRoom, 'deleted (empty)');
+                }
+            });
+        }
     }
-    
-    if (mpGameRef) {
-        mpGameRef.off();
-    }
-    
-    if (mpTimerInterval) {
-        clearInterval(mpTimerInterval);
-    }
+    mpCurrentRoom = null;
+    mpRoomRef = null;
+    mpIsPlayerReady = false;
 }
 
-// ============== MULTIPLAYER GAME ==============
+// ============== GAME START ==============
 
-function startMultiplayerGame(gameState) {
+function startMultiplayerGame(level) {
+    mpSelectedLevel = level;
+    
+    mpRoomRef.update({ gameStarted: true });
+    mpRoomRef.off('value', handleRoomUpdate);
+
     document.getElementById('multiplayerLobby').style.display = 'none';
-    document.getElementById('multiplayerContainer').style.display = 'block';
-    
-    mpSelectedLevel = gameState.level;
-    const levelConfig = LEVELS[mpSelectedLevel];
-    mpWidth = levelConfig.width;
-    mpHeight = levelConfig.height;
-    
-    document.getElementById('mp-levelDisplay').textContent = mpSelectedLevel;
-    
-    // Set player names
-    const opponentId = Object.keys(gameState.players).find(id => id !== mpPlayerId);
-    document.getElementById('your-name').textContent = mpPlayerName;
-    document.getElementById('opponent-name').textContent = gameState.players[opponentId].name;
-    
-    // Initialize game
-    mpYourBoard = [];
-    mpYourScore = 0;
-    mpOpponentScore = 0;
+    document.getElementById('multiplayerContainer').style.display = 'flex';
+
     mpGameOver = false;
+    mpYourScore = 0;
+    
+    initializeMultiplayerBoard();
+    startMultiplayerTimer();
+}
+
+// ============== BOARD INITIALIZATION ==============
+
+function initializeMultiplayerBoard() {
+    // Set grid size based on level
+    if (mpSelectedLevel === 1) {
+        mpWidth = 6;
+        mpHeight = 6;
+    } else {
+        mpWidth = 8;
+        mpHeight = 8;
+    }
     
     mpYourBoardElement = document.getElementById('mp-your-board');
+    mpYourBoardElement.innerHTML = '';
     
-    // Generate initial board
-    generateMultiplayerBoard();
-    
-    // Render your board
-    renderMultiplayerBoard(mpYourBoard, mpYourBoardElement, true);
-    
-    // Hide opponent score during game - only show at end
-    document.getElementById('opponent-score').textContent = '???';
-    
-    // Listen for game updates
-    mpGameRef = mpRoomRef.child('gameState');
-    
-    mpGameRef.on('value', (snapshot) => {
-        const state = snapshot.val();
-        if (state && state.gameOver) {
-            handleMultiplayerGameOver(state);
-        }
-    });
-    
-    // Start synchronized timer
-    startMultiplayerTimer(gameState.timeLimit, gameState.timerStarted);
-}
-
-function generateMultiplayerBoard() {
-    mpYourBoard.length = 0;
-    const levelConfig = LEVELS[mpSelectedLevel];
-    
-    for (let i = 0; i < mpWidth * mpHeight; i++) {
-        if (levelConfig.blockedCells.includes(i)) {
-            mpYourBoard.push(-2);
-        } else {
-            mpYourBoard.push(mpGenerateCandy());
-        }
-    }
-    
-    let changed = true;
-    while (changed) {
-        changed = false;
-        for (let y = 0; y < mpHeight; y++) {
-            for (let x = 0; x < mpWidth; x++) {
-                const idx = mpCoordToIndex(x, y);
-                if (mpYourBoard[idx] === -1 || mpYourBoard[idx] === -2) continue;
-                
-                if (mpIsPartOfMatch(x, y, mpYourBoard)) {
-                    let newColor;
-                    do {
-                        newColor = mpGenerateCandy();
-                    } while (newColor === mpYourBoard[idx] || newColor === -1);
-                    mpYourBoard[idx] = newColor;
-                    changed = true;
-                }
-            }
-        }
-    }
-}
-
-function mpGenerateCandy() {
-    const levelConfig = LEVELS[mpSelectedLevel];
-    if (Math.random() < levelConfig.brokenGemChance) {
-        return -1;
-    }
-    return Math.floor(Math.random() * mpNumColors);
-}
-
-function mpCoordToIndex(x, y) {
-    return y * mpWidth + x;
-}
-
-function mpIndexToCoord(index) {
-    return { x: index % mpWidth, y: Math.floor(index / mpWidth) };
-}
-
-function mpIsPartOfMatch(x, y, grid) {
-    const idx = mpCoordToIndex(x, y);
-    const color = grid[idx];
-    
-    let countH = 1;
-    let i = x - 1;
-    while (i >= 0 && grid[mpCoordToIndex(i, y)] === color) { countH++; i--; }
-    i = x + 1;
-    while (i < mpWidth && grid[mpCoordToIndex(i, y)] === color) { countH++; i++; }
-    if (countH >= 3) return true;
-    
-    let countV = 1;
-    let j = y - 1;
-    while (j >= 0 && grid[mpCoordToIndex(x, j)] === color) { countV++; j--; }
-    j = y + 1;
-    while (j < mpHeight && grid[mpCoordToIndex(x, j)] === color) { countV++; j++; }
-    return countV >= 3;
-}
-
-function renderMultiplayerBoard(board, boardElement, interactive) {
-    boardElement.innerHTML = "";
-    boardElement.className = `board grid-${mpWidth}x${mpHeight}`;
-    if (!interactive) {
-        boardElement.classList.add('opponent-view');
-    }
-    
-    for (let i = 0; i < mpWidth * mpHeight; i++) {
-        const tile = document.createElement("div");
-        tile.classList.add("tile");
-        const color = board[i];
-        
-        if (color === null) {
-            tile.classList.add("empty");
-        } else if (color === -1) {
-            tile.classList.add("broken");
-            tile.innerHTML = '<div class="crack"></div>';
-        } else if (color === -2) {
-            tile.classList.add("blocked");
-        } else {
-            tile.classList.add(`color-${color}`);
-        }
-        
-        if (interactive) {
-            tile.setAttribute("draggable", !mpGameOver && color !== null && color !== -1 && color !== -2);
-            tile.setAttribute("data-id", i);
-            tile.addEventListener("dragstart", mpDragStart);
-            tile.addEventListener("dragover", mpDragOver);
-            tile.addEventListener("drop", mpDragDrop);
-            tile.addEventListener("dragend", mpDragEnd);
-            tile.addEventListener("click", mpTileClick);
-        } else {
-            tile.setAttribute("draggable", false);
-        }
-        
-        boardElement.appendChild(tile);
-    }
-}
-
-function mpTileClick(e) {
-    if (mpGameOver) return;
-    
-    const clickedId = parseInt(e.target.closest('.tile').getAttribute("data-id"), 10);
-    
-    if (mpYourBoard[clickedId] === null || mpYourBoard[clickedId] === -1 || mpYourBoard[clickedId] === -2) return;
-    
-    if (mpSelectedTileId === null) {
-        mpSelectedTileId = clickedId;
-        const tiles = mpYourBoardElement.querySelectorAll(".tile");
-        tiles[clickedId].classList.add("selected");
-        return;
-    }
-    
-    if (mpSelectedTileId === clickedId) {
-        mpSelectedTileId = null;
-        e.target.closest('.tile').classList.remove("selected");
-        return;
-    }
-    
-    const validMoves = mpGetAdjacentIndices(mpSelectedTileId);
-    const isValidMove = validMoves.includes(clickedId);
-    
-    if (!isValidMove) {
-        const tiles = mpYourBoardElement.querySelectorAll(".tile");
-        tiles[mpSelectedTileId].classList.remove("selected");
-        mpSelectedTileId = clickedId;
-        tiles[clickedId].classList.add("selected");
-        return;
-    }
-    
-    const tiles = mpYourBoardElement.querySelectorAll(".tile");
-    tiles[mpSelectedTileId].classList.remove("selected");
-    
-    const temp = mpYourBoard[mpSelectedTileId];
-    mpYourBoard[mpSelectedTileId] = mpYourBoard[clickedId];
-    mpYourBoard[clickedId] = temp;
-    
-    const matches = mpFindMatches(mpYourBoard);
-    if (matches.length === 0) {
-        mpYourBoard[clickedId] = mpYourBoard[mpSelectedTileId];
-        mpYourBoard[mpSelectedTileId] = temp;
+    // Add proper CSS classes
+    mpYourBoardElement.className = 'board';
+    if (mpSelectedLevel === 1) {
+        mpYourBoardElement.classList.add('grid-6x6');
     } else {
-        mpResolveMatches(matches);
+        mpYourBoardElement.classList.add('grid-8x8');
     }
     
-    renderMultiplayerBoard(mpYourBoard, mpYourBoardElement, true);
-    mpSelectedTileId = null;
+    mpYourBoard = [];
+    mpYourScore = 0;
+    
+    for (let i = 0; i < mpWidth * mpHeight; i++) {
+        const tile = document.createElement('div');
+        tile.classList.add('tile');
+        tile.id = 'mp-' + i;
+        
+        const color = Math.floor(Math.random() * mpNumColors);
+        
+        // Use CSS classes like single player instead of inline styles
+        tile.classList.add(`color-${color}`);
+        tile.dataset.color = color;
+        
+        tile.draggable = true;
+        tile.addEventListener('dragstart', mpDragStart);
+        tile.addEventListener('dragover', mpDragOver);
+        tile.addEventListener('drop', mpDragDrop);
+        tile.addEventListener('dragend', mpDragEnd);
+        tile.addEventListener('click', mpTileClick);
+        
+        mpYourBoard.push(color);
+        mpYourBoardElement.appendChild(tile);
+    }
+
+    document.getElementById('your-score').textContent = '0';
+    document.getElementById('mp-levelDisplay').textContent = mpSelectedLevel;
+    
+    console.log('Board initialized with', mpWidth, 'x', mpHeight, 'grid');
+    
+    // Clear initial matches WITHOUT scoring
+    setTimeout(() => {
+        let clearedInitial = false;
+        while (checkForMatchesMP()) {
+            clearMatchesMP(true); // Pass true to skip scoring
+            slideDownMP();
+            generateNewTilesMP();
+            clearedInitial = true;
+        }
+        // Reset score after clearing initial matches
+        if (clearedInitial) {
+            mpYourScore = 0;
+            document.getElementById('your-score').textContent = '0';
+            console.log('Initial matches cleared, score reset to 0');
+        }
+        updateBoardDisplayMP();
+    }, 100);
 }
 
-function mpDragStart(e) {
-    mpDraggedId = parseInt(e.target.getAttribute("data-id"), 10);
+function getColorForValue(value) {
+    const colors = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#95E1D3', '#F38181', '#AA96DA'];
+    return colors[value] || '#CCCCCC';
+}
+
+function getColorForValue(value) {
+    const colors = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#95E1D3', '#F38181', '#AA96DA'];
+    return colors[value] || '#CCCCCC';
+}
+
+// ============== TIMER ==============
+
+function startMultiplayerTimer() {
+    const levelTimes = [60, 90, 120];
+    let timeLeft = levelTimes[mpSelectedLevel - 1] || 60;
+    
+    document.getElementById('mp-timer').textContent = formatTime(timeLeft);
+
+    mpTimerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById('mp-timer').textContent = formatTime(timeLeft);
+
+        if (timeLeft <= 0) {
+            clearInterval(mpTimerInterval);
+            mpTimerInterval = null;
+            endMultiplayerGame();
+        }
+    }, 1000);
+}
+
+function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+}
+
+// ============== GAME END ==============
+
+function endMultiplayerGame() {
+    mpGameOver = true;
+    
+    // Stop all interactions
+    const tiles = mpYourBoardElement.querySelectorAll('.tile');
+    tiles.forEach(tile => {
+        tile.draggable = false;
+        tile.style.pointerEvents = 'none';
+    });
+
+    console.log('🏁 Game Over! Final score:', mpYourScore);
+
+    // Submit score to Firebase
+    mpRoomRef.child('players').child(mpPlayerId).update({
+        score: mpYourScore
+    }).then(() => {
+        console.log('✅ Score submitted:', mpYourScore);
+        
+        // Wait 3 seconds then show results
+        setTimeout(() => {
+            fetchFinalScores();
+        }, 3000);
+    });
+}
+
+function fetchFinalScores() {
+    mpRoomRef.child('players').once('value').then(snapshot => {
+        const players = snapshot.val();
+        const playersList = Object.values(players);
+        
+        const you = players[mpPlayerId];
+        const opponent = playersList.find(p => p.name !== mpPlayerName);
+
+        const yourScore = you?.score || 0;
+        const opponentScore = opponent?.score || 0;
+
+        console.log('Final scores - You:', yourScore, 'Opponent:', opponentScore);
+
+        showResultScreen(yourScore, opponentScore, opponent?.name || 'Opponent');
+    });
+}
+
+function showResultScreen(yourScore, opponentScore, opponentName) {
+    let resultText = '';
+    if (yourScore > opponentScore) {
+        resultText = `🎉 ${mpT('youWon')} ${yourScore} - ${opponentScore}`;
+    } else if (opponentScore > yourScore) {
+        resultText = `😔 ${opponentName} ${mpT('opponentWon')} ${opponentScore} - ${yourScore}`;
+    } else {
+        resultText = `🤝 ${mpT('draw')} ${yourScore} - ${opponentScore}`;
+    }
+
+    document.getElementById('multiplayerContainer').innerHTML = `
+        <div style="text-align: center; padding: 50px; color: white;">
+            <h1>${resultText}</h1>
+            <p>${mpT('yourScore')} ${yourScore}</p>
+            <p>${opponentName}${mpT('opponentScore')} ${opponentScore}</p>
+            <button onclick="showModeMenu()" style="margin-top: 30px; padding: 15px 30px; font-size: 18px; cursor: pointer;">
+                ${mpT('backToMenu')}
+            </button>
+        </div>
+    `;
+    
+    // Clean up room after a delay (give both players time to see results)
+    setTimeout(() => {
+        if (mpRoomRef && mpCurrentRoom) {
+            mpRoomRef.child('players').child(mpPlayerId).remove();
+            console.log('Left room after game ended');
+        }
+    }, 5000); // 5 seconds to view results
+}
+
+// ============== DRAG & DROP ==============
+
+function mpDragStart() {
+    if (mpGameOver) return;
+    mpDraggedId = this.id;
 }
 
 function mpDragOver(e) {
     e.preventDefault();
 }
 
-function mpDragDrop(e) {
-    mpReplacedId = parseInt(e.target.getAttribute("data-id"), 10);
+function mpDragDrop() {
+    if (mpGameOver) return;
+    mpReplacedId = this.id;
 }
 
 function mpDragEnd() {
-    if (mpDraggedId === null || mpReplacedId === null || mpGameOver) {
+    if (mpGameOver || !mpDraggedId || !mpReplacedId) return;
+
+    const draggedIndex = parseInt(mpDraggedId.split('-')[1]);
+    const replacedIndex = parseInt(mpReplacedId.split('-')[1]);
+
+    if (!isAdjacentMP(draggedIndex, replacedIndex)) {
         mpDraggedId = null;
         mpReplacedId = null;
         return;
     }
-    
-    const validMoves = mpGetAdjacentIndices(mpDraggedId);
-    if (!validMoves.includes(mpReplacedId)) {
-        mpDraggedId = null;
-        mpReplacedId = null;
-        return;
-    }
-    
-    const temp = mpYourBoard[mpDraggedId];
-    mpYourBoard[mpDraggedId] = mpYourBoard[mpReplacedId];
-    mpYourBoard[mpReplacedId] = temp;
-    
-    const matches = mpFindMatches(mpYourBoard);
-    if (matches.length === 0) {
-        mpYourBoard[mpReplacedId] = mpYourBoard[mpDraggedId];
-        mpYourBoard[mpDraggedId] = temp;
-    } else {
-        mpResolveMatches(matches);
-    }
-    
-    renderMultiplayerBoard(mpYourBoard, mpYourBoardElement, true);
+
+    swapTilesMP(draggedIndex, replacedIndex);
     mpDraggedId = null;
     mpReplacedId = null;
 }
 
-function mpGetAdjacentIndices(index) {
-    const { x, y } = mpIndexToCoord(index);
-    const neighbors = [];
-    if (x > 0) neighbors.push(mpCoordToIndex(x - 1, y));
-    if (x < mpWidth - 1) neighbors.push(mpCoordToIndex(x + 1, y));
-    if (y > 0) neighbors.push(mpCoordToIndex(x, y - 1));
-    if (y < mpHeight - 1) neighbors.push(mpCoordToIndex(x, y + 1));
-    return neighbors;
+function mpTileClick() {
+    if (mpGameOver) return;
+    
+    const clickedIndex = parseInt(this.id.split('-')[1]);
+
+    if (mpSelectedTileId === null) {
+        mpSelectedTileId = clickedIndex;
+        this.style.border = '3px solid yellow';
+    } else {
+        if (isAdjacentMP(mpSelectedTileId, clickedIndex)) {
+            swapTilesMP(mpSelectedTileId, clickedIndex);
+        }
+        
+        document.getElementById('mp-' + mpSelectedTileId).style.border = 'none';
+        mpSelectedTileId = null;
+    }
 }
 
-function mpFindMatches(board) {
-    const matches = [];
-    
-    for (let y = 0; y < mpHeight; y++) {
-        let runStart = 0;
-        while (runStart < mpWidth) {
-            const color = board[mpCoordToIndex(runStart, y)];
-            if (color === null) {
-                runStart++;
-                continue;
-            }
-            let runEnd = runStart + 1;
-            while (runEnd < mpWidth && board[mpCoordToIndex(runEnd, y)] === color) {
-                runEnd++;
-            }
-            const length = runEnd - runStart;
-            if (length >= 3) {
-                const indices = [];
-                for (let x = runStart; x < runEnd; x++) {
-                    indices.push(mpCoordToIndex(x, y));
-                }
-                matches.push(indices);
-            }
-            runStart = runEnd;
-        }
-    }
-    
-    for (let x = 0; x < mpWidth; x++) {
-        let runStart = 0;
-        while (runStart < mpHeight) {
-            const color = board[mpCoordToIndex(x, runStart)];
-            if (color === null) {
-                runStart++;
-                continue;
-            }
-            let runEnd = runStart + 1;
-            while (runEnd < mpHeight && board[mpCoordToIndex(x, runEnd)] === color) {
-                runEnd++;
-            }
-            const length = runEnd - runStart;
-            if (length >= 3) {
-                const indices = [];
-                for (let y = runStart; y < runEnd; y++) {
-                    indices.push(mpCoordToIndex(x, y));
-                }
-                matches.push(indices);
-            }
-            runStart = runEnd;
-        }
-    }
-    
-    return matches;
+function isAdjacentMP(index1, index2) {
+    const row1 = Math.floor(index1 / mpWidth);
+    const col1 = index1 % mpWidth;
+    const row2 = Math.floor(index2 / mpWidth);
+    const col2 = index2 % mpWidth;
+
+    return (Math.abs(row1 - row2) === 1 && col1 === col2) ||
+           (Math.abs(col1 - col2) === 1 && row1 === row2);
 }
 
-function mpResolveMatches(matches) {
-    if (matches.length === 0 || mpGameOver) return; // Stop if game is over
-    
-    let toClear = new Set();
-    matches.forEach(group => {
-        group.forEach(idx => toClear.add(idx));
-        const len = group.length;
-        let bonus = 0;
-        if (len === 4) bonus = 10;
-        else if (len >= 5) bonus = 25;
-        mpYourScore += len * 10 + bonus;
-    });
-    
-    if (mpSelectedLevel >= 2) {
-        const adjacentBroken = new Set();
-        toClear.forEach(idx => {
-            const neighbors = mpGetAdjacentIndices(idx);
-            neighbors.forEach(n => {
-                if (mpYourBoard[n] === -1) {
-                    adjacentBroken.add(n);
-                }
-            });
-        });
-        
-        adjacentBroken.forEach(idx => {
-            toClear.add(idx);
-            mpYourScore += 20;
-        });
+function swapTilesMP(index1, index2) {
+    const temp = mpYourBoard[index1];
+    mpYourBoard[index1] = mpYourBoard[index2];
+    mpYourBoard[index2] = temp;
+
+    updateBoardDisplayMP();
+
+    if (!checkForMatchesMP()) {
+        mpYourBoard[index2] = mpYourBoard[index1];
+        mpYourBoard[index1] = temp;
+        updateBoardDisplayMP();
+        return;
     }
-    
-    // Update score display immediately
-    document.getElementById('your-score').textContent = mpYourScore;
-    console.log("Score after match:", mpYourScore);
-    
-    const tiles = mpYourBoardElement.querySelectorAll(".tile");
-    toClear.forEach(idx => {
-        const tile = tiles[idx];
-        if (tile) tile.classList.add("explode");
-    });
-    
-    setTimeout(() => {
-        if (mpGameOver) return; // Don't process if game ended during animation
-        
-        toClear.forEach(idx => {
-            mpYourBoard[idx] = null;
-        });
-        
-        mpApplyGravity(mpYourBoard);
-        mpRefillBoard(mpYourBoard);
-        renderMultiplayerBoard(mpYourBoard, mpYourBoardElement, true);
-        
-        // Check for possible moves and shuffle if needed (like single player)
-        if (!mpHasPossibleMoves()) {
-            mpShuffleBoard();
-        }
-        
-        // Check for new matches before updating Firebase
-        const newMatches = mpFindMatches(mpYourBoard);
-        if (newMatches.length > 0) {
-            // Resolve chain reactions locally first
-            mpResolveMatches(newMatches);
-        }
-        // No Firebase updates during game - only at end
-    }, 450);
+
+    setTimeout(() => processMatchesMP(), 300);
 }
 
-function mpApplyGravity(board) {
-    for (let x = 0; x < mpWidth; x++) {
-        const column = [];
-        for (let y = 0; y < mpHeight; y++) {
-            const idx = mpCoordToIndex(x, y);
-            if (board[idx] !== null) {
-                column.push(board[idx]);
-            }
-        }
-        for (let y = mpHeight - 1; y >= 0; y--) {
-            const idx = mpCoordToIndex(x, y);
-            if (column.length > 0) {
-                board[idx] = column.pop();
-            } else {
-                board[idx] = null;
-            }
+function processMatchesMP() {
+    if (mpGameOver) return;
+    
+    if (checkForMatchesMP()) {
+        clearMatchesMP();
+        slideDownMP();
+        generateNewTilesMP();
+        updateBoardDisplayMP();
+        setTimeout(() => processMatchesMP(), 300);
+    } else {
+        // After all matches resolved, check if there are possible moves
+        if (!hasPossibleMovesMP()) {
+            console.log('No possible moves, shuffling board...');
+            shuffleBoardMP();
         }
     }
 }
 
-function mpRefillBoard(board) {
-    const levelConfig = LEVELS[mpSelectedLevel];
-    for (let i = 0; i < mpWidth * mpHeight; i++) {
-        if (board[i] === null && !levelConfig.blockedCells.includes(i)) {
-            board[i] = mpGenerateCandy();
-        } else if (levelConfig.blockedCells.includes(i) && board[i] !== -2) {
-            board[i] = -2;
-        }
-    }
-}
-
-// Check if any move is possible (same as single player)
-function mpHasPossibleMoves() {
-    for (let i = 0; i < mpWidth * mpHeight; i++) {
-        if (mpYourBoard[i] === null || mpYourBoard[i] === -1 || mpYourBoard[i] === -2) continue;
+// Check if there are any possible moves (like single player)
+function hasPossibleMovesMP() {
+    // Try swapping each adjacent pair and see if it creates a match
+    for (let i = 0; i < mpYourBoard.length; i++) {
+        if (mpYourBoard[i] === null) continue;
         
-        const neighbors = mpGetAdjacentIndices(i);
+        const row = Math.floor(i / mpWidth);
+        const col = i % mpWidth;
         
-        for (const n of neighbors) {
-            if (mpYourBoard[n] === null || mpYourBoard[n] === -1 || mpYourBoard[n] === -2) continue;
-            
+        // Try swapping right
+        if (col < mpWidth - 1 && mpYourBoard[i + 1] !== null) {
+            // Swap
             const temp = mpYourBoard[i];
-            mpYourBoard[i] = mpYourBoard[n];
-            mpYourBoard[n] = temp;
+            mpYourBoard[i] = mpYourBoard[i + 1];
+            mpYourBoard[i + 1] = temp;
             
-            const matches = mpFindMatches(mpYourBoard);
+            // Check if this creates a match
+            if (checkForMatchesMP()) {
+                // Swap back
+                mpYourBoard[i + 1] = mpYourBoard[i];
+                mpYourBoard[i] = temp;
+                return true;
+            }
             
-            mpYourBoard[n] = mpYourBoard[i];
+            // Swap back
+            mpYourBoard[i + 1] = mpYourBoard[i];
             mpYourBoard[i] = temp;
+        }
+        
+        // Try swapping down
+        if (row < mpHeight - 1 && mpYourBoard[i + mpWidth] !== null) {
+            // Swap
+            const temp = mpYourBoard[i];
+            mpYourBoard[i] = mpYourBoard[i + mpWidth];
+            mpYourBoard[i + mpWidth] = temp;
             
-            if (matches.length > 0) return true;
+            // Check if this creates a match
+            if (checkForMatchesMP()) {
+                // Swap back
+                mpYourBoard[i + mpWidth] = mpYourBoard[i];
+                mpYourBoard[i] = temp;
+                return true;
+            }
+            
+            // Swap back
+            mpYourBoard[i + mpWidth] = mpYourBoard[i];
+            mpYourBoard[i] = temp;
         }
     }
+    
     return false;
 }
 
-// Shuffle board (same as single player)
-function mpShuffleBoard() {
+// Shuffle board when no moves are possible (like single player)
+function shuffleBoardMP() {
     let attempts = 0;
     
     do {
         attempts++;
         
-        const levelConfig = LEVELS[mpSelectedLevel];
+        // Get all non-null tiles
         const movableCandies = [];
         const movableIndices = [];
         
         for (let i = 0; i < mpYourBoard.length; i++) {
-            if (mpYourBoard[i] !== null && mpYourBoard[i] !== -1 && mpYourBoard[i] !== -2) {
+            if (mpYourBoard[i] !== null) {
                 movableCandies.push(mpYourBoard[i]);
                 movableIndices.push(i);
             }
         }
         
+        // Shuffle array
         for (let i = movableCandies.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             const temp = movableCandies[i];
@@ -753,240 +845,198 @@ function mpShuffleBoard() {
             movableCandies[j] = temp;
         }
         
+        // Put shuffled candies back
         for (let i = 0; i < movableIndices.length; i++) {
             mpYourBoard[movableIndices[i]] = movableCandies[i];
         }
         
-    } while ((!mpHasPossibleMoves() || mpFindMatches(mpYourBoard).length > 0) && attempts < 50);
+    } while ((!hasPossibleMovesMP() || checkForMatchesMP()) && attempts < 50);
     
-    renderMultiplayerBoard(mpYourBoard, mpYourBoardElement, true);
+    updateBoardDisplayMP();
+    console.log('Board shuffled after', attempts, 'attempts');
 }
 
-// ============== TIMER ==============
+// ============== MATCH DETECTION ==============
 
-function startMultiplayerTimer(timeLimit, startTimestamp) {
-    clearInterval(mpTimerInterval);
-    
-    const timerElement = document.getElementById('mp-timer');
-    let gameEndedTriggered = false; // Prevent multiple triggers
-    
-    mpTimerInterval = setInterval(async () => {
-        if (gameEndedTriggered) {
-            clearInterval(mpTimerInterval);
-            return;
+function checkForMatchesMP() {
+    let hasMatch = false;
+
+    // Check horizontal
+    for (let row = 0; row < mpHeight; row++) {
+        for (let col = 0; col < mpWidth - 2; col++) {
+            const idx = row * mpWidth + col;
+            if (mpYourBoard[idx] !== null &&
+                mpYourBoard[idx] === mpYourBoard[idx + 1] &&
+                mpYourBoard[idx] === mpYourBoard[idx + 2]) {
+                hasMatch = true;
+            }
         }
-        
-        const serverSnapshot = await mpDatabase.ref('.info/serverTimeOffset').once('value');
-        const offset = serverSnapshot.val() || 0;
-        const now = Date.now() + offset;
-        
-        const snapshot = await mpRoomRef.child('gameState/timerStarted').once('value');
-        const actualStartTime = snapshot.val();
-        
-        if (!actualStartTime) {
-            clearInterval(mpTimerInterval);
-            return;
+    }
+
+    // Check vertical
+    for (let col = 0; col < mpWidth; col++) {
+        for (let row = 0; row < mpHeight - 2; row++) {
+            const idx = row * mpWidth + col;
+            if (mpYourBoard[idx] !== null &&
+                mpYourBoard[idx] === mpYourBoard[idx + mpWidth] &&
+                mpYourBoard[idx] === mpYourBoard[idx + 2 * mpWidth]) {
+                hasMatch = true;
+            }
         }
-        
-        const elapsed = Math.floor((now - actualStartTime) / 1000);
-        mpTimerSeconds = timeLimit - elapsed;
-        
-        if (mpTimerSeconds <= 0 && !gameEndedTriggered) {
-            gameEndedTriggered = true;
-            mpTimerSeconds = 0;
-            timerElement.textContent = "00:00";
-            clearInterval(mpTimerInterval);
-            
-            // IMMEDIATELY stop the game and capture score
-            mpGameOver = true;
-            const finalScore = mpYourScore;
-            
-            // Disable all board interactions immediately
-            renderMultiplayerBoard(mpYourBoard, mpYourBoardElement, false);
-            
-            console.log("Game Over! Final score captured:", finalScore);
-            
-            // Use transaction to only update if this score is higher (prevents zeros from overwriting)
-            const scoreRef = mpRoomRef.child('gameState/players').child(mpPlayerId).child('finalScore');
-            scoreRef.transaction((currentScore) => {
-                // If no current score or new score is higher, update it
-                if (currentScore === null || finalScore > currentScore) {
-                    console.log("Updating score from", currentScore, "to", finalScore);
-                    return finalScore;
-                } else {
-                    console.log("Keeping existing score", currentScore);
-                    return currentScore; // Keep existing higher score
+    }
+
+    return hasMatch;
+}
+
+function clearMatchesMP(skipScoring = false) {
+    let clearedCount = 0;
+    let toClear = new Set();
+
+    // Find and mark horizontal matches
+    for (let row = 0; row < mpHeight; row++) {
+        for (let col = 0; col < mpWidth - 2; col++) {
+            const idx = row * mpWidth + col;
+            if (mpYourBoard[idx] !== null &&
+                mpYourBoard[idx] === mpYourBoard[idx + 1] &&
+                mpYourBoard[idx] === mpYourBoard[idx + 2]) {
+                
+                // Count the length of the match
+                let matchLength = 3;
+                toClear.add(idx);
+                toClear.add(idx + 1);
+                toClear.add(idx + 2);
+                
+                // Check for 4+ matches
+                let checkCol = col + 3;
+                while (checkCol < mpWidth && mpYourBoard[row * mpWidth + checkCol] === mpYourBoard[idx]) {
+                    toClear.add(row * mpWidth + checkCol);
+                    matchLength++;
+                    checkCol++;
                 }
-            });
-            
-            // Mark as finished
-            await mpRoomRef.child('gameState/players').child(mpPlayerId).update({
-                finished: true,
-                scoreTimestamp: firebase.database.ServerValue.TIMESTAMP
-            });
-            
-            console.log("Score transaction completed");
-            
-            // Check if both players finished
-            checkIfBothFinished();
-        } else if (mpTimerSeconds > 0) {
-            const m = Math.floor(mpTimerSeconds / 60);
-            const s = mpTimerSeconds % 60;
-            timerElement.textContent = `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
-        }
-    }, 1000);
-}
-
-async function checkIfBothFinished() {
-    const snapshot = await mpRoomRef.child('gameState/players').once('value');
-    const players = snapshot.val();
-    
-    if (!players) return;
-    
-    const allFinished = Object.values(players).every(p => p.finished);
-    
-    if (allFinished) {
-        const gameOverSnapshot = await mpRoomRef.child('gameState/gameOver').once('value');
-        if (!gameOverSnapshot.val()) {
-            await mpRoomRef.child('gameState').update({
-                gameOver: true,
-                endTime: firebase.database.ServerValue.TIMESTAMP
-            });
+            }
         }
     }
-}
 
-function handleMultiplayerGameOver(gameState) {
-    // Prevent multiple calls
-    if (handleMultiplayerGameOver.alreadyCalled) {
-        return;
+    // Find and mark vertical matches
+    for (let col = 0; col < mpWidth; col++) {
+        for (let row = 0; row < mpHeight - 2; row++) {
+            const idx = row * mpWidth + col;
+            if (mpYourBoard[idx] !== null &&
+                mpYourBoard[idx] === mpYourBoard[idx + mpWidth] &&
+                mpYourBoard[idx] === mpYourBoard[idx + 2 * mpWidth]) {
+                
+                toClear.add(idx);
+                toClear.add(idx + mpWidth);
+                toClear.add(idx + 2 * mpWidth);
+                
+                // Check for 4+ matches
+                let checkRow = row + 3;
+                while (checkRow < mpHeight && mpYourBoard[checkRow * mpWidth + col] === mpYourBoard[idx]) {
+                    toClear.add(checkRow * mpWidth + col);
+                    checkRow++;
+                }
+            }
+        }
     }
-    handleMultiplayerGameOver.alreadyCalled = true;
-    
-    if (!mpGameOver) {
-        mpGameOver = true;
-        clearInterval(mpTimerInterval);
-        renderMultiplayerBoard(mpYourBoard, mpYourBoardElement, false);
-    }
-    
-    const messageEl = document.getElementById('mp-message');
-    
-    // Show calculating message first
-    messageEl.innerHTML = `
-        <div style="font-size: 24px; margin: 20px 0;">⏳ Calculating results...</div>
-    `;
-    
-    // Wait 3 seconds for both scores to be written to Firebase
-    setTimeout(() => {
-        mpRoomRef.child('gameState/players').once('value', (snapshot) => {
-            const players = snapshot.val();
-            
-            if (!players) {
-                messageEl.innerHTML = '<div style="font-size: 24px; margin: 20px 0;">Error loading results</div>';
-                return;
-            }
-            
-            // Get both players' final scores - USE HIGHEST NON-ZERO SCORE
-            const playersList = Object.entries(players);
-            const yourData = playersList.find(([id]) => id === mpPlayerId);
-            const opponentData = playersList.find(([id]) => id !== mpPlayerId);
-            
-            // Get highest score submitted (ignore zeros from multiple timer triggers)
-            let yourFinalScore = 0;
-            let opponentFinalScore = 0;
-            
-            if (yourData && yourData[1].finalScore) {
-                yourFinalScore = yourData[1].finalScore;
-            }
-            
-            if (opponentData && opponentData[1].finalScore) {
-                opponentFinalScore = opponentData[1].finalScore;
-            }
-            
-            const opponentName = opponentData ? opponentData[1].name : 'Opponent';
-            
-            console.log("Final scores retrieved - You:", yourFinalScore, "Opponent:", opponentFinalScore);
-            
-            // Update displayed scores
-            document.getElementById('your-score').textContent = yourFinalScore;
-            document.getElementById('opponent-score').textContent = opponentFinalScore;
-            
-            let message = '';
-            let result = 'draw';
-            
-            if (yourFinalScore > opponentFinalScore) {
-                message = `🎉 You Win! ${yourFinalScore} - ${opponentFinalScore}`;
-                result = 'win';
-            } else if (yourFinalScore < opponentFinalScore) {
-                message = `😔 ${opponentName} Wins! ${yourFinalScore} - ${opponentFinalScore}`;
-                result = 'loss';
-            } else {
-                message = `🤝 Draw! ${yourFinalScore} - ${opponentFinalScore}`;
-                result = 'draw';
-            }
-            
-            messageEl.innerHTML = `
-                <div style="font-size: 24px; margin: 20px 0;">${message}</div>
-                <button id="play-again-btn" class="lobby-btn ready" onclick="playAgain()" style="font-size: 18px; padding: 15px 30px;">
-                    Play Again
-                </button>
-                <button class="lobby-btn back" onclick="leaveMultiplayerGame()" style="font-size: 18px; padding: 15px 30px; margin-left: 10px;">
-                    Leave Game
-                </button>
-            `;
-            
-            if (window.parent && window.parent.saveGameScore) {
-                window.parent.saveGameScore("Candy Crush", {
-                    score: yourFinalScore,
-                    difficulty: `level${mpSelectedLevel}`,
-                    result: result
-                }).catch(err => {
-                    console.error("Error saving score:", err);
-                });
-            }
-        });
-    }, 3000);
-}
 
-async function playAgain() {
-    // Reset the flag
-    handleMultiplayerGameOver.alreadyCalled = false;
-    
-    // Reset ready status
-    mpIsPlayerReady = false;
-    
-    // Clear game state but keep room
-    await mpRoomRef.child('gameState').remove();
-    
-    // Reset players to not ready
-    await mpRoomRef.child('players').child(mpPlayerId).update({
-        ready: false
+    // Clear the marked tiles
+    toClear.forEach(idx => {
+        mpYourBoard[idx] = null;
+        clearedCount++;
     });
-    
-    // Go back to lobby
-    if (mpGameRef) {
-        mpGameRef.off();
+
+    // Score exactly like single player
+    if (clearedCount > 0 && !skipScoring) {
+        let baseScore = clearedCount * 10;
+        let bonus = 0;
+        
+        // Bonus for longer matches (like single player)
+        if (clearedCount === 4) bonus = 10;
+        else if (clearedCount >= 5) bonus = 25;
+        
+        mpYourScore += baseScore + bonus;
+        document.getElementById('your-score').textContent = mpYourScore;
+        console.log('Score after match:', mpYourScore, '(', clearedCount, 'tiles,', bonus, 'bonus)');
     }
-    
-    clearInterval(mpTimerInterval);
-    
-    document.getElementById('multiplayerContainer').style.display = 'none';
-    document.getElementById('multiplayerLobby').style.display = 'flex';
-    document.getElementById('mp-ready-btn').textContent = 'Ready';
-    document.getElementById('mp-ready-btn').classList.remove('hidden');
-    
-    updateLobbyStatus();
 }
 
-function leaveMultiplayerGame() {
-    handleMultiplayerGameOver.alreadyCalled = false;
-    cleanupMultiplayerRoom();
-    showModeMenu();
+function slideDownMP() {
+    for (let col = 0; col < mpWidth; col++) {
+        let emptySpaces = 0;
+        for (let row = mpHeight - 1; row >= 0; row--) {
+            const idx = row * mpWidth + col;
+            if (mpYourBoard[idx] === null) {
+                emptySpaces++;
+            } else if (emptySpaces > 0) {
+                const newIdx = (row + emptySpaces) * mpWidth + col;
+                mpYourBoard[newIdx] = mpYourBoard[idx];
+                mpYourBoard[idx] = null;
+            }
+        }
+    }
 }
 
-// Cleanup on page unload
-window.addEventListener('beforeunload', () => {
-    if (mpCurrentRoom && mpRoomRef) {
-        cleanupMultiplayerRoom();
+function generateNewTilesMP() {
+    for (let col = 0; col < mpWidth; col++) {
+        for (let row = 0; row < mpHeight; row++) {
+            const idx = row * mpWidth + col;
+            if (mpYourBoard[idx] === null) {
+                mpYourBoard[idx] = Math.floor(Math.random() * mpNumColors);
+            }
+        }
+    }
+}
+
+function updateBoardDisplayMP() {
+    for (let i = 0; i < mpYourBoard.length; i++) {
+        const tile = document.getElementById('mp-' + i);
+        if (tile && mpYourBoard[i] !== null) {
+            // Remove all color classes first
+            tile.className = 'tile';
+            // Add the correct color class
+            tile.classList.add(`color-${mpYourBoard[i]}`);
+            tile.dataset.color = mpYourBoard[i];
+        }
+    }
+}
+
+// ============== INITIALIZE ==============
+
+window.addEventListener('DOMContentLoaded', () => {
+    // Get language from parent with delay to ensure parent is ready
+    setTimeout(() => {
+        mpCurrentLanguage = getParentLanguage();
+        showModeMenu();
+        updateAllTranslations();
+    }, 100);
+});
+
+// Listen for language changes from parent
+window.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'languageChange') {
+        mpCurrentLanguage = event.data.language;
+        updateAllTranslations();
     }
 });
+
+function updateAllTranslations() {
+    console.log('Updating translations to:', mpCurrentLanguage);
+    
+    // Update all elements with data-translate attribute
+    document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.getAttribute('data-translate');
+        el.textContent = mpT(key);
+    });
+    
+    // Update placeholders
+    document.querySelectorAll('[data-translate-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-translate-placeholder');
+        el.placeholder = mpT(key);
+    });
+    
+    // Update select options
+    document.querySelectorAll('option[data-translate]').forEach(option => {
+        const key = option.getAttribute('data-translate');
+        option.textContent = mpT(key);
+    });
+}

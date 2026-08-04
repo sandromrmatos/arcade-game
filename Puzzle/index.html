@@ -13,23 +13,57 @@
 
 <body>
 
-<h1>Image Puzzle</h1>
+<h1 data-translate="title">Image Puzzle</h1>
 
-<div id="controls">
-  <button data-mode="easy" class="active">Easy (4×4)</button>
-  <button data-mode="medium">Medium (6×6)</button>
-  <button data-mode="hard">Hard (7×7)</button>
-  <span id="timer">00:00</span>
+<!-- Difficulty Menu -->
+<div id="difficultyMenu" class="menu-overlay">
+  <div class="menu-content">
+    <h2 data-translate="title">Image Puzzle</h2>
+    <p data-translate="selectDifficulty">Select Difficulty:</p>
+    <button class="difficulty-btn" data-mode="easy">
+      <span data-translate="easy">Easy</span>
+      <p>4×4</p>
+    </button>
+    <button class="difficulty-btn" data-mode="medium">
+      <span data-translate="medium">Medium</span>
+      <p>6×6</p>
+    </button>
+    <button class="difficulty-btn" data-mode="hard">
+      <span data-translate="hard">Hard</span>
+      <p>7×7</p>
+    </button>
+  </div>
 </div>
 
-<div id="preview"></div>
+<!-- Game Container -->
+<div id="gameContainer" style="display: none;">
+  <div id="controls">
+    <button data-mode="easy" class="mode-btn">
+      <span data-translate="easy">Easy</span> (4×4)
+    </button>
+    <button data-mode="medium" class="mode-btn">
+      <span data-translate="medium">Medium</span> (6×6)
+    </button>
+    <button data-mode="hard" class="mode-btn">
+      <span data-translate="hard">Hard</span> (7×7)
+    </button>
+    <span id="timer">00:00</span>
+  </div>
 
-<div id="game">
-  <div id="pieces"></div>
-  <div id="board"></div>
+  <div id="preview"></div>
+
+  <div id="game">
+    <div id="pieces"></div>
+    <div id="board"></div>
+  </div>
+
+  <div id="message"></div>
+  
+  <div id="gameButtons">
+    <button id="restartBtn" data-translate="restart">Restart</button>
+    <button id="menuBtn" data-translate="menu">Menu</button>
+  </div>
 </div>
-
-<div id="message"></div>
 
 </body>
 </html>

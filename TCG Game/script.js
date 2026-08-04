@@ -3413,6 +3413,28 @@ function handleMoveEffectBeforeKnockout(effect, attacker, attackingPlayer, callb
             }, 500);
             break;
             
+        case 'recoil40':
+            // Blow Blitz - 40 damage to self
+            attacker.damage += 40;
+            setTimeout(() => {
+                alert(`${attacker.data.name} took 40 recoil damage!`);
+                renderGame();
+                // Check if attacker knocked itself out
+                if (attacker.damage >= attacker.data.hp) {
+                    // Both attacker and defender are knocked out
+                    // Handle defender knockout first, then attacker
+                    callback(); // This knocks out the defender
+                    // Then knock out the attacker after a delay
+                    setTimeout(() => {
+                        knockoutCreature(attackingPlayer);
+                    }, 1000);
+                } else {
+                    // Only defender knocked out, attacker survives
+                    callback();
+                }
+            }, 500);
+            break;
+            
         case 'creamyConfection':
             // Creamy Confection - coin flip for energy attach or discard
             setTimeout(() => {
@@ -4062,10 +4084,10 @@ function handleMoveEffect(effect, attacker, defender, attackingPlayer) {
             break;
             
         case 'tempestHold':
-            // Tempest Hold - This creature can't retreat for 2 turns
-            attacker.cantRetreatTurns = 2;
+            // Tempest Hold - Opponent can't retreat for 2 turns
+            defender.cantRetreatTurns = 2;
             setTimeout(() => {
-                alert(`${attacker.data.name} can't retreat for the next 2 turns!`);
+                alert(`${defender.data.name} can't retreat for the next 2 turns!`);
                 checkKnockoutsAndContinue(attackingPlayer);
             }, 500);
             break;
@@ -4434,6 +4456,12 @@ function checkBenchKnockouts(player) {
 function handleRetreatButton() {
     const activeCard = gameState.player.active;
     if (!activeCard) return;
+    
+    // Check if blocked by Tempest Hold
+    if (activeCard.cantRetreatTurns && activeCard.cantRetreatTurns > 0) {
+        alert(`${activeCard.data.name} can't retreat! (Tempest Hold: ${activeCard.cantRetreatTurns} turn${activeCard.cantRetreatTurns > 1 ? 's' : ''} remaining)`);
+        return;
+    }
     
     if (activeCard.energy < activeCard.data.retreat) {
         alert("Not enough energy to retreat!");
@@ -5681,6 +5709,30 @@ function endTurn() {
         }
     }
     
+    // Decrement cantRetreatTurns for all creatures (Tempest Hold effect)
+    if (gameState.player.active && gameState.player.active.cantRetreatTurns > 0) {
+        gameState.player.active.cantRetreatTurns--;
+        if (gameState.player.active.cantRetreatTurns === 0) {
+            alert(`${gameState.player.active.data.name} can retreat again!`);
+        }
+    }
+    gameState.player.bench.forEach(card => {
+        if (card && card.cantRetreatTurns > 0) {
+            card.cantRetreatTurns--;
+        }
+    });
+    if (gameState.opponent.active && gameState.opponent.active.cantRetreatTurns > 0) {
+        gameState.opponent.active.cantRetreatTurns--;
+        if (gameState.opponent.active.cantRetreatTurns === 0) {
+            alert(`AI's ${gameState.opponent.active.data.name} can retreat again!`);
+        }
+    }
+    gameState.opponent.bench.forEach(card => {
+        if (card && card.cantRetreatTurns > 0) {
+            card.cantRetreatTurns--;
+        }
+    });
+    
     // Check for turn limit
     if (gameState.turnNumber > 30) {
         endGameByTurnLimit();
@@ -6605,13 +6657,24 @@ function aiCanAttack() {
     const attacker = gameState.opponent.active;
     if (!attacker) return false;
     
-    // Check if blocked by Wing Slap
+    // Check if blocked by Wing Slap or Quick Reflexes
     if (attacker.cantAttackNextTurn) return false;
+    if (gameState.opponent.cantAttackNextTurn) return false;
     
+    // Check if has Move 1 and enough energy for it
     const move1Cost = attacker.data.move1Cost;
-    if (!move1Cost) return false;
+    if (move1Cost && attacker.energy >= move1Cost.length) {
+        return true;
+    }
     
-    return attacker.energy >= move1Cost.length;
+    // Check if has Move 2 and enough energy for it
+    const move2Cost = attacker.data.move2Cost;
+    if (move2Cost && attacker.energy >= move2Cost.length) {
+        return true;
+    }
+    
+    // Can't afford either move
+    return false;
 }
 
 function aiAttack() {
@@ -6647,41 +6710,38 @@ function aiAttack() {
         attacker.hallucinationFlip = flip;
     }
     
-    // Choose move: AI always prefers Move 2 if it has enough energy, unless Move 2 deals 0 damage
+    // Choose move: AI prefers Move 2 if affordable and better than Move 1
     let damage = 0;
     let effect = null;
     let moveNumber = 1;
-    let canUseMove2 = attacker.data.move2Cost && attacker.energy >= attacker.data.move2Cost.length;
     
-    if (canUseMove2) {
-        // Check if Move 2 deals 0 damage
-        if (attacker.data.move2Damage === 0) {
-            // Randomly choose between Move 1 and Move 2 when Move 2 deals 0 damage
-            const useMove2 = Math.random() < 0.5;
-            if (useMove2) {
-                damage = attacker.data.move2Damage;
-                effect = attacker.data.move2Effect;
-                moveNumber = 2;
-                console.log("AI randomly chose move 2 (0 damage):", attacker.data.move2Name, "with effect:", effect);
-            } else {
-                damage = attacker.data.move1Damage;
-                effect = attacker.data.move1Effect;
-                moveNumber = 1;
-                console.log("AI randomly chose move 1 instead of 0 damage move 2:", attacker.data.move1Name, "with effect:", effect);
-            }
-        } else {
-            // Always use Move 2 when available, affordable, and deals damage
-            damage = attacker.data.move2Damage;
-            effect = attacker.data.move2Effect;
-            moveNumber = 2;
-            console.log("AI using move 2:", attacker.data.move2Name, "with effect:", effect);
-        }
-    } else {
-        // Fall back to Move 1
+    const canUseMove1 = attacker.data.move1Cost && attacker.energy >= attacker.data.move1Cost.length;
+    const canUseMove2 = attacker.data.move2Cost && attacker.energy >= attacker.data.move2Cost.length;
+    
+    if (canUseMove2 && canUseMove1) {
+        // Both moves available - prefer Move 2 unless Move 1 is clearly better
+        // Move 2 is preferred by default (usually more powerful)
+        damage = attacker.data.move2Damage;
+        effect = attacker.data.move2Effect;
+        moveNumber = 2;
+        console.log("AI chose move 2 (both available):", attacker.data.move2Name, "damage:", damage, "effect:", effect);
+    } else if (canUseMove2) {
+        // Only Move 2 affordable
+        damage = attacker.data.move2Damage;
+        effect = attacker.data.move2Effect;
+        moveNumber = 2;
+        console.log("AI chose move 2 (only option):", attacker.data.move2Name, "damage:", damage, "effect:", effect);
+    } else if (canUseMove1) {
+        // Only Move 1 affordable
         damage = attacker.data.move1Damage;
         effect = attacker.data.move1Effect;
         moveNumber = 1;
-        console.log("AI using move 1:", attacker.data.move1Name, "with effect:", effect);
+        console.log("AI chose move 1 (only option):", attacker.data.move1Name, "damage:", damage, "effect:", effect);
+    } else {
+        // This shouldn't happen (aiCanAttack should prevent this)
+        console.error("AI tried to attack but can't afford any moves!");
+        setTimeout(() => endTurn(), 500);
+        return;
     }
     
     // Handle special damage calculation effects

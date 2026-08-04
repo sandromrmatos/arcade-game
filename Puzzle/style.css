@@ -155,3 +155,113 @@ h1 {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
+
+
+/* ============== MENU ============== */
+.menu-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+}
+
+.menu-content {
+  text-align: center;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  max-width: 600px;
+}
+
+.menu-content h2 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.menu-content p {
+  margin-bottom: 30px;
+  color: #666;
+  font-size: 18px;
+}
+
+.difficulty-btn {
+  display: inline-block;
+  width: 150px;
+  margin: 10px;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 15px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  vertical-align: top;
+}
+
+.difficulty-btn:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+}
+
+.difficulty-btn span {
+  display: block;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.difficulty-btn p {
+  margin: 0;
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+/* ============== GAME BUTTONS ============== */
+#gameButtons {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#gameButtons button {
+  margin: 5px;
+  padding: 12px 25px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: transform 0.2s;
+}
+
+#gameButtons button:hover {
+  transform: translateY(-2px);
+}
+
+#menuBtn {
+  background: #6c757d;
+}
+
+#menuBtn:hover {
+  background: #5a6268;
+}
+
+/* Update mode buttons in controls */
+#controls button.mode-btn {
+  margin: 5px;
+  padding: 8px 15px;
+  background: #f0f0f0;
+  color: #333;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#controls button.mode-btn.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: #667eea;
+}

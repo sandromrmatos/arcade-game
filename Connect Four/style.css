@@ -246,3 +246,250 @@ h2 {
         padding: 10px;
     }
 }
+
+
+/* ============== MODE SELECTION ============== */
+.mode-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+}
+
+.mode-menu .menu-content {
+    text-align: center;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+.mode-btn {
+    display: inline-block;
+    width: 200px;
+    margin: 15px;
+    padding: 30px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    vertical-align: top;
+}
+
+.mode-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+}
+
+.mode-btn span:first-child {
+    display: block;
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.mode-btn p {
+    margin: 10px 0 0 0;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.back-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.back-btn:hover {
+    background: #5a6268;
+}
+
+/* ============== MULTIPLAYER LOBBY ============== */
+.multiplayer-lobby {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+}
+
+.lobby-content {
+    text-align: center;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    min-width: 400px;
+}
+
+.room-controls {
+    margin: 30px 0;
+}
+
+.room-controls input {
+    width: 80%;
+    padding: 12px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.lobby-btn {
+    margin: 5px;
+    padding: 12px 25px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: transform 0.2s;
+}
+
+.lobby-btn:hover {
+    transform: translateY(-2px);
+}
+
+.lobby-btn.back {
+    background: #6c757d;
+}
+
+.lobby-btn.ready {
+    background: #28a745;
+    margin-top: 20px;
+}
+
+.lobby-btn.hidden {
+    display: none;
+}
+
+#lobby-status {
+    margin: 20px 0;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    min-height: 60px;
+    color: #212529;
+}
+
+/* ============== MULTIPLAYER GAME ============== */
+#multiplayerContainer {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+#mp-gameInfo {
+    margin-bottom: 20px;
+}
+
+#mp-currentPlayer {
+    font-size: 24px;
+    font-weight: bold;
+    color: #ffffff;
+    margin: 10px 0;
+}
+
+#mp-players {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 15px 0;
+    font-size: 16px;
+}
+
+.color-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.color-badge.red {
+    background: #ff4444;
+    color: white;
+}
+
+.color-badge.yellow {
+    background: #ffd700;
+    color: #333;
+}
+
+#mp-board {
+    background: #2c3e50;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+.mp-cell {
+    width: 60px;
+    height: 60px;
+    background: #34495e;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mp-cell:hover {
+    background: #455a75;
+}
+
+.mp-cell.red {
+    background: radial-gradient(circle, #ff1744 0%, #d50000 100%);
+    box-shadow: 0 4px 8px rgba(255,23,68,0.5);
+    animation: dropIn 0.3s ease-out;
+}
+
+.mp-cell.yellow {
+    background: radial-gradient(circle, #ffeb3b 0%, #fbc02d 100%);
+    box-shadow: 0 4px 8px rgba(255,235,59,0.5);
+    animation: dropIn 0.3s ease-out;
+}
+
+@keyframes dropIn {
+    from {
+        transform: translateY(-300px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+#mp-message {
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+#mp-menuBtn {
+    margin-top: 20px;
+    padding: 12px 30px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#mp-menuBtn:hover {
+    background: #c82333;
+}
+
+#menuBtn {
+    margin-left: 10px;
+}

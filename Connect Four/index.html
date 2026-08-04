@@ -4,21 +4,64 @@
 <meta charset="UTF-8">
 <title>Connect Four</title>
 <link rel="stylesheet" href="style.css">
+  
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 </head>
 <body>
 
 <h2 id="title">Connect Four</h2>
 
-<div id="menuOverlay">
+<!-- Mode Selection Menu -->
+<div id="modeMenu" class="mode-menu">
+    <div class="menu-content">
+        <h2>Connect Four</h2>
+        <p data-translate="chooseModeText">Choose Game Mode:</p>
+        <button class="mode-btn" onclick="showSinglePlayerMenu()">
+            <span>👤</span>
+            <span data-translate="singlePlayer">Single Player</span>
+            <p data-translate="singlePlayerDesc">Play vs AI</p>
+        </button>
+        <button class="mode-btn" onclick="showMultiplayerMenu()">
+            <span>👥</span>
+            <span data-translate="multiplayer">Multiplayer</span>
+            <p data-translate="multiplayerDesc">Play vs Friend</p>
+        </button>
+    </div>
+</div>
+
+<!-- Single Player Difficulty Menu -->
+<div id="menuOverlay" style="display: none;">
     <div class="menu-content">
         <h2 id="menuTitle">Connect Four</h2>
         <p id="menuSubtitle">Select Difficulty:</p>
         <button id="btnEasy">Easy</button>
         <button id="btnHard">Hard</button>
+        <button class="back-btn" onclick="showModeMenu()">← Back</button>
     </div>
 </div>
 
-<div id="container">
+<!-- Multiplayer Lobby -->
+<div id="multiplayerLobby" class="multiplayer-lobby" style="display: none;">
+    <div class="lobby-content">
+        <h2>Connect Four - <span data-translate="multiplayer">Multiplayer</span></h2>
+        
+        <div class="room-controls">
+            <input type="text" id="room-input" data-translate-placeholder="enterRoomName" placeholder="Enter room name" maxlength="20">
+            <br>
+            <button class="lobby-btn" onclick="createMultiplayerRoom()" data-translate="createRoom">Create Room</button>
+            <button class="lobby-btn" onclick="joinMultiplayerRoom()" data-translate="joinRoom">Join Room</button>
+            <button class="lobby-btn back" onclick="showModeMenu()" data-translate="back">Back</button>
+        </div>
+        
+        <div id="lobby-status"></div>
+        <button id="mp-ready-btn" class="lobby-btn ready hidden" onclick="toggleMultiplayerReady()" data-translate="ready">Ready</button>
+    </div>
+</div>
+
+<!-- Single Player Game -->
+<div id="container" style="display: none;">
     <div id="gameInfo">
         <div id="currentPlayer"></div>
         <div id="score">Wins: 0 | Losses: 0 | Draws: 0 | Turns: 0</div>
@@ -29,9 +72,25 @@
     <div id="message"></div>
     
     <button id="restartBtn">New Game</button>
+    <button id="menuBtn" onclick="showModeMenu()">Menu</button>
+</div>
+
+<!-- Multiplayer Game -->
+<div id="multiplayerContainer" style="display: none;">
+    <div id="mp-gameInfo">
+        <div id="mp-currentPlayer"></div>
+        <div id="mp-players"></div>
+    </div>
+    
+    <div id="mp-board"></div>
+    
+    <div id="mp-message"></div>
+    
+    <button id="mp-menuBtn" onclick="leaveMultiplayerGame()" data-translate="leaveGame">Leave Game</button>
 </div>
 
 <script src="script.js"></script>
+<script src="multiplayer.js"></script>
 
 </body>
 </html>

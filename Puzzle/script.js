@@ -61,6 +61,7 @@ let timerInterval = null;
 let startTime = null;
 let imageSrc = null;
 let currentMode = "easy";
+let currentLanguage = 'en';
 
 const piecesContainer = document.getElementById("pieces");
 const boardContainer = document.getElementById("board");
@@ -70,14 +71,98 @@ const messageDisplay = document.getElementById("message");
 const root = document.querySelector(":root");
 
 // ------------------------------
+// TRANSLATIONS
+// ------------------------------
+const translations = {
+  en: {
+    title: 'Image Puzzle',
+    selectDifficulty: 'Select Difficulty:',
+    easy: 'Easy',
+    medium: 'Medium',
+    hard: 'Hard',
+    restart: 'Restart',
+    menu: 'Menu',
+    congrats: 'Congrats! You finished in'
+  },
+  pt: {
+    title: 'Puzzle de Imagem',
+    selectDifficulty: 'Selecione a Dificuldade:',
+    easy: 'Fácil',
+    medium: 'Médio',
+    hard: 'Difícil',
+    restart: 'Reiniciar',
+    menu: 'Menu',
+    congrats: 'Parabéns! Você terminou em'
+  }
+};
+
+function t(key) {
+  return translations[currentLanguage][key] || key;
+}
+
+function getParentLanguage() {
+  try {
+    if (window.parent && window.parent.currentLanguage) {
+      return window.parent.currentLanguage;
+    }
+    if (window.parent && window.parent.localStorage) {
+      const lang = window.parent.localStorage.getItem('arcadeLanguage');
+      if (lang) return lang;
+    }
+    const localLang = localStorage.getItem('arcadeLanguage');
+    if (localLang) return localLang;
+  } catch (e) {
+    console.log('Error getting parent language:', e);
+  }
+  return 'en';
+}
+
+function updateLanguage() {
+  currentLanguage = getParentLanguage();
+  
+  document.querySelectorAll('[data-translate]').forEach(el => {
+    const key = el.getAttribute('data-translate');
+    el.textContent = t(key);
+  });
+}
+
+// ------------------------------
+// MENU FUNCTIONS
+// ------------------------------
+function showMenu() {
+  document.getElementById('difficultyMenu').style.display = 'flex';
+  document.getElementById('gameContainer').style.display = 'none';
+  stopTimer();
+}
+
+function hideMenu() {
+  document.getElementById('difficultyMenu').style.display = 'none';
+  document.getElementById('gameContainer').style.display = 'block';
+}
+
+// ------------------------------
 // MODE BUTTONS
 // ------------------------------
+document.querySelectorAll(".difficulty-btn[data-mode]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    startGame(btn.dataset.mode);
+  });
+});
+
 document.querySelectorAll("#controls button[data-mode]").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll("#controls button[data-mode]").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
     startGame(btn.dataset.mode);
   });
+});
+
+document.getElementById("restartBtn").addEventListener("click", () => {
+  startGame(currentMode);
+});
+
+document.getElementById("menuBtn").addEventListener("click", () => {
+  showMenu();
 });
 
 // ------------------------------
@@ -117,6 +202,12 @@ function startGame(modeName) {
   placedCount = 0;
   selectedPiece = null;
   messageDisplay.textContent = "";
+
+  hideMenu();
+  
+  // Update active button
+  document.querySelectorAll("#controls button[data-mode]").forEach(b => b.classList.remove("active"));
+  document.querySelector(`#controls button[data-mode="${modeName}"]`).classList.add("active");
 
   imageSrc = pickRandomImage();
   preview.style.backgroundImage = `url('${imageSrc}')`;
@@ -166,10 +257,10 @@ function buildPieces() {
   piecesContainer.innerHTML = "";
   piecesContainer.style.display = "grid";
 
-  // Keep 4 columns max so layout never breaks
-  const pieceCols = Math.min(cols, 4);
-  piecesContainer.style.gridTemplateColumns = `repeat(${pieceCols}, ${TILE_W}px)`;
-  piecesContainer.style.gap = "8px";
+  // Match the board grid structure exactly
+  piecesContainer.style.gridTemplateColumns = `repeat(${cols}, ${TILE_W}px)`;
+  piecesContainer.style.gridTemplateRows = `repeat(${rows}, ${TILE_H}px)`;
+  piecesContainer.style.gap = "2px";
 
   const indices = Array.from({ length: totalPieces }, (_, i) => i);
   shuffle(indices);
@@ -244,7 +335,7 @@ function onCellClick(cell) {
     if (placedCount === totalPieces) {
       stopTimer();
       const elapsed = Math.floor((Date.now() - startTime) / 1000);
-      messageDisplay.textContent = `Congrats! You finished in ${timerDisplay.textContent}`;
+      messageDisplay.textContent = `${t('congrats')} ${timerDisplay.textContent}`;
       
       // Save score to leaderboard
       if (window.parent && window.parent.saveGameScore) {
@@ -272,4 +363,16 @@ function onCellClick(cell) {
 // ------------------------------
 // INITIAL START
 // ------------------------------
-startGame("easy");
+setTimeout(() => {
+  currentLanguage = getParentLanguage();
+  updateLanguage();
+  showMenu();
+}, 100);
+
+// Listen for language changes
+window.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'languageChange') {
+    currentLanguage = event.data.language;
+    updateLanguage();
+  }
+});

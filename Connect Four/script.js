@@ -753,6 +753,7 @@ function hideMenu() {
 function startGame(selectedDifficulty) {
     difficulty = selectedDifficulty;
     hideMenu();
+    document.getElementById('container').style.display = 'block';
     
     // Randomly decide who starts (50/50 chance)
     currentPlayer = Math.random() < 0.5 ? PLAYER : AI;
@@ -782,4 +783,5 @@ document.getElementById('restartBtn').addEventListener('click', restartGame);
 // Initialize
 initBoard();
 updateLanguage();
-showMenu();
+// Don't show menu automatically - let mode selection handle it
+
