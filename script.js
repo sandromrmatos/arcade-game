@@ -80,7 +80,8 @@ const translations = {
     "Bomberman": "Bomberman",
     "Battleship": "Battleship",
     "TCG Game": "TCG Game",
-    "VGC": "VGC"
+    "VGC": "VGC",
+    "Shut the Box": "Shut the Box"
   },
   pt: {
     title: "Jogos Arcade por Sandro",
@@ -148,7 +149,8 @@ const translations = {
     "Bomberman": "Bomberman",
     "Battleship": "Batalha Naval",
     "TCG Game": "Jogo TCG",
-    "VGC": "VGC"
+    "VGC": "VGC",
+    "Shut the Box": "Feche a Caixa"
   }
 };
 
@@ -633,14 +635,21 @@ const gameDescriptions = {
     description: "Battle against an intelligent AI in this strategic trading card game! Build custom decks, play creatures with 5 elemental types, evolve them through stages, inflict special conditions, and use powerful items to knock out your opponent's creatures. Features 84 unique cards with special move effects!",
     modes: "Choose from 4 starter decks OR create your own custom deck:\n• Mystic Deck: Psychic creatures with hallucination moves\n• Wind Deck: Flying creatures with dice/coin flip moves\n• Celestial Deck: Nature creatures with healing abilities\n• Mechanic Deck: Metal creatures with energy manipulation\n• Custom Decks: Build your own 40-card deck mixing types!\n\nDeck Building Rules:\n• Exactly 40 cards required\n• Mix 1 primary type with Neutral cards\n• Item cards can mix with any type\n• Evolved creatures need their base form\n\nAI randomly selects a deck and plays strategically!",
     scoring: "Win/Loss record tracked! First to 3 points wins (1 point per knocked out creature - including bench!). Moves like Mystic Blaze can KO multiple creatures for multiple points. Leaderboard ranks by win rate: wins/(wins+losses). Higher win rate = better rank!",
-    controls: "Setup Phase (Turn 0):\n• Place 1 Stage 1 creature in active spot\n• Optionally place creatures on bench\n• Click Done when ready\n\nEach Turn:\n• Draw 1 card at start\n• Attach 1 energy to any creature (once/turn)\n• Play Stage 1 creatures to empty bench slots\n• Evolve creatures (Turn 3+):\n  - Can't evolve newly played cards\n  - Can't evolve twice in one turn\n  - Stage 1→Stage 2→Stage 3\n• Use 1 item card per turn:\n  - Potion: Heal 20 HP\n  - Card Draw: Draw 2 cards\n  - Booster: +20 damage next attack\n  - Power-Up: +10 damage for 3 turns\n• Attack with active creature (ends turn):\n  - Requires energy = move cost\n  - Special moves: dice rolls, coin flips, AoE damage, healing, stat changes\n  - Watch for type advantages (2x damage) & resistances (-20 damage)\n• Retreat to bench (costs energy, cures status)\n\nSpecial Conditions:\n• Hallucination 😵: Flip coin when attacking - Heads: +10 dmg, Tails: +40 self-dmg. Cured by retreating.\n\nWin: 3 points, no creatures left, or most points after 30 turns"
+    controls: "Setup Phase (Turn 0):\n• Place 1 Stage 1 creature in active spot\n• Optionally place creatures on bench\n• Click Done when ready\n\nEach Turn:\n• Draw 1 card at start\n• Attach 1 energy to any creature (once/turn)\n• Play Stage 1 creatures to empty bench slots\n• Evolve creatures (Turn 3+):\n  - Cannot evolve newly played cards\n  - Cannot evolve twice in one turn\n  - Stage 1→Stage 2→Stage 3\n• Use 1 item card per turn:\n  - Potion: Heal 20 HP\n  - Card Draw: Draw 2 cards\n  - Booster: +20 damage next attack\n  - Power-Up: +10 damage for 3 turns\n• Attack with active creature (ends turn):\n  - Requires energy = move cost\n  - Special moves: dice rolls, coin flips, AoE damage, healing, stat changes\n  - Watch for type advantages (2x damage) & resistances (-20 damage)\n• Retreat to bench (costs energy, cures status)\n\nSpecial Conditions:\n• Hallucination 😵: Flip coin when attacking - Heads: +10 dmg, Tails: +40 self-dmg. Cured by retreating.\n\nWin: 3 points, no creatures left, or most points after 30 turns"
   },
   "VGC": {
     title: "VGC (2v2 Creature Battle System)",
     description: "Build your team of 4 creatures and battle in tactical 2v2 turn-based matches! Allocate stats, choose moves and abilities, and use strategy to defeat your opponent. Features 25 unique creatures across 5 types with authentic battle mechanics!",
     modes: "Single mode - Battle against AI with 25 creatures across 5 types:\n• Mystic: Psychic-type creatures with spiritual moves\n• Wind: Flying-type creatures with aerial attacks\n• Celestial: Nature-type creatures with cosmic powers\n• Mechanic: Metal/tech-type creatures with mechanical abilities\n• Neutral: Balanced creatures effective against all types",
     scoring: "Win/Loss record, Win Rate, and Last Played date tracked! Leaderboard ranks players by win rate: wins/(wins+losses). Higher win rate = better rank!",
-    controls: "Team Building:\n• Select 4 creatures from 25 available\n• Allocate 30 stat points (max 20 per stat): HP, Attack, Defense, Sp. Attack, Sp. Defense, Speed\n• Choose 4 moves from 12 available per creature\n• Choose 1 ability from 2 available\n• Save your team for future battles\n• Load previously saved teams\n\nBattle Phase:\n• Select 4 creatures for battle (first 2 start active)\n• Each turn, choose actions for both active creatures:\n  - Fight: Select move and target\n  - Switch: Swap with bench creature (can't attack same turn)\n• Moves execute by priority, then speed\n• Type advantages deal +25% damage\n• STAB (Same Type Attack Bonus): +20% damage\n• Replace fainted creatures from your bench\n• Win by defeating all opponent creatures!\n\nDebug Mode:\n• Select saved teams for both sides to test strategies"
+    controls: "Team Building:\n• Select 4 creatures from 25 available\n• Allocate 30 stat points (max 20 per stat): HP, Attack, Defense, Sp. Attack, Sp. Defense, Speed\n• Choose 4 moves from 12 available per creature\n• Choose 1 ability from 2 available\n• Save your team for future battles\n• Load previously saved teams\n\nBattle Phase:\n• Select 4 creatures for battle (first 2 start active)\n• Each turn, choose actions for both active creatures:\n  - Fight: Select move and target\n  - Switch: Swap with bench creature (cannot attack same turn)\n• Moves execute by priority, then speed\n• Type advantages deal +25% damage\n• STAB (Same Type Attack Bonus): +20% damage\n• Replace fainted creatures from your bench\n• Win by defeating all opponent creatures!\n\nDebug Mode:\n• Select saved teams for both sides to test strategies"
+  },
+  "Shut the Box": {
+    title: "Shut the Box",
+    description: "Classic dice game where you roll two dice and flip down numbered tiles that add up to the dice total. The goal is to shut all tiles (reach 0). If you cannot make a move, game ends. Lower final score is better!",
+    modes: "Level 1: Single board with tiles 1-12. Roll dice, select tiles that sum to the dice total, and submit.\n\nLevel 2: Double board challenge! First board (1-12) blocks second board (12-1 behind). You can only select tiles from the second board after removing the tile directly in front of it from the first board. Example: Remove tile 5 from board 1 to unlock tile 8 (behind it) on board 2.",
+    scoring: "Score = Sum of remaining tile numbers. 0 is perfect (you shut the box!). Lower scores are better. Each level has separate leaderboards.",
+    controls: "1. Click 'Roll Dice' to roll two dice\n2. Click tiles to select a combination that adds up to the dice total\n3. Click 'Reset Selection' if you make a mistake\n4. Click 'Submit' when your selection equals the dice total\n5. Continue until all tiles are removed or no valid moves remain\n\nLevel 2: Tiles on board 2 are locked (grayed) until the corresponding board 1 tile is removed."
   }
 };
 
@@ -840,6 +849,20 @@ const gameDescriptionsPT = {
     modes: "Escolha entre 4 baralhos iniciais OU crie o seu próprio baralho personalizado:\n• Baralho Místico: Criaturas psíquicas com movimentos de alucinação\n• Baralho Vento: Criaturas voadoras com movimentos de dados/moedas\n• Baralho Celestial: Criaturas da natureza com habilidades de cura\n• Baralho Mecânico: Criaturas metálicas com manipulação de energia\n• Baralhos Personalizados: Construa seu próprio baralho de 40 cartas misturando tipos!\n\nRegras de Construção:\n• Exatamente 40 cartas necessárias\n• Misture 1 tipo primário com cartas Neutras\n• Cartas de Item podem misturar com qualquer tipo\n• Criaturas evoluídas precisam da forma base\n\nA IA seleciona aleatoriamente um baralho e joga estrategicamente!",
     scoring: "Registo de vitórias/derrotas rastreado! Primeiro a marcar 3 pontos ganha (1 ponto por criatura derrotada - incluindo banco!). Movimentos como Mystic Blaze podem derrotar múltiplas criaturas por múltiplos pontos. Placar classifica por taxa de vitórias: vitórias/(vitórias+derrotas). Maior taxa = melhor classificação!",
     controls: "Fase de Configuração (Turno 0):\n• Coloque 1 criatura Estágio 1 no espaço ativo\n• Opcionalmente coloque criaturas no banco\n• Clique em Concluído quando pronto\n\nCada Turno:\n• Compre 1 carta no início\n• Anexe 1 energia a qualquer criatura (1x/turno)\n• Jogue criaturas Estágio 1 em espaços vazios\n• Evolua criaturas (Turno 3+):\n  - Não pode evoluir cartas recém-jogadas\n  - Não pode evoluir duas vezes em um turno\n  - Estágio 1→Estágio 2→Estágio 3\n• Use 1 carta de item por turno:\n  - Poção: Cure 20 HP\n  - Compra de Carta: Compre 2 cartas\n  - Reforço: +20 dano próximo ataque\n  - Power-Up: +10 dano por 3 turnos\n• Ataque com criatura ativa (termina turno):\n  - Requer energia = custo movimento\n  - Movimentos especiais: dados, moedas, dano em área, cura, mudanças de stats\n  - Atenção a vantagens de tipo (2x dano) e resistências (-20 dano)\n• Recue para banco (custa energia, cura status)\n\nCondições Especiais:\n• Alucinação 😵: Lance moeda ao atacar - Cara: +10 dano, Coroa: +40 auto-dano. Curado ao recuar.\n\nVitória: 3 pontos, sem criaturas restantes, ou mais pontos após 30 turnos"
+  },
+  "Shut the Box": {
+    title: "Feche a Caixa",
+    description: "Jogo clássico de dados onde rola dois dados e vira peças numeradas que somam o total dos dados. O objetivo é fechar todas as peças (chegar a 0). Se não conseguir fazer uma jogada, o jogo termina. Pontuação final mais baixa é melhor!",
+    modes: "Nível 1: Tabuleiro único com peças 1-12. Role os dados, selecione peças que somem o total dos dados e envie.\n\nNível 2: Desafio de tabuleiro duplo! O primeiro tabuleiro (1-12) bloqueia o segundo tabuleiro (12-1 atrás). Só pode selecionar peças do segundo tabuleiro depois de remover a peça diretamente à frente dele do primeiro tabuleiro. Exemplo: Remova a peça 5 do tabuleiro 1 para desbloquear a peça 8 (atrás dela) no tabuleiro 2.",
+    scoring: "Pontuação = Soma dos números das peças restantes. 0 é perfeito (fechou a caixa!). Pontuações mais baixas são melhores. Cada nível tem placares separados.",
+    controls: "1. Clique em 'Rolar Dados' para rolar dois dados\n2. Clique em peças para selecionar uma combinação que soma o total dos dados\n3. Clique em 'Reiniciar Seleção' se cometer um erro\n4. Clique em 'Enviar' quando sua seleção igualar o total dos dados\n5. Continue até que todas as peças sejam removidas ou não restem jogadas válidas\n\nNível 2: Peças no tabuleiro 2 estão bloqueadas (acinzentadas) até que a peça correspondente do tabuleiro 1 seja removida."
+  },
+  "Shut the Box": {
+    title: "Feche a Caixa",
+    description: "Jogo clássico de dados onde lança dois dados e vira peças numeradas que somam o total dos dados. O objetivo é fechar todas as peças (chegar a 0). Se não conseguir fazer uma jogada, o jogo termina. Pontuação final mais baixa é melhor!",
+    modes: "Nível 1: Tabuleiro único com peças 1-12. Lance os dados, selecione peças que somem o total dos dados e envie.\n\nNível 2: Desafio de tabuleiro duplo! O primeiro tabuleiro (1-12) bloqueia o segundo tabuleiro (12-1 atrás). Só pode selecionar peças do segundo tabuleiro depois de remover a peça diretamente à frente dele do primeiro tabuleiro. Exemplo: Remova a peça 5 do tabuleiro 1 para desbloquear a peça 8 (atrás dela) no tabuleiro 2.",
+    scoring: "Pontuação = Soma dos números das peças restantes. 0 é perfeito (fechou a caixa!). Pontuações mais baixas são melhores. Cada nível tem placares separados.",
+    controls: "1. Clique em 'Lançar Dados' para lançar dois dados\n2. Clique em peças para selecionar uma combinação que soma o total dos dados\n3. Clique em 'Reiniciar Seleção' se cometer um erro\n4. Clique em 'Enviar' quando sua seleção igualar o total dos dados\n5. Continue até que todas as peças sejam removidas ou não restem jogadas válidas\n\nNível 2: Peças no tabuleiro 2 estão bloqueadas (acinzentadas) até que a peça correspondente do tabuleiro 1 seja removida."
   }
 };
 
@@ -1183,6 +1206,12 @@ function showGameLeaderboard(gameName) {
   // Special handling for Battleship (clicks - lower is better, with difficulty modes)
   if (gameName === "Battleship") {
     showBattleshipLeaderboard(db, content, gameName);
+    return;
+  }
+  
+  // Special handling for Shut the Box (score - lower is better, with level modes)
+  if (gameName === "Shut the Box") {
+    showShutTheBoxLeaderboard(db, content, gameName);
     return;
   }
   
@@ -2281,6 +2310,79 @@ function showBattleshipLeaderboard(db, content, gameName) {
     });
 }
 
+function showShutTheBoxLeaderboard(db, content, gameName) {
+  db.collection("games")
+    .where("gameName", "==", gameName)
+    .limit(200)
+    .get()
+    .then(snapshot => {
+      const allDocs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      console.log("All docs for Shut the Box:", allDocs);
+      
+      // Filter for game and separate by level
+      const level1Docs = allDocs
+        .filter(doc => doc.gameName === gameName && (doc.level === 1 || doc.level === "1") && doc.score !== undefined)
+        .sort((a, b) => a.score - b.score) // Lower score is better
+        .slice(0, 10);
+      
+      const level2Docs = allDocs
+        .filter(doc => doc.gameName === gameName && (doc.level === 2 || doc.level === "2") && doc.score !== undefined)
+        .sort((a, b) => a.score - b.score) // Lower score is better
+        .slice(0, 10);
+      
+      console.log("Level 1 docs:", level1Docs);
+      console.log("Level 2 docs:", level2Docs);
+      
+      let html = '<div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">';
+      
+      // Level 1 table
+      html += `<div style="flex: 1; min-width: 300px;"><h3>Level 1</h3>`;
+      if (level1Docs.length === 0) {
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Score</th><th>Date</th></tr></thead><tbody>';
+        level1Docs.forEach((doc, i) => {
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          const scoreColor = doc.score === 0 ? '#4CAF50' : '#FF9800'; // Green for perfect, orange for others
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td style="color: ${scoreColor}; font-weight: bold;">${doc.score}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div>';
+      
+      // Level 2 table
+      html += `<div style="flex: 1; min-width: 300px;"><h3>Level 2</h3>`;
+      if (level2Docs.length === 0) {
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
+      } else {
+        html += '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Score</th><th>Date</th></tr></thead><tbody>';
+        level2Docs.forEach((doc, i) => {
+          const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          const scoreColor = doc.score === 0 ? '#4CAF50' : '#FF9800'; // Green for perfect, orange for others
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${doc.playerName}</td>
+            <td style="color: ${scoreColor}; font-weight: bold;">${doc.score}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div></div>';
+      
+      content.innerHTML = html;
+    })
+    .catch(err => {
+      content.textContent = t("errorLoading") + " " + err.message;
+      console.error("Leaderboard error:", err);
+    });
+}
+
 function showSimonSaysLeaderboard(db, content, gameName) {
   db.collection("games")
     .limit(100)
@@ -3021,6 +3123,11 @@ window.saveGameScore = function(gameName, scoreData) {
       query = query.where("difficulty", "==", scoreData.difficulty);
     }
     
+    // Add level filter for games that have it (like Shut the Box)
+    if (scoreData.level) {
+      query = query.where("level", "==", scoreData.level);
+    }
+    
     // Determine if this is a time-based or score-based game
     const isTimeBased = scoreData.hasOwnProperty("bestTime");
     const isScoreBased = scoreData.hasOwnProperty("score");
@@ -3063,6 +3170,10 @@ window.saveGameScore = function(gameName, scoreData) {
           if (gameName === "Sequence Builder" && isTurnsBased) {
             console.log(`Existing turns:`, existingData.turns, `New turns:`, scoreData.turns);
             shouldUpdate = scoreData.turns > existingData.turns;
+          } else if (gameName === "Shut the Box" && isScoreBased) {
+            // Special case: Shut the Box uses score where lower is better (0 is perfect)
+            console.log(`Existing score:`, existingData.score, `New score:`, scoreData.score);
+            shouldUpdate = scoreData.score < existingData.score;
           } else if (isTimeBased || isTurnsBased || isClicksBased) {
             // For time-based, turns-based (like Memory), and clicks-based (like Battleship), lower is better
             const field = isTimeBased ? "bestTime" : isClicksBased ? "clicks" : "turns";

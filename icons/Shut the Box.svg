@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- Box background -->
+  <rect x="20" y="40" width="160" height="120" rx="10" fill="#8B4513" stroke="#5D2E0F" stroke-width="3"/>
+  
+  <!-- Inner box -->
+  <rect x="30" y="50" width="140" height="100" rx="5" fill="#A0522D"/>
+  
+  <!-- Numbers (tiles) -->
+  <rect x="40" y="60" width="20" height="25" rx="3" fill="#F4E4C1" stroke="#8B7355" stroke-width="1.5"/>
+  <text x="50" y="77" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#333" text-anchor="middle">1</text>
+  
+  <rect x="65" y="60" width="20" height="25" rx="3" fill="#F4E4C1" stroke="#8B7355" stroke-width="1.5"/>
+  <text x="75" y="77" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#333" text-anchor="middle">2</text>
+  
+  <rect x="90" y="60" width="20" height="25" rx="3" fill="#F4E4C1" stroke="#8B7355" stroke-width="1.5"/>
+  <text x="100" y="77" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#333" text-anchor="middle">3</text>
+  
+  <rect x="115" y="60" width="20" height="25" rx="3" fill="#F4E4C1" stroke="#8B7355" stroke-width="1.5"/>
+  <text x="125" y="77" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#333" text-anchor="middle">4</text>
+  
+  <rect x="140" y="60" width="20" height="25" rx="3" fill="#888" stroke="#555" stroke-width="1.5"/>
+  <text x="150" y="77" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#CCC" text-anchor="middle">5</text>
+  
+  <!-- Second row -->
+  <rect x="40" y="90" width="20" height="25" rx="3" fill="#F4E4C1" stroke="#8B7355" stroke-width="1.5"/>
+  <text x="50" y="107" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#333" text-anchor="middle">6</text>
+  
+  <rect x="65" y="90" width="20" height="25" rx="3" fill="#888" stroke="#555" stroke-width="1.5"/>
+  <text x="75" y="107" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#CCC" text-anchor="middle">7</text>
+  
+  <rect x="90" y="90" width="20" height="25" rx="3" fill="#F4E4C1" stroke="#8B7355" stroke-width="1.5"/>
+  <text x="100" y="107" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#333" text-anchor="middle">8</text>
+  
+  <rect x="115" y="90" width="20" height="25" rx="3" fill="#888" stroke="#555" stroke-width="1.5"/>
+  <text x="125" y="107" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#CCC" text-anchor="middle">9</text>
+  
+  <rect x="140" y="90" width="20" height="25" rx="3" fill="#F4E4C1" stroke="#8B7355" stroke-width="1.5"/>
+  <text x="150" y="107" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#333" text-anchor="middle">10</text>
+  
+  <!-- Dice -->
+  <rect x="50" y="125" width="25" height="25" rx="3" fill="white" stroke="#333" stroke-width="2"/>
+  <circle cx="57" cy="132" r="2" fill="#333"/>
+  <circle cx="57" cy="145" r="2" fill="#333"/>
+  <circle cx="70" cy="132" r="2" fill="#333"/>
+  <circle cx="70" cy="145" r="2" fill="#333"/>
+  <circle cx="63.5" cy="138.5" r="2" fill="#333"/>
+  
+  <rect x="120" y="125" width="25" height="25" rx="3" fill="white" stroke="#333" stroke-width="2"/>
+  <circle cx="127" cy="132" r="2" fill="#333"/>
+  <circle cx="140" cy="145" r="2" fill="#333"/>
+  <circle cx="133.5" cy="138.5" r="2" fill="#333"/>
+</svg>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shut the Box</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1 data-translate="title">Shut the Box</h1>
+
+    <!-- Level Selection Menu -->
+    <div id="levelMenu" class="menu-overlay">
+        <div class="menu-content">
+            <h2 data-translate="title">Shut the Box</h2>
+            <p data-translate="selectLevel">Select Level:</p>
+            <button class="level-btn" onclick="startGame(1)">
+                <span data-translate="level1">Level 1</span>
+                <p data-translate="level1Desc">Single Board (1-12)</p>
+            </button>
+            <button class="level-btn" onclick="startGame(2)">
+                <span data-translate="level2">Level 2</span>
+                <p data-translate="level2Desc">Double Board (1-12 + 12-1)</p>
+            </button>
+        </div>
+    </div>
+
+    <!-- Game Container -->
+    <div id="gameContainer" style="display: none;">
+        <div id="gameInfo">
+            <div class="info-row">
+                <span><span data-translate="level">Level</span>: <span id="currentLevel">1</span></span>
+                <span><span data-translate="score">Score</span>: <span id="score">78</span></span>
+            </div>
+        </div>
+
+        <!-- Dice Container -->
+        <div id="diceContainer">
+            <div id="dice1" class="dice">
+                <div class="dice-face"></div>
+            </div>
+            <div id="dice2" class="dice">
+                <div class="dice-face"></div>
+            </div>
+            <div id="diceTotal" class="dice-total">0</div>
+        </div>
+
+        <button id="rollBtn" data-translate="rollDice">Roll Dice</button>
+
+        <!-- Board 1 -->
+        <div id="board1Container">
+            <h3 data-translate="board">Board</h3>
+            <div id="board1" class="board"></div>
+        </div>
+
+        <!-- Board 2 (Level 2 only) -->
+        <div id="board2Container" style="display: none;">
+            <h3 data-translate="board2">Board 2 (Behind)</h3>
+            <div id="board2" class="board"></div>
+        </div>
+
+        <!-- Selection Controls -->
+        <div id="selectionControls" style="display: none;">
+            <p><span data-translate="selected">Selected</span>: <span id="selectedNumbers"></span> = <span id="selectedSum">0</span></p>
+            <button id="resetBtn" data-translate="reset">Reset Selection</button>
+            <button id="submitBtn" data-translate="submit">Submit</button>
+        </div>
+
+        <!-- Message -->
+        <div id="message"></div>
+
+        <!-- Menu Button -->
+        <button id="menuBtn" onclick="showMenu()" data-translate="menu">Menu</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
