@@ -19,6 +19,7 @@
     "Puzzle",
     "Domino",
     "Maze",
+    "Maze in the Dark",
     "Connect Four",
     "2048",
     "Sequence Builder",
@@ -29,6 +30,7 @@
     "Collapse",
     "Shut the Box",
     "TCG Game",
-    "VGC"
+    "VGC",
+    "Farming Town"
   ]
 }

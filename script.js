@@ -574,6 +574,13 @@ const gameDescriptions = {
     scoring: "Fastest time to reach the finish wins. Lower time is better!",
     controls: "Use arrow keys to move or click on adjacent cells to move the paw. Find your way from ▶️ to 🏁!"
   },
+  "Maze in the Dark": {
+    title: "Maze in the Dark",
+    description: "Navigate through a maze with limited visibility! You can only see the finish flag and the 4 cells directly adjacent to your position (up, down, left, right). Complete the maze as quickly as possible using memory and spatial awareness!",
+    modes: "Easy (11×11): Small maze with limited vision\nMedium (17×17): Bigger maze with limited vision\nHard (23×23): Large maze with limited vision",
+    scoring: "Fastest time to reach the finish wins. Lower time is better! Only adjacent cells are visible as you explore.",
+    controls: "Use arrow keys to move or click on adjacent visible cells to move the paw. You can only see 4 cells around you! Find your way from 🐾 to 🏁 in the darkness!"
+  },
   "Connect Four": {
     title: "Connect Four",
     description: "Drop colored discs into a vertical grid. Get four in a row horizontally, vertically, or diagonally to win! Play against an AI opponent.",
@@ -786,6 +793,13 @@ const gameDescriptionsPT = {
     modes: "Fácil (11×11): Labirinto pequeno\nMédio (17×17): Labirinto maior\nDifícil (23×23): Labirinto grande",
     scoring: "Tempo mais rápido para chegar ao fim ganha. Tempo mais baixo é melhor!",
     controls: "Use as setas para mover ou clique nas células adjacentes para mover a pata. Encontre o caminho de ▶️ até 🏁!"
+  },
+  "Maze in the Dark": {
+    title: "Labirinto no Escuro",
+    description: "Navegue por um labirinto com visibilidade limitada! Só consegue ver a bandeira de chegada e as 4 células diretamente adjacentes à sua posição (cima, baixo, esquerda, direita). Complete o labirinto o mais rápido possível usando memória e consciência espacial!",
+    modes: "Fácil (11×11): Labirinto pequeno com visão limitada\nMédio (17×17): Labirinto maior com visão limitada\nDifícil (23×23): Labirinto grande com visão limitada",
+    scoring: "Tempo mais rápido para chegar ao fim ganha. Tempo mais baixo é melhor! Apenas células adjacentes são visíveis enquanto explora.",
+    controls: "Use as setas para mover ou clique nas células visíveis adjacentes para mover a pata. Só consegue ver 4 células à sua volta! Encontre o caminho de 🐾 até 🏁 na escuridão!"
   },
   "Connect Four": {
     title: "Quatro em Linha",
@@ -1169,6 +1183,12 @@ function showGameLeaderboard(gameName) {
   
   // Special handling for Maze (bestTime - lower is better, with difficulty modes)
   if (gameName === "Maze") {
+    showTimeBasedDifficultyLeaderboard(db, content, gameName);
+    return;
+  }
+  
+  // Special handling for Maze in the Dark (bestTime - lower is better, with difficulty modes)
+  if (gameName === "Maze in the Dark") {
     showTimeBasedDifficultyLeaderboard(db, content, gameName);
     return;
   }

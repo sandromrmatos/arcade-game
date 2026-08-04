@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maze in the Dark</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      background: #0f3460;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+      text-align: center;
+      max-width: 95vw;
+    }
+
+    h1 {
+      color: #e94560;
+      margin-bottom: 20px;
+      font-size: 28px;
+      text-shadow: 0 0 10px rgba(233, 69, 96, 0.5);
+    }
+
+    .mode-selection {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .mode-btn {
+      padding: 15px 30px;
+      font-size: 18px;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .mode-btn.easy {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .mode-btn.medium {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+    }
+
+    .mode-btn.hard {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+    }
+
+    .mode-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+    }
+
+    .game-info {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 20px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #e94560;
+      flex-wrap: wrap;
+    }
+
+    .timer {
+      color: #00f2fe;
+    }
+
+    .maze-container {
+      display: inline-block;
+      border: 3px solid #e94560;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #000;
+      margin: 0 auto;
+      box-shadow: 0 0 20px rgba(233, 69, 96, 0.5);
+    }
+
+    .maze-row {
+      display: flex;
+      line-height: 0;
+    }
+
+    .maze-cell {
+      width: 30px;
+      height: 30px;
+      border: 1px solid #111;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background 0.2s;
+      background: #000;
+    }
+
+    .maze-cell.wall {
+      background: #1a1a2e;
+      cursor: not-allowed;
+    }
+
+    .maze-cell.path {
+      background: #0f3460;
+    }
+
+    .maze-cell.start {
+      background: #667eea;
+      font-weight: bold;
+    }
+
+    .maze-cell.finish {
+      background: #e94560;
+      font-weight: bold;
+      box-shadow: 0 0 15px rgba(233, 69, 96, 0.8);
+    }
+
+    .maze-cell.player {
+      background: #ffd700;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+    }
+
+    .maze-cell.visible {
+      background: #0f3460;
+    }
+
+    .maze-cell.visible.wall {
+      background: #1a1a2e;
+    }
+
+    .maze-cell.clickable {
+      background: #16537e;
+    }
+
+    .maze-cell.clickable:hover {
+      background: #2c6b9e;
+      transform: scale(1.1);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .controls {
+      margin-top: 20px;
+      color: #e94560;
+      font-size: 14px;
+    }
+
+    .restart-btn {
+      margin-top: 20px;
+      padding: 12px 30px;
+      font-size: 16px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #e94560 0%, #0f3460 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .restart-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .maze-cell {
+        width: 25px;
+        height: 25px;
+        font-size: 14px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .mode-btn {
+        padding: 12px 20px;
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .maze-cell {
+        width: 20px;
+        height: 20px;
+        font-size: 12px;
+      }
+
+      .container {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 id="title">Maze in the Dark</h1>
+
+    <div id="mode-selection" class="mode-selection">
+      <button class="mode-btn easy" onclick="startGame('easy')">Easy</button>
+      <button class="mode-btn medium" onclick="startGame('medium')">Medium</button>
+      <button class="mode-btn hard" onclick="startGame('hard')">Hard</button>
+    </div>
+
+    <div id="game-area" class="hidden">
+      <div class="game-info">
+        <div id="difficulty-display"></div>
+        <div class="timer" id="timer">Time: 00:00</div>
+      </div>
+
+      <div id="maze-container" class="maze-container"></div>
+
+      <div class="controls" id="controls">
+        Use arrow keys or click adjacent cells to move
+      </div>
+
+      <button class="restart-btn" onclick="backToMenu()">Back to Menu</button>
+    </div>
+  </div>
+
+  <script>
+    // Language system
+    let currentLanguage = 'en';
+
+    // Get language from parent
+    function getParentLanguage() {
+      try {
+        return window.parent.currentLanguage || 'en';
+      } catch (e) {
+        return 'en';
+      }
+    }
+
+    const translations = {
+      en: {
+        title: "Maze in the Dark",
+        easy: "Easy",
+        medium: "Medium",
+        hard: "Hard",
+        time: "Time",
+        difficulty: "Difficulty",
+        controls: "Use arrow keys or click adjacent cells to move",
+        backToMenu: "Back to Menu",
+        congrats: "Congratulations!",
+        completed: "You completed the maze in",
+        newRecord: "NEW RECORD!",
+        previousBest: "Previous best"
+      },
+      pt: {
+        title: "Labirinto no Escuro",
+        easy: "Fácil",
+        medium: "Médio",
+        hard: "Difícil",
+        time: "Tempo",
+        difficulty: "Dificuldade",
+        controls: "Use as setas ou clique nas células adjacentes para mover",
+        backToMenu: "Voltar ao Menu",
+        congrats: "Parabéns!",
+        completed: "Completou o labirinto em",
+        newRecord: "NOVO RECORDE!",
+        previousBest: "Melhor anterior"
+      }
+    };
+
+    function t(key) {
+      return translations[currentLanguage][key] || key;
+    }
+
+    function updateLanguage() {
+      currentLanguage = getParentLanguage();
+      document.getElementById('title').textContent = t('title');
+      document.getElementById('controls').textContent = t('controls');
+      
+      // Update mode buttons
+      const modeBtns = document.querySelectorAll('.mode-btn');
+      if (modeBtns.length >= 3) {
+        modeBtns[0].textContent = t('easy');
+        modeBtns[1].textContent = t('medium');
+        modeBtns[2].textContent = t('hard');
+      }
+
+      // Update back button
+      const restartBtn = document.querySelector('.restart-btn');
+      if (restartBtn) {
+        restartBtn.textContent = t('backToMenu');
+      }
+
+      // Update difficulty display if game is running
+      if (currentDifficulty) {
+        document.getElementById('difficulty-display').textContent = 
+          `${t('difficulty')}: ${t(currentDifficulty)}`;
+      }
+    }
+
+    // Listen for language changes
+    window.addEventListener('message', function(event) {
+      if (event.data.type === 'languageChange') {
+        updateLanguage();
+      }
+    });
+
+    // Game variables - MUST be declared before updateLanguage() is called
+    let currentDifficulty = null;
+    let maze = [];
+    let playerPos = { row: 0, col: 0 };
+    let finishPos = { row: 0, col: 0 };
+    let timerInterval = null;
+    let startTime = 0;
+    let elapsedTime = 0;
+
+    // Initialize language
+    updateLanguage();
+
+    // Maze generation using recursive backtracking
+    function generateMaze(rows, cols) {
+      // Create grid filled with walls
+      const grid = Array(rows).fill(null).map(() => Array(cols).fill(1));
+      
+      // Carve paths
+      function carve(row, col) {
+        grid[row][col] = 0;
+        
+        // Randomize directions
+        const directions = [
+          [-2, 0], [2, 0], [0, -2], [0, 2]
+        ].sort(() => Math.random() - 0.5);
+        
+        for (const [dr, dc] of directions) {
+          const newRow = row + dr;
+          const newCol = col + dc;
+          
+          if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols && grid[newRow][newCol] === 1) {
+            grid[row + dr/2][col + dc/2] = 0;
+            carve(newRow, newCol);
+          }
+        }
+      }
+      
+      // Start carving from (0,0)
+      carve(0, 0);
+      
+      // Ensure start and finish are paths
+      grid[0][0] = 0;
+      grid[rows-1][cols-1] = 0;
+      
+      // Create paths adjacent to start and finish to ensure they're accessible
+      if (rows > 1) {
+        grid[1][0] = 0; // Path below start
+        grid[rows-2][cols-1] = 0; // Path above finish
+      }
+      if (cols > 1) {
+        grid[0][1] = 0; // Path right of start
+        grid[rows-1][cols-2] = 0; // Path left of finish
+      }
+      
+      // Create some additional paths for easier gameplay
+      for (let i = 0; i < Math.floor(rows * cols * 0.05); i++) {
+        const r = Math.floor(Math.random() * rows);
+        const c = Math.floor(Math.random() * cols);
+        grid[r][c] = 0;
+      }
+      
+      return grid;
+    }
+
+    function startGame(difficulty) {
+      console.log("startGame called with difficulty:", difficulty);
+      currentDifficulty = difficulty;
+      
+      // Set maze size based on difficulty
+      let rows, cols;
+      if (difficulty === 'easy') {
+        rows = 11;
+        cols = 11;
+      } else if (difficulty === 'medium') {
+        rows = 17;
+        cols = 17;
+      } else {
+        rows = 23;
+        cols = 23;
+      }
+      
+      // Generate maze
+      maze = generateMaze(rows, cols);
+      
+      // Set start and finish positions
+      playerPos = { row: 0, col: 0 };
+      finishPos = { row: rows - 1, col: cols - 1 };
+      
+      // Hide mode selection, show game area
+      document.getElementById('mode-selection').classList.add('hidden');
+      document.getElementById('game-area').classList.remove('hidden');
+      
+      // Update difficulty display
+      document.getElementById('difficulty-display').textContent = 
+        `${t('difficulty')}: ${t(difficulty)}`;
+      
+      // Start timer
+      startTime = Date.now();
+      elapsedTime = 0;
+      updateTimer();
+      timerInterval = setInterval(updateTimer, 100);
+      
+      // Render maze
+      renderMaze();
+    }
+
+    function isCellVisible(row, col) {
+      // Always show the finish cell
+      if (row === finishPos.row && col === finishPos.col) {
+        return true;
+      }
+      
+      // Show the player's current cell
+      if (row === playerPos.row && col === playerPos.col) {
+        return true;
+      }
+      
+      // Show the 4 adjacent cells (up, down, left, right)
+      const rowDiff = Math.abs(row - playerPos.row);
+      const colDiff = Math.abs(col - playerPos.col);
+      
+      return (rowDiff === 1 && colDiff === 0) || (rowDiff === 0 && colDiff === 1);
+    }
+
+    function renderMaze() {
+      const container = document.getElementById('maze-container');
+      container.innerHTML = '';
+      
+      for (let row = 0; row < maze.length; row++) {
+        const rowDiv = document.createElement('div');
+        rowDiv.className = 'maze-row';
+        
+        for (let col = 0; col < maze[row].length; col++) {
+          const cell = document.createElement('div');
+          cell.className = 'maze-cell';
+          cell.dataset.row = row;
+          cell.dataset.col = col;
+          
+          const isVisible = isCellVisible(row, col);
+          
+          // Determine cell type
+          if (row === playerPos.row && col === playerPos.col) {
+            cell.classList.add('player', 'visible');
+            cell.textContent = '🐾';
+          } else if (row === finishPos.row && col === finishPos.col) {
+            cell.classList.add('finish', 'visible');
+            cell.textContent = '🏁';
+            
+            // Make finish cell clickable if adjacent to player
+            if (isAdjacent(row, col, playerPos.row, playerPos.col)) {
+              cell.classList.add('clickable');
+              cell.addEventListener('click', () => movePlayer(row, col));
+            }
+          } else if (isVisible) {
+            cell.classList.add('visible');
+            
+            if (maze[row][col] === 1) {
+              cell.classList.add('wall');
+            } else {
+              cell.classList.add('path');
+              
+              // Check if this cell is adjacent to player (clickable)
+              if (isAdjacent(row, col, playerPos.row, playerPos.col)) {
+                cell.classList.add('clickable');
+                cell.addEventListener('click', () => movePlayer(row, col));
+              }
+            }
+          }
+          // If not visible, cell stays completely dark (no classes)
+          
+          rowDiv.appendChild(cell);
+        }
+        
+        container.appendChild(rowDiv);
+      }
+    }
+
+    function isAdjacent(row1, col1, row2, col2) {
+      const rowDiff = Math.abs(row1 - row2);
+      const colDiff = Math.abs(col1 - col2);
+      return (rowDiff === 1 && colDiff === 0) || (rowDiff === 0 && colDiff === 1);
+    }
+
+    function movePlayer(newRow, newCol) {
+      // Check if move is valid
+      if (newRow < 0 || newRow >= maze.length || newCol < 0 || newCol >= maze[0].length) {
+        return;
+      }
+      
+      if (!isAdjacent(newRow, newCol, playerPos.row, playerPos.col)) {
+        return;
+      }
+      
+      if (maze[newRow][newCol] === 1) {
+        return; // Can't move into wall
+      }
+      
+      // Update player position
+      playerPos.row = newRow;
+      playerPos.col = newCol;
+      
+      // Re-render maze
+      renderMaze();
+      
+      // Check if reached finish
+      if (playerPos.row === finishPos.row && playerPos.col === finishPos.col) {
+        finishGame();
+      }
+    }
+
+    function updateTimer() {
+      elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+      const minutes = Math.floor(elapsedTime / 60);
+      const seconds = elapsedTime % 60;
+      document.getElementById('timer').textContent = 
+        `${t('time')}: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    function finishGame() {
+      // Stop timer
+      clearInterval(timerInterval);
+      
+      // Save score
+      if (window.parent.saveGameScore) {
+        window.parent.saveGameScore("Maze in the Dark", {
+          bestTime: elapsedTime,
+          difficulty: currentDifficulty
+        }).then(result => {
+          const minutes = Math.floor(elapsedTime / 60);
+          const seconds = elapsedTime % 60;
+          const timeStr = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+          
+          if (result && result.isNewBest) {
+            alert(`${t('newRecord')}\n\n${t('congrats')}\n${t('completed')} ${timeStr}!`);
+            
+            if (window.parent.showNewBestScore) {
+              window.parent.showNewBestScore("Maze in the Dark", { bestTime: elapsedTime, difficulty: currentDifficulty });
+            }
+          } else {
+            alert(`${t('congrats')}\n${t('completed')} ${timeStr}!`);
+          }
+        }).catch(err => {
+          console.error("Error saving score:", err);
+          const minutes = Math.floor(elapsedTime / 60);
+          const seconds = elapsedTime % 60;
+          const timeStr = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+          alert(`${t('congrats')}\n${t('completed')} ${timeStr}!`);
+        });
+      }
+    }
+
+    function backToMenu() {
+      // Stop timer
+      clearInterval(timerInterval);
+      
+      // Reset game
+      currentDifficulty = null;
+      maze = [];
+      playerPos = { row: 0, col: 0 };
+      
+      // Show mode selection, hide game area
+      document.getElementById('mode-selection').classList.remove('hidden');
+      document.getElementById('game-area').classList.add('hidden');
+    }
+
+    // Keyboard controls
+    document.addEventListener('keydown', (e) => {
+      if (!currentDifficulty) return;
+      
+      let newRow = playerPos.row;
+      let newCol = playerPos.col;
+      
+      switch(e.key) {
+        case 'ArrowUp':
+          newRow--;
+          e.preventDefault();
+          break;
+        case 'ArrowDown':
+          newRow++;
+          e.preventDefault();
+          break;
+        case 'ArrowLeft':
+          newCol--;
+          e.preventDefault();
+          break;
+        case 'ArrowRight':
+          newCol++;
+          e.preventDefault();
+          break;
+        default:
+          return;
+      }
+      
+      movePlayer(newRow, newCol);
+    });
+  </script>
+</body>
+</html>

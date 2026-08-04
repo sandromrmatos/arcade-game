@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Farming Town</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Firebase SDK v10.8.0 (compat version for compatibility with existing games) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <!-- Top UI Panel -->
+    <div id="topPanel" class="top-panel">
+        <div class="player-info">
+            <div class="stat-item">
+                <span class="stat-label" data-i18n="playerName">Player</span>: 
+                <span id="playerNameDisplay">...</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label" data-i18n="level">Level</span>: 
+                <span id="levelDisplay">1</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label" data-i18n="xp">XP</span>: 
+                <span id="xpDisplay">0</span> / <span id="xpNextDisplay">20</span>
+            </div>
+            <div class="stat-item coins">
+                <span class="coin-icon">🪙</span>
+                <span id="coinsDisplay">20</span>
+            </div>
+        </div>
+        <div class="action-buttons">
+            <button id="btnInventory" class="btn-action" data-i18n="inventory">Inventory</button>
+            <button id="btnMarketplace" class="btn-action" data-i18n="marketplace">Marketplace</button>
+            <button id="btnCreatePlot" class="btn-action" data-i18n="createPlot">Create Plot (2🪙)</button>
+            <button id="btnVisitFriend" class="btn-action" data-i18n="visitFriend">Visit a Friend</button>
+            <button id="btnHelp" class="btn-action" data-i18n="help">Help</button>
+            <select id="languageSelector" class="language-selector">
+                <option value="en">EN</option>
+                <option value="pt">PT</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Game Grid Container -->
+    <div id="gameContainer" class="game-container">
+        <div id="gridContainer" class="grid-container">
+            <!-- Grid tiles will be dynamically generated here -->
+        </div>
+    </div>
+
+    <!-- Inventory Modal -->
+    <div id="inventoryModal" class="modal hidden">
+        <div class="modal-content inventory-content">
+            <div class="modal-header">
+                <h2 data-i18n="inventory">Inventory</h2>
+                <button class="btn-close" data-close="inventoryModal">&times;</button>
+            </div>
+            <div class="inventory-tabs">
+                <button class="tab-btn active" data-tab="seeds" data-i18n="seeds">Seeds</button>
+                <button class="tab-btn" data-tab="crops" data-i18n="crops">Crops & Fruits</button>
+                <button class="tab-btn" data-tab="products" data-i18n="products">Products</button>
+                <button class="tab-btn" data-tab="buildings" data-i18n="buildingsTab">Buildings</button>
+            </div>
+            <div class="inventory-grid" id="inventoryGrid">
+                <!-- Inventory items will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Marketplace Modal -->
+    <div id="marketplaceModal" class="modal hidden">
+        <div class="modal-content marketplace-content">
+            <div class="modal-header">
+                <h2 data-i18n="marketplace">Marketplace</h2>
+                <button class="btn-close" data-close="marketplaceModal">&times;</button>
+            </div>
+            <div class="marketplace-tabs">
+                <button class="tab-btn active" data-tab="sell" data-i18n="sell">Sell</button>
+                <button class="tab-btn" data-tab="buySeeds" data-i18n="buySeeds">Buy Seeds</button>
+                <button class="tab-btn" data-tab="buyBuildings" data-i18n="buyBuildings">Buy Buildings</button>
+                <button class="tab-btn" data-tab="buyDecorations" data-i18n="buyDecorations">Buy Decorations</button>
+                <button class="tab-btn" data-tab="buyLand" data-i18n="buyLand">Buy Land</button>
+            </div>
+            <div class="marketplace-content-area" id="marketplaceContent">
+                <!-- Marketplace content will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Building Interaction Modal -->
+    <div id="buildingModal" class="modal hidden">
+        <div class="modal-content building-content">
+            <div class="modal-header">
+                <h2 id="buildingModalTitle">Building</h2>
+                <button class="btn-close" data-close="buildingModal">&times;</button>
+            </div>
+            <div class="building-slots" id="buildingSlots">
+                <!-- 3 production slots will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Planting Menu Modal -->
+    <div id="plantingModal" class="modal hidden">
+        <div class="modal-content planting-content">
+            <div class="modal-header">
+                <h2 data-i18n="plantSeed">Plant Seed</h2>
+                <button class="btn-close" data-close="plantingModal">&times;</button>
+            </div>
+            <div class="planting-options" id="plantingOptions">
+                <!-- Available seeds from inventory will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Tree Placement Modal -->
+    <div id="treePlacementModal" class="modal hidden">
+        <div class="modal-content tree-placement-content">
+            <div class="modal-header">
+                <h2 data-i18n="placeTree">Place Tree</h2>
+                <button class="btn-close" data-close="treePlacementModal">&times;</button>
+            </div>
+            <div class="tree-options" id="treeOptions">
+                <!-- Available trees from inventory will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Building Placement Modal -->
+    <div id="buildingPlacementModal" class="modal hidden">
+        <div class="modal-content building-placement-content">
+            <div class="modal-header">
+                <h2 data-i18n="placeBuilding">Place Building</h2>
+                <button class="btn-close" data-close="buildingPlacementModal">&times;</button>
+            </div>
+            <div id="buildingPlacementInfo" class="placement-info">
+                <p data-i18n="clickToPlace">Click on the grid to place the building</p>
+                <p id="buildingSizeInfo"></p>
+                <button id="btnCancelPlacement" class="btn-cancel" data-i18n="cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recipe Selection Modal (for buildings with multiple recipes) -->
+    <div id="recipeModal" class="modal hidden">
+        <div class="modal-content recipe-content">
+            <div class="modal-header">
+                <h2 data-i18n="selectRecipe">Select Recipe</h2>
+                <button class="btn-close" data-close="recipeModal">&times;</button>
+            </div>
+            <div class="recipe-list" id="recipeList">
+                <!-- Available recipes will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Level Up Notification Modal -->
+    <div id="levelUpModal" class="modal hidden">
+        <div class="modal-content level-up-content">
+            <div class="level-up-celebration">
+                <h1>🎉</h1>
+                <h2 data-i18n="levelUp">Level Up!</h2>
+                <p><span data-i18n="reachedLevel">You reached level</span> <span id="newLevelDisplay"></span>!</p>
+                <div id="levelUpRewards"></div>
+                <button id="btnCloseLevelUp" class="btn-primary" data-i18n="continue">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Generic Notification Modal -->
+    <div id="notificationModal" class="modal hidden">
+        <div class="modal-content notification-content">
+            <div class="modal-header">
+                <h2 id="notificationTitle">Notice</h2>
+                <button class="btn-close" data-close="notificationModal">&times;</button>
+            </div>
+            <div id="notificationMessage" class="notification-message"></div>
+            <button id="btnCloseNotification" class="btn-primary" data-i18n="ok">OK</button>
+        </div>
+    </div>
+
+    <!-- Help/Tutorial Modal -->
+    <div id="helpModal" class="modal hidden">
+        <div class="modal-content help-content">
+            <div class="modal-header">
+                <h2 data-i18n="help">Help</h2>
+                <button class="btn-close" data-close="helpModal">&times;</button>
+            </div>
+            <div class="help-sections" id="helpContent">
+                <!-- Help content will be populated by translations -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Visit a Friend Modal -->
+    <div id="visitFriendModal" class="modal hidden">
+        <div class="modal-content visit-friend-content">
+            <div class="modal-header">
+                <h2 data-i18n="visitFriend">Visit a Friend</h2>
+                <button class="btn-close" data-close="visitFriendModal">&times;</button>
+            </div>
+            <div class="visit-friend-selector">
+                <label data-i18n="selectPlayer">Select a player:</label>
+                <select id="friendSelector" class="friend-selector">
+                    <option value="" data-i18n="loadingPlayers">Loading players...</option>
+                </select>
+                <button id="btnVisit" class="btn-primary" data-i18n="visit">Visit</button>
+                <button id="btnReturnToMyFarm" class="btn-secondary hidden" data-i18n="returnToMyFarm">Return to My Farm</button>
+            </div>
+            <div id="friendFarmInfo" class="friend-farm-info hidden">
+                <h3><span data-i18n="visiting">Visiting</span>: <span id="visitedPlayerName"></span></h3>
+                <div class="friend-stats">
+                    <span data-i18n="level">Level</span>: <span id="visitedLevel">1</span> | 
+                    <span data-i18n="xp">XP</span>: <span id="visitedXP">0</span> | 
+                    <span>🪙 <span id="visitedCoins">0</span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tooltip (for hover information) -->
+    <div id="tooltip" class="tooltip hidden">
+        <div id="tooltipContent"></div>
+    </div>
+
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-spinner"></div>
+        <p data-i18n="loading">Loading...</p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="data.js"></script>
+    <script src="translations.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
