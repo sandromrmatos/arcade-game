@@ -1743,45 +1743,57 @@ function handleConstructionComplete(tile) {
 }
 
 // Show building placement menu
-function showBuildingPlacementMenu() {
+function showBuildingPlacementMenu(buildingType = null) {
   const modal = document.getElementById('buildingPlacementModal');
   const infoDiv = document.getElementById('buildingPlacementInfo');
   
-  // Get available building kits from inventory
-  const buildingTypes = Object.keys(GameData.buildings);
-  let hasBuildings = false;
-  let selectedBuilding = null;
-  
-  buildingTypes.forEach(buildingType => {
-    const kitId = `${buildingType}Kit`;
-    const count = GameState.getInventoryCount(kitId);
+  // If no building type specified, find first available in inventory
+  if (!buildingType) {
+    const buildingTypes = Object.keys(GameData.buildings);
     
-    if (count > 0 && !selectedBuilding) {
-      hasBuildings = true;
-      selectedBuilding = buildingType;
+    for (const type of buildingTypes) {
+      const kitId = `${type}Kit`;
+      const count = GameState.getInventoryCount(kitId);
+      
+      if (count > 0) {
+        buildingType = type;
+        break;
+      }
     }
-  });
+  }
   
-  if (!hasBuildings) {
+  // Check if specified building kit exists in inventory
+  if (!buildingType) {
     showNotification(t('placeBuilding'), t('noBuildings'));
     return;
   }
   
-  if (selectedBuilding) {
-    const buildingData = GameData.buildings[selectedBuilding];
-    document.getElementById('buildingSizeInfo').textContent = 
-      `${t(selectedBuilding)} - ${t('size')}: ${buildingData.width}x${buildingData.height}`;
-    
-    GameState.placementMode = 'building';
-    GameState.placementItem = selectedBuilding;
-    GameState.placementPreviewTile = null;
+  const kitId = `${buildingType}Kit`;
+  const count = GameState.getInventoryCount(kitId);
+  
+  if (count <= 0) {
+    showNotification(t('placeBuilding'), t('noBuildings'));
+    return;
   }
+  
+  const buildingData = GameData.buildings[buildingType];
+  if (!buildingData) {
+    showNotification(t('placeBuilding'), t('noBuildings'));
+    return;
+  }
+  
+  document.getElementById('buildingSizeInfo').textContent = 
+    `${t(buildingType)} - ${t('size')}: ${buildingData.width}x${buildingData.height}`;
+  
+  GameState.placementMode = 'building';
+  GameState.placementItem = buildingType;
+  GameState.placementPreviewTile = null;
   
   // Close the modal immediately so grid is clickable
   // modal.classList.remove('hidden');
   
   // Show a notification instead
-  showNotification(t('placeBuilding'), `${t('clickToPlace')} - ${t(selectedBuilding)} (${buildingData.width}x${buildingData.height})`);
+  showNotification(t('placeBuilding'), `${t('clickToPlace')} - ${t(buildingType)} (${buildingData.width}x${buildingData.height})`);
   
   // Cancel button
   document.getElementById('btnCancelPlacement').onclick = () => {
@@ -2132,8 +2144,9 @@ function renderInventoryTab(tabName) {
       });
     } else if (item.id.includes('Kit')) {
       itemDiv.addEventListener('click', () => {
+        const buildingType = item.id.replace('Kit', '');
         closeModal('inventoryModal');
-        showBuildingPlacementMenu();
+        showBuildingPlacementMenu(buildingType);
       });
     }
     
