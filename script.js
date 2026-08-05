@@ -1294,13 +1294,13 @@ function showGameLeaderboard(gameName) {
   // Get all games, then filter and sort client-side (no index needed)
   // Note: This fetches all games, which is fine for low volumes
   db.collection("games")
-    .limit(100)
+    .where("gameName", "==", gameName)
+    .limit(50)
     .get()
     .then(snapshot => {
-      // Filter for specific game and sort by bestTime
+      // Sort by bestTime
       const docs = snapshot.docs
         .map(doc => ({ id: doc.id, ...doc.data() }))
-        .filter(doc => doc.gameName === gameName)
         .sort((a, b) => a.bestTime - b.bestTime)
         .slice(0, 10);
       
@@ -1364,19 +1364,20 @@ function getTableHeader(type) {
 
 function showScoreBasedLeaderboard(db, content, gameName) {
   db.collection("games")
-    .limit(200)
+    .where("gameName", "==", gameName)
+    .limit(100)
     .get()
     .then(snapshot => {
       const allDocs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       
-      // Filter for game and separate by difficulty
+      // Separate by difficulty
       const easyDocs = allDocs
-        .filter(doc => doc.gameName === gameName && doc.difficulty === "easy")
+        .filter(doc => doc.difficulty === "easy")
         .sort((a, b) => b.score - a.score)
         .slice(0, 10);
       
       const hardDocs = allDocs
-        .filter(doc => doc.gameName === gameName && doc.difficulty === "hard")
+        .filter(doc => doc.difficulty === "hard")
         .sort((a, b) => b.score - a.score)
         .slice(0, 10);
       
@@ -3012,13 +3013,26 @@ function showWordleLeaderboard(db, content, gameName) {
 
 function showFarmingTownLeaderboard(db, content, gameName) {
   db.collection("games")
-    .limit(100)
+    .where("gameName", "==", gameName)
+    .limit(50)
     .get()
     .then(snapshot => {
-      // Filter for Farming Town and sort by XP (score field) descending
-      const docs = snapshot.docs
-        .map(doc => ({ id: doc.id, ...doc.data() }))
-        .filter(doc => doc.gameName === gameName)
+      // Map all documents
+      const allDocs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+      // Group by player name and keep only the highest XP for each player
+      const playerBestScores = {};
+      allDocs.forEach(doc => {
+        const playerName = doc.playerName;
+        const xp = doc.xp || doc.score || 0;
+        
+        if (!playerBestScores[playerName] || xp > (playerBestScores[playerName].xp || playerBestScores[playerName].score || 0)) {
+          playerBestScores[playerName] = doc;
+        }
+      });
+      
+      // Convert to array and sort by XP descending
+      const docs = Object.values(playerBestScores)
         .sort((a, b) => (b.xp || b.score || 0) - (a.xp || a.score || 0))
         .slice(0, 10);
       
