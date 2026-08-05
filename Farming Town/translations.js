@@ -55,10 +55,13 @@ const Translations = {
     crops: "Crops & Fruits",
     products: "Products",
     buildingsTab: "Buildings",
+    farmsTab: "Farms",
+    treesTab: "Trees",
 
     // === MARKETPLACE TABS ===
     buySeeds: "Buy Seeds",
     buyBuildings: "Buy Buildings",
+    buyFarms: "Buy Farms",
     buyDecorations: "Buy Decorations",
     buyLand: "Buy Land",
 
@@ -118,6 +121,7 @@ const Translations = {
     porridge: "Porridge",
     pig: "Pig",
     chicken: "Chicken",
+    chickenAndEggs: "Chicken & Eggs",
     egg: "Egg",
     bread: "Bread",
     cake: "Cake",
@@ -331,10 +335,13 @@ const Translations = {
     crops: "Colheitas e Frutas",
     products: "Produtos",
     buildingsTab: "Edifícios",
+    farmsTab: "Fazendas",
+    treesTab: "Árvores",
 
     // === ABAS MERCADO ===
     buySeeds: "Comprar Sementes",
     buyBuildings: "Comprar Edifícios",
+    buyFarms: "Comprar Fazendas",
     buyDecorations: "Comprar Decorações",
     buyLand: "Comprar Terreno",
 
@@ -394,6 +401,7 @@ const Translations = {
     porridge: "Mingau",
     pig: "Porco",
     chicken: "Galinha",
+    chickenAndEggs: "Galinha e Ovos",
     egg: "Ovo",
     bread: "Pão",
     cake: "Bolo",

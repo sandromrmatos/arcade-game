@@ -1120,22 +1120,64 @@ function renderBuilding(tile) {
     return `<div class="tile-content tile-constructing">${icon}</div>`;
   }
   
-  // Check if any production slot has completed products
-  let hasCompletedProducts = false;
-  for (let slot = 0; slot < 3; slot++) {
-    const key = `${tile.x}_${tile.y}_${slot}`;
-    const production = GameState.productionQueues[key];
-    if (production && production.completed) {
-      hasCompletedProducts = true;
-      break;
+  // Determine if this is the origin tile (top-left of building)
+  // If originX/originY are set, check if this tile matches those coordinates
+  // Otherwise, if not set, treat this tile as origin (for backwards compatibility)
+  const isOrigin = tile.isOriginTile || 
+                   (tile.originX === undefined && tile.originY === undefined) ||
+                   (tile.x === tile.originX && tile.y === tile.originY);
+  
+  // Only show status on origin tile
+  if (isOrigin) {
+    // Use originX/originY if set, otherwise use this tile's coordinates
+    const originX = tile.originX !== undefined ? tile.originX : tile.x;
+    const originY = tile.originY !== undefined ? tile.originY : tile.y;
+    
+    // Check production slots for status
+    let hasCompletedProducts = false;
+    let hasProduction = false;
+    let shortestTime = Infinity;
+    
+    for (let slot = 0; slot < 3; slot++) {
+      const key = `${originX}_${originY}_${slot}`;
+      const production = GameState.productionQueues[key];
+      
+      if (production && production.recipeType) {
+        hasProduction = true;
+        
+        if (production.completed) {
+          hasCompletedProducts = true;
+        } else if (production.isProducing && production.startedAt && production.productionMinutes) {
+          // Calculate remaining time for this slot
+          const now = new Date();
+          const elapsed = (now - production.startedAt.toDate()) / 1000 / 60;
+          const remaining = Math.max(0, Math.ceil(production.productionMinutes - elapsed));
+          
+          if (remaining < shortestTime) {
+            shortestTime = remaining;
+          }
+        }
+      }
+    }
+    
+    // Priority 1: Show alert if products are ready
+    if (hasCompletedProducts) {
+      return `<div class="tile-content">${icon}<div class="building-alert">!</div></div>`;
+    }
+    
+    // Priority 2: Show shortest production time if anything is producing
+    if (shortestTime < Infinity) {
+      const timeStr = formatTime(shortestTime);
+      return `<div class="tile-content">${icon}</div><div class="tile-timer">${timeStr}</div>`;
+    }
+    
+    // Priority 3: Show "empty" if no production at all
+    if (!hasProduction) {
+      return `<div class="tile-content">${icon}</div><div class="tile-timer">${t('empty')}</div>`;
     }
   }
   
-  // Show normal building with alert if products are ready
-  if (hasCompletedProducts) {
-    return `<div class="tile-content">${icon}<div class="building-alert">!</div></div>`;
-  }
-  
+  // For non-origin tiles, just show the icon
   return `<div class="tile-content">${icon}</div>`;
 }
 
@@ -1296,6 +1338,7 @@ function getTileIcon(type, subtype = null) {
     animalFeed: '🌰',
     pig: '🐷',
     chicken: '🐔',
+    chickenAndEggs: '🐔🥚',
     egg: '🥚',
     bread: '🍞',
     cake: '🎂',
@@ -2112,8 +2155,18 @@ function renderInventoryTab(tabName) {
       
     case 'buildings':
       items = getInventoryItemsByCategory([
-        'millKit', 'pigFarmKit', 'chickenFarmKit', 'bakeryKit', 
-        'butcherKit', 'cowFarmKit', 'restaurantKit', 'cinemaKit', 
+        'millKit', 'bakeryKit', 'butcherKit', 'restaurantKit', 'cinemaKit'
+      ]);
+      break;
+      
+    case 'farms':
+      items = getInventoryItemsByCategory([
+        'pigFarmKit', 'chickenFarmKit', 'cowFarmKit'
+      ]);
+      break;
+      
+    case 'trees':
+      items = getInventoryItemsByCategory([
         'appleTree', 'lemonTree', 'orangeTree'
       ]);
       break;
@@ -2213,6 +2266,9 @@ function renderMarketplaceTab(tabName) {
       break;
     case 'buyBuildings':
       renderBuyBuildingsTab(container);
+      break;
+    case 'buyFarms':
+      renderBuyFarmsTab(container);
       break;
     case 'buyDecorations':
       renderBuyDecorationsTab(container);
@@ -2467,20 +2523,40 @@ function buySeeds(cropId, quantity) {
 }
 
 // Render BUY BUILDINGS tab
+// Helper function to count total buildings (kits + constructing + built)
+function getTotalBuildingCount(buildingId) {
+  // Count kits in inventory
+  const kitsInInventory = GameState.getInventoryCount(buildingId + 'Kit');
+  
+  // Count buildings under construction or already built
+  let buildingsOnGrid = 0;
+  GameState.grid.forEach(row => {
+    row.forEach(tile => {
+      if (tile && tile.type === 'building' && tile.buildingType === buildingId && tile.isOriginTile) {
+        buildingsOnGrid++;
+      }
+    });
+  });
+  
+  return kitsInInventory + buildingsOnGrid;
+}
+
 function renderBuyBuildingsTab(container) {
   const buildings = Object.values(GameData.buildings)
+    .filter(b => !['pigFarm', 'chickenFarm', 'cowFarm'].includes(b.id)) // Exclude farms
     .sort((a, b) => a.unlockLevel - b.unlockLevel); // Sort by unlock level
   
   buildings.forEach(building => {
     const isUnlocked = GameData.isUnlocked('building', building.id, GameState.level);
     
-    // Count both constructed buildings AND kits in inventory
-    const constructedCount = GameState.buildingsOwned[building.id] || 0;
-    const kitsInInventory = GameState.getInventoryCount(building.id + 'Kit');
-    const owned = constructedCount + kitsInInventory;
+    // Count total: kits in inventory + buildings on grid (constructing or built)
+    const owned = getTotalBuildingCount(building.id);
+    
+    // For pricing, we need to know how many we've PURCHASED (not just completed)
+    // Price doubles if we already own 1 (whether it's a kit, constructing, or built)
+    const price = owned === 0 ? building.kitPrice : building.kitPrice * 2;
     
     const canBuyMore = owned < building.maxOwned;
-    const price = GameData.getHouseKitPrice(building.id, constructedCount);
     const secondUnlockLevel = building.unlockLevel + 2;
     
     const itemDiv = document.createElement('div');
@@ -2526,15 +2602,75 @@ function renderBuyBuildingsTab(container) {
   });
 }
 
+// New function for buying farms
+function renderBuyFarmsTab(container) {
+  const farms = Object.values(GameData.buildings)
+    .filter(b => ['pigFarm', 'chickenFarm', 'cowFarm'].includes(b.id)) // Only farms
+    .sort((a, b) => a.unlockLevel - b.unlockLevel); // Sort by unlock level
+  
+  farms.forEach(building => {
+    const isUnlocked = GameData.isUnlocked('building', building.id, GameState.level);
+    
+    // Count total: kits in inventory + buildings on grid (constructing or built)
+    const owned = getTotalBuildingCount(building.id);
+    
+    // For pricing, we need to know how many we've PURCHASED (not just completed)
+    // Price doubles if we already own 1 (whether it's a kit, constructing, or built)
+    const price = owned === 0 ? building.kitPrice : building.kitPrice * 2;
+    
+    const canBuyMore = owned < building.maxOwned;
+    const secondUnlockLevel = building.unlockLevel + 2;
+    
+    const itemDiv = document.createElement('div');
+    itemDiv.className = 'marketplace-item';
+    if (!isUnlocked || !canBuyMore) {
+      itemDiv.classList.add('locked');
+    }
+    
+    let statusText = '';
+    if (!isUnlocked) {
+      statusText = `<span class="unlock-badge">${t('unlockAtLevel')} ${building.unlockLevel}</span>`;
+    } else if (owned >= building.maxOwned) {
+      statusText = `<span class="unlock-badge">${t('maxOwned')}</span>`;
+    } else if (owned === 1) {
+      statusText = `<span class="unlock-badge">${t('canBuySecondAt')} ${secondUnlockLevel}</span>`;
+    }
+    
+    itemDiv.innerHTML = `
+      <div class="item-info">
+        <div class="item-icon">${getTileIcon(building.id)}</div>
+        <div class="item-details">
+          <h3>${t(building.id + 'Kit')} ${statusText}</h3>
+          <p>${t('size')}: ${building.width}x${building.height} | ${t('owned')}: ${owned}/${building.maxOwned}</p>
+        </div>
+      </div>
+      <div class="item-price">🪙${price}</div>
+      <div class="item-actions">
+        ${isUnlocked && canBuyMore ? `
+          <button class="btn-primary" data-action="buy-farm" data-building="${building.id}">${t('buy')}</button>
+        ` : ''}
+      </div>
+    `;
+    
+    container.appendChild(itemDiv);
+  });
+  
+  // Add buy button handlers
+  container.querySelectorAll('[data-action="buy-farm"]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const buildingId = e.target.dataset.building;
+      buyBuildingKit(buildingId);
+    });
+  });
+}
+
 // Buy building kit function
 function buyBuildingKit(buildingId) {
   const building = GameData.buildings[buildingId];
   if (!building) return false;
   
-  // Count both constructed buildings AND kits in inventory (same logic as display)
-  const constructedCount = GameState.buildingsOwned[buildingId] || 0;
-  const kitsInInventory = GameState.getInventoryCount(buildingId + 'Kit');
-  const owned = constructedCount + kitsInInventory;
+  // Count total: kits in inventory + buildings on grid (constructing or built)
+  const owned = getTotalBuildingCount(buildingId);
   
   // Check if already at max owned
   if (owned >= building.maxOwned) {
@@ -2548,7 +2684,9 @@ function buyBuildingKit(buildingId) {
     return false;
   }
   
-  const price = GameData.getHouseKitPrice(buildingId, constructedCount);
+  // For pricing, we need to know how many we've PURCHASED (not just completed)
+  // Price doubles if we already own 1 (whether it's a kit, constructing, or built)
+  const price = owned === 0 ? building.kitPrice : building.kitPrice * 2;
   
   // Check if trying to buy without seeds/crops (safety check)
   if (!validatePurchase(price)) {
