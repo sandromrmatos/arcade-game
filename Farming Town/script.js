@@ -51,6 +51,9 @@ const GameState = {
   // Inventory: { itemId: quantity }
   inventory: {},
   
+  // Mission progress tracking: { missionId: { progress: number, claimed: boolean } }
+  missionProgress: {},
+  
   // Production queues: { "x_y_slot": productionData }
   productionQueues: {},
   
@@ -64,6 +67,7 @@ const GameState = {
   selectedTile: null,
   placementMode: null, // null, 'tree', 'building'
   placementItem: null,
+  placementPreviewTile: null, // For confirming building placement
   
   // Timers
   updateInterval: null,
@@ -174,6 +178,9 @@ const GameState = {
     this.updateDisplay();
     this.savePlayerData();
     
+    // Update leaderboard whenever XP changes
+    this.updateLeaderboard();
+    
     // Check if leveled up
     if (this.level > oldLevel) {
       this.onLevelUp(oldLevel, this.level);
@@ -233,12 +240,18 @@ const GameState = {
   
   // Check if player has any seeds
   hasAnySeeds() {
-    const seedItems = ['wheatSeed', 'tomatoSeed', 'potatoSeed', 'leekSeed'];
+    const seedItems = ['wheatSeed', 'tomatoSeed', 'potatoSeed', 'leekSeed', 'cornSeed', 'carrotSeed', 'onionSeed'];
     return seedItems.some(seed => this.getInventoryCount(seed) > 0);
   },
   
   // Save functions (will implement Firebase integration)
   async savePlayerData() {
+    // CRITICAL: Prevent saving while visiting a friend
+    if (isVisitingFriend) {
+      console.log('Blocked save: currently visiting a friend');
+      return;
+    }
+    
     if (!db || !playerId) {
       console.log('Cannot save player data: db or playerId missing');
       return;
@@ -261,6 +274,12 @@ const GameState = {
   },
   
   async saveGridTile(tile) {
+    // CRITICAL: Prevent saving while visiting a friend
+    if (isVisitingFriend) {
+      console.log('Blocked tile save: currently visiting a friend');
+      return;
+    }
+    
     if (!db || !playerId) {
       console.log('Cannot save tile: db or playerId missing');
       return;
@@ -295,10 +314,26 @@ const GameState = {
   },
   
   async saveInventory() {
+    // CRITICAL: Prevent saving while visiting a friend
+    if (isVisitingFriend) {
+      console.log('Blocked inventory save: currently visiting a friend');
+      return;
+    }
+    
     if (!db || !playerId) return;
     
     try {
-      // Save each inventory item
+      // Get all existing inventory items from database to check for deletions
+      const existingInventorySnapshot = await db.collection('farmingTownInventories')
+        .where('playerId', '==', playerId)
+        .get();
+      
+      const existingItems = new Set();
+      existingInventorySnapshot.forEach(doc => {
+        existingItems.add(doc.data().itemName);
+      });
+      
+      // Save or update current inventory items
       for (const [itemId, quantity] of Object.entries(this.inventory)) {
         if (quantity > 0) {
           const inventoryId = `${playerId}_item_${itemId}`;
@@ -308,7 +343,15 @@ const GameState = {
             quantity: quantity,
             lastModified: firebase.firestore.FieldValue.serverTimestamp()
           });
+          existingItems.delete(itemId); // Mark as handled
         }
+      }
+      
+      // Delete items that are no longer in inventory
+      for (const itemId of existingItems) {
+        const inventoryId = `${playerId}_item_${itemId}`;
+        await db.collection('farmingTownInventories').doc(inventoryId).delete();
+        console.log('Deleted inventory item from database:', itemId);
       }
     } catch (error) {
       console.error('Error saving inventory:', error);
@@ -316,6 +359,12 @@ const GameState = {
   },
   
   async saveProduction(buildingX, buildingY, slotIndex, productionData) {
+    // CRITICAL: Prevent saving while visiting a friend
+    if (isVisitingFriend) {
+      console.log('Blocked production save: currently visiting a friend');
+      return;
+    }
+    
     if (!db || !playerId) return;
     
     try {
@@ -338,14 +387,23 @@ const GameState = {
   },
   
   async updateLeaderboard() {
+    // CRITICAL: Prevent leaderboard updates while visiting a friend
+    if (isVisitingFriend) {
+      console.log('Blocked leaderboard update: currently visiting a friend');
+      return;
+    }
+    
     if (!db || !this.playerName) return;
     
     try {
-      await db.collection('games').add({
+      // Use player-specific document ID to avoid duplicates
+      const leaderboardId = `farmingTown_${playerId}`;
+      await db.collection('games').doc(leaderboardId).set({
         playerName: this.playerName,
         gameName: 'Farming Town',
         level: this.level,
         xp: this.xp,
+        score: this.xp, // Use XP as the score for sorting
         lastPlayed: firebase.firestore.FieldValue.serverTimestamp(),
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       });
@@ -354,12 +412,152 @@ const GameState = {
       if (window.parent && window.parent.saveGameScore) {
         window.parent.saveGameScore('Farming Town', {
           level: this.level,
-          xp: this.xp
+          xp: this.xp,
+          score: this.xp
         });
       }
     } catch (error) {
       console.error('Error updating leaderboard:', error);
     }
+  },
+  
+  // Mission tracking methods
+  incrementMissionProgress(type, itemId, amount = 1) {
+    // type: 'harvest' or 'production'
+    // itemId: crop/product identifier (e.g., 'wheat', 'flour')
+    
+    if (!GameData.missions[type] || !GameData.missions[type][itemId]) {
+      return; // No missions for this item
+    }
+    
+    const missions = GameData.missions[type][itemId];
+    
+    missions.forEach(mission => {
+      const missionKey = mission.id;
+      
+      // Initialize progress if not exists
+      if (!this.missionProgress[missionKey]) {
+        this.missionProgress[missionKey] = {
+          progress: 0,
+          claimed: false
+        };
+      }
+      
+      // Only increment if not completed and claimed
+      if (!this.missionProgress[missionKey].claimed) {
+        this.missionProgress[missionKey].progress += amount;
+        
+        // Cap at target
+        if (this.missionProgress[missionKey].progress > mission.target) {
+          this.missionProgress[missionKey].progress = mission.target;
+        }
+      }
+    });
+    
+    // Save mission progress
+    this.saveMissionProgress();
+  },
+  
+  async saveMissionProgress() {
+    // CRITICAL: Prevent saving while visiting a friend
+    if (isVisitingFriend) {
+      console.log('Blocked mission progress save: currently visiting a friend');
+      return;
+    }
+    
+    if (!db || !playerId) return;
+    
+    try {
+      await db.collection('farmingTownPlayers').doc(playerId).update({
+        missionProgress: this.missionProgress
+      });
+    } catch (error) {
+      console.error('Error saving mission progress:', error);
+    }
+  },
+  
+  claimMissionReward(missionId) {
+    // Find the mission in GameData
+    let mission = null;
+    let missionType = null;
+    
+    // Search in harvest missions
+    for (const cropType in GameData.missions.harvest) {
+      const found = GameData.missions.harvest[cropType].find(m => m.id === missionId);
+      if (found) {
+        mission = found;
+        missionType = 'harvest';
+        break;
+      }
+    }
+    
+    // Search in production missions if not found
+    if (!mission) {
+      for (const productType in GameData.missions.production) {
+        const found = GameData.missions.production[productType].find(m => m.id === missionId);
+        if (found) {
+          mission = found;
+          missionType = 'production';
+          break;
+        }
+      }
+    }
+    
+    if (!mission) {
+      console.error('Mission not found:', missionId);
+      return false;
+    }
+    
+    // Check if mission is completed
+    const progress = this.missionProgress[missionId];
+    if (!progress || progress.progress < mission.target) {
+      showNotification(t('missions'), 'Mission not completed yet!');
+      return false;
+    }
+    
+    // Check if already claimed
+    if (progress.claimed) {
+      showNotification(t('missions'), 'Reward already claimed!');
+      return false;
+    }
+    
+    // Distribute rewards
+    const rewards = mission.rewards;
+    let rewardText = [];
+    
+    if (rewards.coins) {
+      this.addCoins(rewards.coins);
+      rewardText.push(`🪙 ${rewards.coins}`);
+    }
+    
+    if (rewards.xp) {
+      this.addXP(rewards.xp);
+      rewardText.push(`${rewards.xp} XP`);
+    }
+    
+    if (rewards.appleTree) {
+      this.addToInventory('appleTree', rewards.appleTree);
+      rewardText.push(`🍎🌳 ${rewards.appleTree}`);
+    }
+    
+    if (rewards.lemonTree) {
+      this.addToInventory('lemonTree', rewards.lemonTree);
+      rewardText.push(`🍋🌳 ${rewards.lemonTree}`);
+    }
+    
+    if (rewards.orangeTree) {
+      this.addToInventory('orangeTree', rewards.orangeTree);
+      rewardText.push(`🍊🌳 ${rewards.orangeTree}`);
+    }
+    
+    // Mark as claimed
+    this.missionProgress[missionId].claimed = true;
+    this.saveMissionProgress();
+    
+    // Show notification
+    showNotification(t('missionClaimed'), `${t('missionReward')}: ${rewardText.join(', ')}`);
+    
+    return true;
   },
   
   // Load game data from Firebase
@@ -383,6 +581,7 @@ const GameState = {
         this.level = data.level;
         this.gridWidth = data.gridWidth || 5;
         this.gridHeight = data.gridHeight || 5;
+        this.missionProgress = data.missionProgress || {};
         console.log('Player data loaded:', { coins: this.coins, level: this.level });
       } else {
         // New player - save initial data
@@ -519,14 +718,7 @@ async function initGame() {
     return;
   }
   
-  // Get or create player ID
-  playerId = localStorage.getItem('farmingTownPlayerId');
-  if (!playerId) {
-    playerId = 'player_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-    localStorage.setItem('farmingTownPlayerId', playerId);
-  }
-  
-  // Get player name
+  // Get player name first
   let playerName = localStorage.getItem('farmingTownPlayerName');
   if (!playerName) {
     // Try to get from parent window (arcade system)
@@ -546,6 +738,35 @@ async function initGame() {
   }
   
   GameState.playerName = playerName;
+  
+  // Look up existing player by name in Firestore
+  try {
+    const playerSnapshot = await db.collection('farmingTownPlayers')
+      .where('playerName', '==', playerName)
+      .limit(1)
+      .get();
+    
+    if (!playerSnapshot.empty) {
+      // Found existing player - use their ID
+      const existingDoc = playerSnapshot.docs[0];
+      playerId = existingDoc.id;
+      localStorage.setItem('farmingTownPlayerId', playerId);
+      console.log('Found existing player:', playerName, 'with ID:', playerId);
+    } else {
+      // New player - create new ID
+      playerId = 'player_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      localStorage.setItem('farmingTownPlayerId', playerId);
+      console.log('Created new player:', playerName, 'with ID:', playerId);
+    }
+  } catch (error) {
+    console.error('Error looking up player:', error);
+    // Fallback to local storage or create new
+    playerId = localStorage.getItem('farmingTownPlayerId');
+    if (!playerId) {
+      playerId = 'player_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      localStorage.setItem('farmingTownPlayerId', playerId);
+    }
+  }
   
   // Load game data or initialize new game
   const loaded = await GameState.loadGameData();
@@ -575,7 +796,11 @@ async function initGame() {
   // Auto-save every 30 seconds
   GameState.saveInterval = setInterval(() => {
     GameState.savePlayerData();
+    GameState.updateLeaderboard(); // Update leaderboard on auto-save
   }, 30000);
+  
+  // Initial leaderboard update
+  GameState.updateLeaderboard();
   
   console.log('Game initialized!');
 }
@@ -647,6 +872,7 @@ function setupEventListeners() {
   // Action buttons
   document.getElementById('btnInventory').addEventListener('click', showInventoryModal);
   document.getElementById('btnMarketplace').addEventListener('click', showMarketplaceModal);
+  document.getElementById('btnMissions').addEventListener('click', showMissionsModal);
   document.getElementById('btnCreatePlot').addEventListener('click', handleCreatePlot);
   document.getElementById('btnVisitFriend').addEventListener('click', showVisitFriendModal);
   document.getElementById('btnHelp').addEventListener('click', showHelpModal);
@@ -777,12 +1003,20 @@ function createTileElement(tile) {
   }
   
   // Add click handler
-  div.addEventListener('click', () => handleTileClick(tile));
+  div.addEventListener('click', () => {
+    handleTileClick(tile);
+    // On mobile, hide tooltip after click to prevent it sticking
+    if ('ontouchstart' in window) {
+      hideTooltip();
+    }
+  });
   
-  // Add hover handlers for tooltip
-  div.addEventListener('mouseenter', (e) => showTileTooltip(tile, e));
-  div.addEventListener('mouseleave', hideTooltip);
-  div.addEventListener('mousemove', (e) => updateTooltipPosition(e));
+  // Add hover handlers for tooltip (desktop only)
+  if (!('ontouchstart' in window)) {
+    div.addEventListener('mouseenter', (e) => showTileTooltip(tile, e));
+    div.addEventListener('mouseleave', hideTooltip);
+    div.addEventListener('mousemove', (e) => updateTooltipPosition(e));
+  }
   
   return div;
 }
@@ -883,9 +1117,9 @@ function formatTime(minutes) {
   const mins = Math.ceil(minutes % 60);
   
   if (mins === 0) {
-    return `${hours}${t('hour').charAt(0)}`;
+    return `${hours}h`;
   }
-  return `${hours}${t('hour').charAt(0)} ${mins}m`;
+  return `${hours}h ${mins}m`;
 }
 
 // Show tooltip on tile hover
@@ -1001,10 +1235,15 @@ function getTileIcon(type, subtype = null) {
     tomato: '🍅',
     potato: '🥔',
     leek: '🥬',
+    corn: '🌽',
+    carrot: '🥕',
+    onion: '🧅',
     apple: '🍎',
     lemon: '🍋',
+    orange: '🍊',
     appleTree: '🍎🌳',
     lemonTree: '🍋🌳',
+    orangeTree: '🍊🌳',
     mill: '🏭',
     pigFarm: '🐷',
     chickenFarm: '🐔',
@@ -1012,8 +1251,10 @@ function getTileIcon(type, subtype = null) {
     butcher: '🥩',
     cowFarm: '🐄',
     restaurant: '🍽️',
+    cinema: '🎬',
     flour: '🌾',
     porridge: '🥣',
+    animalFeed: '🌾🌽',
     pig: '🐷',
     chicken: '🐔',
     egg: '🥚',
@@ -1025,7 +1266,11 @@ function getTileIcon(type, subtype = null) {
     cow: '🐄',
     salad: '🥗',
     soup: '🍲',
-    lemonade: '🥤'
+    lemonade: '🥤',
+    stew: '🍲',
+    popcorn: '🍿',
+    onionRings: '🧅⭕',
+    orangeJuice: '🧃'
   };
   
   return icons[subtype || type] || '❓';
@@ -1170,6 +1415,9 @@ function harvestCrop(tile) {
   
   // Add XP
   GameState.addXP(cropData.xpOnHarvest);
+  
+  // Track mission progress for harvest
+  GameState.incrementMissionProgress('harvest', tile.cropType, cropData.harvestYield);
   
   // Clear the plot
   tile.cropType = null;
@@ -1487,14 +1735,20 @@ function showBuildingPlacementMenu() {
     
     GameState.placementMode = 'building';
     GameState.placementItem = selectedBuilding;
+    GameState.placementPreviewTile = null;
   }
   
-  modal.classList.remove('hidden');
+  // Close the modal immediately so grid is clickable
+  // modal.classList.remove('hidden');
+  
+  // Show a notification instead
+  showNotification(t('placeBuilding'), `${t('clickToPlace')} - ${t(selectedBuilding)} (${buildingData.width}x${buildingData.height})`);
   
   // Cancel button
   document.getElementById('btnCancelPlacement').onclick = () => {
     GameState.placementMode = null;
     GameState.placementItem = null;
+    GameState.placementPreviewTile = null;
     closeModal('buildingPlacementModal');
   };
 }
@@ -1713,14 +1967,18 @@ function collectProduction(buildingTile, slotIndex) {
   const recipe = GameData.recipes[production.recipeType];
   if (!recipe) return false;
   
-  // Add products to inventory
+  // Add products to inventory and track missions
   if (recipe.produces) {
     // Special case: chickenAndEggs produces multiple items
     for (const [item, quantity] of Object.entries(recipe.produces)) {
       GameState.addToInventory(item, quantity);
+      // Track mission progress for each product
+      GameState.incrementMissionProgress('production', item, quantity);
     }
   } else {
     GameState.addToInventory(production.recipeType, recipe.producesQuantity);
+    // Track mission progress for production
+    GameState.incrementMissionProgress('production', production.recipeType, recipe.producesQuantity);
   }
   
   // Add XP
@@ -1960,7 +2218,9 @@ function renderSellTab(container) {
         <div class="item-price">🪙${sellPrice} (+${xpOnSell}XP)</div>
         <div class="item-actions">
           <div class="quantity-selector">
+            <button class="qty-btn qty-minus" data-input="sell-${itemId}-qty">-</button>
             <input type="number" min="1" max="${quantity}" value="1" id="sell-${itemId}-qty">
+            <button class="qty-btn qty-plus" data-input="sell-${itemId}-qty" data-max="${quantity}">+</button>
           </div>
           <button class="btn-primary" data-action="sell" data-item="${itemId}">${t('sell')}</button>
         </div>
@@ -1974,6 +2234,31 @@ function renderSellTab(container) {
     container.innerHTML = `<p style="text-align:center;padding:40px;color:#999;">${t('noItemsToSell')}</p>`;
     return;
   }
+  
+  // Add +/- button handlers
+  container.querySelectorAll('.qty-minus').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const inputId = e.target.dataset.input;
+      const input = document.getElementById(inputId);
+      const min = parseInt(input.min) || 1;
+      let value = parseInt(input.value) || min;
+      if (value > min) {
+        input.value = value - 1;
+      }
+    });
+  });
+  
+  container.querySelectorAll('.qty-plus').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const inputId = e.target.dataset.input;
+      const input = document.getElementById(inputId);
+      const max = parseInt(e.target.dataset.max) || 99;
+      let value = parseInt(input.value) || 1;
+      if (value < max) {
+        input.value = value + 1;
+      }
+    });
+  });
   
   // Add sell button handlers
   container.querySelectorAll('[data-action="sell"]').forEach(btn => {
@@ -2033,7 +2318,8 @@ function sellItem(itemId, quantity) {
 
 // Render BUY SEEDS tab
 function renderBuySeedsTab(container) {
-  const crops = Object.values(GameData.crops);
+  const crops = Object.values(GameData.crops)
+    .sort((a, b) => a.unlockLevel - b.unlockLevel); // Sort by unlock level
   
   crops.forEach(crop => {
     const isUnlocked = GameData.isUnlocked('crop', crop.id, GameState.level);
@@ -2056,7 +2342,9 @@ function renderBuySeedsTab(container) {
       <div class="item-actions">
         ${isUnlocked ? `
           <div class="quantity-selector">
+            <button class="qty-btn qty-minus" data-input="buy-${crop.id}Seed-qty">-</button>
             <input type="number" min="1" max="99" value="10" id="buy-${crop.id}Seed-qty">
+            <button class="qty-btn qty-plus" data-input="buy-${crop.id}Seed-qty" data-max="99">+</button>
           </div>
           <button class="btn-primary" data-action="buy-seed" data-crop="${crop.id}">${t('buy')}</button>
         ` : ''}
@@ -2064,6 +2352,31 @@ function renderBuySeedsTab(container) {
     `;
     
     container.appendChild(itemDiv);
+  });
+  
+  // Add +/- button handlers
+  container.querySelectorAll('.qty-minus').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const inputId = e.target.dataset.input;
+      const input = document.getElementById(inputId);
+      const min = parseInt(input.min) || 1;
+      let value = parseInt(input.value) || min;
+      if (value > min) {
+        input.value = value - 1;
+      }
+    });
+  });
+  
+  container.querySelectorAll('.qty-plus').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const inputId = e.target.dataset.input;
+      const input = document.getElementById(inputId);
+      const max = parseInt(e.target.dataset.max) || 99;
+      let value = parseInt(input.value) || 1;
+      if (value < max) {
+        input.value = value + 1;
+      }
+    });
   });
   
   // Add buy button handlers
@@ -2098,7 +2411,8 @@ function buySeeds(cropId, quantity) {
 
 // Render BUY BUILDINGS tab
 function renderBuyBuildingsTab(container) {
-  const buildings = Object.values(GameData.buildings);
+  const buildings = Object.values(GameData.buildings)
+    .sort((a, b) => a.unlockLevel - b.unlockLevel); // Sort by unlock level
   
   buildings.forEach(building => {
     const isUnlocked = GameData.isUnlocked('building', building.id, GameState.level);
@@ -2350,10 +2664,35 @@ function handleTileClick(tile) {
   }
   
   if (GameState.placementMode === 'building') {
-    // Place building on grass tiles
+    // Place building on grass tiles - show confirmation dialog first
     if (tile.type === 'grass' && GameState.placementItem) {
-      placeBuilding(tile, GameState.placementItem);
-      closeModal('buildingPlacementModal');
+      // Validate placement
+      const buildingData = GameData.buildings[GameState.placementItem];
+      if (!buildingData) return;
+      
+      // Check if all required tiles are available (grass)
+      let canPlace = true;
+      for (let dy = 0; dy < buildingData.height; dy++) {
+        for (let dx = 0; dx < buildingData.width; dx++) {
+          const checkTile = GameState.getTile(tile.x + dx, tile.y + dy);
+          if (!checkTile || checkTile.type !== 'grass') {
+            canPlace = false;
+            break;
+          }
+        }
+        if (!canPlace) break;
+      }
+      
+      if (canPlace) {
+        // Ask for confirmation
+        const confirmMessage = `${t('placeBuilding')}: ${t(GameState.placementItem)}\n${t('size')}: ${buildingData.width}x${buildingData.height}\nPosition: (${tile.x}, ${tile.y})\n\n${t('confirm')}?`;
+        
+        if (confirm(confirmMessage)) {
+          placeBuilding(tile, GameState.placementItem);
+        }
+      } else {
+        showNotification(t('placeBuilding'), t('invalidPlacement'));
+      }
     } else {
       showNotification(t('placeBuilding'), t('invalidPlacement'));
     }
@@ -2597,6 +2936,13 @@ async function visitPlayerFarm(friendPlayerId, friendData) {
       };
     }
     
+    // CRITICAL: Stop auto-save to prevent overwriting player data with friend's data
+    if (GameState.saveInterval) {
+      clearInterval(GameState.saveInterval);
+      GameState.saveInterval = null;
+      console.log('Auto-save disabled during friend visit');
+    }
+    
     // Load friend's data
     showLoadingScreen(true);
     
@@ -2605,23 +2951,34 @@ async function visitPlayerFarm(friendPlayerId, friendData) {
       .where('playerId', '==', friendPlayerId)
       .get();
     
-    // Reconstruct friend's grid
+    // Reconstruct friend's grid (use simple rectangular grid)
     GameState.grid = [];
+    
+    // First pass: find max dimensions
+    let maxX = 0, maxY = 0;
+    gridSnapshot.forEach(doc => {
+      const data = doc.data();
+      maxX = Math.max(maxX, data.x);
+      maxY = Math.max(maxY, data.y);
+    });
+    
+    // Initialize empty grid
+    for (let y = 0; y <= maxY; y++) {
+      GameState.grid[y] = [];
+      for (let x = 0; x <= maxX; x++) {
+        GameState.grid[y][x] = GameState.createTile(x, y, 'grass');
+      }
+    }
+    
+    // Second pass: populate with actual tiles
     gridSnapshot.forEach(doc => {
       const data = doc.data();
       const x = data.x;
       const y = data.y;
       
-      // Ensure grid array is large enough
-      while (GameState.grid.length <= y) {
-        GameState.grid.push([]);
-      }
-      while (GameState.grid[y].length <= x) {
-        GameState.grid[y].push(null);
-      }
-      
-      // Create tile from saved data
-      const tile = GameState.createTile(x, y, data.tileType);
+      // Update tile with saved data
+      const tile = GameState.grid[y][x];
+      tile.type = data.tileType;
       tile.cropType = data.cropType;
       tile.plantedAt = data.plantedAt;
       tile.growthMinutes = data.growthMinutes;
@@ -2635,8 +2992,6 @@ async function visitPlayerFarm(friendPlayerId, friendData) {
       tile.isOriginTile = data.isOriginTile;
       tile.originX = data.originX;
       tile.originY = data.originY;
-      
-      GameState.grid[y][x] = tile;
     });
     
     // Update game state with friend's data
@@ -2644,11 +2999,8 @@ async function visitPlayerFarm(friendPlayerId, friendData) {
     GameState.level = friendData.level;
     GameState.xp = friendData.xp;
     GameState.coins = friendData.coins;
-    
-    // Recalculate grid bounds
-    const bounds = GameState.getGridBounds();
-    GameState.gridWidth = bounds.maxX;
-    GameState.gridHeight = bounds.maxY;
+    GameState.gridWidth = maxX + 1;
+    GameState.gridHeight = maxY + 1;
     
     // Update display
     GameState.updateDisplay();
@@ -2731,6 +3083,14 @@ function returnToMyFarm() {
   GameState.updateDisplay();
   renderGrid();
   updateAllTimers();
+  
+  // CRITICAL: Restart auto-save after returning to own farm
+  if (!GameState.saveInterval) {
+    GameState.saveInterval = setInterval(() => {
+      GameState.savePlayerData();
+    }, 30000); // Save every 30 seconds
+    console.log('Auto-save re-enabled');
+  }
   
   // Close modal
   closeModal('visitFriendModal');
@@ -2934,4 +3294,160 @@ if (typeof window !== 'undefined') {
   window.renderGrid = renderGrid;
   window.showInventoryModal = showInventoryModal;
   window.showMarketplaceModal = showMarketplaceModal;
+}
+
+
+// ============================================================================
+// MISSIONS SYSTEM WITH PROGRESS TRACKING
+// ============================================================================
+
+// Show missions modal
+function showMissionsModal() {
+  const modal = document.getElementById('missionsModal');
+  
+  // Reset all tabs to inactive
+  const tabs = modal.querySelectorAll('.tab-btn');
+  tabs.forEach(t => t.classList.remove('active'));
+  
+  // Set first tab (crops) as active
+  const firstTab = modal.querySelector('.tab-btn[data-tab="crops"]');
+  if (firstTab) {
+    firstTab.classList.add('active');
+  }
+  
+  // Set up tab switching
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      renderMissionsTab(tab.dataset.tab);
+    });
+  });
+  
+  // Show crops tab by default
+  renderMissionsTab('crops');
+  
+  modal.classList.remove('hidden');
+}
+
+// Render missions tab content
+function renderMissionsTab(tabName) {
+  const container = document.getElementById('missionsList');
+  container.innerHTML = '';
+  
+  let missionsData = [];
+  
+  if (tabName === 'crops') {
+    // Show harvest missions
+    for (const cropType in GameData.missions.harvest) {
+      const missions = GameData.missions.harvest[cropType];
+      missions.forEach(mission => {
+        missionsData.push({
+          ...mission,
+          type: 'harvest',
+          itemId: cropType,
+          itemName: t(cropType)
+        });
+      });
+    }
+  } else if (tabName === 'products') {
+    // Show production missions
+    for (const productType in GameData.missions.production) {
+      const missions = GameData.missions.production[productType];
+      missions.forEach(mission => {
+        missionsData.push({
+          ...mission,
+          type: 'production',
+          itemId: productType,
+          itemName: t(productType)
+        });
+      });
+    }
+  }
+  
+  if (missionsData.length === 0) {
+    container.innerHTML = '<p style="text-align:center;padding:40px;">No missions available</p>';
+    return;
+  }
+  
+  // Group missions by item
+  const missionsByItem = {};
+  missionsData.forEach(mission => {
+    if (!missionsByItem[mission.itemId]) {
+      missionsByItem[mission.itemId] = [];
+    }
+    missionsByItem[mission.itemId].push(mission);
+  });
+  
+  // Render each item group
+  for (const itemId in missionsByItem) {
+    const missions = missionsByItem[itemId];
+    const itemName = missions[0].itemName;
+    const icon = getTileIcon(itemId);
+    
+    const groupDiv = document.createElement('div');
+    groupDiv.className = 'mission-group';
+    groupDiv.innerHTML = `
+      <h3 class="mission-group-title">${icon} ${itemName}</h3>
+    `;
+    
+    missions.forEach(mission => {
+      const progress = GameState.missionProgress[mission.id] || { progress: 0, claimed: false };
+      const percentage = Math.min(100, (progress.progress / mission.target) * 100);
+      const isCompleted = progress.progress >= mission.target;
+      const isClaimed = progress.claimed;
+      
+      // Build reward text
+      const rewardParts = [];
+      if (mission.rewards.coins) rewardParts.push(`🪙${mission.rewards.coins}`);
+      if (mission.rewards.xp) rewardParts.push(`${mission.rewards.xp}XP`);
+      if (mission.rewards.appleTree) rewardParts.push(`🍎🌳×${mission.rewards.appleTree}`);
+      if (mission.rewards.lemonTree) rewardParts.push(`🍋🌳×${mission.rewards.lemonTree}`);
+      if (mission.rewards.orangeTree) rewardParts.push(`🍊🌳×${mission.rewards.orangeTree}`);
+      const rewardText = rewardParts.join(', ');
+      
+      const missionDiv = document.createElement('div');
+      missionDiv.className = 'mission-item';
+      if (isClaimed) missionDiv.classList.add('claimed');
+      
+      missionDiv.innerHTML = `
+        <div class="mission-info">
+          <div class="mission-title">
+            ${t(mission.type === 'harvest' ? 'missionHarvest' : 'missionProduce')} ${mission.target} ${itemName}
+          </div>
+          <div class="mission-progress-bar">
+            <div class="mission-progress-fill" style="width: ${percentage}%"></div>
+            <span class="mission-progress-text">${progress.progress} / ${mission.target}</span>
+          </div>
+          <div class="mission-reward">
+            ${t('missionReward')}: ${rewardText}
+          </div>
+        </div>
+        <div class="mission-actions">
+          ${isCompleted && !isClaimed ? 
+            `<button class="btn-primary btn-claim" data-mission="${mission.id}">${t('claimReward')}</button>` :
+            isClaimed ? 
+            `<span class="mission-claimed-badge">${t('missionCompleted')}</span>` :
+            `<span class="mission-incomplete">${Math.round(percentage)}%</span>`
+          }
+        </div>
+      `;
+      
+      groupDiv.appendChild(missionDiv);
+    });
+    
+    container.appendChild(groupDiv);
+  }
+  
+  // Add claim button event listeners
+  container.querySelectorAll('.btn-claim').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const missionId = e.target.dataset.mission;
+      const success = GameState.claimMissionReward(missionId);
+      if (success) {
+        // Refresh missions display
+        renderMissionsTab(tabName);
+      }
+    });
+  });
 }

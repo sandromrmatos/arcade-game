@@ -59,6 +59,36 @@ const GameData = {
       sellPrice: 25,
       xpOnHarvest: 12,
       xpOnSell: 13
+    },
+    corn: {
+      id: 'corn',
+      unlockLevel: 5,
+      seedCost: 8,
+      growthMinutes: 240, // 4 hours
+      harvestYield: 3,
+      sellPrice: 12,
+      xpOnHarvest: 4,
+      xpOnSell: 5
+    },
+    carrot: {
+      id: 'carrot',
+      unlockLevel: 10,
+      seedCost: 35,
+      growthMinutes: 1080, // 18 hours
+      harvestYield: 2,
+      sellPrice: 32,
+      xpOnHarvest: 15,
+      xpOnSell: 18
+    },
+    onion: {
+      id: 'onion',
+      unlockLevel: 11,
+      seedCost: 50,
+      growthMinutes: 2160, // 36 hours
+      harvestYield: 4,
+      sellPrice: 27,
+      xpOnHarvest: 17,
+      xpOnSell: 20
     }
   },
 
@@ -83,6 +113,16 @@ const GameData = {
       xpOnCollect: 5,
       xpOnSell: 5,
       canPurchase: false
+    },
+    orange: {
+      id: 'orange',
+      unlockLevel: 999,
+      ripeMinutes: 360, // 6 hours
+      collectionYield: 3,
+      sellPrice: 15,
+      xpOnCollect: 10,
+      xpOnSell: 6,
+      canPurchase: false
     }
   },
 
@@ -97,7 +137,7 @@ const GameData = {
       xpOnComplete: 10,
       kitPrice: 50,
       maxOwned: 2, // Can buy 2nd at level 6 for double price
-      recipes: ['flour', 'porridge']
+      recipes: ['flour', 'porridge', 'animalFeed']
     },
     pigFarm: {
       id: 'pigFarm',
@@ -163,7 +203,18 @@ const GameData = {
       xpOnComplete: 120,
       kitPrice: 800,
       maxOwned: 2,
-      recipes: ['salad', 'soup', 'lemonade']
+      recipes: ['salad', 'soup', 'lemonade', 'stew']
+    },
+    cinema: {
+      id: 'cinema',
+      unlockLevel: 11,
+      width: 3,
+      height: 3,
+      constructionMinutes: 1440, // 24 hours
+      xpOnComplete: 150,
+      kitPrice: 2000,
+      maxOwned: 2,
+      recipes: ['popcorn', 'onionRings', 'orangeJuice']
     }
   },
 
@@ -192,6 +243,17 @@ const GameData = {
       xpOnCollect: 10,
       xpOnSell: 6
     },
+    animalFeed: {
+      id: 'animalFeed',
+      buildingType: 'mill',
+      unlockLevel: 6,
+      productionMinutes: 180, // 3 hours
+      ingredients: { wheat: 1, corn: 2 },
+      producesQuantity: 3,
+      sellPrice: 20,
+      xpOnCollect: 10,
+      xpOnSell: 6
+    },
 
     // Pig Farm recipes
     pig: {
@@ -212,7 +274,7 @@ const GameData = {
       buildingType: 'chickenFarm',
       unlockLevel: 6,
       productionMinutes: 1440, // 24 hours
-      ingredients: { wheat: 3 },
+      ingredients: { animalFeed: 1 },
       produces: { chicken: 1, egg: 5 }, // Special: produces 2 different items
       sellPrices: { chicken: 50, egg: 5 },
       xpOnCollect: 30,
@@ -324,6 +386,52 @@ const GameData = {
       sellPrice: 25,
       xpOnCollect: 20,
       xpOnSell: 25
+    },
+    stew: {
+      id: 'stew',
+      buildingType: 'restaurant',
+      unlockLevel: 11,
+      productionMinutes: 360, // 6 hours
+      ingredients: { tomato: 1, carrot: 2, potato: 1, steak: 1, onion: 2 },
+      producesQuantity: 2,
+      sellPrice: 120,
+      xpOnCollect: 35,
+      xpOnSell: 45
+    },
+
+    // Cinema recipes
+    popcorn: {
+      id: 'popcorn',
+      buildingType: 'cinema',
+      unlockLevel: 11,
+      productionMinutes: 20,
+      ingredients: { corn: 1 },
+      producesQuantity: 2,
+      sellPrice: 25,
+      xpOnCollect: 15,
+      xpOnSell: 15
+    },
+    onionRings: {
+      id: 'onionRings',
+      buildingType: 'cinema',
+      unlockLevel: 12,
+      productionMinutes: 60,
+      ingredients: { onion: 1 },
+      producesQuantity: 2,
+      sellPrice: 35,
+      xpOnCollect: 15,
+      xpOnSell: 18
+    },
+    orangeJuice: {
+      id: 'orangeJuice',
+      buildingType: 'cinema',
+      unlockLevel: 13,
+      productionMinutes: 20,
+      ingredients: { orange: 2 },
+      producesQuantity: 3,
+      sellPrice: 20,
+      xpOnCollect: 12,
+      xpOnSell: 10
     }
   },
 
@@ -333,17 +441,17 @@ const GameData = {
     2: { requiredXP: 20, rewards: [] },
     3: { requiredXP: 50, rewards: [{ type: 'tree', item: 'apple', quantity: 1 }] },
     4: { requiredXP: 150, rewards: [] },
-    5: { requiredXP: 300, rewards: [{ type: 'tree', item: 'apple', quantity: 2 }, { type: 'tree', item: 'lemon', quantity: 1 }] },
-    6: { requiredXP: 600, rewards: [] },
-    7: { requiredXP: 1200, rewards: [{ type: 'tree', item: 'lemon', quantity: 2 }] },
-    8: { requiredXP: 2400, rewards: [] },
-    9: { requiredXP: 4800, rewards: [] },
-    10: { requiredXP: 9600, rewards: [] },
-    11: { requiredXP: 19200, rewards: [] },
-    12: { requiredXP: 38400, rewards: [{ type: 'tree', item: 'apple', quantity: 2 }, { type: 'tree', item: 'lemon', quantity: 2 }] },
-    13: { requiredXP: 76800, rewards: [] },
-    14: { requiredXP: 153600, rewards: [] },
-    15: { requiredXP: 307200, rewards: [] }
+    5: { requiredXP: 600, rewards: [{ type: 'tree', item: 'apple', quantity: 2 }, { type: 'tree', item: 'lemon', quantity: 1 }] },
+    6: { requiredXP: 1800, rewards: [] },
+    7: { requiredXP: 4000, rewards: [{ type: 'tree', item: 'lemon', quantity: 2 }] },
+    8: { requiredXP: 6000, rewards: [{ type: 'tree', item: 'orange', quantity: 1 }] },
+    9: { requiredXP: 8900, rewards: [] },
+    10: { requiredXP: 14000, rewards: [] },
+    11: { requiredXP: 19000, rewards: [{ type: 'tree', item: 'orange', quantity: 1 }] },
+    12: { requiredXP: 28400, rewards: [{ type: 'tree', item: 'apple', quantity: 2 }, { type: 'tree', item: 'lemon', quantity: 2 }] },
+    13: { requiredXP: 36800, rewards: [{ type: 'tree', item: 'orange', quantity: 2 }] },
+    14: { requiredXP: 53600, rewards: [] },
+    15: { requiredXP: 87200, rewards: [] }
   },
 
   // Grid expansion configuration
@@ -414,6 +522,225 @@ const GameData = {
     // First purchase: base price
     // Second purchase (at +2 levels): double price
     return purchaseCount === 0 ? basePrice : basePrice * 2;
+  },
+
+  // Missions system - track player progress for harvest and production
+  missions: {
+    // Harvest missions for each crop type
+    harvest: {
+      wheat: [
+        { id: 'wheat_20', target: 20, rewards: { coins: 5 } },
+        { id: 'wheat_50', target: 50, rewards: { coins: 8 } },
+        { id: 'wheat_100', target: 100, rewards: { coins: 10, xp: 2 } },
+        { id: 'wheat_200', target: 200, rewards: { coins: 20, xp: 5, appleTree: 1 } },
+        { id: 'wheat_400', target: 400, rewards: { coins: 35, xp: 10, lemonTree: 1 } },
+        { id: 'wheat_500', target: 500, rewards: { coins: 50, xp: 15, orangeTree: 1 } }
+      ],
+      tomato: [
+        { id: 'tomato_20', target: 20, rewards: { coins: 5 } },
+        { id: 'tomato_50', target: 50, rewards: { coins: 8 } },
+        { id: 'tomato_100', target: 100, rewards: { coins: 10, xp: 2 } },
+        { id: 'tomato_200', target: 200, rewards: { coins: 20, xp: 5, appleTree: 1 } },
+        { id: 'tomato_400', target: 400, rewards: { coins: 35, xp: 10, lemonTree: 1 } },
+        { id: 'tomato_500', target: 500, rewards: { coins: 50, xp: 15, orangeTree: 1 } }
+      ],
+      potato: [
+        { id: 'potato_20', target: 20, rewards: { coins: 5 } },
+        { id: 'potato_50', target: 50, rewards: { coins: 8 } },
+        { id: 'potato_100', target: 100, rewards: { coins: 10, xp: 2 } },
+        { id: 'potato_200', target: 200, rewards: { coins: 20, xp: 5, appleTree: 1 } },
+        { id: 'potato_400', target: 400, rewards: { coins: 35, xp: 10, lemonTree: 1 } },
+        { id: 'potato_500', target: 500, rewards: { coins: 50, xp: 15, orangeTree: 1 } }
+      ],
+      leek: [
+        { id: 'leek_20', target: 20, rewards: { coins: 5 } },
+        { id: 'leek_50', target: 50, rewards: { coins: 8 } },
+        { id: 'leek_100', target: 100, rewards: { coins: 10, xp: 2 } },
+        { id: 'leek_200', target: 200, rewards: { coins: 20, xp: 5, appleTree: 1 } },
+        { id: 'leek_400', target: 400, rewards: { coins: 35, xp: 10, lemonTree: 1 } },
+        { id: 'leek_500', target: 500, rewards: { coins: 50, xp: 15, orangeTree: 1 } }
+      ],
+      corn: [
+        { id: 'corn_20', target: 20, rewards: { coins: 5 } },
+        { id: 'corn_50', target: 50, rewards: { coins: 8 } },
+        { id: 'corn_100', target: 100, rewards: { coins: 10, xp: 2 } },
+        { id: 'corn_200', target: 200, rewards: { coins: 20, xp: 5, appleTree: 1 } },
+        { id: 'corn_400', target: 400, rewards: { coins: 35, xp: 10, lemonTree: 1 } },
+        { id: 'corn_500', target: 500, rewards: { coins: 50, xp: 15, orangeTree: 1 } }
+      ],
+      carrot: [
+        { id: 'carrot_20', target: 20, rewards: { coins: 5 } },
+        { id: 'carrot_50', target: 50, rewards: { coins: 8 } },
+        { id: 'carrot_100', target: 100, rewards: { coins: 10, xp: 2 } },
+        { id: 'carrot_200', target: 200, rewards: { coins: 20, xp: 5, appleTree: 1 } },
+        { id: 'carrot_400', target: 400, rewards: { coins: 35, xp: 10, lemonTree: 1 } },
+        { id: 'carrot_500', target: 500, rewards: { coins: 50, xp: 15, orangeTree: 1 } }
+      ],
+      onion: [
+        { id: 'onion_20', target: 20, rewards: { coins: 5 } },
+        { id: 'onion_50', target: 50, rewards: { coins: 8 } },
+        { id: 'onion_100', target: 100, rewards: { coins: 10, xp: 2 } },
+        { id: 'onion_200', target: 200, rewards: { coins: 20, xp: 5, appleTree: 1 } },
+        { id: 'onion_400', target: 400, rewards: { coins: 35, xp: 10, lemonTree: 1 } },
+        { id: 'onion_500', target: 500, rewards: { coins: 50, xp: 15, orangeTree: 1 } }
+      ]
+    },
+    
+    // Production missions for each recipe type
+    production: {
+      flour: [
+        { id: 'flour_10', target: 10, rewards: { coins: 5 } },
+        { id: 'flour_25', target: 25, rewards: { coins: 8 } },
+        { id: 'flour_50', target: 50, rewards: { coins: 10, xp: 2 } },
+        { id: 'flour_100', target: 100, rewards: { coins: 20, xp: 5, appleTree: 1 } },
+        { id: 'flour_200', target: 200, rewards: { coins: 35, xp: 10, lemonTree: 1 } },
+        { id: 'flour_300', target: 300, rewards: { coins: 50, xp: 15, orangeTree: 1 } }
+      ],
+      porridge: [
+        { id: 'porridge_10', target: 10, rewards: { coins: 5 } },
+        { id: 'porridge_25', target: 25, rewards: { coins: 8 } },
+        { id: 'porridge_50', target: 50, rewards: { coins: 10, xp: 2 } },
+        { id: 'porridge_100', target: 100, rewards: { coins: 20, xp: 5, appleTree: 1 } },
+        { id: 'porridge_200', target: 200, rewards: { coins: 35, xp: 10, lemonTree: 1 } },
+        { id: 'porridge_300', target: 300, rewards: { coins: 50, xp: 15, orangeTree: 1 } }
+      ],
+      animalFeed: [
+        { id: 'animalFeed_10', target: 10, rewards: { coins: 5 } },
+        { id: 'animalFeed_25', target: 25, rewards: { coins: 8 } },
+        { id: 'animalFeed_50', target: 50, rewards: { coins: 10, xp: 2 } },
+        { id: 'animalFeed_100', target: 100, rewards: { coins: 20, xp: 5, appleTree: 1 } },
+        { id: 'animalFeed_200', target: 200, rewards: { coins: 35, xp: 10, lemonTree: 1 } },
+        { id: 'animalFeed_300', target: 300, rewards: { coins: 50, xp: 15, orangeTree: 1 } }
+      ],
+      pig: [
+        { id: 'pig_10', target: 10, rewards: { coins: 5 } },
+        { id: 'pig_25', target: 25, rewards: { coins: 8 } },
+        { id: 'pig_50', target: 50, rewards: { coins: 10, xp: 2 } },
+        { id: 'pig_100', target: 100, rewards: { coins: 20, xp: 5, appleTree: 1 } },
+        { id: 'pig_200', target: 200, rewards: { coins: 35, xp: 10, lemonTree: 1 } },
+        { id: 'pig_300', target: 300, rewards: { coins: 50, xp: 15, orangeTree: 1 } }
+      ],
+      chicken: [
+        { id: 'chicken_10', target: 10, rewards: { coins: 5 } },
+        { id: 'chicken_25', target: 25, rewards: { coins: 8 } },
+        { id: 'chicken_50', target: 50, rewards: { coins: 10, xp: 2 } },
+        { id: 'chicken_100', target: 100, rewards: { coins: 20, xp: 5, appleTree: 1 } },
+        { id: 'chicken_200', target: 200, rewards: { coins: 35, xp: 10, lemonTree: 1 } },
+        { id: 'chicken_300', target: 300, rewards: { coins: 50, xp: 15, orangeTree: 1 } }
+      ],
+      egg: [
+        { id: 'egg_10', target: 10, rewards: { coins: 5 } },
+        { id: 'egg_25', target: 25, rewards: { coins: 8 } },
+        { id: 'egg_50', target: 50, rewards: { coins: 10, xp: 2 } },
+        { id: 'egg_100', target: 100, rewards: { coins: 20, xp: 5, appleTree: 1 } },
+        { id: 'egg_200', target: 200, rewards: { coins: 35, xp: 10, lemonTree: 1 } },
+        { id: 'egg_300', target: 300, rewards: { coins: 50, xp: 15, orangeTree: 1 } }
+      ],
+      bread: [
+        { id: 'bread_10', target: 10, rewards: { coins: 5 } },
+        { id: 'bread_25', target: 25, rewards: { coins: 8 } },
+        { id: 'bread_50', target: 50, rewards: { coins: 10, xp: 2 } },
+        { id: 'bread_100', target: 100, rewards: { coins: 20, xp: 5, appleTree: 1 } },
+        { id: 'bread_200', target: 200, rewards: { coins: 35, xp: 10, lemonTree: 1 } },
+        { id: 'bread_300', target: 300, rewards: { coins: 50, xp: 15, orangeTree: 1 } }
+      ],
+      cake: [
+        { id: 'cake_10', target: 10, rewards: { coins: 5 } },
+        { id: 'cake_25', target: 25, rewards: { coins: 8 } },
+        { id: 'cake_50', target: 50, rewards: { coins: 10, xp: 2 } },
+        { id: 'cake_100', target: 100, rewards: { coins: 20, xp: 5, appleTree: 1 } },
+        { id: 'cake_200', target: 200, rewards: { coins: 35, xp: 10, lemonTree: 1 } },
+        { id: 'cake_300', target: 300, rewards: { coins: 50, xp: 15, orangeTree: 1 } }
+      ],
+      potatoScone: [
+        { id: 'potatoScone_10', target: 10, rewards: { coins: 5 } },
+        { id: 'potatoScone_25', target: 25, rewards: { coins: 8 } },
+        { id: 'potatoScone_50', target: 50, rewards: { coins: 10, xp: 2 } },
+        { id: 'potatoScone_100', target: 100, rewards: { coins: 20, xp: 5, appleTree: 1 } },
+        { id: 'potatoScone_200', target: 200, rewards: { coins: 35, xp: 10, lemonTree: 1 } },
+        { id: 'potatoScone_300', target: 300, rewards: { coins: 50, xp: 15, orangeTree: 1 } }
+      ],
+      sausage: [
+        { id: 'sausage_10', target: 10, rewards: { coins: 5 } },
+        { id: 'sausage_25', target: 25, rewards: { coins: 8 } },
+        { id: 'sausage_50', target: 50, rewards: { coins: 10, xp: 2 } },
+        { id: 'sausage_100', target: 100, rewards: { coins: 20, xp: 5, appleTree: 1 } },
+        { id: 'sausage_200', target: 200, rewards: { coins: 35, xp: 10, lemonTree: 1 } },
+        { id: 'sausage_300', target: 300, rewards: { coins: 50, xp: 15, orangeTree: 1 } }
+      ],
+      steak: [
+        { id: 'steak_10', target: 10, rewards: { coins: 5 } },
+        { id: 'steak_25', target: 25, rewards: { coins: 8 } },
+        { id: 'steak_50', target: 50, rewards: { coins: 10, xp: 2 } },
+        { id: 'steak_100', target: 100, rewards: { coins: 20, xp: 5, appleTree: 1 } },
+        { id: 'steak_200', target: 200, rewards: { coins: 35, xp: 10, lemonTree: 1 } },
+        { id: 'steak_300', target: 300, rewards: { coins: 50, xp: 15, orangeTree: 1 } }
+      ],
+      cow: [
+        { id: 'cow_10', target: 10, rewards: { coins: 5 } },
+        { id: 'cow_25', target: 25, rewards: { coins: 8 } },
+        { id: 'cow_50', target: 50, rewards: { coins: 10, xp: 2 } },
+        { id: 'cow_100', target: 100, rewards: { coins: 20, xp: 5, appleTree: 1 } },
+        { id: 'cow_200', target: 200, rewards: { coins: 35, xp: 10, lemonTree: 1 } },
+        { id: 'cow_300', target: 300, rewards: { coins: 50, xp: 15, orangeTree: 1 } }
+      ],
+      salad: [
+        { id: 'salad_10', target: 10, rewards: { coins: 5 } },
+        { id: 'salad_25', target: 25, rewards: { coins: 8 } },
+        { id: 'salad_50', target: 50, rewards: { coins: 10, xp: 2 } },
+        { id: 'salad_100', target: 100, rewards: { coins: 20, xp: 5, appleTree: 1 } },
+        { id: 'salad_200', target: 200, rewards: { coins: 35, xp: 10, lemonTree: 1 } },
+        { id: 'salad_300', target: 300, rewards: { coins: 50, xp: 15, orangeTree: 1 } }
+      ],
+      soup: [
+        { id: 'soup_10', target: 10, rewards: { coins: 5 } },
+        { id: 'soup_25', target: 25, rewards: { coins: 8 } },
+        { id: 'soup_50', target: 50, rewards: { coins: 10, xp: 2 } },
+        { id: 'soup_100', target: 100, rewards: { coins: 20, xp: 5, appleTree: 1 } },
+        { id: 'soup_200', target: 200, rewards: { coins: 35, xp: 10, lemonTree: 1 } },
+        { id: 'soup_300', target: 300, rewards: { coins: 50, xp: 15, orangeTree: 1 } }
+      ],
+      lemonade: [
+        { id: 'lemonade_10', target: 10, rewards: { coins: 5 } },
+        { id: 'lemonade_25', target: 25, rewards: { coins: 8 } },
+        { id: 'lemonade_50', target: 50, rewards: { coins: 10, xp: 2 } },
+        { id: 'lemonade_100', target: 100, rewards: { coins: 20, xp: 5, appleTree: 1 } },
+        { id: 'lemonade_200', target: 200, rewards: { coins: 35, xp: 10, lemonTree: 1 } },
+        { id: 'lemonade_300', target: 300, rewards: { coins: 50, xp: 15, orangeTree: 1 } }
+      ],
+      stew: [
+        { id: 'stew_10', target: 10, rewards: { coins: 5 } },
+        { id: 'stew_25', target: 25, rewards: { coins: 8 } },
+        { id: 'stew_50', target: 50, rewards: { coins: 10, xp: 2 } },
+        { id: 'stew_100', target: 100, rewards: { coins: 20, xp: 5, appleTree: 1 } },
+        { id: 'stew_200', target: 200, rewards: { coins: 35, xp: 10, lemonTree: 1 } },
+        { id: 'stew_300', target: 300, rewards: { coins: 50, xp: 15, orangeTree: 1 } }
+      ],
+      popcorn: [
+        { id: 'popcorn_10', target: 10, rewards: { coins: 5 } },
+        { id: 'popcorn_25', target: 25, rewards: { coins: 8 } },
+        { id: 'popcorn_50', target: 50, rewards: { coins: 10, xp: 2 } },
+        { id: 'popcorn_100', target: 100, rewards: { coins: 20, xp: 5, appleTree: 1 } },
+        { id: 'popcorn_200', target: 200, rewards: { coins: 35, xp: 10, lemonTree: 1 } },
+        { id: 'popcorn_300', target: 300, rewards: { coins: 50, xp: 15, orangeTree: 1 } }
+      ],
+      onionRings: [
+        { id: 'onionRings_10', target: 10, rewards: { coins: 5 } },
+        { id: 'onionRings_25', target: 25, rewards: { coins: 8 } },
+        { id: 'onionRings_50', target: 50, rewards: { coins: 10, xp: 2 } },
+        { id: 'onionRings_100', target: 100, rewards: { coins: 20, xp: 5, appleTree: 1 } },
+        { id: 'onionRings_200', target: 200, rewards: { coins: 35, xp: 10, lemonTree: 1 } },
+        { id: 'onionRings_300', target: 300, rewards: { coins: 50, xp: 15, orangeTree: 1 } }
+      ],
+      orangeJuice: [
+        { id: 'orangeJuice_10', target: 10, rewards: { coins: 5 } },
+        { id: 'orangeJuice_25', target: 25, rewards: { coins: 8 } },
+        { id: 'orangeJuice_50', target: 50, rewards: { coins: 10, xp: 2 } },
+        { id: 'orangeJuice_100', target: 100, rewards: { coins: 20, xp: 5, appleTree: 1 } },
+        { id: 'orangeJuice_200', target: 200, rewards: { coins: 35, xp: 10, lemonTree: 1 } },
+        { id: 'orangeJuice_300', target: 300, rewards: { coins: 50, xp: 15, orangeTree: 1 } }
+      ]
+    }
   }
 };
 

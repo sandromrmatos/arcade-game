@@ -81,7 +81,8 @@ const translations = {
     "Battleship": "Battleship",
     "TCG Game": "TCG Game",
     "VGC": "VGC",
-    "Shut the Box": "Shut the Box"
+    "Shut the Box": "Shut the Box",
+    "Farming Town": "Farming Town"
   },
   pt: {
     title: "Jogos Arcade por Sandro",
@@ -150,7 +151,8 @@ const translations = {
     "Battleship": "Batalha Naval",
     "TCG Game": "Jogo TCG",
     "VGC": "VGC",
-    "Shut the Box": "Feche a Caixa"
+    "Shut the Box": "Feche a Caixa",
+    "Farming Town": "Cidade Agrícola"
   }
 };
 
@@ -1166,6 +1168,12 @@ function showGameLeaderboard(gameName) {
   // Special handling for Puzzle Bobble (score - higher is better, with difficulty modes)
   if (gameName === "Puzzle Bobble") {
     showScoreBasedLeaderboard(db, content, gameName);
+    return;
+  }
+  
+  // Special handling for Farming Town (XP/Level progression)
+  if (gameName === "Farming Town") {
+    showFarmingTownLeaderboard(db, content, gameName);
     return;
   }
   
@@ -3001,6 +3009,50 @@ function showWordleLeaderboard(db, content, gameName) {
 
 // Close leaderboard section when clicking back to menu
 // Close button is handled via onclick attribute
+
+function showFarmingTownLeaderboard(db, content, gameName) {
+  db.collection("games")
+    .limit(100)
+    .get()
+    .then(snapshot => {
+      // Filter for Farming Town and sort by XP (score field) descending
+      const docs = snapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .filter(doc => doc.gameName === gameName)
+        .sort((a, b) => (b.xp || b.score || 0) - (a.xp || a.score || 0))
+        .slice(0, 10);
+      
+      if (docs.length === 0) {
+        content.innerHTML = `<p style="color: #666;">${t("noScores")}</p>`;
+        return;
+      }
+      
+      let html = '<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Level</th><th>XP</th><th>Date</th></tr></thead><tbody>';
+      
+      let rank = 1;
+      docs.forEach(doc => {
+        const level = doc.level || 1;
+        const xp = doc.xp || doc.score || 0;
+        const date = doc.lastPlayed ? new Date(doc.lastPlayed.toDate()).toLocaleDateString() : 
+                     (doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A');
+        
+        html += `<tr>
+          <td>${rank++}</td>
+          <td>${doc.playerName}</td>
+          <td>${level}</td>
+          <td>${xp}</td>
+          <td>${date}</td>
+        </tr>`;
+      });
+      
+      html += "</tbody></table>";
+      content.innerHTML = html;
+    })
+    .catch(err => {
+      content.textContent = t("errorLoading") + " " + err.message;
+      console.error("Leaderboard error:", err);
+    });
+}
 
 function closeLeaderboard() {
   const section = document.getElementById("leaderboard-section");

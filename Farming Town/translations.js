@@ -9,6 +9,7 @@ const Translations = {
     coins: "Coins",
     inventory: "Inventory",
     marketplace: "Marketplace",
+    missions: "Missions",
     createPlot: "Create Plot (2🪙)",
     visitFriend: "Visit a Friend",
     help: "Help",
@@ -79,12 +80,20 @@ const Translations = {
     potatoSeed: "Potato Seed",
     leek: "Leek",
     leekSeed: "Leek Seed",
+    corn: "Corn",
+    cornSeed: "Corn Seed",
+    carrot: "Carrot",
+    carrotSeed: "Carrot Seed",
+    onion: "Onion",
+    onionSeed: "Onion Seed",
 
     // === FRUIT TREES ===
     apple: "Apple",
     appleTree: "Apple Tree",
     lemon: "Lemon",
     lemonTree: "Lemon Tree",
+    orange: "Orange",
+    orangeTree: "Orange Tree",
 
     // === BUILDINGS ===
     mill: "Mill",
@@ -101,6 +110,8 @@ const Translations = {
     cowFarmKit: "Cow Farm Kit",
     restaurant: "Restaurant",
     restaurantKit: "Restaurant Kit",
+    cinema: "Cinema",
+    cinemaKit: "Cinema Kit",
 
     // === PRODUCTS ===
     flour: "Flour",
@@ -117,6 +128,11 @@ const Translations = {
     salad: "Salad",
     soup: "Soup",
     lemonade: "Lemonade",
+    stew: "Stew",
+    animalFeed: "Animal Feed",
+    popcorn: "Popcorn",
+    onionRings: "Onion Rings",
+    orangeJuice: "Orange Juice",
 
     // === DECORATIONS ===
     road: "Road",
@@ -227,10 +243,14 @@ const Translations = {
     tomatoDesc: "Juicy vegetable that grows 2 per seed. Unlocks at level 3.",
     potatoDesc: "Hearty crop that takes time but yields well. Unlocks at level 6.",
     leekDesc: "Premium vegetable for advanced recipes. Unlocks at level 8.",
+    cornDesc: "Versatile crop for feed and snacks. Unlocks at level 5.",
+    carrotDesc: "Nutritious vegetable for complex dishes. Unlocks at level 10.",
+    onionDesc: "Essential ingredient for many recipes. Unlocks at level 11.",
 
     // === TREE DESCRIPTIONS ===
     appleTreeDesc: "Produces 3 apples every 60 minutes. Received as reward.",
     lemonTreeDesc: "Produces 2 lemons every 120 minutes. Received as reward.",
+    orangeTreeDesc: "Produces 3 oranges every 360 minutes. Received as reward.",
 
     // === BUILDING DESCRIPTIONS ===
     millDesc: "Processes wheat into flour and porridge. Unlocks at level 4.",
@@ -239,7 +259,19 @@ const Translations = {
     bakeryDesc: "Bakes bread, cakes, and scones. Unlocks at level 7.",
     butcherDesc: "Processes animals into meat products. Unlocks at level 8.",
     cowFarmDesc: "Raises cows from wheat. Unlocks at level 9.",
-    restaurantDesc: "Creates gourmet dishes from ingredients. Unlocks at level 10."
+    restaurantDesc: "Creates gourmet dishes from ingredients. Unlocks at level 10.",
+    cinemaDesc: "Produces snacks and refreshments. Unlocks at level 11.",
+
+    // === MISSIONS ===
+    missionsHarvest: "Harvest Missions",
+    missionsProduction: "Production Missions",
+    missionProgress: "Progress",
+    missionCompleted: "Completed!",
+    missionReward: "Reward",
+    claimReward: "Claim Reward",
+    missionClaimed: "Reward claimed!",
+    missionHarvest: "Harvest",
+    missionProduce: "Produce",
   },
 
   pt: {
@@ -250,6 +282,7 @@ const Translations = {
     coins: "Moedas",
     inventory: "Inventário",
     marketplace: "Mercado",
+    missions: "Missões",
     createPlot: "Criar Terreno (2🪙)",
     visitFriend: "Visitar um Amigo",
     help: "Ajuda",
@@ -323,12 +356,20 @@ const Translations = {
     potatoSeed: "Semente de Batata",
     leek: "Alho-poró",
     leekSeed: "Semente de Alho-poró",
+    corn: "Milho",
+    cornSeed: "Semente de Milho",
+    carrot: "Cenoura",
+    carrotSeed: "Semente de Cenoura",
+    onion: "Cebola",
+    onionSeed: "Semente de Cebola",
 
     // === ÁRVORES FRUTÍFERAS ===
     apple: "Maçã",
     appleTree: "Macieira",
     lemon: "Limão",
     lemonTree: "Limoeiro",
+    orange: "Laranja",
+    orangeTree: "Laranjeira",
 
     // === EDIFÍCIOS ===
     mill: "Moinho",
@@ -345,6 +386,8 @@ const Translations = {
     cowFarmKit: "Kit Fazenda de Vacas",
     restaurant: "Restaurante",
     restaurantKit: "Kit Restaurante",
+    cinema: "Cinema",
+    cinemaKit: "Kit Cinema",
 
     // === PRODUTOS ===
     flour: "Farinha",
@@ -361,6 +404,11 @@ const Translations = {
     salad: "Salada",
     soup: "Sopa",
     lemonade: "Limonada",
+    stew: "Ensopado",
+    animalFeed: "Ração Animal",
+    popcorn: "Pipoca",
+    onionRings: "Anéis de Cebola",
+    orangeJuice: "Suco de Laranja",
 
     // === DECORAÇÕES ===
     road: "Estrada",
@@ -471,10 +519,14 @@ const Translations = {
     tomatoDesc: "Vegetal suculento que cresce 2 por semente. Desbloqueia no nível 3.",
     potatoDesc: "Cultura resistente que leva tempo mas rende bem. Desbloqueia no nível 6.",
     leekDesc: "Vegetal premium para receitas avançadas. Desbloqueia no nível 8.",
+    cornDesc: "Cultura versátil para ração e lanches. Desbloqueia no nível 5.",
+    carrotDesc: "Vegetal nutritivo para pratos complexos. Desbloqueia no nível 10.",
+    onionDesc: "Ingrediente essencial para muitas receitas. Desbloqueia no nível 11.",
 
     // === DESCRIÇÕES ÁRVORES ===
     appleTreeDesc: "Produz 3 maçãs a cada 60 minutos. Recebido como recompensa.",
     lemonTreeDesc: "Produz 2 limões a cada 120 minutos. Recebido como recompensa.",
+    orangeTreeDesc: "Produz 3 laranjas a cada 360 minutos. Recebido como recompensa.",
 
     // === DESCRIÇÕES EDIFÍCIOS ===
     millDesc: "Processa trigo em farinha e mingau. Desbloqueia no nível 4.",
@@ -483,7 +535,19 @@ const Translations = {
     bakeryDesc: "Assa pães, bolos e scones. Desbloqueia no nível 7.",
     butcherDesc: "Processa animais em produtos de carne. Desbloqueia no nível 8.",
     cowFarmDesc: "Cria vacas a partir de trigo. Desbloqueia no nível 9.",
-    restaurantDesc: "Cria pratos gourmet a partir de ingredientes. Desbloqueia no nível 10."
+    restaurantDesc: "Cria pratos gourmet a partir de ingredientes. Desbloqueia no nível 10.",
+    cinemaDesc: "Produz lanches e refrescos. Desbloqueia no nível 11.",
+
+    // === MISSÕES ===
+    missionsHarvest: "Missões de Colheita",
+    missionsProduction: "Missões de Produção",
+    missionProgress: "Progresso",
+    missionCompleted: "Completo!",
+    missionReward: "Recompensa",
+    claimReward: "Coletar Recompensa",
+    missionClaimed: "Recompensa coletada!",
+    missionHarvest: "Colher",
+    missionProduce: "Produzir",
   }
 };
 
