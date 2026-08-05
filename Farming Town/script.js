@@ -456,6 +456,9 @@ const GameState = {
     
     // Save mission progress
     this.saveMissionProgress();
+    
+    // Update missions button alert
+    updateMissionsButtonAlert();
   },
   
   async saveMissionProgress() {
@@ -553,6 +556,12 @@ const GameState = {
     // Mark as claimed
     this.missionProgress[missionId].claimed = true;
     this.saveMissionProgress();
+    
+    // Update missions button alert
+    updateMissionsButtonAlert();
+    
+    // Update tab badges
+    updateMissionTabBadges();
     
     // Show notification
     showNotification(t('missionClaimed'), `${t('missionReward')}: ${rewardText.join(', ')}`);
@@ -783,6 +792,9 @@ async function initGame() {
   
   // Update display
   GameState.updateDisplay();
+  
+  // Update missions button alert
+  updateMissionsButtonAlert();
   
   // Set up event listeners
   setupEventListeners();
@@ -1027,7 +1039,10 @@ function renderCrop(tile) {
     wheat: '🌾',
     tomato: '🍅',
     potato: '🥔',
-    leek: '🥬'
+    leek: '🥬',
+    corn: '🌽',
+    carrot: '🥕',
+    onion: '🧅'
   };
   
   const icon = cropIcons[tile.cropType] || '🌱';
@@ -1086,7 +1101,8 @@ function renderBuilding(tile) {
     bakery: '🥖',
     butcher: '🥩',
     cowFarm: '🐄',
-    restaurant: '🍽️'
+    restaurant: '🍽️',
+    cinema: '🎬'
   };
   
   const icon = buildingIcons[tile.buildingType] || '🏢';
@@ -1104,7 +1120,22 @@ function renderBuilding(tile) {
     return `<div class="tile-content tile-constructing">${icon}</div>`;
   }
   
-  // Show normal building
+  // Check if any production slot has completed products
+  let hasCompletedProducts = false;
+  for (let slot = 0; slot < 3; slot++) {
+    const key = `${tile.x}_${tile.y}_${slot}`;
+    const production = GameState.productionQueues[key];
+    if (production && production.completed) {
+      hasCompletedProducts = true;
+      break;
+    }
+  }
+  
+  // Show normal building with alert if products are ready
+  if (hasCompletedProducts) {
+    return `<div class="tile-content">${icon}<div class="building-alert">!</div></div>`;
+  }
+  
   return `<div class="tile-content">${icon}</div>`;
 }
 
@@ -1245,16 +1276,24 @@ function getTileIcon(type, subtype = null) {
     lemonTree: '🍋🌳',
     orangeTree: '🍊🌳',
     mill: '🏭',
+    millKit: '🏭',
     pigFarm: '🐷',
+    pigFarmKit: '🐷',
     chickenFarm: '🐔',
+    chickenFarmKit: '🐔',
     bakery: '🥖',
+    bakeryKit: '🥖',
     butcher: '🥩',
+    butcherKit: '🥩',
     cowFarm: '🐄',
+    cowFarmKit: '🐄',
     restaurant: '🍽️',
+    restaurantKit: '🍽️',
     cinema: '🎬',
-    flour: '🌾',
+    cinemaKit: '🎬',
+    flour: '⬜',
     porridge: '🥣',
-    animalFeed: '🌾🌽',
+    animalFeed: '🌰',
     pig: '🐷',
     chicken: '🐔',
     egg: '🥚',
@@ -1442,7 +1481,7 @@ function showPlantingMenu(tile) {
   optionsContainer.innerHTML = '';
   
   // Get available seeds from inventory
-  const seedTypes = ['wheat', 'tomato', 'potato', 'leek'];
+  const seedTypes = ['wheat', 'tomato', 'potato', 'leek', 'corn', 'carrot', 'onion'];
   let hasSeeds = false;
   
   seedTypes.forEach(cropType => {
@@ -1800,7 +1839,8 @@ function showBuildingModal(tile) {
     
     if (production.recipeType) {
       const recipeData = GameData.recipes[production.recipeType];
-      slotContent += `<div class="slot-recipe">${t(production.recipeType)}</div>`;
+      const recipeIcon = getTileIcon(production.recipeType);
+      slotContent += `<div class="slot-recipe">${recipeIcon} ${t(production.recipeType)}</div>`;
       
       if (production.completed) {
         slotContent += `<div class="slot-timer">${t('productionComplete')}</div>`;
@@ -2043,24 +2083,26 @@ function renderInventoryTab(tabName) {
   
   switch (tabName) {
     case 'seeds':
-      items = getInventoryItemsByCategory(['wheatSeed', 'tomatoSeed', 'potatoSeed', 'leekSeed']);
+      items = getInventoryItemsByCategory(['wheatSeed', 'tomatoSeed', 'potatoSeed', 'leekSeed', 'cornSeed', 'carrotSeed', 'onionSeed']);
       break;
       
     case 'crops':
-      items = getInventoryItemsByCategory(['wheat', 'tomato', 'potato', 'leek', 'apple', 'lemon']);
+      items = getInventoryItemsByCategory(['wheat', 'tomato', 'potato', 'leek', 'corn', 'carrot', 'onion', 'apple', 'lemon', 'orange']);
       break;
       
     case 'products':
       items = getInventoryItemsByCategory([
-        'flour', 'porridge', 'pig', 'chicken', 'egg', 'bread', 'cake', 
-        'potatoScone', 'sausage', 'steak', 'cow', 'salad', 'soup', 'lemonade'
+        'flour', 'porridge', 'animalFeed', 'pig', 'chicken', 'egg', 'bread', 'cake', 
+        'potatoScone', 'sausage', 'steak', 'cow', 'salad', 'soup', 'lemonade', 'stew',
+        'popcorn', 'onionRings', 'orangeJuice'
       ]);
       break;
       
     case 'buildings':
       items = getInventoryItemsByCategory([
         'millKit', 'pigFarmKit', 'chickenFarmKit', 'bakeryKit', 
-        'butcherKit', 'cowFarmKit', 'restaurantKit', 'appleTree', 'lemonTree'
+        'butcherKit', 'cowFarmKit', 'restaurantKit', 'cinemaKit', 
+        'appleTree', 'lemonTree', 'orangeTree'
       ]);
       break;
   }
@@ -2172,9 +2214,11 @@ function renderMarketplaceTab(tabName) {
 function renderSellTab(container) {
   // Get all sellable items (crops, fruits, products, animals)
   const sellableCategories = [
-    'wheat', 'tomato', 'potato', 'leek', 'apple', 'lemon',
-    'flour', 'porridge', 'pig', 'chicken', 'egg', 'bread', 'cake',
-    'potatoScone', 'sausage', 'steak', 'cow', 'salad', 'soup', 'lemonade'
+    'wheat', 'tomato', 'potato', 'leek', 'corn', 'carrot', 'onion',
+    'apple', 'lemon', 'orange',
+    'flour', 'porridge', 'animalFeed', 'pig', 'chicken', 'egg', 'bread', 'cake',
+    'potatoScone', 'sausage', 'steak', 'cow', 'salad', 'soup', 'lemonade', 'stew',
+    'popcorn', 'onionRings', 'orangeJuice'
   ];
   
   let hasItems = false;
@@ -2416,9 +2460,14 @@ function renderBuyBuildingsTab(container) {
   
   buildings.forEach(building => {
     const isUnlocked = GameData.isUnlocked('building', building.id, GameState.level);
-    const owned = GameState.buildingsOwned[building.id] || 0;
+    
+    // Count both constructed buildings AND kits in inventory
+    const constructedCount = GameState.buildingsOwned[building.id] || 0;
+    const kitsInInventory = GameState.getInventoryCount(building.id + 'Kit');
+    const owned = constructedCount + kitsInInventory;
+    
     const canBuyMore = owned < building.maxOwned;
-    const price = GameData.getHouseKitPrice(building.id, owned);
+    const price = GameData.getHouseKitPrice(building.id, constructedCount);
     const secondUnlockLevel = building.unlockLevel + 2;
     
     const itemDiv = document.createElement('div');
@@ -2469,8 +2518,24 @@ function buyBuildingKit(buildingId) {
   const building = GameData.buildings[buildingId];
   if (!building) return false;
   
-  const owned = GameState.buildingsOwned[buildingId] || 0;
-  const price = GameData.getHouseKitPrice(buildingId, owned);
+  // Count both constructed buildings AND kits in inventory (same logic as display)
+  const constructedCount = GameState.buildingsOwned[buildingId] || 0;
+  const kitsInInventory = GameState.getInventoryCount(buildingId + 'Kit');
+  const owned = constructedCount + kitsInInventory;
+  
+  // Check if already at max owned
+  if (owned >= building.maxOwned) {
+    showNotification(t('buyBuildings'), t('maxOwned') || 'Maximum owned reached');
+    return false;
+  }
+  
+  // Check level requirement for second purchase
+  if (owned === 1 && GameState.level < building.unlockLevel + 2) {
+    showNotification(t('buyBuildings'), `${t('canBuySecondAt')} ${building.unlockLevel + 2}`);
+    return false;
+  }
+  
+  const price = GameData.getHouseKitPrice(buildingId, constructedCount);
   
   // Check if trying to buy without seeds/crops (safety check)
   if (!validatePurchase(price)) {
@@ -2486,6 +2551,15 @@ function buyBuildingKit(buildingId) {
   GameState.addToInventory(buildingId + 'Kit', 1);
   
   showNotification(t('buyBuildings'), `${t('itemPurchased')} ${t(buildingId + 'Kit')}`);
+  
+  // Refresh the marketplace to update owned counts and restrictions
+  const activeTab = document.querySelector('.marketplace-tabs .tab-btn.active');
+  if (activeTab) {
+    const tabName = activeTab.dataset.tab;
+    const container = document.getElementById('marketplaceContent');
+    renderMarketplaceTab(tabName, container);
+  }
+  
   return true;
 }
 
@@ -3301,6 +3375,53 @@ if (typeof window !== 'undefined') {
 // MISSIONS SYSTEM WITH PROGRESS TRACKING
 // ============================================================================
 
+// Count completable missions by type
+function countCompletableMissions(tabName) {
+  let count = 0;
+  
+  if (tabName === 'crops') {
+    // Count harvest missions
+    for (const cropType in GameData.missions.harvest) {
+      const missions = GameData.missions.harvest[cropType];
+      missions.forEach(mission => {
+        const progress = GameState.missionProgress[mission.id] || { progress: 0, claimed: false };
+        if (progress.progress >= mission.target && !progress.claimed) {
+          count++;
+        }
+      });
+    }
+  } else if (tabName === 'products') {
+    // Count production missions
+    for (const productType in GameData.missions.production) {
+      const missions = GameData.missions.production[productType];
+      missions.forEach(mission => {
+        const progress = GameState.missionProgress[mission.id] || { progress: 0, claimed: false };
+        if (progress.progress >= mission.target && !progress.claimed) {
+          count++;
+        }
+      });
+    }
+  }
+  
+  return count;
+}
+
+// Update missions button alert state
+function updateMissionsButtonAlert() {
+  const btn = document.getElementById('btnMissions');
+  if (!btn) return;
+  
+  const harvestCount = countCompletableMissions('crops');
+  const productionCount = countCompletableMissions('products');
+  const totalCount = harvestCount + productionCount;
+  
+  if (totalCount > 0) {
+    btn.classList.add('missions-alert');
+  } else {
+    btn.classList.remove('missions-alert');
+  }
+}
+
 // Show missions modal
 function showMissionsModal() {
   const modal = document.getElementById('missionsModal');
@@ -3315,6 +3436,9 @@ function showMissionsModal() {
     firstTab.classList.add('active');
   }
   
+  // Update badge counts on tabs
+  updateMissionTabBadges();
+  
   // Set up tab switching
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
@@ -3328,6 +3452,44 @@ function showMissionsModal() {
   renderMissionsTab('crops');
   
   modal.classList.remove('hidden');
+}
+
+// Update badge counts on mission tabs
+function updateMissionTabBadges() {
+  const harvestCount = countCompletableMissions('crops');
+  const productionCount = countCompletableMissions('products');
+  
+  // Update or create badges
+  const cropsTab = document.querySelector('.tab-btn[data-tab="crops"]');
+  const productsTab = document.querySelector('.tab-btn[data-tab="products"]');
+  
+  if (cropsTab) {
+    let badge = cropsTab.querySelector('.mission-badge');
+    if (harvestCount > 0) {
+      if (!badge) {
+        badge = document.createElement('span');
+        badge.className = 'mission-badge';
+        cropsTab.appendChild(badge);
+      }
+      badge.textContent = harvestCount;
+    } else if (badge) {
+      badge.remove();
+    }
+  }
+  
+  if (productsTab) {
+    let badge = productsTab.querySelector('.mission-badge');
+    if (productionCount > 0) {
+      if (!badge) {
+        badge = document.createElement('span');
+        badge.className = 'mission-badge';
+        productsTab.appendChild(badge);
+      }
+      badge.textContent = productionCount;
+    } else if (badge) {
+      badge.remove();
+    }
+  }
 }
 
 // Render missions tab content
@@ -3369,6 +3531,32 @@ function renderMissionsTab(tabName) {
     container.innerHTML = '<p style="text-align:center;padding:40px;">No missions available</p>';
     return;
   }
+  
+  // Sort missions by completion status
+  // 1. Unclaimed completed (completable) - highest priority
+  // 2. In progress (not completed, not claimed)
+  // 3. Claimed - lowest priority
+  missionsData.sort((a, b) => {
+    const progressA = GameState.missionProgress[a.id] || { progress: 0, claimed: false };
+    const progressB = GameState.missionProgress[b.id] || { progress: 0, claimed: false };
+    
+    const isCompletedA = progressA.progress >= a.target;
+    const isCompletedB = progressB.progress >= b.target;
+    
+    const isCompletableA = isCompletedA && !progressA.claimed;
+    const isCompletableB = isCompletedB && !progressB.claimed;
+    
+    // Completable missions come first
+    if (isCompletableA && !isCompletableB) return -1;
+    if (!isCompletableA && isCompletableB) return 1;
+    
+    // Claimed missions come last
+    if (progressA.claimed && !progressB.claimed) return 1;
+    if (!progressA.claimed && progressB.claimed) return -1;
+    
+    // Within same status, sort by target (easier missions first)
+    return a.target - b.target;
+  });
   
   // Group missions by item
   const missionsByItem = {};

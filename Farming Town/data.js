@@ -513,7 +513,9 @@ const GameData = {
 
   // Helper function to get all recipes for a building type
   getRecipesForBuilding(buildingType) {
-    return Object.values(this.recipes).filter(recipe => recipe.buildingType === buildingType);
+    const recipes = Object.values(this.recipes).filter(recipe => recipe.buildingType === buildingType);
+    // Sort by unlock level (ascending) for consistent ordering
+    return recipes.sort((a, b) => a.unlockLevel - b.unlockLevel);
   },
 
   // Helper function to calculate house kit price based on purchase count

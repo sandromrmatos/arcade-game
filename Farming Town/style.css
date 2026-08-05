@@ -79,6 +79,7 @@ body {
     font-weight: 600;
     transition: all 0.3s ease;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
 }
 
 .btn-action:hover {
@@ -88,6 +89,21 @@ body {
 
 .btn-action:active {
     transform: translateY(0);
+}
+
+/* Missions button alert state */
+.btn-action.missions-alert {
+    background: linear-gradient(135deg, #ff3b30, #e60000);
+    animation: missionAlert 2s ease-in-out infinite;
+}
+
+@keyframes missionAlert {
+    0%, 100% { 
+        box-shadow: 0 2px 8px rgba(255, 59, 48, 0.4);
+    }
+    50% { 
+        box-shadow: 0 4px 16px rgba(255, 59, 48, 0.8);
+    }
 }
 
 .language-selector {
@@ -187,6 +203,37 @@ body {
 .tile-content {
     font-size: 36px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+/* Building alert indicator */
+.building-alert {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff3b30;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(255, 59, 48, 0.5);
+    animation: alertPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes alertPulse {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 2px 6px rgba(255, 59, 48, 0.5);
+    }
+    50% { 
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(255, 59, 48, 0.8);
+    }
 }
 
 .tile-timer {
@@ -317,6 +364,7 @@ body {
     cursor: pointer;
     font-weight: 600;
     transition: all 0.2s;
+    position: relative;
 }
 
 .tab-btn:hover {
@@ -326,6 +374,35 @@ body {
 .tab-btn.active {
     background: linear-gradient(135deg, #4CAF50, #45a049);
     color: white;
+}
+
+/* Mission badge on tabs */
+.mission-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #ff3b30;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 6px;
+    box-shadow: 0 2px 4px rgba(255, 59, 48, 0.4);
+    animation: badgePulse 2s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+    0%, 100% { 
+        transform: scale(1);
+    }
+    50% { 
+        transform: scale(1.15);
+    }
 }
 
 /* === INVENTORY === */
