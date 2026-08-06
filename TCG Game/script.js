@@ -2723,12 +2723,12 @@ function handleAttack(moveNumber) {
         gameState.opponent.caprineGuardShield = 0; // Shield is consumed
     }
     
-    // Apply Elemental Fortitude shield (Galactic Adventures - only from Wind/Mechanic)
-    if (gameState.opponent.elementalFortitudeShield && (attackerType === 'Wind' || attackerType === 'Mechanic')) {
-        const shieldAmount = gameState.opponent.elementalFortitudeShield;
+    // Apply Elemental Fortitude shield (Galactic Adventures - only from Wind/Mechanic, creature-specific)
+    if (defender.elementalFortitudeShield && (attackerType === 'Wind' || attackerType === 'Mechanic')) {
+        const shieldAmount = defender.elementalFortitudeShield;
         damage = Math.max(0, damage - shieldAmount);
         alert(`Elemental Fortitude reduces damage by ${shieldAmount}! ${attacker.data.name} deals ${damage} damage!`);
-        gameState.opponent.elementalFortitudeShield = 0; // Shield is consumed
+        defender.elementalFortitudeShield = 0; // Shield is consumed
     }
     
     // Apply Metalic Protection (Galactic Adventures - no damage from Mechanic)
@@ -5305,8 +5305,8 @@ function useAbility(card, player, location, index) {
             break;
             
         case 'elementalFortitude':
-            // Elemental Fortitude - next turn takes 20 less damage from Wind and Mechanic
-            gameState.player.elementalFortitudeShield = 20;
+            // Elemental Fortitude - THIS creature takes 20 less damage from Wind and Mechanic next turn
+            card.elementalFortitudeShield = 20;
             card.abilityUsedThisTurn = true;
             alert(`${card.data.name} used Elemental Fortitude! Next turn, it takes 20 less damage from Wind/Mechanic attacks!`);
             renderGame();
@@ -5857,25 +5857,16 @@ function endTurn() {
         }
     }
     
-    // Decrement cantRetreatTurns for all creatures (Tempest Hold effect)
-    if (gameState.player.active && gameState.player.active.cantRetreatTurns > 0) {
-        gameState.player.active.cantRetreatTurns--;
-        if (gameState.player.active.cantRetreatTurns === 0) {
-            alert(`${gameState.player.active.data.name} can retreat again!`);
+    // Decrement cantRetreatTurns ONLY for the player whose turn just ENDED (Tempest Hold effect)
+    // This ensures the restriction counts down only during that player's own turns
+    if (gameState[playerEndingTurn].active && gameState[playerEndingTurn].active.cantRetreatTurns > 0) {
+        gameState[playerEndingTurn].active.cantRetreatTurns--;
+        if (gameState[playerEndingTurn].active.cantRetreatTurns === 0) {
+            const playerName = playerEndingTurn === 'player' ? '' : "AI's ";
+            alert(`${playerName}${gameState[playerEndingTurn].active.data.name} can retreat again!`);
         }
     }
-    gameState.player.bench.forEach(card => {
-        if (card && card.cantRetreatTurns > 0) {
-            card.cantRetreatTurns--;
-        }
-    });
-    if (gameState.opponent.active && gameState.opponent.active.cantRetreatTurns > 0) {
-        gameState.opponent.active.cantRetreatTurns--;
-        if (gameState.opponent.active.cantRetreatTurns === 0) {
-            alert(`AI's ${gameState.opponent.active.data.name} can retreat again!`);
-        }
-    }
-    gameState.opponent.bench.forEach(card => {
+    gameState[playerEndingTurn].bench.forEach(card => {
         if (card && card.cantRetreatTurns > 0) {
             card.cantRetreatTurns--;
         }
@@ -5930,9 +5921,10 @@ function endTurn() {
     gameState[playerStartingTurn].clarityAuraActive = false;
     gameState[playerStartingTurn].camouflageActive = false;
     
-    // Clear evolvedLastTurn for the player whose turn is ENDING (for Thunder Rush tracking)
-    // This ensures: Turn 4 opponent evolves → Turn 5 player can use Thunder Rush → Turn 6 starts (cleared)
-    gameState[playerEndingTurn].evolvedLastTurn = false;
+    // Clear evolvedLastTurn for the player whose turn is STARTING (for Thunder Rush tracking)
+    // This ensures: Turn 13 opponent evolves → Turn 14 player can use Thunder Rush → Turn 14 ends, Turn 15 starts (cleared)
+    // The flag stays true through the OPPONENT player's turn so THEY can check if YOU evolved
+    gameState[playerStartingTurn].evolvedLastTurn = false;
     
     // Note: Guardian Mode is cleared right after turn switch above
     
@@ -7271,12 +7263,12 @@ function aiAttack() {
         gameState.player.caprineGuardShield = 0; // Shield is consumed
     }
     
-    // Apply Elemental Fortitude shield (Galactic Adventures - only from Wind/Mechanic)
-    if (gameState.player.elementalFortitudeShield && (attackerType === 'Wind' || attackerType === 'Mechanic')) {
-        const shieldAmount = gameState.player.elementalFortitudeShield;
+    // Apply Elemental Fortitude shield (Galactic Adventures - only from Wind/Mechanic, creature-specific)
+    if (defender.elementalFortitudeShield && (attackerType === 'Wind' || attackerType === 'Mechanic')) {
+        const shieldAmount = defender.elementalFortitudeShield;
         damage = Math.max(0, damage - shieldAmount);
         alert(`Elemental Fortitude reduces AI's damage by ${shieldAmount}! AI deals ${damage} damage!`);
-        gameState.player.elementalFortitudeShield = 0; // Shield is consumed
+        defender.elementalFortitudeShield = 0; // Shield is consumed
     }
     
     // Apply Metalic Protection (Galactic Adventures - no damage from Mechanic)

@@ -28,20 +28,34 @@ gameState.opponent.evolvedLastTurn = true;
 ```
 
 #### 3. Flag Clearing (`endTurn` function)
+**IMPORTANT:** The flag is cleared for the player whose turn is **STARTING**, not ending!
+
 ```javascript
-// Clear evolvedLastTurn for the player whose turn is ENDING
-gameState[playerEndingTurn].evolvedLastTurn = false;
+// Clear evolvedLastTurn for the player whose turn is STARTING
+// This allows the opponent to use Thunder Rush during their entire turn
+gameState[playerStartingTurn].evolvedLastTurn = false;
 ```
 
+**Why this timing matters:**
+- Turn 13: Opponent evolves → `opponent.evolvedLastTurn = true`
+- Turn 14 (your turn): You can use Thunder Rush because `opponent.evolvedLastTurn` is still `true`
+- Turn 15 starts: NOW clear `opponent.evolvedLastTurn` to `false`
+
+If we cleared it at the end of turn 13, it would already be false on turn 14!
+
+**Bug Fix (2026-08-06):** Initially cleared the flag at the wrong time (end of the turn when evolution happened), which meant it was already false when the opponent's next turn started. Fixed to clear at the start of the turn AFTER the opponent's turn, ensuring the flag persists through the full turn cycle.
+
 ### How It Works Now
-1. **Turn 4**: Opponent evolves a creature (any creature, active or bench)
+1. **Turn 13 (Opponent turn)**: Opponent evolves a creature (any creature, active or bench)
    - Sets `gameState.opponent.evolvedLastTurn = true`
-2. **Turn 5 (Player turn)**: Thunder Rush ability becomes available
+2. **Turn 13 ends, Turn 14 starts (Player turn)**: Thunder Rush ability becomes available
    - Check passes: `gameState.opponent.evolvedLastTurn === true`
    - Player can activate Thunder Rush
    - Next attack damage is doubled
-3. **Turn 6 (End of turn 5)**: Flag is cleared
+3. **Turn 14 ends, Turn 15 starts**: Flag is cleared
    - Sets `gameState.opponent.evolvedLastTurn = false`
+
+**Key Timing:** The flag persists through the ENTIRE next player's turn, allowing them to use Thunder Rush anytime during their turn. It's only cleared when THEIR turn ends and the next turn begins.
 
 ---
 
