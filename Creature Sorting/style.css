@@ -1,0 +1,255 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.screen {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 1200px;
+    width: 100%;
+}
+
+.hidden {
+    display: none !important;
+}
+
+#gameTitle {
+    text-align: center;
+    color: #667eea;
+    font-size: 3em;
+    margin-bottom: 40px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.menu-btn {
+    padding: 20px;
+    font-size: 1.2em;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.menu-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.menu-btn:active {
+    transform: translateY(0);
+}
+
+.btn-text {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.btn-desc {
+    font-size: 0.8em;
+    opacity: 0.9;
+}
+
+#gameHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.header-btn {
+    padding: 10px 20px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background 0.3s;
+}
+
+.header-btn:hover {
+    background: #764ba2;
+}
+
+#timerDisplay {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #667eea;
+}
+
+#difficultyDisplay {
+    font-size: 1.2em;
+    color: #764ba2;
+    font-weight: bold;
+}
+
+#shelvesContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.shelf {
+    background: linear-gradient(to bottom, #f0f0f0 0%, #e0e0e0 100%);
+    border: 3px solid #999;
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    gap: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.slot {
+    width: 80px;
+    height: 80px;
+    background: white;
+    border: 3px dashed #ccc;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.slot:hover {
+    border-color: #667eea;
+    transform: scale(1.05);
+}
+
+.slot.empty {
+    background: #f9f9f9;
+}
+
+.slot.selected {
+    border-color: #ffd700;
+    border-style: solid;
+    background: #fffacd;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+}
+
+.slot img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+#gameInfo {
+    text-align: center;
+    margin-top: 20px;
+    color: #666;
+    font-style: italic;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.modal-content {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 500px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.modal-content h2 {
+    color: #667eea;
+    margin-bottom: 20px;
+    font-size: 2.5em;
+}
+
+.modal-content p {
+    margin: 15px 0;
+    font-size: 1.2em;
+    color: #333;
+}
+
+#recordMessage {
+    color: #ffd700;
+    font-weight: bold;
+    font-size: 1.3em;
+}
+
+.modal-content .menu-btn {
+    margin: 10px;
+    width: auto;
+    display: inline-flex;
+    justify-content: center;
+}
+
+#backToMenuBtn {
+    max-width: 400px;
+    margin: 20px auto 0;
+}
+
+@media (max-width: 768px) {
+    .screen {
+        padding: 20px;
+    }
+
+    #gameTitle {
+        font-size: 2em;
+    }
+
+    .slot {
+        width: 60px;
+        height: 60px;
+    }
+
+    .shelf {
+        padding: 10px;
+        gap: 5px;
+    }
+
+    #timerDisplay {
+        font-size: 1.2em;
+    }
+
+    #shelvesContainer {
+        gap: 15px;
+    }
+}

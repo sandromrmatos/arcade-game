@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Background -->
+  <rect width="100" height="100" fill="#8B5CF6" rx="15"/>
+  
+  <!-- Shelf -->
+  <rect x="10" y="65" width="80" height="8" fill="#6B4423" rx="2"/>
+  <rect x="10" y="73" width="80" height="4" fill="#4A2F19"/>
+  
+  <!-- Three creature slots on shelf -->
+  <!-- Left creature - cute monster -->
+  <circle cx="23" cy="55" r="8" fill="#FF6B9D"/>
+  <circle cx="21" cy="53" r="2" fill="white"/>
+  <circle cx="25" cy="53" r="2" fill="white"/>
+  <circle cx="21" cy="53" r="1" fill="black"/>
+  <circle cx="25" cy="53" r="1" fill="black"/>
+  <path d="M 20 58 Q 23 60 26 58" stroke="black" stroke-width="1.5" fill="none"/>
+  
+  <!-- Middle creature - cute monster (same type as left) -->
+  <circle cx="50" cy="55" r="8" fill="#FF6B9D"/>
+  <circle cx="48" cy="53" r="2" fill="white"/>
+  <circle cx="52" cy="53" r="2" fill="white"/>
+  <circle cx="48" cy="53" r="1" fill="black"/>
+  <circle cx="52" cy="53" r="1" fill="black"/>
+  <path d="M 47 58 Q 50 60 53 58" stroke="black" stroke-width="1.5" fill="none"/>
+  
+  <!-- Right creature - cute monster (same type as left and middle) -->
+  <circle cx="77" cy="55" r="8" fill="#FF6B9D"/>
+  <circle cx="75" cy="53" r="2" fill="white"/>
+  <circle cx="79" cy="53" r="2" fill="white"/>
+  <circle cx="75" cy="53" r="1" fill="black"/>
+  <circle cx="79" cy="53" r="1" fill="black"/>
+  <path d="M 74 58 Q 77 60 80 58" stroke="black" stroke-width="1.5" fill="none"/>
+  
+  <!-- Upper shelf with different creatures (unsorted) -->
+  <rect x="10" y="30" width="80" height="8" fill="#6B4423" rx="2"/>
+  <rect x="10" y="38" width="80" height="4" fill="#4A2F19"/>
+  
+  <!-- Different creatures on upper shelf -->
+  <!-- Blue creature -->
+  <circle cx="23" cy="20" r="8" fill="#4FC3F7"/>
+  <circle cx="21" cy="18" r="2" fill="white"/>
+  <circle cx="25" cy="18" r="2" fill="white"/>
+  <circle cx="21" cy="18" r="1" fill="black"/>
+  <circle cx="25" cy="18" r="1" fill="black"/>
+  <path d="M 20 23 Q 23 25 26 23" stroke="black" stroke-width="1.5" fill="none"/>
+  
+  <!-- Green creature -->
+  <circle cx="50" cy="20" r="8" fill="#81C784"/>
+  <circle cx="48" cy="18" r="2" fill="white"/>
+  <circle cx="52" cy="18" r="2" fill="white"/>
+  <circle cx="48" cy="18" r="1" fill="black"/>
+  <circle cx="52" cy="18" r="1" fill="black"/>
+  <path d="M 47 23 Q 50 25 53 23" stroke="black" stroke-width="1.5" fill="none"/>
+  
+  <!-- Yellow creature -->
+  <circle cx="77" cy="20" r="8" fill="#FFD54F"/>
+  <circle cx="75" cy="18" r="2" fill="white"/>
+  <circle cx="79" cy="18" r="2" fill="white"/>
+  <circle cx="75" cy="18" r="1" fill="black"/>
+  <circle cx="79" cy="18" r="1" fill="black"/>
+  <path d="M 74 23 Q 77 25 80 23" stroke="black" stroke-width="1.5" fill="none"/>
+  
+  <!-- Sparkle effect to show sorting/organizing -->
+  <path d="M 85 45 L 87 47 L 89 45 L 87 43 Z" fill="#FFE082"/>
+  <path d="M 88 42 L 89 43 L 90 42 L 89 41 Z" fill="#FFE082"/>
+  <path d="M 82 48 L 83 49 L 84 48 L 83 47 Z" fill="#FFE082"/>
+</svg>

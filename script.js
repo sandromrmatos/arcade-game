@@ -82,6 +82,7 @@ const translations = {
     "TCG Game": "TCG Game",
     "VGC": "VGC",
     "Shut the Box": "Shut the Box",
+    "Creature Sorting": "Creature Sorting",
     "Farming Town": "Farming Town"
   },
   pt: {
@@ -152,6 +153,7 @@ const translations = {
     "TCG Game": "Jogo TCG",
     "VGC": "VGC",
     "Shut the Box": "Feche a Caixa",
+    "Creature Sorting": "Ordenação de Criaturas",
     "Farming Town": "Cidade Agrícola"
   }
 };
@@ -659,12 +661,16 @@ const gameDescriptions = {
     modes: "Level 1: Single board with tiles 1-12. Roll dice, select tiles that sum to the dice total, and submit.\n\nLevel 2: Double board challenge! First board (1-12) blocks second board (12-1 behind). You can only select tiles from the second board after removing the tile directly in front of it from the first board. Example: Remove tile 5 from board 1 to unlock tile 8 (behind it) on board 2.",
     scoring: "Score = Sum of remaining tile numbers. 0 is perfect (you shut the box!). Lower scores are better. Each level has separate leaderboards.",
     controls: "1. Click 'Roll Dice' to roll two dice\n2. Click tiles to select a combination that adds up to the dice total\n3. Click 'Reset Selection' if you make a mistake\n4. Click 'Submit' when your selection equals the dice total\n5. Continue until all tiles are removed or no valid moves remain\n\nLevel 2: Tiles on board 2 are locked (grayed) until the corresponding board 1 tile is removed."
-  }
-};
-
-const gameDescriptionsPT = {
-  "Memory": {
-    title: "Jogo de Memória",
+  },
+  "Creature Sorting": {
+    title: "Creature Sorting",
+    description: "Organize cute creatures into matching sets on shelves! Each shelf holds 3 items. Your goal is to fill each shelf with 3 identical creatures, leaving exactly one shelf empty. Click creatures to select them, then click empty slots to move them. Only empty slots can receive items - no swapping allowed!",
+    modes: "Easy (6 shelves): 5 unique creatures = 15 items total. Arrange into 5 complete sets + 1 empty shelf\n\nMedium (10 shelves): 9 unique creatures = 27 items total. Arrange into 9 complete sets + 1 empty shelf\n\nHard (14 shelves): 13 unique creatures = 39 items total. Arrange into 13 complete sets + 1 empty shelf\n\nAll puzzles are guaranteed solvable using advanced pathfinding algorithms!",
+    scoring: "Complete the puzzle in the fastest time! Timer starts on your first move. Lower time is better. Top 10 times are saved per difficulty level. Beat your own records!",
+    controls: "1. Click any creature to select it (gold highlight)\n2. Click any empty slot to move the creature there\n3. Click the selected creature again to cancel selection\n4. Plan your moves carefully - only empty slots can receive items!\n5. Victory: All shelves have 3 matching creatures + 1 shelf completely empty\n\nStrategy Tips:\n• Look for creatures that already have 2 on the same shelf\n• Create temporary space by clearing a shelf entirely\n• Think ahead - some moves may block future progress\n• The puzzle always has a solution - keep trying!"
+  },
+  "TCG Game": {
+    title: "Elemental Awakening TCG",
     description: "Combine pares de cartas virando-as duas de cada vez. Encontre todos os pares correspondentes para ganhar!",
     modes: "Pequeno (4×4): 8 pares para combinar\nGrande (6×6): 18 pares para combinar",
     scoring: "Menor número de jogadas ganha. Quanto menos viragens para encontrar todos os pares, melhor a pontuação!",
@@ -872,6 +878,13 @@ const gameDescriptionsPT = {
     modes: "Nível 1: Tabuleiro único com peças 1-12. Role os dados, selecione peças que somem o total dos dados e envie.\n\nNível 2: Desafio de tabuleiro duplo! O primeiro tabuleiro (1-12) bloqueia o segundo tabuleiro (12-1 atrás). Só pode selecionar peças do segundo tabuleiro depois de remover a peça diretamente à frente dele do primeiro tabuleiro. Exemplo: Remova a peça 5 do tabuleiro 1 para desbloquear a peça 8 (atrás dela) no tabuleiro 2.",
     scoring: "Pontuação = Soma dos números das peças restantes. 0 é perfeito (fechou a caixa!). Pontuações mais baixas são melhores. Cada nível tem placares separados.",
     controls: "1. Clique em 'Rolar Dados' para rolar dois dados\n2. Clique em peças para selecionar uma combinação que soma o total dos dados\n3. Clique em 'Reiniciar Seleção' se cometer um erro\n4. Clique em 'Enviar' quando sua seleção igualar o total dos dados\n5. Continue até que todas as peças sejam removidas ou não restem jogadas válidas\n\nNível 2: Peças no tabuleiro 2 estão bloqueadas (acinzentadas) até que a peça correspondente do tabuleiro 1 seja removida."
+  },
+  "Creature Sorting": {
+    title: "Ordenação de Criaturas",
+    description: "Organize criaturas fofas em conjuntos correspondentes nas prateleiras! Cada prateleira comporta 3 itens. Seu objetivo é preencher cada prateleira com 3 criaturas idênticas, deixando exatamente uma prateleira vazia. Clique nas criaturas para selecioná-las, depois clique em espaços vazios para movê-las. Apenas espaços vazios podem receber itens - sem trocas permitidas!",
+    modes: "Fácil (6 prateleiras): 5 criaturas únicas = 15 itens no total. Organize em 5 conjuntos completos + 1 prateleira vazia\n\nMédio (10 prateleiras): 9 criaturas únicas = 27 itens no total. Organize em 9 conjuntos completos + 1 prateleira vazia\n\nDifícil (14 prateleiras): 13 criaturas únicas = 39 itens no total. Organize em 13 conjuntos completos + 1 prateleira vazia\n\nTodos os puzzles são garantidamente solucionáveis usando algoritmos avançados de pathfinding!",
+    scoring: "Complete o puzzle no menor tempo possível! O cronômetro começa no seu primeiro movimento. Tempo menor é melhor. Os 10 melhores tempos são salvos por nível de dificuldade. Supere seus próprios recordes!",
+    controls: "1. Clique em qualquer criatura para selecioná-la (destaque dourado)\n2. Clique em qualquer espaço vazio para mover a criatura para lá\n3. Clique na criatura selecionada novamente para cancelar a seleção\n4. Planeje seus movimentos cuidadosamente - apenas espaços vazios podem receber itens!\n5. Vitória: Todas as prateleiras têm 3 criaturas correspondentes + 1 prateleira completamente vazia\n\nDicas de Estratégia:\n• Procure criaturas que já tenham 2 na mesma prateleira\n• Crie espaço temporário limpando uma prateleira inteiramente\n• Pense à frente - alguns movimentos podem bloquear o progresso futuro\n• O puzzle sempre tem uma solução - continue tentando!"
   },
   "Shut the Box": {
     title: "Feche a Caixa",
@@ -1149,6 +1162,12 @@ function showGameLeaderboard(gameName) {
   
   // Special handling for Puzzle (bestTime - lower is better, with difficulty modes)
   if (gameName === "Puzzle") {
+    showPuzzleLeaderboard(db, content, gameName);
+    return;
+  }
+  
+  // Special handling for Creature Sorting (bestTime - lower is better, with difficulty modes)
+  if (gameName === "Creature Sorting") {
     showPuzzleLeaderboard(db, content, gameName);
     return;
   }

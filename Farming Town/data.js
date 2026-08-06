@@ -280,6 +280,20 @@ const GameData = {
       xpOnCollect: 30,
       xpOnSell: { chicken: 30, egg: 10 }
     },
+    
+    // Individual products for marketplace (chicken and egg have their own entries)
+    chicken: {
+      id: 'chicken',
+      isProduct: true, // Not a recipe, just product data
+      sellPrice: 50,
+      xpOnSell: 30
+    },
+    egg: {
+      id: 'egg',
+      isProduct: true, // Not a recipe, just product data
+      sellPrice: 5,
+      xpOnSell: 10
+    },
 
     // Bakery recipes
     bread: {

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creature Sorting</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="mainMenu" class="screen">
+        <h1 data-translate="title">Creature Sorting</h1>
+        <div class="menu-buttons">
+            <button id="easyBtn" class="menu-btn">
+                <span class="btn-text" data-translate="easy">Easy</span>
+                <span class="btn-desc" data-translate="easyDesc">6 shelves, 5 items</span>
+            </button>
+            <button id="mediumBtn" class="menu-btn">
+                <span class="btn-text" data-translate="medium">Medium</span>
+                <span class="btn-desc" data-translate="mediumDesc">10 shelves, 9 items</span>
+            </button>
+            <button id="hardBtn" class="menu-btn">
+                <span class="btn-text" data-translate="hard">Hard</span>
+                <span class="btn-desc" data-translate="hardDesc">14 shelves, 13 items</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="gameScreen" class="screen hidden">
+        <div id="gameHeader">
+            <button id="backBtn" class="header-btn" data-translate="back">Back</button>
+            <div id="timerDisplay">
+                <span data-translate="time">Time</span>: <span id="timer">00:00</span>
+            </div>
+            <div id="difficultyDisplay"></div>
+        </div>
+        <div id="shelvesContainer"></div>
+        <div id="gameInfo">
+            <p data-translate="instruction">Click an item to select, then click an empty slot to move it</p>
+        </div>
+    </div>
+
+    <div id="victoryModal" class="modal hidden">
+        <div class="modal-content">
+            <h2 data-translate="congratulations">Congratulations!</h2>
+            <p id="victoryTime"></p>
+            <p id="recordMessage"></p>
+            <button id="playAgainBtn" class="menu-btn" data-translate="playAgain">Play Again</button>
+            <button id="menuBtn" class="menu-btn" data-translate="mainMenu">Main Menu</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
