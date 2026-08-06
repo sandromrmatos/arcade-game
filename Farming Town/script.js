@@ -73,6 +73,10 @@ const GameState = {
   plantingModeActive: false,
   plantingModeCropType: null, // The seed being planted
   
+  // Continuous harvest mode
+  harvestModeActive: false,
+  harvestModeCollected: {}, // Track what was collected: { wheat: 5, apple: 3, ... }
+  
   // Timers
   updateInterval: null,
   saveInterval: null,
@@ -953,6 +957,7 @@ function setupEventListeners() {
   document.getElementById('btnMissions').addEventListener('click', showMissionsModal);
   document.getElementById('btnCreatePlot').addEventListener('click', handleCreatePlot);
   document.getElementById('btnPlantCrops').addEventListener('click', showPlantingModeSelector);
+  document.getElementById('btnHarvest').addEventListener('click', toggleHarvestMode);
   document.getElementById('btnVisitFriend').addEventListener('click', showVisitFriendModal);
   document.getElementById('btnHelp').addEventListener('click', showHelpModal);
   
@@ -1553,21 +1558,33 @@ function harvestCrop(tile) {
   }
   
   if (!tile.ready) {
-    showNotification(t('harvest'), t('notReady') || 'Crop is not ready yet!');
+    if (!GameState.harvestModeActive) {
+      showNotification(t('harvest'), t('notReady') || 'Crop is not ready yet!');
+    }
     return false;
   }
   
   const cropData = GameData.crops[tile.cropType];
   if (!cropData) return false;
   
+  const cropType = tile.cropType;
+  
   // Add harvested crops to inventory
-  GameState.addToInventory(tile.cropType, cropData.harvestYield);
+  GameState.addToInventory(cropType, cropData.harvestYield);
   
   // Add XP
   GameState.addXP(cropData.xpOnHarvest);
   
   // Track mission progress for harvest
-  GameState.incrementMissionProgress('harvest', tile.cropType, cropData.harvestYield);
+  GameState.incrementMissionProgress('harvest', cropType, cropData.harvestYield);
+  
+  // Track in harvest mode
+  if (GameState.harvestModeActive) {
+    if (!GameState.harvestModeCollected[cropType]) {
+      GameState.harvestModeCollected[cropType] = 0;
+    }
+    GameState.harvestModeCollected[cropType] += cropData.harvestYield;
+  }
   
   // Clear the plot
   tile.cropType = null;
@@ -1580,7 +1597,11 @@ function harvestCrop(tile) {
   
   // Update display
   renderGrid();
-  showNotification(t('harvest'), `${t('harvested')} +${cropData.harvestYield} ${t(tile.cropType || 'crop')}`);
+  
+  // Show notification only if NOT in harvest mode
+  if (!GameState.harvestModeActive) {
+    showNotification(t('harvest'), `${t('harvested')} +${cropData.harvestYield} ${t(cropType)}`);
+  }
   
   return true;
 }
@@ -1765,6 +1786,106 @@ function plantSeedContinuous(tile, cropType) {
 }
 
 // ============================================================================
+// CONTINUOUS HARVEST MODE
+// ============================================================================
+
+// Toggle harvest mode
+function toggleHarvestMode() {
+  if (GameState.harvestModeActive) {
+    stopHarvestMode();
+  } else {
+    startHarvestMode();
+  }
+}
+
+// Start continuous harvest mode
+function startHarvestMode() {
+  GameState.harvestModeActive = true;
+  GameState.harvestModeCollected = {}; // Reset collection tracker
+  
+  // Update button text to "Stop Harvesting"
+  const btn = document.getElementById('btnHarvest');
+  btn.textContent = t('stopHarvesting');
+  btn.classList.add('harvest-active');
+  
+  // Show simple notification without OK button requirement
+  const notification = document.createElement('div');
+  notification.id = 'harvestModeNotification';
+  notification.style.cssText = `
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background: rgba(76, 175, 80, 0.95);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    animation: slideIn 0.3s ease;
+  `;
+  notification.textContent = `${t('harvesting')} - ${t('clickReadyCrops')}`;
+  document.body.appendChild(notification);
+}
+
+// Stop continuous harvest mode
+function stopHarvestMode() {
+  GameState.harvestModeActive = false;
+  
+  // Update button text back to "Harvest"
+  const btn = document.getElementById('btnHarvest');
+  btn.textContent = t('harvestButton');
+  btn.classList.remove('harvest-active');
+  
+  // Remove mode notification
+  const modeNotification = document.getElementById('harvestModeNotification');
+  if (modeNotification) {
+    modeNotification.remove();
+  }
+  
+  // Show harvest summary if anything was collected
+  const collected = GameState.harvestModeCollected;
+  const items = Object.keys(collected);
+  
+  if (items.length > 0) {
+    let summaryText = `${t('harvestComplete')}:\n`;
+    items.forEach(itemId => {
+      const icon = getTileIcon(itemId);
+      summaryText += `${icon} +${collected[itemId]} ${t(itemId)}\n`;
+    });
+    
+    // Show summary in a simple notification (no OK button in the floating notification)
+    const summary = document.createElement('div');
+    summary.style.cssText = `
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      background: rgba(76, 175, 80, 0.95);
+      color: white;
+      padding: 16px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      max-width: 300px;
+      white-space: pre-line;
+      animation: slideIn 0.3s ease;
+    `;
+    summary.textContent = summaryText;
+    document.body.appendChild(summary);
+    
+    // Auto-remove after 4 seconds
+    setTimeout(() => {
+      summary.style.animation = 'slideOut 0.3s ease';
+      setTimeout(() => summary.remove(), 300);
+    }, 4000);
+  }
+  
+  // Reset collection tracker
+  GameState.harvestModeCollected = {};
+}
+
+// ============================================================================
 // FRUIT TREE PLACEMENT AND COLLECTION SYSTEM
 // ============================================================================
 
@@ -1817,19 +1938,30 @@ function collectFruit(tile) {
   }
   
   if (!tile.fruitReady) {
-    showNotification(t('collect'), t('notReady') || 'Fruit is not ripe yet!');
+    if (!GameState.harvestModeActive) {
+      showNotification(t('collect'), t('notReady') || 'Fruit is not ripe yet!');
+    }
     return false;
   }
   
   const treeData = GameData.fruitTrees[tile.treeType];
   if (!treeData) return false;
   
+  const fruitType = tile.treeType; // 'apple', 'lemon', or 'orange'
+  
   // Add fruit to inventory
-  const fruitType = tile.treeType; // 'apple' or 'lemon'
   GameState.addToInventory(fruitType, treeData.collectionYield);
   
   // Add XP
   GameState.addXP(treeData.xpOnCollect);
+  
+  // Track in harvest mode
+  if (GameState.harvestModeActive) {
+    if (!GameState.harvestModeCollected[fruitType]) {
+      GameState.harvestModeCollected[fruitType] = 0;
+    }
+    GameState.harvestModeCollected[fruitType] += treeData.collectionYield;
+  }
   
   // Reset collection timer
   tile.lastCollectedAt = firebase.firestore.Timestamp.now();
@@ -1840,7 +1972,11 @@ function collectFruit(tile) {
   
   // Update display
   renderGrid();
-  showNotification(t('collect'), `${t('fruitCollected')} +${treeData.collectionYield} ${t(fruitType)}`);
+  
+  // Show notification only if NOT in harvest mode
+  if (!GameState.harvestModeActive) {
+    showNotification(t('collect'), `${t('fruitCollected')} +${treeData.collectionYield} ${t(fruitType)}`);
+  }
   
   return true;
 }
@@ -3056,7 +3192,23 @@ function showLevelUpModal(newLevel) {
 
 // Handle tile click based on tile type and current mode
 function handleTileClick(tile) {
-  // Handle continuous planting mode first
+  // Handle continuous harvest mode for ready crops and trees
+  if (GameState.harvestModeActive) {
+    // Harvest ready crops
+    if (tile.type === 'plot' && tile.cropType && tile.ready) {
+      harvestCrop(tile);
+      return;
+    }
+    // Collect ready fruit from trees
+    if (tile.type === 'tree' && tile.fruitReady) {
+      collectFruit(tile);
+      return;
+    }
+    // Ignore clicks on non-ready or non-harvestable tiles in harvest mode
+    return;
+  }
+  
+  // Handle continuous planting mode
   if (GameState.plantingModeActive && tile.type === 'plot' && !tile.cropType) {
     // Plant seed directly in continuous mode (no popup)
     plantSeedContinuous(tile, GameState.plantingModeCropType);

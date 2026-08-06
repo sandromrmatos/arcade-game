@@ -121,6 +121,21 @@ body {
     }
 }
 
+/* Harvest mode active state */
+.btn-action.harvest-active {
+    background: linear-gradient(135deg, #34c759, #28a745);
+    animation: harvestPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes harvestPulse {
+    0%, 100% { 
+        box-shadow: 0 2px 8px rgba(52, 199, 89, 0.4);
+    }
+    50% { 
+        box-shadow: 0 4px 16px rgba(52, 199, 89, 0.8);
+    }
+}
+
 .language-selector {
     padding: 6px 12px;
     border-radius: 6px;
