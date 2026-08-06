@@ -333,10 +333,34 @@ When adding new features:
 ## Performance Considerations
 
 - Grid renders every second via setInterval
-- Auto-save runs every 30 seconds
+- Auto-save runs every 30 seconds **with stale data protection**
 - Firebase writes on significant events only
 - Client-side time calculations (not server queries)
 - localStorage for playerId caching
+
+## Stale Data Protection (Auto-Save)
+
+### Problem Prevention
+To prevent old browser tabs from overwriting newer progress, the game tracks:
+- `clientLastActivity`: Timestamp of last action on this client
+- Server's `lastPlayed`: Timestamp of last save from any device
+
+### How It Works
+Before auto-saving every 30 seconds, `savePlayerData()`:
+1. Fetches server's current `lastPlayed` timestamp
+2. Compares with client's `clientLastActivity`
+3. If server is newer → **Blocks save**, shows warning, stops auto-save
+4. If client is newer → **Saves normally**, updates server timestamp
+
+### Activity Tracking
+All player actions call `markActivity()`:
+- `addCoins()`, `spendCoins()`
+- `addXP()`
+- `addToInventory()`, `removeFromInventory()`
+
+**Pattern Rule**: Any function that modifies player stats must call `markActivity()` before saving.
+
+**User Warning**: "This tab has outdated data. Please refresh the page to get the latest game state."
 
 ## Visual Indicators
 

@@ -106,6 +106,21 @@ body {
     }
 }
 
+/* Planting mode active state */
+.btn-action.planting-active {
+    background: linear-gradient(135deg, #ff9500, #ff6b00);
+    animation: plantingPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes plantingPulse {
+    0%, 100% { 
+        box-shadow: 0 2px 8px rgba(255, 149, 0, 0.4);
+    }
+    50% { 
+        box-shadow: 0 4px 16px rgba(255, 149, 0, 0.8);
+    }
+}
+
 .language-selector {
     padding: 6px 12px;
     border-radius: 6px;

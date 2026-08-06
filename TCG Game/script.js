@@ -1658,6 +1658,9 @@ function evolveCard(player, location, index) {
         turnTracker.evolvedIds.add(card.evolutionId);
     }
     
+    // Set evolvedLastTurn flag for Thunder Rush ability tracking
+    gameState[player].evolvedLastTurn = true;
+    
     gameState.selectedCard = null;
     renderGame();
 }
@@ -3645,7 +3648,20 @@ function handleMoveEffectBeforeKnockout(effect, attacker, attackingPlayer, callb
         case 'skyDraw':
             // Sky Draw - Draw a card after attacking
             if (gameState[attackingPlayer].deck.length > 0) {
-                const drawnCard = gameState[attackingPlayer].deck.pop();
+                const cardId = gameState[attackingPlayer].deck.pop();
+                const cardData = getCardData(cardId);
+                const drawnCard = {
+                    id: cardId,
+                    data: cardData,
+                    energy: 0,
+                    damage: 0,
+                    abilityUsedThisTurn: false,
+                    absorbEnergyActive: false,
+                    energizedHealingAmount: 0,
+                    healingRetreatAmount: 0,
+                    evolutionId: Math.random().toString(36).substr(2, 9),
+                    evolutionChain: []
+                };
                 gameState[attackingPlayer].hand.push(drawnCard);
                 setTimeout(() => {
                     alert(`${attackingPlayer === 'player' ? 'You' : 'AI'} drew a card!`);
@@ -3713,6 +3729,105 @@ function handleMoveEffectBeforeKnockout(effect, attacker, attackingPlayer, callb
                 } else {
                     callback();
                 }
+            }, 500);
+            break;
+            
+        case 'tempestHold':
+            // Tempest Hold - Attacker can't retreat for 2 turns
+            attacker.cantRetreatTurns = 2;
+            setTimeout(() => {
+                alert(`${attacker.data.name} can't retreat for the next 2 turns!`);
+                callback();
+            }, 500);
+            break;
+            
+        case 'forestFury':
+            // Forest Fury - Causes Lock (apply to incoming creature)
+            setTimeout(() => {
+                gameState[opponent].incomingHasLock = true;
+                alert(`The incoming active creature will be affected by Lock due to Forest Fury!`);
+                renderGame();
+                callback();
+            }, 500);
+            break;
+            
+        case 'chaosDice':
+            // Chaos Dice - Roll dice, apply Hallucination (1-2), Flux (3-4), or Lock (5-6) to incoming creature
+            setTimeout(() => {
+                const roll = rollDice();
+                alert(`Chaos Dice: Rolled a ${roll}!`);
+                if (roll <= 2) {
+                    gameState[opponent].incomingHallucinating = true;
+                    alert(`The incoming active creature will be hallucinating!`);
+                } else if (roll <= 4) {
+                    gameState[opponent].incomingHasFlux = true;
+                    alert(`The incoming active creature will be affected by Flux!`);
+                } else {
+                    gameState[opponent].incomingHasLock = true;
+                    alert(`The incoming active creature will be affected by Lock!`);
+                }
+                renderGame();
+                callback();
+            }, 500);
+            break;
+            
+        case 'caffeineAddiction':
+            // Caffeine Addiction - Flip coin, heads heal 20, tails Lock on incoming creature
+            setTimeout(() => {
+                const flip = flipCoin();
+                alert(`Caffeine Addiction: Coin flip: ${flip}`);
+                if (flip === 'heads') {
+                    attacker.damage = Math.max(0, attacker.damage - 20);
+                    alert(`${attacker.data.name} healed 20 HP!`);
+                } else {
+                    gameState[opponent].incomingHasLock = true;
+                    alert(`The incoming active creature will be affected by Lock!`);
+                }
+                renderGame();
+                callback();
+            }, 500);
+            break;
+            
+        case 'mindPulse':
+            // Mind Pulse - Flip coin, if heads cause Hallucination on incoming creature
+            setTimeout(() => {
+                const flip = flipCoin();
+                alert(`Mind Pulse: Coin flip: ${flip}`);
+                if (flip === 'heads') {
+                    gameState[opponent].incomingHallucinating = true;
+                    alert(`The incoming active creature will be hallucinating!`);
+                } else {
+                    alert("Coin was tails! No hallucination.");
+                }
+                renderGame();
+                callback();
+            }, 500);
+            break;
+            
+        case 'fluxWave':
+            // Flux Wave - Opponent's incoming creature is affected by Flux
+            setTimeout(() => {
+                gameState[opponent].incomingHasFlux = true;
+                alert(`The incoming active creature will be affected by Flux!`);
+                renderGame();
+                callback();
+            }, 500);
+            break;
+            
+        case 'psychicProwl':
+            // Psychic Prowl - Flip coin, heads Flux, tails Lock on incoming creature
+            setTimeout(() => {
+                const flip = flipCoin();
+                alert(`Psychic Prowl: Coin flip: ${flip}`);
+                if (flip === 'heads') {
+                    gameState[opponent].incomingHasFlux = true;
+                    alert(`The incoming active creature will be affected by Flux!`);
+                } else {
+                    gameState[opponent].incomingHasLock = true;
+                    alert(`The incoming active creature will be affected by Lock!`);
+                }
+                renderGame();
+                callback();
             }, 500);
             break;
             
@@ -4084,10 +4199,10 @@ function handleMoveEffect(effect, attacker, defender, attackingPlayer) {
             break;
             
         case 'tempestHold':
-            // Tempest Hold - Opponent can't retreat for 2 turns
-            defender.cantRetreatTurns = 2;
+            // Tempest Hold - Attacker can't retreat for 2 turns
+            attacker.cantRetreatTurns = 2;
             setTimeout(() => {
-                alert(`${defender.data.name} can't retreat for the next 2 turns!`);
+                alert(`${attacker.data.name} can't retreat for the next 2 turns!`);
                 checkKnockoutsAndContinue(attackingPlayer);
             }, 500);
             break;
@@ -4250,7 +4365,20 @@ function handleMoveEffect(effect, attacker, defender, attackingPlayer) {
         case 'skyDraw':
             // Sky Draw - Draw a card after attacking
             if (gameState[attackingPlayer].deck.length > 0) {
-                const drawnCard = gameState[attackingPlayer].deck.pop();
+                const cardId = gameState[attackingPlayer].deck.pop();
+                const cardData = getCardData(cardId);
+                const drawnCard = {
+                    id: cardId,
+                    data: cardData,
+                    energy: 0,
+                    damage: 0,
+                    abilityUsedThisTurn: false,
+                    absorbEnergyActive: false,
+                    energizedHealingAmount: 0,
+                    healingRetreatAmount: 0,
+                    evolutionId: Math.random().toString(36).substr(2, 9),
+                    evolutionChain: []
+                };
                 gameState[attackingPlayer].hand.push(drawnCard);
                 setTimeout(() => {
                     alert(`${attackingPlayer === 'player' ? 'You' : 'AI'} drew a card!`);
@@ -4696,6 +4824,26 @@ function knockoutCreature(player) {
 function selectNewActiveCreature(player, benchIndex) {
     gameState[player].active = gameState[player].bench[benchIndex];
     gameState[player].bench[benchIndex] = null;
+    
+    // Apply incoming status conditions from moves that knocked out the previous active
+    if (gameState[player].incomingHallucinating) {
+        gameState[player].active.hallucinating = true;
+        gameState[player].incomingHallucinating = false;
+        alert(`${gameState[player].active.data.name} is hallucinating!`);
+    }
+    
+    if (gameState[player].incomingHasFlux) {
+        gameState[player].active.hasFlux = true;
+        gameState[player].incomingHasFlux = false;
+        alert(`${gameState[player].active.data.name} is affected by Flux!`);
+    }
+    
+    if (gameState[player].incomingHasLock) {
+        gameState[player].active.hasLock = true;
+        gameState[player].incomingHasLock = false;
+        alert(`${gameState[player].active.data.name} is affected by Lock!`);
+    }
+    
     renderGame();
 }
 
@@ -5274,7 +5422,7 @@ function aiUseAbilities() {
                     const guardianFlip = flipCoin();
                     alert(`AI's ${card.data.name} used Guardian's Call! Coin flip: ${guardianFlip}!`);
                     if (guardianFlip === 'heads') {
-                        const aegiscelisIndex = gameState.opponent.hand.findIndex(c => c.data.name === "Aegiscelis");
+                        const aegiscelisIndex = gameState.opponent.hand.findIndex(c => c && c.data && c.data.name === "Aegiscelis");
                         const aegiscelis = gameState.opponent.hand[aegiscelisIndex];
                         
                         const newCard = {
@@ -5491,7 +5639,7 @@ function aiUseAbilities() {
                     const guardianFlip = flipCoin();
                     alert(`AI's ${card.data.name} used Guardian's Call! Coin flip: ${guardianFlip}!`);
                     if (guardianFlip === 'heads') {
-                        const aegiscelisIndex = gameState.opponent.hand.findIndex(c => c.data.name === "Aegiscelis");
+                        const aegiscelisIndex = gameState.opponent.hand.findIndex(c => c && c.data && c.data.name === "Aegiscelis");
                         const aegiscelis = gameState.opponent.hand[aegiscelisIndex];
                         
                         const newCard = {
@@ -5781,6 +5929,10 @@ function endTurn() {
     const playerStartingTurn = gameState.currentTurn;
     gameState[playerStartingTurn].clarityAuraActive = false;
     gameState[playerStartingTurn].camouflageActive = false;
+    
+    // Clear evolvedLastTurn for the player whose turn is ENDING (for Thunder Rush tracking)
+    // This ensures: Turn 4 opponent evolves → Turn 5 player can use Thunder Rush → Turn 6 starts (cleared)
+    gameState[playerEndingTurn].evolvedLastTurn = false;
     
     // Note: Guardian Mode is cleared right after turn switch above
     
@@ -6198,6 +6350,10 @@ function aiTryEvolveOnce() {
             if (card.evolutionId) {
                 turnTracker.evolvedIds.add(card.evolutionId);
             }
+            
+            // Set evolvedLastTurn flag for Thunder Rush ability tracking
+            gameState.opponent.evolvedLastTurn = true;
+            
             renderGame();
             return true;
         }
@@ -6223,6 +6379,10 @@ function aiTryEvolveOnce() {
                 if (card.evolutionId) {
                     turnTracker.evolvedIds.add(card.evolutionId);
                 }
+                
+                // Set evolvedLastTurn flag for Thunder Rush ability tracking
+                gameState.opponent.evolvedLastTurn = true;
+                
                 renderGame();
                 return true;
             }
@@ -6247,7 +6407,7 @@ function aiUseItems(callback) {
     
     // Use Remedy if active creature has special conditions
     if (gameState.opponent.active && gameState.opponent.active.hallucinating) {
-        const remedyIndex = gameState.opponent.hand.findIndex(card => card.data.name === "Remedy");
+        const remedyIndex = gameState.opponent.hand.findIndex(card => card && card.data && card.data.name === "Remedy");
         if (remedyIndex !== -1) {
             const remedy = gameState.opponent.hand[remedyIndex];
             flashItemCard(remedy.id, () => {
@@ -6267,7 +6427,7 @@ function aiUseItems(callback) {
     
     // Find potion if active creature is damaged
     if (gameState.opponent.active && gameState.opponent.active.damage > 0) {
-        const potionIndex = gameState.opponent.hand.findIndex(card => card.data.name === "Potion");
+        const potionIndex = gameState.opponent.hand.findIndex(card => card && card.data && card.data.name === "Potion");
         if (potionIndex !== -1) {
             const potion = gameState.opponent.hand[potionIndex];
             flashItemCard(potion.id, () => {
@@ -6285,7 +6445,7 @@ function aiUseItems(callback) {
     }
     
     // Use Booster ONLY if AI can attack this turn
-    const boosterIndex = gameState.opponent.hand.findIndex(card => card.data.name === "Booster");
+    const boosterIndex = gameState.opponent.hand.findIndex(card => card && card.data && card.data.name === "Booster");
     if (boosterIndex !== -1 && aiCanAttack()) {
         const booster = gameState.opponent.hand[boosterIndex];
         flashItemCard(booster.id, () => {
@@ -6896,6 +7056,105 @@ function aiAttack() {
         // Galactic Meteor - 10 damage per energy on player's active
         damage = defender.energy * 10;
         alert(`AI's Galactic Meteor: ${defender.data.name} has ${defender.energy} energy! Deals ${damage} damage!`);
+    } else if (effect === 'shadowWrap') {
+        // Shadow Wrap - +30 damage if player has special condition
+        if (defender.hallucinating || defender.hasFlux || defender.hasLock) {
+            damage += 30;
+            alert(`AI's Shadow Wrap: ${defender.data.name} has a special condition! +30 damage! Total: ${damage}`);
+        }
+    } else if (effect === 'verdantStruggle') {
+        // Verdant Struggle - Flip 2 coins, if both heads deal 50, otherwise 0
+        const flip1 = flipCoin();
+        const flip2 = flipCoin();
+        alert(`AI's Verdant Struggle: Flipped ${flip1} and ${flip2}`);
+        if (flip1 === 'heads' && flip2 === 'heads') {
+            damage = 50;
+            alert("Both heads! Deals 50 damage!");
+        } else {
+            damage = 0;
+            alert("At least one tails! Deals no damage!");
+        }
+    } else if (effect === 'furySpin') {
+        // Fury Spin - +50 damage if HP is 30 or less
+        const attackerRemaining = attacker.data.hp - attacker.damage;
+        if (attackerRemaining <= 30) {
+            damage += 50;
+            alert(`AI's Fury Spin: ${attacker.data.name} has ${attackerRemaining} HP (30 or less)! +50 damage! Total: ${damage}`);
+        }
+    } else if (effect === 'enragedCharge') {
+        // Enraged Charge - +30 damage per energy after 3
+        if (attacker.energy > 3) {
+            const extraEnergy = attacker.energy - 3;
+            damage += extraEnergy * 30;
+            alert(`AI's Enraged Charge: ${attacker.data.name} has ${extraEnergy} extra energy! +${extraEnergy * 30} damage! Total: ${damage}`);
+        }
+    } else if (effect === 'harshFlinch') {
+        // Harsh Flinch - Flip coins until tails, +20 per heads
+        let headsCount = 0;
+        let results = [];
+        let keepFlipping = true;
+        while (keepFlipping) {
+            const flip = flipCoin();
+            results.push(flip);
+            if (flip === 'heads') {
+                headsCount++;
+            } else {
+                keepFlipping = false;
+            }
+        }
+        const bonusDamage = headsCount * 20;
+        damage += bonusDamage;
+        alert(`AI's Harsh Flinch: Flipped ${results.join(', ')}! Got ${headsCount} heads before tails! +${bonusDamage} damage! Total: ${damage}`);
+    } else if (effect === 'foresightBeam') {
+        // Foresight Beam - Flip coin, if heads +10 damage
+        const flip = flipCoin();
+        alert(`AI's Foresight Beam: Coin flip: ${flip}`);
+        if (flip === 'heads') {
+            damage += 10;
+            alert(`Coin was heads! +10 damage! Total: ${damage}`);
+        }
+    } else if (effect === 'spectralWrapGA') {
+        // Spectral Wrap (Galactic Adventures) - +10 damage per energy on player's active
+        const bonusDamage = defender.energy * 10;
+        damage += bonusDamage;
+        alert(`AI's Spectral Wrap: ${defender.data.name} has ${defender.energy} energy! +${bonusDamage} damage! Total: ${damage}`);
+    } else if (effect === 'featherBarrage') {
+        // Feather Barrage - Flip coin, if heads +20 damage
+        const flip = flipCoin();
+        alert(`AI's Feather Barrage: Coin flip: ${flip}`);
+        if (flip === 'heads') {
+            damage += 20;
+            alert(`Coin was heads! +20 damage! Total: ${damage}`);
+        }
+    } else if (effect === 'hurricaneWing') {
+        // Hurricane Wing - Flip coin, if tails no damage
+        const flip = flipCoin();
+        alert(`AI's Hurricane Wing: Coin flip: ${flip}`);
+        if (flip === 'tails') {
+            damage = 0;
+            alert("Coin was tails! Hurricane Wing deals no damage!");
+        }
+    } else if (effect === 'tailDance') {
+        // Tail Dance - Flip coin, if tails no damage
+        const flip = flipCoin();
+        alert(`AI's Tail Dance: Coin flip: ${flip}`);
+        if (flip === 'tails') {
+            damage = 0;
+            alert("Coin was tails! Tail Dance deals no damage!");
+        }
+    } else if (effect === 'alphabetAssault') {
+        // Alphabet Assault - 10 damage per letter in player's active creature name
+        const letterCount = defender.data.name.length;
+        damage = letterCount * 10;
+        alert(`AI's Alphabet Assault: ${defender.data.name} has ${letterCount} letters! Deals ${damage} damage!`);
+    } else if (effect === 'infernoConstrict') {
+        // Inferno Constrict - 30 damage per Mechanic creature on AI's bench
+        let mechanicCount = 0;
+        gameState.opponent.bench.forEach(card => {
+            if (card && getCardType(card.data) === 'Mechanic') mechanicCount++;
+        });
+        damage = mechanicCount * 30;
+        alert(`AI's Inferno Constrict: ${mechanicCount} Mechanic creatures on AI's bench! Deals ${damage} damage!`);
     }
     
     // Apply opponent's booster if active

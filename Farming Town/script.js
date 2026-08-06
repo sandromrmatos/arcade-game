@@ -69,9 +69,21 @@ const GameState = {
   placementItem: null,
   placementPreviewTile: null, // For confirming building placement
   
+  // Continuous planting mode
+  plantingModeActive: false,
+  plantingModeCropType: null, // The seed being planted
+  
   // Timers
   updateInterval: null,
   saveInterval: null,
+  
+  // Track last activity timestamp to prevent stale data overwrites
+  clientLastActivity: null,
+  
+  // Update client activity timestamp (called on any game action)
+  markActivity() {
+    this.clientLastActivity = new Date();
+  },
   
   // Initialize game state
   init() {
@@ -154,6 +166,7 @@ const GameState = {
   // Add coins
   addCoins(amount) {
     this.coins += amount;
+    this.markActivity();
     this.updateDisplay();
     this.savePlayerData();
   },
@@ -162,6 +175,7 @@ const GameState = {
   spendCoins(amount) {
     if (this.coins >= amount) {
       this.coins -= amount;
+      this.markActivity();
       this.updateDisplay();
       this.savePlayerData();
       return true;
@@ -175,6 +189,7 @@ const GameState = {
     const oldLevel = this.level;
     this.level = GameData.getLevelFromXP(this.xp);
     
+    this.markActivity();
     this.updateDisplay();
     this.savePlayerData();
     
@@ -215,6 +230,7 @@ const GameState = {
       this.inventory[itemId] = 0;
     }
     this.inventory[itemId] += quantity;
+    this.markActivity();
     this.saveInventory();
   },
   
@@ -224,6 +240,7 @@ const GameState = {
       if (this.inventory[itemId] === 0) {
         delete this.inventory[itemId];
       }
+      this.markActivity();
       this.saveInventory();
       return true;
     }
@@ -258,6 +275,44 @@ const GameState = {
     }
     
     try {
+      // STALE DATA CHECK: Fetch server's lastPlayed to prevent overwrites
+      const doc = await db.collection('farmingTownPlayers').doc(playerId).get();
+      
+      if (doc.exists) {
+        const serverData = doc.data();
+        const serverLastPlayed = serverData.lastPlayed;
+        
+        // If server has newer data than this client, don't overwrite
+        if (serverLastPlayed && this.clientLastActivity) {
+          const serverTime = serverLastPlayed.toDate();
+          const clientTime = this.clientLastActivity;
+          
+          if (clientTime < serverTime) {
+            console.warn('⚠️ STALE DATA DETECTED: Server has newer data. Skipping save to prevent overwrite.');
+            console.warn('Server last played:', serverTime);
+            console.warn('Client last activity:', clientTime);
+            
+            // Show warning to user
+            showNotification(
+              t('warning'),
+              'This tab has outdated data. Please refresh the page to get the latest game state.'
+            );
+            
+            // Stop auto-save to prevent repeated overwrites
+            if (this.saveInterval) {
+              clearInterval(this.saveInterval);
+              this.saveInterval = null;
+              console.log('Auto-save disabled due to stale data');
+            }
+            
+            return; // Don't save stale data
+          }
+        }
+      }
+      
+      // Safe to save - update clientLastActivity
+      this.clientLastActivity = new Date();
+      
       await db.collection('farmingTownPlayers').doc(playerId).set({
         playerName: this.playerName,
         coins: this.coins,
@@ -267,7 +322,7 @@ const GameState = {
         gridHeight: this.gridHeight,
         lastPlayed: firebase.firestore.FieldValue.serverTimestamp()
       }, { merge: true });
-      console.log('Player data saved:', { coins: this.coins, level: this.level });
+      console.log('Player data saved:', { coins: this.coins, xp: this.xp, level: this.level });
     } catch (error) {
       console.error('Error saving player data:', error);
     }
@@ -591,10 +646,21 @@ const GameState = {
         this.gridWidth = data.gridWidth || 5;
         this.gridHeight = data.gridHeight || 5;
         this.missionProgress = data.missionProgress || {};
-        console.log('Player data loaded:', { coins: this.coins, level: this.level });
+        
+        // Set clientLastActivity from server's lastPlayed timestamp
+        if (data.lastPlayed) {
+          this.clientLastActivity = data.lastPlayed.toDate();
+          console.log('Client last activity set to:', this.clientLastActivity);
+        } else {
+          // No lastPlayed yet, set to now
+          this.clientLastActivity = new Date();
+        }
+        
+        console.log('Player data loaded:', { coins: this.coins, xp: this.xp, level: this.level });
       } else {
         // New player - save initial data
         console.log('New player - creating initial data');
+        this.clientLastActivity = new Date();
         await this.savePlayerData();
       }
       
@@ -886,6 +952,7 @@ function setupEventListeners() {
   document.getElementById('btnMarketplace').addEventListener('click', showMarketplaceModal);
   document.getElementById('btnMissions').addEventListener('click', showMissionsModal);
   document.getElementById('btnCreatePlot').addEventListener('click', handleCreatePlot);
+  document.getElementById('btnPlantCrops').addEventListener('click', showPlantingModeSelector);
   document.getElementById('btnVisitFriend').addEventListener('click', showVisitFriendModal);
   document.getElementById('btnHelp').addEventListener('click', showHelpModal);
   
@@ -1069,7 +1136,8 @@ function renderCrop(tile) {
 function renderTree(tile) {
   const treeIcons = {
     apple: '🍎',
-    lemon: '🍋'
+    lemon: '🍋',
+    orange: '🍊'
   };
   
   const icon = treeIcons[tile.treeType] || '🌳';
@@ -1557,6 +1625,143 @@ function showPlantingMenu(tile) {
   }
   
   modal.classList.remove('hidden');
+}
+
+// ============================================================================
+// CONTINUOUS PLANTING MODE
+// ============================================================================
+
+// Show planting mode selector (choose seed type for continuous planting)
+function showPlantingModeSelector() {
+  // Check if already in planting mode - if so, stop it
+  if (GameState.plantingModeActive) {
+    stopPlantingMode();
+    return;
+  }
+  
+  const modal = document.getElementById('plantingModal');
+  const titleElement = modal.querySelector('h2');
+  const optionsContainer = document.getElementById('plantingOptions');
+  optionsContainer.innerHTML = '';
+  
+  titleElement.textContent = t('plantCrops');
+  
+  // Get available seeds from inventory
+  const seedTypes = [
+    { cropType: 'wheat', seedId: 'wheatSeed' },
+    { cropType: 'tomato', seedId: 'tomatoSeed' },
+    { cropType: 'potato', seedId: 'potatoSeed' },
+    { cropType: 'leek', seedId: 'leekSeed' },
+    { cropType: 'corn', seedId: 'cornSeed' },
+    { cropType: 'carrot', seedId: 'carrotSeed' },
+    { cropType: 'onion', seedId: 'onionSeed' }
+  ];
+  
+  let hasSeeds = false;
+  
+  seedTypes.forEach(({ cropType, seedId }) => {
+    const count = GameState.getInventoryCount(seedId);
+    
+    if (count > 0) {
+      hasSeeds = true;
+      const cropData = GameData.crops[cropType];
+      
+      const option = document.createElement('div');
+      option.className = 'planting-option';
+      option.innerHTML = `
+        <div class="option-icon">${getTileIcon(cropType)}</div>
+        <div class="option-name">${t(cropType)}</div>
+        <div class="option-count">${count}</div>
+      `;
+      
+      option.addEventListener('click', () => {
+        startPlantingMode(cropType);
+        closeModal('plantingModal');
+      });
+      
+      optionsContainer.appendChild(option);
+    }
+  });
+  
+  if (!hasSeeds) {
+    optionsContainer.innerHTML = `<p style="text-align:center;padding:20px;color:#999;">${t('noSeeds')}</p>`;
+  }
+  
+  modal.classList.remove('hidden');
+}
+
+// Start continuous planting mode
+function startPlantingMode(cropType) {
+  GameState.plantingModeActive = true;
+  GameState.plantingModeCropType = cropType;
+  
+  // Update button text to "Stop Planting"
+  const btn = document.getElementById('btnPlantCrops');
+  btn.textContent = t('stopPlanting');
+  btn.classList.add('planting-active');
+  
+  showNotification(
+    t('plantCrops'),
+    `${t('planting')} ${t(cropType)}. ${t('clickEmptyPlots')}`
+  );
+}
+
+// Stop continuous planting mode
+function stopPlantingMode() {
+  GameState.plantingModeActive = false;
+  GameState.plantingModeCropType = null;
+  
+  // Update button text back to "Plant Crops"
+  const btn = document.getElementById('btnPlantCrops');
+  btn.textContent = t('plantCrops');
+  btn.classList.remove('planting-active');
+  
+  showNotification(t('plantCrops'), t('plantingModeStopped'));
+}
+
+// Plant seed in continuous mode (no popup)
+function plantSeedContinuous(tile, cropType) {
+  const cropData = GameData.crops[cropType];
+  if (!cropData) return false;
+  
+  const seedId = `${cropType}Seed`;
+  
+  // Check if have seeds
+  if (!GameState.hasInInventory(seedId, 1)) {
+    // Out of seeds - stop planting mode
+    stopPlantingMode();
+    showNotification(
+      t('plantCrops'),
+      `${t('outOfSeeds')} ${t(seedId)}`
+    );
+    return false;
+  }
+  
+  // Remove seed from inventory
+  GameState.removeFromInventory(seedId, 1);
+  
+  // Plant the seed
+  tile.cropType = cropType;
+  tile.plantedAt = firebase.firestore.Timestamp.now();
+  tile.growthMinutes = cropData.growthMinutes;
+  tile.ready = false;
+  
+  // Save to database
+  GameState.saveGridTile(tile);
+  
+  // Update display
+  renderGrid();
+  
+  // Check if out of seeds after this plant
+  if (!GameState.hasInInventory(seedId, 1)) {
+    stopPlantingMode();
+    showNotification(
+      t('plantCrops'),
+      `${t('outOfSeeds')} ${t(seedId)}`
+    );
+  }
+  
+  return true;
 }
 
 // ============================================================================
@@ -2851,7 +3056,14 @@ function showLevelUpModal(newLevel) {
 
 // Handle tile click based on tile type and current mode
 function handleTileClick(tile) {
-  // Handle placement modes first
+  // Handle continuous planting mode first
+  if (GameState.plantingModeActive && tile.type === 'plot' && !tile.cropType) {
+    // Plant seed directly in continuous mode (no popup)
+    plantSeedContinuous(tile, GameState.plantingModeCropType);
+    return;
+  }
+  
+  // Handle placement modes
   if (GameState.placementMode === 'plot') {
     // Create plot on grass tile
     if (tile.type === 'grass') {
