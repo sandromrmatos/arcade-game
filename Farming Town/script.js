@@ -291,10 +291,18 @@ const GameState = {
           const serverTime = serverLastPlayed.toDate();
           const clientTime = this.clientLastActivity;
           
-          if (clientTime < serverTime) {
-            console.warn('⚠️ STALE DATA DETECTED: Server has newer data. Skipping save to prevent overwrite.');
+          // Calculate time difference in milliseconds
+          const timeDiff = serverTime - clientTime;
+          
+          // Only warn if server data is SIGNIFICANTLY newer (more than 5 minutes)
+          // This prevents false positives during normal gameplay with network delays
+          const STALE_THRESHOLD = 5 * 60 * 1000; // 5 minutes in milliseconds
+          
+          if (timeDiff > STALE_THRESHOLD) {
+            console.warn('⚠️ STALE DATA DETECTED: Server has significantly newer data.');
             console.warn('Server last played:', serverTime);
             console.warn('Client last activity:', clientTime);
+            console.warn('Time difference:', Math.round(timeDiff / 1000 / 60), 'minutes');
             
             // Show warning to user
             showNotification(
@@ -310,6 +318,11 @@ const GameState = {
             }
             
             return; // Don't save stale data
+          }
+          
+          // Small time difference (< 5 minutes) is acceptable - likely just network delay
+          if (timeDiff > 0) {
+            console.log('Small time difference detected (', Math.round(timeDiff / 1000), 'seconds) - proceeding with save');
           }
         }
       }
