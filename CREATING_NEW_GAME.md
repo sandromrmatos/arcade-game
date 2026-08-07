@@ -120,7 +120,19 @@ The function:
 
 ### Pattern: Use Parent Window Language
 
-**Don't** create a language selector inside your game. Use the parent window's language system.
+**CRITICAL**: Games should NEVER create their own language selector. The arcade already has a language dropdown in the main menu that applies to all games.
+
+**DO NOT**:
+- ❌ Create a language selection modal in your game
+- ❌ Prompt users to select language
+- ❌ Save language preference in your game's localStorage
+- ❌ Provide any language selection UI
+
+**DO**:
+- ✅ Read language from parent window
+- ✅ Listen for language change events from parent
+- ✅ Update your UI when language changes
+- ✅ Use the parent window's language immediately on load
 
 ### Implementation in Your Game
 
@@ -197,14 +209,182 @@ function updateLanguage() {
 // Listen for language change messages from parent
 window.addEventListener('message', (event) => {
     if (event.data.type === 'languageChange') {
+        currentLanguage = getParentLanguage();
         updateLanguage();
     }
 });
 
-// Apply language on page load
+// Apply language on page load - NO LANGUAGE MODAL!
 document.addEventListener('DOMContentLoaded', () => {
+    currentLanguage = getParentLanguage();
     updateLanguage();
+    // Start your game immediately
+    startGame();
 });
+```
+
+### Common Mistakes to Avoid
+
+❌ **WRONG**: Creating a language selection modal
+```javascript
+// DO NOT DO THIS!
+function selectLanguage(lang) {
+    currentLanguage = lang;
+    document.getElementById('languageModal').classList.add('hidden');
+}
+```
+
+✅ **CORRECT**: Using parent window language immediately
+```javascript
+// DO THIS!
+document.addEventListener('DOMContentLoaded', () => {
+    currentLanguage = getParentLanguage();
+    updateLanguage();
+    showLevelSelection(); // Start game immediately
+});
+```
+
+---
+
+## Player Name Management
+
+### Pattern: Use Parent Window Player Name
+
+**CRITICAL**: Games should NEVER prompt for player name. The arcade prompts for the player's name when they first visit, and this name is available to all games.
+
+**DO NOT**:
+- ❌ Prompt user for their name with `prompt()` or modal
+- ❌ Save player name in your game's localStorage
+- ❌ Ask for name again if it's not found
+
+**DO**:
+- ✅ Read player name from `window.parent.localStorage.getItem('arcadePlayerName')`
+- ✅ Fall back to `window.parent.playerName` (backup method)
+- ✅ Use the name directly without prompting
+- ✅ Handle missing name gracefully (log warning, don't save scores)
+
+### Implementation in Your Game
+
+```javascript
+async function getPlayerName() {
+    // Get player name from parent window (arcade)
+    // First try: parent localStorage with correct key 'arcadePlayerName'
+    if (window.parent && window.parent.localStorage) {
+        try {
+            const name = window.parent.localStorage.getItem('arcadePlayerName');
+            if (name) return name;
+        } catch (e) {
+            console.log('Cannot access parent localStorage');
+        }
+    }
+    
+    // Second try: direct property (backup method)
+    if (window.parent && window.parent.playerName) {
+        return window.parent.playerName;
+    }
+    
+    // If no name found, return null (shouldn't happen in arcade)
+    console.warn('No player name found from parent window');
+    return null;
+}
+
+async function loadPlayerData() {
+    const playerName = await getPlayerName();
+    
+    if (!playerName) {
+        console.warn('Cannot save scores: no player name');
+        return; // Gracefully handle - don't prompt!
+    }
+    
+    // Use playerName for Firebase queries, etc.
+    gameState.playerName = playerName;
+    // ... load player data from Firebase
+}
+```
+
+### Common Mistakes to Avoid
+
+❌ **WRONG**: Prompting for player name
+```javascript
+// DO NOT DO THIS!
+async function getPlayerName() {
+    const name = prompt('Enter your name:');
+    if (name) {
+        localStorage.setItem('playerName', name);
+        return name;
+    }
+    return null;
+}
+```
+
+❌ **WRONG**: Using wrong localStorage key
+```javascript
+// DO NOT DO THIS!
+async function getPlayerName() {
+    // This will NOT work - key is 'arcadePlayerName' not 'playerName'
+    const name = window.parent.localStorage.getItem('playerName');
+    return name;
+}
+```
+
+✅ **CORRECT**: Using parent window player name with correct key
+```javascript
+// DO THIS!
+async function getPlayerName() {
+    // Primary method: parent localStorage with 'arcadePlayerName' key
+    if (window.parent && window.parent.localStorage) {
+        try {
+            const name = window.parent.localStorage.getItem('arcadePlayerName');
+            if (name) return name;
+        } catch (e) {
+            console.log('Cannot access parent localStorage');
+        }
+    }
+    
+    // Fallback: direct property
+    if (window.parent && window.parent.playerName) {
+        return window.parent.playerName;
+    }
+    
+    return null; // Don't prompt!
+}
+```
+
+### Reference Implementation
+
+See **Farming Town** for a complete working example:
+- File: `Farming Town/script.js` around line 800
+- Uses `window.parent.localStorage.getItem('arcadePlayerName')`
+- Gracefully handles missing name without prompting
+
+### Testing Player Name Integration
+
+When testing your game:
+1. **In Arcade**: Player name is automatically available from arcade
+2. **Standalone**: Player name won't be available (expected behavior)
+3. **What to do**: Either test through arcade, or temporarily add a default name for standalone testing
+
+**Example for standalone testing**:
+```javascript
+async function getPlayerName() {
+    // Try parent localStorage first
+    if (window.parent && window.parent.localStorage) {
+        try {
+            const name = window.parent.localStorage.getItem('arcadePlayerName');
+            if (name) return name;
+        } catch (e) {
+            console.log('Cannot access parent localStorage');
+        }
+    }
+    
+    // FOR TESTING ONLY - Remove before final integration
+    if (!window.parent || window.parent === window) {
+        console.warn('Testing standalone - using test player name');
+        return 'TestPlayer';
+    }
+    
+    return null;
+}
 ```
 
 ---
@@ -764,6 +944,10 @@ function getParentLanguage() {
     if (window.parent && window.parent.currentLanguage) {
         return window.parent.currentLanguage;
     }
+    if (window.parent && window.parent.localStorage) {
+        const lang = window.parent.localStorage.getItem('arcadeLanguage');
+        if (lang === 'en' || lang === 'pt') return lang;
+    }
     return 'en';
 }
 
@@ -773,9 +957,12 @@ function t(key) {
 }
 
 function updateLanguage() {
+    const lang = getParentLanguage();
     document.querySelectorAll('[data-translate]').forEach(element => {
         const key = element.getAttribute('data-translate');
-        element.textContent = t(key);
+        if (translations[lang] && translations[lang][key]) {
+            element.textContent = translations[lang][key];
+        }
     });
 }
 
@@ -785,7 +972,11 @@ window.addEventListener('message', (event) => {
     }
 });
 
-document.addEventListener('DOMContentLoaded', updateLanguage);
+// NO LANGUAGE MODAL - Start game immediately!
+document.addEventListener('DOMContentLoaded', () => {
+    updateLanguage();
+    startGame(); // Or showLevelSelection(), etc.
+});
 ```
 
 ---
@@ -949,23 +1140,46 @@ window.parent.saveGameScore("Bomberman", {
 
 ## Summary
 
+### CRITICAL Requirements for Arcade Integration ⚠️
+
+**These are the most common mistakes - avoid them!**
+
+1. **❌ NO Language Selection Modal/UI**
+   - The arcade already has a language dropdown in the main menu
+   - Your game should use `getParentLanguage()` immediately on load
+   - Never create language selection UI in your game
+
+2. **❌ NO Player Name Prompts**
+   - The arcade prompts for player name when users first visit
+   - Your game should use `window.parent.playerName`
+   - Never use `prompt()` or modals to ask for player name
+
+3. **✅ Start Game Immediately**
+   - No blocking modals for language or name
+   - Game should be playable immediately after loading
+
+4. **✅ Listen for Language Changes**
+   - Implement `window.addEventListener('message')` to catch language switches
+   - Update all UI text when language changes
+
 ### Minimum Steps to Add a Game
 1. Create game folder with `index.html`, `script.js`, `style.css`
 2. Add game name to `games.json`
 3. Add translations to main `script.js` (en and pt)
 4. Add info description to main `script.js`
 5. Create and add icon to `icons/` folder
-6. Implement parent language sync in your game
-7. Implement score saving via `window.parent.saveGameScore()`
-8. Test everything!
+6. Implement parent language sync in your game (NO language selection UI!)
+7. Use parent player name (NO prompts!)
+8. Implement score saving via `window.parent.saveGameScore()`
+9. Test everything!
 
 ### For Games with Multiple Difficulties
-9. Include `difficulty` field in score data
-10. Add special handling to `showGameLeaderboard()` in main `script.js`
+10. Include `difficulty` field in score data
+11. Add special handling to `showGameLeaderboard()` in main `script.js`
 
 ---
 
-**Last Updated**: August 6, 2026  
+**Last Updated**: August 7, 2026  
 **System Version**: Arcade v2.0  
 **Supported Languages**: English (EN), Portuguese (PT)  
 **Database**: Firebase Firestore  
@@ -982,6 +1196,8 @@ When debugging:
 5. Reference existing games (Creature Sorting, Puzzle, 2048) as examples
 
 Common mistakes:
+- **Creating language selection UI (arcade already has this!)**
+- **Prompting for player name (arcade already has this!)**
 - Case sensitivity in game names
 - Missing translations in one language
 - Forgetting to add special leaderboard handling for multi-difficulty games

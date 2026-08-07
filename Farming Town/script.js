@@ -2212,6 +2212,35 @@ function showBuildingModal(tile) {
   const slotsContainer = document.getElementById('buildingSlots');
   slotsContainer.innerHTML = '';
   
+  // Check if any slot has completed production
+  let hasCompletedProduction = false;
+  for (let slotIndex = 0; slotIndex < 3; slotIndex++) {
+    const key = `${originTile.x}_${originTile.y}_${slotIndex}`;
+    const production = GameState.productionQueues[key];
+    if (production && production.completed) {
+      hasCompletedProduction = true;
+      break;
+    }
+  }
+  
+  // Add "Collect All" button if at least one slot is ready
+  if (hasCompletedProduction) {
+    const collectAllBtn = document.createElement('button');
+    collectAllBtn.className = 'btn-primary btn-collect-all';
+    collectAllBtn.textContent = t('collectAll');
+    collectAllBtn.style.cssText = `
+      width: 100%;
+      margin-bottom: 20px;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 700;
+    `;
+    collectAllBtn.addEventListener('click', () => {
+      collectAllProduction(originTile);
+    });
+    slotsContainer.appendChild(collectAllBtn);
+  }
+  
   for (let slotIndex = 0; slotIndex < 3; slotIndex++) {
     const key = `${originTile.x}_${originTile.y}_${slotIndex}`;
     const production = GameState.productionQueues[key] || {
@@ -2434,6 +2463,87 @@ function collectProduction(buildingTile, slotIndex) {
   showBuildingModal(buildingTile);
   
   showNotification(t('collect'), `${t('collected')} +${recipe.xpOnCollect} XP`);
+  return true;
+}
+
+// Collect all completed production from all 3 slots
+function collectAllProduction(buildingTile) {
+  let collectedItems = {}; // Track collected items: { flour: 4, chicken: 2, egg: 10 }
+  let totalXP = 0;
+  let anyCollected = false;
+  
+  // Iterate through all 3 slots
+  for (let slotIndex = 0; slotIndex < 3; slotIndex++) {
+    const key = `${buildingTile.x}_${buildingTile.y}_${slotIndex}`;
+    const production = GameState.productionQueues[key];
+    
+    if (!production || !production.completed) {
+      continue; // Skip non-completed slots
+    }
+    
+    const recipe = GameData.recipes[production.recipeType];
+    if (!recipe) continue;
+    
+    anyCollected = true;
+    
+    // Add products to inventory and track for summary
+    if (recipe.produces) {
+      // Special case: chickenAndEggs produces multiple items
+      for (const [item, quantity] of Object.entries(recipe.produces)) {
+        GameState.addToInventory(item, quantity);
+        GameState.incrementMissionProgress('production', item, quantity);
+        
+        // Track for summary
+        if (!collectedItems[item]) {
+          collectedItems[item] = 0;
+        }
+        collectedItems[item] += quantity;
+      }
+    } else {
+      GameState.addToInventory(production.recipeType, recipe.producesQuantity);
+      GameState.incrementMissionProgress('production', production.recipeType, recipe.producesQuantity);
+      
+      // Track for summary
+      if (!collectedItems[production.recipeType]) {
+        collectedItems[production.recipeType] = 0;
+      }
+      collectedItems[production.recipeType] += recipe.producesQuantity;
+    }
+    
+    // Add XP
+    GameState.addXP(recipe.xpOnCollect);
+    totalXP += recipe.xpOnCollect;
+    
+    // Clear production slot
+    production.recipeType = null;
+    production.isProducing = false;
+    production.startedAt = null;
+    production.productionMinutes = null;
+    production.completed = false;
+    
+    // Save to database
+    GameState.saveProduction(buildingTile.x, buildingTile.y, slotIndex, production);
+  }
+  
+  if (!anyCollected) {
+    return false;
+  }
+  
+  // Build summary message
+  let summaryText = `${t('collectedAll')}:\n\n`;
+  Object.keys(collectedItems).forEach(itemId => {
+    const icon = getTileIcon(itemId);
+    const quantity = collectedItems[itemId];
+    summaryText += `${icon} +${quantity} ${t(itemId)}\n`;
+  });
+  summaryText += `\n${t('totalXP')}: +${totalXP} XP`;
+  
+  // Refresh building modal
+  showBuildingModal(buildingTile);
+  
+  // Show summary notification
+  showNotification(t('collectAll'), summaryText);
+  
   return true;
 }
 

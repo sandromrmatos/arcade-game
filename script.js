@@ -65,6 +65,7 @@ const translations = {
     "Simon Says": "Simon Says",
     "Snakes and Ladders": "Snakes and Ladders",
     "Wordle": "Wordle",
+    "Hangman": "Hangman",
     "Minefield": "Minefield",
     "Arkanoid": "Arkanoid",
     "Word Search": "Word Search",
@@ -84,7 +85,9 @@ const translations = {
     "Shut the Box": "Shut the Box",
     "Creature Sorting": "Creature Sorting",
     "Two Dots": "Two Dots",
-    "Farming Town": "Farming Town"
+    "Guess Who": "Guess Who",
+    "Farming Town": "Farming Town",
+    "Restaurant": "Restaurant"
   },
   pt: {
     title: "Jogos Arcade por Sandro",
@@ -137,6 +140,7 @@ const translations = {
     "Simon Says": "Simon Diz",
     "Snakes and Ladders": "Cobras e Escadas",
     "Wordle": "Wordle",
+    "Hangman": "Forca",
     "Minefield": "Campo Minado",
     "Arkanoid": "Arkanoid",
     "Word Search": "Sopa de Letras",
@@ -156,7 +160,9 @@ const translations = {
     "Shut the Box": "Feche a Caixa",
     "Creature Sorting": "Ordenação de Criaturas",
     "Two Dots": "Two Dots",
-    "Farming Town": "Cidade Agrícola"
+    "Guess Who": "Quem É?",
+    "Farming Town": "Cidade Agrícola",
+    "Restaurant": "Restaurante"
   }
 };
 
@@ -517,6 +523,13 @@ const gameDescriptions = {
     scoring: "Total words correctly guessed tracked! Leaderboard ranks players by number of words guessed. More words = better rank!",
     controls: "Type your 5-letter guess and press Enter. Green = correct letter & position, Yellow = correct letter wrong position, Gray = letter not in word."
   },
+  "Hangman": {
+    title: "Hangman",
+    description: "Classic word guessing game! Guess the hidden word one letter at a time. Each wrong guess draws a body part. 6 wrong guesses and it's game over!",
+    modes: "Single mode - continuous play with word streak tracking",
+    scoring: "Total words correctly guessed tracked! Leaderboard ranks players by number of words guessed. More words = better rank! Win a word to continue your streak and start the next word automatically!",
+    controls: "Click letter buttons to make guesses. Green buttons = correct letters, Red buttons = wrong letters. Guess all letters before running out of lives to win!"
+  },
   "Minefield": {
     title: "Minefield (Minesweeper)",
     description: "Clear a grid by revealing safe cells while avoiding hidden bombs. Numbers show how many bombs are adjacent.",
@@ -671,6 +684,13 @@ const gameDescriptions = {
     scoring: "2 dots=1pt � 3=2pts � 4=4pts � 5=7pts � 6=10pts � 7=13pts � 8=16pts. Longer chains score exponentially more! You have 2 minutes to get the highest score. Highest score wins!",
     controls: "Mouse: Click and drag through adjacent dots of the same color. Touch: Tap and drag your finger. Release to complete the chain. Dots must touch horizontally or vertically (no diagonals). Connected dots disappear and new ones fall from the top!"
   },
+  "Guess Who": {
+    title: "Guess Who",
+    description: "Identify the AI's secret character by asking yes/no questions about their attributes and eliminating incorrect options.",
+    modes: "Single mode: Ask questions, eliminate characters, and win by being left with only the correct person!",
+    scoring: "Fastest completion time wins. Timer starts on first question. Lower time is better!",
+    controls: "Select attribute and value from dropdowns, click 'Ask Question' to get AI's answer. Click 'Start Eliminating' button, then click on character faces to grey them out. Click 'Stop Eliminating' when done to check if you've found the correct person."
+  },
   "Creature Sorting": {
     title: "Creature Sorting",
     description: "Organize cute creatures into matching sets on shelves! Each shelf holds 3 items. Your goal is to fill each shelf with 3 identical creatures, leaving exactly one shelf empty. Click creatures to select them, then click empty slots to move them. Only empty slots can receive items - no swapping allowed!",
@@ -747,6 +767,13 @@ const gameDescriptions = {
     modes: "Modo único - nova palavra em cada jogo",
     scoring: "Total de palavras corretamente adivinhadas rastreado! O placar classifica os jogadores por número de palavras adivinhadas. Mais palavras = melhor classificação!",
     controls: "Digite a sua tentativa de 5 letras e pressione Enter. Verde = letra e posição corretas, Amarelo = letra correta posição errada, Cinzento = letra não está na palavra."
+  },
+  "Hangman": {
+    title: "Forca",
+    description: "Jogo clássico de adivinhar palavras! Adivinhe a palavra escondida uma letra de cada vez. Cada erro desenha uma parte do corpo. 6 erros e é fim de jogo!",
+    modes: "Modo único - jogo contínuo com rastreamento de sequência de palavras",
+    scoring: "Total de palavras corretamente adivinhadas rastreado! O placar classifica os jogadores por número de palavras adivinhadas. Mais palavras = melhor classificação! Ganhe uma palavra para continuar a sua sequência e iniciar automaticamente a próxima palavra!",
+    controls: "Clique nos botões de letras para fazer tentativas. Botões verdes = letras corretas, Botões vermelhos = letras erradas. Adivinhe todas as letras antes de ficar sem vidas para ganhar!"
   },
   "Minefield": {
     title: "Campo Minado",
@@ -895,6 +922,13 @@ const gameDescriptions = {
     scoring: "2 dots=1pt � 3=2pts � 4=4pts � 5=7pts � 6=10pts � 7=13pts � 8=16pts. Longer chains score exponentially more! You have 2 minutes to get the highest score. Highest score wins!",
     controls: "Mouse: Click and drag through adjacent dots of the same color. Touch: Tap and drag your finger. Release to complete the chain. Dots must touch horizontally or vertically (no diagonals). Connected dots disappear and new ones fall from the top!"
   },
+  "Guess Who": {
+    title: "Quem É?",
+    description: "Identifique o personagem secreto da IA fazendo perguntas de sim/não sobre seus atributos e eliminando opções incorretas.",
+    modes: "Modo único: Faça perguntas, elimine personagens e ganhe ficando apenas com a pessoa correta!",
+    scoring: "O tempo de conclusão mais rápido vence. O cronômetro começa na primeira pergunta. Menor tempo é melhor!",
+    controls: "Selecione atributo e valor nos menus suspensos, clique em 'Perguntar' para obter a resposta da IA. Clique no botão 'Começar Eliminação', depois clique nos rostos dos personagens para acinzentá-los. Clique em 'Parar Eliminação' quando terminar para verificar se encontrou a pessoa correta."
+  },
   "Creature Sorting": {
     title: "Ordenação de Criaturas",
     description: "Organize criaturas fofas em conjuntos correspondentes nas prateleiras! Cada prateleira comporta 3 itens. Seu objetivo é preencher cada prateleira com 3 criaturas idênticas, deixando exatamente uma prateleira vazia. Clique nas criaturas para selecioná-las, depois clique em espaços vazios para movê-las. Apenas espaços vazios podem receber itens - sem trocas permitidas!",
@@ -908,6 +942,13 @@ const gameDescriptions = {
     modes: "Nível 1: Tabuleiro único com peças 1-12. Lance os dados, selecione peças que somem o total dos dados e envie.\n\nNível 2: Desafio de tabuleiro duplo! O primeiro tabuleiro (1-12) bloqueia o segundo tabuleiro (12-1 atrás). Só pode selecionar peças do segundo tabuleiro depois de remover a peça diretamente à frente dele do primeiro tabuleiro. Exemplo: Remova a peça 5 do tabuleiro 1 para desbloquear a peça 8 (atrás dela) no tabuleiro 2.",
     scoring: "Pontuação = Soma dos números das peças restantes. 0 é perfeito (fechou a caixa!). Pontuações mais baixas são melhores. Cada nível tem placares separados.",
     controls: "1. Clique em 'Lançar Dados' para lançar dois dados\n2. Clique em peças para selecionar uma combinação que soma o total dos dados\n3. Clique em 'Reiniciar Seleção' se cometer um erro\n4. Clique em 'Enviar' quando sua seleção igualar o total dos dados\n5. Continue até que todas as peças sejam removidas ou não restem jogadas válidas\n\nNível 2: Peças no tabuleiro 2 estão bloqueadas (acinzentadas) até que a peça correspondente do tabuleiro 1 seja removida."
+  },
+  "Restaurant": {
+    title: "Restaurant Management Game",
+    description: "Run your own restaurant and serve customers to earn coins before time runs out! Manage appliances, prepare dishes using ingredients, and serve customers quickly to maximize payment. Progress through 3 levels with increasing complexity!",
+    modes: "Level 1 (3 min): Coffee Machine (1 slot), Black Americano only, 2 customers, £15 goal\n\nLevel 2 (3 min): Add Chopping Board, Tomato Salads unlocked, 3 customers, £30 goal\n\nLevel 3 (3 min): Coffee Machine gets 2nd slot, Lattes unlocked with Milk ingredient, 4 customers, £50 goal\n\nLevels unlock sequentially - must beat previous level to progress!",
+    scoring: "Earn coins by serving customers! Payment depends on wait time:\n• <20s: 100% (£3-5)\n• 20-30s: 75%\n• 30-40s: 50%\n• 40-50s: 25%\n• >50s: 0%\n\nCustomers show reactions (😊😐☹️😠) based on payment. Highest coin total per level wins! Best scores saved separately for each level.",
+    controls: "Cooking:\n1. Click ingredient (Coffee Beans, Tomato, or Milk)\n2. Click appliance to add ingredient (max 5 per appliance)\n3. Click appliance again to open cooking menu\n4. Click empty slot, then select recipe if you have ingredients\n5. Wait for cooking timer (5-6 seconds)\n6. Click 'Serve' when ready\n\nServing:\n1. Select customer with matching order\n2. Customer consumes for 2 seconds\n3. New customer spawns after 5 seconds\n\nIngredients can be tossed after 5 seconds. Customers never leave - they just pay less if kept waiting!"
   }
 };
 
@@ -1187,6 +1228,9 @@ function showGameLeaderboard(gameName) {
     showPuzzleLeaderboard(db, content, gameName);
     return;
   }
+
+  // Guess Who uses default leaderboard (bestTime - lower is better, no difficulty modes)
+  // No special handling needed - falls through to default
   
   // Special handling for Candy Crush (score - higher is better)
   if (gameName === "Candy Crush") {
@@ -1209,6 +1253,12 @@ function showGameLeaderboard(gameName) {
   // Special handling for Two Dots (score - higher is better, with difficulty modes)
   if (gameName === "Two Dots") {
     showScoreBasedLeaderboard(db, content, gameName);
+    return;
+  }
+  
+  // Special handling for Restaurant (coins per level - higher is better)
+  if (gameName === "Restaurant") {
+    showRestaurantLeaderboard(db, content, gameName);
     return;
   }
   
@@ -1328,6 +1378,12 @@ function showGameLeaderboard(gameName) {
   
   // Special handling for Wordle (words guessed count)
   if (gameName === "Wordle") {
+    showWordleLeaderboard(db, content, gameName);
+    return;
+  }
+  
+  // Special handling for Hangman (words guessed count - same as Wordle)
+  if (gameName === "Hangman") {
     showWordleLeaderboard(db, content, gameName);
     return;
   }
@@ -1496,6 +1552,120 @@ function showScoreBasedLeaderboard(db, content, gameName) {
     .catch(err => {
       content.textContent = t("errorLoading") + " " + err.message;
       console.error("Leaderboard error:", err);
+    });
+}
+
+function showRestaurantLeaderboard(db, content, gameName) {
+  db.collection("restaurantPlayers")
+    .get()
+    .then(snapshot => {
+      const allPlayers = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+      // Separate by level
+      const level1Scores = [];
+      const level2Scores = [];
+      const level3Scores = [];
+      
+      allPlayers.forEach(player => {
+        if (player.bestScores) {
+          if (player.bestScores[1]) {
+            level1Scores.push({
+              playerName: player.playerName,
+              score: player.bestScores[1],
+              timestamp: player.timestamp
+            });
+          }
+          if (player.bestScores[2]) {
+            level2Scores.push({
+              playerName: player.playerName,
+              score: player.bestScores[2],
+              timestamp: player.timestamp
+            });
+          }
+          if (player.bestScores[3]) {
+            level3Scores.push({
+              playerName: player.playerName,
+              score: player.bestScores[3],
+              timestamp: player.timestamp
+            });
+          }
+        }
+      });
+      
+      // Sort by score descending (higher coins is better)
+      level1Scores.sort((a, b) => b.score - a.score);
+      level2Scores.sort((a, b) => b.score - a.score);
+      level3Scores.sort((a, b) => b.score - a.score);
+      
+      // Take top 10
+      const top10Level1 = level1Scores.slice(0, 10);
+      const top10Level2 = level2Scores.slice(0, 10);
+      const top10Level3 = level3Scores.slice(0, 10);
+      
+      let html = '<div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">';
+      
+      // Level 1 table
+      html += `<div style="flex: 1; min-width: 300px;"><h3>Level 1</h3>`;
+      if (top10Level1.length === 0) {
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
+      } else {
+        html += `<table class="leaderboard-table"><thead><tr><th>${t("rank")}</th><th>${t("player")}</th><th>Coins</th><th>${t("date")}</th></tr></thead><tbody>`;
+        top10Level1.forEach((score, i) => {
+          const date = score.timestamp ? new Date(score.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${score.playerName}</td>
+            <td>£${score.score}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div>';
+      
+      // Level 2 table
+      html += `<div style="flex: 1; min-width: 300px;"><h3>Level 2</h3>`;
+      if (top10Level2.length === 0) {
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
+      } else {
+        html += `<table class="leaderboard-table"><thead><tr><th>${t("rank")}</th><th>${t("player")}</th><th>Coins</th><th>${t("date")}</th></tr></thead><tbody>`;
+        top10Level2.forEach((score, i) => {
+          const date = score.timestamp ? new Date(score.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${score.playerName}</td>
+            <td>£${score.score}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div>';
+      
+      // Level 3 table
+      html += `<div style="flex: 1; min-width: 300px;"><h3>Level 3</h3>`;
+      if (top10Level3.length === 0) {
+        html += `<p style="color: #666;">${t("noScores")}</p>`;
+      } else {
+        html += `<table class="leaderboard-table"><thead><tr><th>${t("rank")}</th><th>${t("player")}</th><th>Coins</th><th>${t("date")}</th></tr></thead><tbody>`;
+        top10Level3.forEach((score, i) => {
+          const date = score.timestamp ? new Date(score.timestamp.toDate()).toLocaleDateString() : 'N/A';
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${score.playerName}</td>
+            <td>£${score.score}</td>
+            <td>${date}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+      html += '</div></div>';
+      
+      content.innerHTML = html;
+    })
+    .catch(err => {
+      content.textContent = t("errorLoading") + " " + err.message;
+      console.error("Restaurant leaderboard error:", err);
     });
 }
 

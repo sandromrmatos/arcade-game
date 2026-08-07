@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Level Selection Modal -->
+    <div id="levelSelectionModal" class="modal hidden">
+        <div class="modal-content">
+            <h2 data-translate="selectLevel">Select Level</h2>
+            <div id="levelButtons"></div>
+        </div>
+    </div>
+
+    <!-- Victory Modal -->
+    <div id="victoryModal" class="modal hidden">
+        <div class="modal-content">
+            <h2 data-translate="levelComplete">Level Complete!</h2>
+            <p><span data-translate="coinsEarned">Coins Earned:</span> <span id="coinsEarnedValue"></span></p>
+            <div id="victoryButtons">
+                <button onclick="retryLevel()" class="btn" data-translate="retry">Retry</button>
+                <button onclick="nextLevel()" class="btn" data-translate="nextLevel">Next Level</button>
+                <button onclick="backToMenu()" class="btn" data-translate="backToMenu">Back to Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Defeat Modal -->
+    <div id="defeatModal" class="modal hidden">
+        <div class="modal-content">
+            <h2 data-translate="levelFailed">Level Failed!</h2>
+            <p><span data-translate="coinsEarned">Coins Earned:</span> <span id="defeatCoinsValue"></span></p>
+            <p><span data-translate="goalWas">Goal was:</span> <span id="goalValue"></span></p>
+            <div>
+                <button onclick="retryLevel()" class="btn" data-translate="retry">Retry</button>
+                <button onclick="backToMenu()" class="btn" data-translate="backToMenu">Back to Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaderboard Modal -->
+    <div id="leaderboardModal" class="modal hidden">
+        <div class="modal-content leaderboard-content">
+            <h2 data-translate="leaderboard">Leaderboard</h2>
+            <div id="leaderboardTabs"></div>
+            <div id="leaderboardTable"></div>
+            <button onclick="closeLeaderboard()" class="btn" data-translate="close">Close</button>
+        </div>
+    </div>
+
+    <!-- Appliance Modal -->
+    <div id="applianceModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="applianceName"></h2>
+                <button onclick="closeApplianceModal()" class="close-btn">×</button>
+            </div>
+            <div id="ingredientsInAppliance"></div>
+            <div id="applianceModalSlots"></div>
+        </div>
+    </div>
+
+    <!-- Recipe Selection Modal -->
+    <div id="recipeModal" class="modal hidden">
+        <div class="modal-content">
+            <h2 data-translate="selectRecipe">Select Recipe</h2>
+            <div id="recipeList"></div>
+            <button onclick="closeRecipeModal()" class="btn" data-translate="cancel">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Serve Selection Modal -->
+    <div id="serveModal" class="modal hidden">
+        <div class="modal-content">
+            <h2 data-translate="selectCustomer">Select Customer to Serve</h2>
+            <div id="customerServeList"></div>
+            <button onclick="cancelServe()" class="btn" data-translate="cancel">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Main Game Container -->
+    <div id="gameContainer" class="hidden">
+        <!-- Top Bar -->
+        <div id="topBar">
+            <div class="top-info">
+                <div class="timer-display">
+                    <span data-translate="timer">Timer:</span>
+                    <span id="timer">2:00</span>
+                </div>
+                <div class="coins-display">
+                    <span data-translate="coins">Coins:</span>
+                    <span id="coins">£0</span> / <span id="goal">£15</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customer Board -->
+        <div id="customerBoard">
+            <h3 data-translate="customers">Customers</h3>
+            <div id="customerSlots"></div>
+        </div>
+
+        <!-- Appliance Board -->
+        <div id="applianceBoard">
+            <h3 data-translate="appliances">Appliances</h3>
+            <div id="applianceSlots"></div>
+        </div>
+
+        <!-- Ingredient Board -->
+        <div id="ingredientBoard">
+            <h3 data-translate="ingredients">Ingredients</h3>
+            <div id="ingredientSlots"></div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess Who</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Header -->
+        <div class="header">
+            <h1 data-translate="gameTitle">Guess Who</h1>
+            <div class="timer-display">
+                <span data-translate="timeLabel">Time:</span>
+                <span id="timerDisplay">00:00</span>
+            </div>
+        </div>
+
+        <!-- Question Panel -->
+        <div class="question-panel">
+            <h2 data-translate="askQuestion">Ask a Question</h2>
+            
+            <div class="question-selector">
+                <div class="attribute-group">
+                    <label data-translate="selectAttribute">Select Attribute:</label>
+                    <select id="attributeSelect">
+                        <option value="" data-translate="chooseAttribute">-- Choose --</option>
+                        <option value="hair" data-translate="hair">Hair</option>
+                        <option value="age" data-translate="age">Age</option>
+                        <option value="skin" data-translate="skin">Skin Colour</option>
+                        <option value="gender" data-translate="gender">Gender</option>
+                        <option value="glasses" data-translate="glasses">Glasses</option>
+                    </select>
+                </div>
+
+                <div class="value-group">
+                    <label data-translate="selectValue">Select Value:</label>
+                    <select id="valueSelect" disabled>
+                        <option value="" data-translate="chooseValue">-- Choose --</option>
+                    </select>
+                </div>
+
+                <button id="askButton" class="ask-btn" disabled data-translate="askBtn">Ask Question</button>
+            </div>
+
+            <div class="answer-display" id="answerDisplay"></div>
+
+            <button id="readyToGuess" class="guess-btn" data-translate="readyGuess">Start Eliminating</button>
+        </div>
+
+        <!-- Game Board -->
+        <div class="game-board" id="gameBoard">
+            <!-- 24 character cards will be generated here -->
+        </div>
+
+        <!-- Victory Modal -->
+        <div id="victoryModal" class="modal hidden">
+            <div class="modal-content">
+                <h2 data-translate="victoryTitle">You Won!</h2>
+                <p data-translate="victoryMessage">Congratulations! You found the correct person!</p>
+                <p><span data-translate="yourTime">Your Time:</span> <span id="finalTime"></span></p>
+                <p id="newRecordMessage" class="hidden"><strong data-translate="newRecord">🎉 NEW BEST TIME! 🎉</strong></p>
+                <button id="playAgainBtn" data-translate="playAgain">Play Again</button>
+                <button id="returnMenuBtn" data-translate="returnMenu">Return to Menu</button>
+            </div>
+        </div>
+
+        <!-- Defeat Modal -->
+        <div id="defeatModal" class="modal hidden">
+            <div class="modal-content">
+                <h2 data-translate="defeatTitle">Wrong Guess!</h2>
+                <p data-translate="defeatMessage">That wasn't the correct person. Try again!</p>
+                <button id="tryAgainBtn" data-translate="tryAgain">Try Again</button>
+                <button id="returnMenuBtn2" data-translate="returnMenu">Return to Menu</button>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="instructions">
+            <p data-translate="instructions">Ask questions to eliminate characters. Click on faces to grey them out. Win by having only the AI's character remaining!</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="gameTitle">Hangman</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1 data-translate="gameTitle">Hangman</h1>
+        
+        <!-- Stats Display -->
+        <div class="stats-display">
+            <div class="stat-item">
+                <span data-translate="wordsGuessed">Words Guessed</span>: <span id="wordsGuessedCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span data-translate="currentStreak">Current Streak</span>: <span id="currentStreak">0</span>
+            </div>
+        </div>
+
+        <!-- Hangman Display -->
+        <div class="hangman-display">
+            <svg id="hangman" width="200" height="250" viewBox="0 0 200 250">
+                <!-- Gallows -->
+                <line x1="10" y1="230" x2="150" y2="230" stroke="#8B4513" stroke-width="4"/>
+                <line x1="50" y1="230" x2="50" y2="20" stroke="#8B4513" stroke-width="4"/>
+                <line x1="50" y1="20" x2="130" y2="20" stroke="#8B4513" stroke-width="4"/>
+                <line x1="130" y1="20" x2="130" y2="50" stroke="#8B4513" stroke-width="4"/>
+                
+                <!-- Head -->
+                <circle id="head" cx="130" cy="70" r="20" stroke="#333" stroke-width="3" fill="none" class="body-part hidden"/>
+                
+                <!-- Body -->
+                <line id="body" x1="130" y1="90" x2="130" y2="150" stroke="#333" stroke-width="3" class="body-part hidden"/>
+                
+                <!-- Left Arm -->
+                <line id="leftArm" x1="130" y1="110" x2="100" y2="130" stroke="#333" stroke-width="3" class="body-part hidden"/>
+                
+                <!-- Right Arm -->
+                <line id="rightArm" x1="130" y1="110" x2="160" y2="130" stroke="#333" stroke-width="3" class="body-part hidden"/>
+                
+                <!-- Left Leg -->
+                <line id="leftLeg" x1="130" y1="150" x2="110" y2="190" stroke="#333" stroke-width="3" class="body-part hidden"/>
+                
+                <!-- Right Leg -->
+                <line id="rightLeg" x1="130" y1="150" x2="150" y2="190" stroke="#333" stroke-width="3" class="body-part hidden"/>
+            </svg>
+        </div>
+
+        <!-- Lives Counter -->
+        <div class="lives-container">
+            <span data-translate="livesRemaining">Lives Remaining</span>: <span id="livesCount">6</span>/6
+        </div>
+
+        <!-- Word Display -->
+        <div id="wordDisplay" class="word-display"></div>
+
+        <!-- Wrong Letters -->
+        <div class="wrong-letters-container">
+            <span data-translate="wrongLetters">Wrong Letters</span>: <span id="wrongLetters">-</span>
+        </div>
+
+        <!-- Keyboard -->
+        <div id="keyboard" class="keyboard"></div>
+
+        <!-- Game Message -->
+        <div id="gameMessage" class="game-message hidden"></div>
+
+        <!-- Restart Button -->
+        <button id="restartBtn" class="restart-btn hidden" data-translate="playAgain">Play Again</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

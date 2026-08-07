@@ -10,6 +10,7 @@
     "Simon Says",
     "Snakes and Ladders",
     "Wordle",
+    "Hangman",
     "Minefield",
     "Arkanoid",
     "Word Search",
@@ -31,8 +32,10 @@
     "Shut the Box",
     "Creature Sorting",
     "Two Dots",
+    "Guess Who",
     "TCG Game",
     "VGC",
-    "Farming Town"
+    "Farming Town",
+    "Restaurant"
   ]
 }
