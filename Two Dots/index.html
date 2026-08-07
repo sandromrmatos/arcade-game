@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two Dots</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Menu Screen -->
+        <div id="menu-screen" class="screen">
+            <h1 data-translate="gameTitle">Two Dots</h1>
+            <p class="game-description" data-translate="gameDescription">Connect adjacent dots of the same color!</p>
+            
+            <div class="difficulty-buttons">
+                <button class="difficulty-btn" onclick="selectDifficulty('easy')">
+                    <span data-translate="easy">Easy</span>
+                    <small data-translate="easyDesc">4×4 Grid • 3 Colors</small>
+                </button>
+                <button class="difficulty-btn" onclick="selectDifficulty('medium')">
+                    <span data-translate="medium">Medium</span>
+                    <small data-translate="mediumDesc">5×5 Grid • 4 Colors</small>
+                </button>
+                <button class="difficulty-btn" onclick="selectDifficulty('hard')">
+                    <span data-translate="hard">Hard</span>
+                    <small data-translate="hardDesc">6×6 Grid • 5 Colors</small>
+                </button>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen hidden">
+            <div class="game-header">
+                <button class="back-btn" onclick="backToMenu()" data-translate="backButton">← Back</button>
+                <div class="game-info">
+                    <div class="info-item">
+                        <span data-translate="score">Score</span>
+                        <span class="score-value" id="score">0</span>
+                    </div>
+                    <div class="info-item">
+                        <span data-translate="time">Time</span>
+                        <span class="timer-value" id="timer">2:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="grid-container"></div>
+
+            <div class="instructions">
+                <p data-translate="instructions">Drag through adjacent dots of the same color to connect them!</p>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="gameover-screen" class="screen hidden">
+            <h2 data-translate="gameOver">Game Over!</h2>
+            <div class="final-stats">
+                <p><span data-translate="finalScore">Final Score:</span> <span id="final-score">0</span></p>
+                <p class="saving-message" id="saving-message" data-translate="savingScore">Saving score...</p>
+                <p class="record-message hidden" id="record-message" data-translate="newRecord">🎉 NEW BEST SCORE! 🎉</p>
+            </div>
+            <div class="gameover-buttons">
+                <button class="game-btn" onclick="restartGame()" data-translate="playAgain">Play Again</button>
+                <button class="game-btn secondary" onclick="backToMenu()" data-translate="backToMenu">Back to Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

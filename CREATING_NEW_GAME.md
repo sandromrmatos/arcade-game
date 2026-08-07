@@ -225,10 +225,13 @@ Fields:
 
 ### Scoring Patterns
 
-Different games use different scoring systems:
+Different games use different scoring systems. **Always specify the metric type and direction when creating a new game.**
 
 #### Pattern A: Higher is Better (Score-based)
-Games: Tetris, Candy Crush, Arkanoid, Domino
+**Metric**: `score` (number)  
+**Direction**: Higher is better (descending sort in leaderboard)  
+**Games**: Tetris, Candy Crush, Arkanoid, Domino, Two Dots, Puzzle Bobble
+
 ```javascript
 {
   gameName: "Tetris",
@@ -240,7 +243,10 @@ Games: Tetris, Candy Crush, Arkanoid, Domino
 ```
 
 #### Pattern B: Lower is Better (Time-based)
-Games: Puzzle, Minefield, Maze, Creature Sorting
+**Metric**: `bestTime` (seconds)  
+**Direction**: Lower is better (ascending sort in leaderboard)  
+**Games**: Puzzle, Minefield, Maze, Creature Sorting, Mahjong Solitaire
+
 ```javascript
 {
   gameName: "Puzzle",
@@ -252,7 +258,10 @@ Games: Puzzle, Minefield, Maze, Creature Sorting
 ```
 
 #### Pattern C: Higher is Better (Time Remaining)
-Games: Cross the Bridge
+**Metric**: `timeLeft` (seconds)  
+**Direction**: Higher is better (descending sort in leaderboard)  
+**Games**: Cross the Bridge
+
 ```javascript
 {
   gameName: "Cross the Bridge",
@@ -263,8 +272,41 @@ Games: Cross the Bridge
 }
 ```
 
-#### Pattern D: Cumulative Records
-Games: Wordle (total words), Simon Says (highest round)
+#### Pattern D: Lower is Better (Turns/Moves)
+**Metric**: `turns` (number)  
+**Direction**: Lower is better (ascending sort in leaderboard)  
+**Games**: Connect Four, Memory
+
+```javascript
+{
+  gameName: "Memory",
+  playerName: "Player1",
+  turns: 24,
+  difficulty: "easy",
+  timestamp: firebase.firestore.FieldValue.serverTimestamp()
+}
+```
+
+#### Pattern E: Higher is Better (Length/Size)
+**Metric**: `length` (number)  
+**Direction**: Higher is better (descending sort in leaderboard)  
+**Games**: Snake
+
+```javascript
+{
+  gameName: "Snake",
+  playerName: "Player1",
+  length: 45,  // snake length
+  difficulty: "medium",
+  timestamp: firebase.firestore.FieldValue.serverTimestamp()
+}
+```
+
+#### Pattern F: Cumulative Records
+**Metric**: Custom (varies by game)  
+**Direction**: Typically higher is better  
+**Games**: Wordle (total words), Simon Says (highest round)
+
 ```javascript
 {
   gameName: "Wordle",
@@ -274,8 +316,11 @@ Games: Wordle (total words), Simon Says (highest round)
 }
 ```
 
-#### Pattern E: Win Rate
-Games: Tic Tac Toe, Snakes and Ladders
+#### Pattern G: Win Rate
+**Metric**: `winRate` (0.0 to 1.0)  
+**Direction**: Higher is better  
+**Games**: Tic Tac Toe, Snakes and Ladders
+
 ```javascript
 {
   gameName: "Tic Tac Toe",
@@ -454,6 +499,57 @@ Or use SVG editors:
 
 ## Special Leaderboard Handling
 
+### ⚠️ CRITICAL: Specify Leaderboard Requirements When Creating Games
+
+**WHEN REQUESTING A NEW GAME, YOU MUST ALWAYS SPECIFY:**
+
+1. **Metric Type**: What is being measured?
+   - `score` (points accumulated)
+   - `bestTime` (time to complete)
+   - `timeLeft` (time remaining)
+   - `turns` (number of moves)
+   - `length` (e.g., Snake length)
+   - `rounds` (number of rounds)
+   - Other custom metrics
+
+2. **Direction**: Which is better?
+   - **Higher is better** (score, timeLeft, length, rounds)
+   - **Lower is better** (bestTime, turns)
+
+3. **Difficulty Modes**: Does the game have difficulty levels?
+   - **No difficulties**: Single leaderboard table
+   - **2-3 difficulties**: Separate table per difficulty (easy/medium/hard)
+   - Must specify if using difficulties!
+
+### Example Game Requests
+
+#### ✅ GOOD: Clear Specifications
+```
+"Create a puzzle game where players complete a jigsaw puzzle. 
+It has 3 difficulty modes (easy/medium/hard).
+LEADERBOARD: bestTime metric, lower is better, split by difficulty."
+```
+
+```
+"Create a match-3 game with 2-minute rounds.
+No difficulty modes.
+LEADERBOARD: score metric, higher is better, single table."
+```
+
+```
+"Create a snake game with difficulty modes (easy/medium/hard).
+LEADERBOARD: length metric (snake length), higher is better, split by difficulty."
+```
+
+#### ❌ BAD: Missing Information
+```
+"Create a puzzle game."  ← Missing: metric, direction, difficulties
+```
+
+```
+"Create a timed game with leaderboard."  ← Missing: higher/lower better, difficulties
+```
+
 ### Default Leaderboard (Most Games)
 Most games use the default leaderboard display which shows all scores in one table.
 
@@ -462,23 +558,33 @@ Most games use the default leaderboard display which shows all scores in one tab
 ### Games with Difficulty Modes (Separate Tables)
 
 Some games need **separate leaderboards for each difficulty**. Examples:
-- Puzzle (Easy/Medium/Hard)
-- Creature Sorting (Easy/Medium/Hard)
-- 2048 (4×4/5×5)
+- Puzzle (Easy/Medium/Hard) - bestTime, lower is better
+- Creature Sorting (Easy/Medium/Hard) - bestTime, lower is better
+- Two Dots (Easy/Medium/Hard) - score, higher is better
+- 2048 (4×4/5×5) - score, higher is better
 
 #### Implementation
 
 **Step 1**: In your game, include difficulty in score data:
 ```javascript
+// For time-based games (lower is better)
 window.parent.saveGameScore("My Game", {
     bestTime: 125,
     difficulty: "medium"  // ← Required!
+});
+
+// For score-based games (higher is better)
+window.parent.saveGameScore("My Game", {
+    score: 15000,
+    difficulty: "hard"  // ← Required!
 });
 ```
 
 **Step 2**: Add special handling to `showGameLeaderboard()` in main script.js:
 
-Find this section (around line 1163):
+Find this section (around line 1163) and add your game based on its metric type:
+
+##### For Time-Based Games (Lower is Better)
 ```javascript
 // Special handling for Puzzle (bestTime - lower is better, with difficulty modes)
 if (gameName === "Puzzle") {
@@ -486,27 +592,42 @@ if (gameName === "Puzzle") {
   return;
 }
 
-// Special handling for Creature Sorting (bestTime - lower is better, with difficulty modes)
-if (gameName === "Creature Sorting") {
+// Add your game here if it uses bestTime
+if (gameName === "My Time Game") {
   showPuzzleLeaderboard(db, content, gameName);
   return;
 }
 ```
 
-Add your game:
+##### For Score-Based Games (Higher is Better)
 ```javascript
-// Special handling for My Game (bestTime - lower is better, with difficulty modes)
-if (gameName === "My Game") {
-  showPuzzleLeaderboard(db, content, gameName);
+// Special handling for Two Dots (score - higher is better, with difficulty modes)
+if (gameName === "Two Dots") {
+  showScoreBasedLeaderboard(db, content, gameName);
+  return;
+}
+
+// Add your game here if it uses score
+if (gameName === "My Score Game") {
+  showScoreBasedLeaderboard(db, content, gameName);
   return;
 }
 ```
 
-**Step 3**: The `showPuzzleLeaderboard()` function will:
-- Create 3 tabs for difficulties
+##### For Other Metrics
+Different functions exist for different metrics:
+- `showTimeBasedDifficultyLeaderboard()` - For bestTime with 2-3 difficulties
+- `showScoreBasedLeaderboard()` - For score with 2-3 difficulties
+- `showTimeLeftDifficultyLeaderboard()` - For timeLeft (higher is better)
+- `showLengthBasedDifficultyLeaderboard()` - For length (higher is better)
+- `showTurnsBasedDifficultyLeaderboard()` - For turns (lower is better)
+
+**Step 3**: The chosen function will:
+- Create 2-3 tables for difficulties (auto-detects if medium exists)
 - Filter scores by difficulty
 - Display separate rankings
-- Sort appropriately (time ascending for time-based)
+- Sort appropriately (ascending for "lower is better", descending for "higher is better")
+- Show correct column header ("Score", "Best Time", "Turns", etc.)
 
 ### Custom Leaderboard Functions
 

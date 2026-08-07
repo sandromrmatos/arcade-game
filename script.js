@@ -83,6 +83,7 @@ const translations = {
     "VGC": "VGC",
     "Shut the Box": "Shut the Box",
     "Creature Sorting": "Creature Sorting",
+    "Two Dots": "Two Dots",
     "Farming Town": "Farming Town"
   },
   pt: {
@@ -154,6 +155,7 @@ const translations = {
     "VGC": "VGC",
     "Shut the Box": "Feche a Caixa",
     "Creature Sorting": "Ordenação de Criaturas",
+    "Two Dots": "Two Dots",
     "Farming Town": "Cidade Agrícola"
   }
 };
@@ -662,6 +664,13 @@ const gameDescriptions = {
     scoring: "Score = Sum of remaining tile numbers. 0 is perfect (you shut the box!). Lower scores are better. Each level has separate leaderboards.",
     controls: "1. Click 'Roll Dice' to roll two dice\n2. Click tiles to select a combination that adds up to the dice total\n3. Click 'Reset Selection' if you make a mistake\n4. Click 'Submit' when your selection equals the dice total\n5. Continue until all tiles are removed or no valid moves remain\n\nLevel 2: Tiles on board 2 are locked (grayed) until the corresponding board 1 tile is removed."
   },
+  "Two Dots": {
+    title: "Two Dots",
+    description: "Connect adjacent dots of the same color by dragging through them! Create longer chains for higher scores in this addictive puzzle game.",
+    modes: "Easy (4�4): 3 colors, simple chains\nMedium (5�5): 4 colors, more strategy\nHard (6�6): 5 colors, complex patterns",
+    scoring: "2 dots=1pt � 3=2pts � 4=4pts � 5=7pts � 6=10pts � 7=13pts � 8=16pts. Longer chains score exponentially more! You have 2 minutes to get the highest score. Highest score wins!",
+    controls: "Mouse: Click and drag through adjacent dots of the same color. Touch: Tap and drag your finger. Release to complete the chain. Dots must touch horizontally or vertically (no diagonals). Connected dots disappear and new ones fall from the top!"
+  },
   "Creature Sorting": {
     title: "Creature Sorting",
     description: "Organize cute creatures into matching sets on shelves! Each shelf holds 3 items. Your goal is to fill each shelf with 3 identical creatures, leaving exactly one shelf empty. Click creatures to select them, then click empty slots to move them. Only empty slots can receive items - no swapping allowed!",
@@ -878,6 +887,13 @@ const gameDescriptions = {
     modes: "Nível 1: Tabuleiro único com peças 1-12. Role os dados, selecione peças que somem o total dos dados e envie.\n\nNível 2: Desafio de tabuleiro duplo! O primeiro tabuleiro (1-12) bloqueia o segundo tabuleiro (12-1 atrás). Só pode selecionar peças do segundo tabuleiro depois de remover a peça diretamente à frente dele do primeiro tabuleiro. Exemplo: Remova a peça 5 do tabuleiro 1 para desbloquear a peça 8 (atrás dela) no tabuleiro 2.",
     scoring: "Pontuação = Soma dos números das peças restantes. 0 é perfeito (fechou a caixa!). Pontuações mais baixas são melhores. Cada nível tem placares separados.",
     controls: "1. Clique em 'Rolar Dados' para rolar dois dados\n2. Clique em peças para selecionar uma combinação que soma o total dos dados\n3. Clique em 'Reiniciar Seleção' se cometer um erro\n4. Clique em 'Enviar' quando sua seleção igualar o total dos dados\n5. Continue até que todas as peças sejam removidas ou não restem jogadas válidas\n\nNível 2: Peças no tabuleiro 2 estão bloqueadas (acinzentadas) até que a peça correspondente do tabuleiro 1 seja removida."
+  },
+  "Two Dots": {
+    title: "Two Dots",
+    description: "Connect adjacent dots of the same color by dragging through them! Create longer chains for higher scores in this addictive puzzle game.",
+    modes: "Easy (4�4): 3 colors, simple chains\nMedium (5�5): 4 colors, more strategy\nHard (6�6): 5 colors, complex patterns",
+    scoring: "2 dots=1pt � 3=2pts � 4=4pts � 5=7pts � 6=10pts � 7=13pts � 8=16pts. Longer chains score exponentially more! You have 2 minutes to get the highest score. Highest score wins!",
+    controls: "Mouse: Click and drag through adjacent dots of the same color. Touch: Tap and drag your finger. Release to complete the chain. Dots must touch horizontally or vertically (no diagonals). Connected dots disappear and new ones fall from the top!"
   },
   "Creature Sorting": {
     title: "Ordenação de Criaturas",
@@ -1190,6 +1206,12 @@ function showGameLeaderboard(gameName) {
     return;
   }
   
+  // Special handling for Two Dots (score - higher is better, with difficulty modes)
+  if (gameName === "Two Dots") {
+    showScoreBasedLeaderboard(db, content, gameName);
+    return;
+  }
+  
   // Special handling for Farming Town (XP/Level progression)
   if (gameName === "Farming Town") {
     showFarmingTownLeaderboard(db, content, gameName);
@@ -1395,10 +1417,18 @@ function showScoreBasedLeaderboard(db, content, gameName) {
         .sort((a, b) => b.score - a.score)
         .slice(0, 10);
       
+      const mediumDocs = allDocs
+        .filter(doc => doc.difficulty === "medium")
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 10);
+      
       const hardDocs = allDocs
         .filter(doc => doc.difficulty === "hard")
         .sort((a, b) => b.score - a.score)
         .slice(0, 10);
+      
+      // Check if game has 3 difficulties or 2
+      const hasThreeDifficulties = mediumDocs.length > 0 || gameName === "Two Dots";
       
       let html = '<div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">';
       
@@ -1420,6 +1450,27 @@ function showScoreBasedLeaderboard(db, content, gameName) {
         html += '</tbody></table>';
       }
       html += '</div>';
+      
+      // Medium mode table (only for games with 3 difficulties)
+      if (hasThreeDifficulties) {
+        html += `<div style="flex: 1; min-width: 300px;"><h3>${t("mediumMode")}</h3>`;
+        if (mediumDocs.length === 0) {
+          html += `<p style="color: #666;">${t("noScores")}</p>`;
+        } else {
+          html += `<table class="leaderboard-table">${getTableHeader("score")}<tbody>`;
+          mediumDocs.forEach((doc, i) => {
+            const date = doc.timestamp ? new Date(doc.timestamp.toDate()).toLocaleDateString() : 'N/A';
+            html += `<tr>
+              <td>${i + 1}</td>
+              <td>${doc.playerName}</td>
+              <td>${doc.score}</td>
+              <td>${date}</td>
+            </tr>`;
+          });
+          html += '</tbody></table>';
+        }
+        html += '</div>';
+      }
       
       // Hard mode table
       html += `<div style="flex: 1; min-width: 300px;"><h3>${t("hardMode")}</h3>`;
