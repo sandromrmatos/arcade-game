@@ -2275,6 +2275,12 @@ function handleAttack(moveNumber) {
     
     if (!attacker || !defender) return;
     
+    // Check if player is affected by Invincible Gambit
+    if (gameState.player.invincibleTurnsLeft && gameState.player.invincibleTurnsLeft > 0) {
+        alert(`You cannot attack! Invincible Gambit prevents you from attacking for ${gameState.player.invincibleTurnsLeft} more turn(s)!`);
+        return;
+    }
+    
     // Check if player can't attack this turn due to Quick Reflexes or Wing Slap
     if (gameState.player.cantAttackNextTurn) {
         alert(`You can't attack this turn due to Quick Reflexes effect!`);
@@ -4051,13 +4057,13 @@ function handleMoveEffect(effect, attacker, defender, attackingPlayer) {
             break;
             
         case 'invincibleGambit':
-            // Invincible Gambit - Flip 3 coins, opponent can't damage for each heads, then faint
+            // Invincible Gambit - Flip 3 coins, opponent can't attack for each heads on their turns, then faint
             setTimeout(() => {
                 let headsCount = 0;
                 for (let i = 0; i < 3; i++) {
                     if (flipCoin() === 'heads') headsCount++;
                 }
-                alert(`Invincible Gambit: Got ${headsCount} heads! Opponent can't deal damage for ${headsCount} turn(s).`);
+                alert(`Invincible Gambit: Got ${headsCount} heads! Opponent can't attack for ${headsCount} of their turn(s).`);
                 if (headsCount > 0) {
                     if (!gameState[opponent].invincibleTurnsLeft) {
                         gameState[opponent].invincibleTurnsLeft = 0;
@@ -5552,10 +5558,10 @@ function aiUseAbilities() {
                 alert(`AI's ${card.data.name} used Guardian Mode! All AI creatures take 10 less damage this turn!`);
                 renderGame();
             } else if (abilityEffect === 'warriorMode') {
-                // Warrior Mode - AI's attacks deal +20 damage this turn
-                gameState.opponent.warriorModeBonus = 20;
+                // Warrior Mode - AI's attacks deal +10 damage this turn
+                gameState.opponent.warriorModeBonus = 10;
                 card.abilityUsedThisTurn = true;
-                alert(`AI's ${card.data.name} used Warrior Mode! AI's attacks this turn deal +20 damage!`);
+                alert(`AI's ${card.data.name} used Warrior Mode! AI's attacks this turn deal +10 damage!`);
                 renderGame();
             } else if (abilityEffect === 'thunderRush') {
                 // Thunder Rush - AI's next attack deals double damage
@@ -5871,6 +5877,19 @@ function endTurn() {
             card.cantRetreatTurns--;
         }
     });
+    
+    // Decrement invincibleTurnsLeft ONLY for the player whose turn just ENDED (Invincible Gambit effect)
+    // This ensures the opponent can't attack only during their own turns
+    if (gameState[playerEndingTurn].invincibleTurnsLeft && gameState[playerEndingTurn].invincibleTurnsLeft > 0) {
+        gameState[playerEndingTurn].invincibleTurnsLeft--;
+        if (gameState[playerEndingTurn].invincibleTurnsLeft === 0) {
+            const playerName = playerEndingTurn === 'player' ? 'You' : 'AI';
+            alert(`${playerName} can attack again! Invincible Gambit effect has ended.`);
+        } else {
+            const playerName = playerEndingTurn === 'player' ? 'You' : 'AI';
+            alert(`${playerName} cannot attack for ${gameState[playerEndingTurn].invincibleTurnsLeft} more turn(s)!`);
+        }
+    }
     
     // Check for turn limit
     if (gameState.turnNumber > 30) {
@@ -6834,6 +6853,13 @@ function aiAttack() {
     const defender = gameState.player.active;
     
     if (!attacker || !defender) return;
+    
+    // Check if AI is affected by Invincible Gambit
+    if (gameState.opponent.invincibleTurnsLeft && gameState.opponent.invincibleTurnsLeft > 0) {
+        alert(`AI cannot attack! Invincible Gambit prevents them from attacking for ${gameState.opponent.invincibleTurnsLeft} more turn(s)!`);
+        setTimeout(() => endTurn(), 500);
+        return;
+    }
     
     // Check if AI can't attack this turn due to Quick Reflexes
     if (gameState.opponent.cantAttackNextTurn) {
